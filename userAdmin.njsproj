@@ -47,6 +47,8 @@
     <Compile Include="src\models\accessToken.js" />
     <Compile Include="src\models\client.js" />
     <Compile Include="src\models\users.js" />
+    <Content Include=".gitattributes" />
+    <Content Include=".gitignore" />
     <Content Include="src\config.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
