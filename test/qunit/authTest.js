@@ -58,9 +58,7 @@
                 callback(data);
             })
         .fail(function (jqXHR, textStatus, errorThrown) {
-                ok(false, "Something wrong getting token");
-                console.log(textStatus);
-                console.log(errorThrown);
+                ok(false, "Something wrong getting token. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
             });
     };
     var postUser = function (userCredentials, callback) {
@@ -70,7 +68,7 @@
                 callback(data);
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
-                ok(false, "Unhandled error creating user");
+                ok(false, "Unhandled error creating user. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
             });
     };
     var getRandomString = function (stringLength) {
@@ -90,6 +88,21 @@
     
     
     
+    test("create user", function () {
+        
+        var newUser = getRandomUser();
+        
+        postUser(newUser, function (data) {
+            ok(data.isValid === true, "Expected user created. Instead found not valid result");
+            ok(data.userId !== null, "Expected userId value");
+            
+            postUser(newUser, function (dataUserAlreadyExists) {
+                ok(dataUserAlreadyExists.isValid === false, "Expected not valid result");
+            });
+        });
+        
+
+    });    
     test("valid credentials get valid token", function () {
         
         var newUser = getRandomUser();
@@ -132,21 +145,7 @@
         });
     });
 
-    test("create user", function () {
-        
-        var newUser = getRandomUser();
-        
-        postUser(newUser, function (data) {
-            ok(data.isValid === true, "Expected user created. Instead found not valid result");
-            ok(data.userId !== null, "Expected userId value");
-            
-            postUser(newUser, function (dataUserAlreadyExists) {
-                ok(dataUserAlreadyExists.isValid === false, "Expected not valid result");
-            });
-        });
-        
-
-    });
+    
 
 
 

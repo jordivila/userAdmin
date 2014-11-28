@@ -23,17 +23,7 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 
 
 
-mongoose.connect(config.get('mongoose:uri'), function (err) {
-    if (err) {
-        throw err;
-    }
-});
-
-
-
-
-
-if (process.env.NODE_ENV == 'test') {
+if ( (process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev') ) {
     // Add headers
     app.use(function (req, res, next) {
         // Website you wish to allow to connect
@@ -70,28 +60,99 @@ app.get('/api/user',
 });
 app.post('/api/user', usersController.postUsers);
 
-app.get('/ErrorExample', function (req, res, next) {
-    next(new Error('Random error!'));
-});
 
 
+
+
+
+
+
+
+
+
+//catch 404
 app.use(function (req, res, next) {
+    log.info('Not found URL: %s', req.url);
+    
     res.status(404);
-    log.debug('Not found URL: %s', req.url);
-    res.send({ error: 'Not found' });
-    return;
+    res.send({});
 });
 
+//operational errors
 app.use(function (err, req, res, next) {
+    if (!err) return next(); 
+
+    log.error(err);
     res.status(err.status || 500);
-    log.error('Internal error(%d): %s', res.statusCode, err.message);
-    res.send({ error: err.message });
-    return;
+    res.send({}); // do not send error messages as it can send private info
+
 });
+
+
+//programmer errors
+process.on('uncaughtException', function (err) {
+    try {
+        //try logging
+        log.error(err);
+    }
+    catch (errLogging) {
+        
+        try {
+            //try sending email
+            log.error(err);
+        }
+        catch (errSendingEmail) { 
+            // do nothing here
+        }
+    }
+    process.exit(1);
+});
+
 
 app.listen(config.get('port'), function () {
     log.info('Express server listening on port ' + config.get('port'));
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

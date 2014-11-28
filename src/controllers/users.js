@@ -8,7 +8,7 @@
     // Create endpoint /api/users for POST
     
     function create(userReq, cb) {
-        //var userReqModel = new UserModel({ username: req.body.username, password: req.body.password });
+        
         var userReqModel = new UserModel(userReq);
         
         var result = {
@@ -45,13 +45,12 @@
     exports.create = create;
     exports.postUsers = function (req, res, next) {
         var result = create(req.body, function (err, user) {
-            //if (err) {
-            //log.error(err);
-            //res.send(new Error('Error creating user'));
-            //}
-            //else {
-            res.json(user);
-            //}
+            if (err) {
+                next(err);
+            }
+            else {
+                res.json(user);
+            }
         });
     };
 })();

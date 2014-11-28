@@ -107,5 +107,6 @@
     grunt.registerTask('frontend', ['jshint:files', 'concat', 'uglify']);
     grunt.registerTask('backend', ['express:test', 'mochaTest', 'qunit' ]);
     grunt.registerTask('backendDev', ['express:dev']);
+    
 
 };
