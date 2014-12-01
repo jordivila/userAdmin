@@ -10,6 +10,7 @@ var log                     = require('./libs/log')(module);
 var oauth2                  = require('./controllers/oauth2');
 var authController          = require('./controllers/auth');
 var usersController         = require('./controllers/users');
+var clientController        = require('./controllers/client');
 
 
 var app = express();
@@ -63,6 +64,8 @@ app.post('/api/user', usersController.postUsers);
 
 
 
+app.post('/api/client', clientController.postClients);
+
 
 
 
@@ -81,6 +84,10 @@ app.use(function (req, res, next) {
 //operational errors
 app.use(function (err, req, res, next) {
     if (!err) return next(); 
+    
+    
+    console.log(err.message);
+    console.log(err.stack);
 
     log.error(err);
     res.status(err.status || 500);

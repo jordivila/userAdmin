@@ -30,6 +30,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\controllers\client.js" />
     <Compile Include="src\controllers\users.js" />
     <Compile Include="src\libs\db.js" />
     <Compile Include="test\mocha\libs\utils.js" />

@@ -13,20 +13,6 @@
         }
     };
     
-    //var credentials = {
-    //    grant_type: "password",
-    //    client_id: "mobileV1",
-    //    client_secret: "abc123456",
-    //    username: "andrey",
-    //    password: "simplepassword"
-    //};
-    
-    //var tokenModel = {
-    //    access_token: null,
-    //    refresh_token: null,
-    //    expires_in: null,
-    //    token_type: null
-    //};
     
     jQuery(document)
     .ajaxSend(function (e, x, settings) {
@@ -36,12 +22,21 @@
             start();
         });
     
-    var getTokenCredentials = function (user) {
+    var getClientData = function (user) {
+        
+        return {
+            name: getRandomString(15), 
+            clientId: getRandomString(10),
+            clientSecret: getRandomString(10)
+        };
+
+    };
+    var getTokenCredentials = function (user, clientData) {
         
         return {
             grant_type: "password",
-            client_id: "mobileV1",
-            client_secret: "abc123456",
+            client_id: clientData.clientId,
+            client_secret: clientData.clientSecret,
             username: user.username,
             password: user.password
         };
@@ -59,6 +54,16 @@
             })
         .fail(function (jqXHR, textStatus, errorThrown) {
                 ok(false, "Something wrong getting token. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
+            });
+    };
+    var postClient = function (clientData, callback) {
+        
+        jQuery.post(server.getBaseAddress() + "/api/client/", clientData)
+            .done(function (data, textStatus, jqXHR) {
+                callback(data);
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                ok(false, "Unhandled error creating client. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
             });
     };
     var postUser = function (userCredentials, callback) {
@@ -87,11 +92,18 @@
     };
     
     
+    var newClient = getClientData();
+    var newUser = getRandomUser();
+    
+    test("create client", function () {
+        postClient(newClient, function (data) {
+            ok(data.isValid === true, "Expected client created. Instead found not valid result");
+            ok(data.clientId !== null, "Expected clientId value");
+        });
+    });
+
     
     test("create user", function () {
-        
-        var newUser = getRandomUser();
-        
         postUser(newUser, function (data) {
             ok(data.isValid === true, "Expected user created. Instead found not valid result");
             ok(data.userId !== null, "Expected userId value");
@@ -100,48 +112,32 @@
                 ok(dataUserAlreadyExists.isValid === false, "Expected not valid result");
             });
         });
-        
+    });
 
-    });    
     test("valid credentials get valid token", function () {
+        getValidToken(getTokenCredentials(newUser, newClient), function (data) {
         
-        var newUser = getRandomUser();
-        
-        postUser(newUser, function (data) {
-            ok(data.isValid === true, "Expected user created. Instead found not valid result");
-            ok(data.userId !== null, "Expected userId value");
-            
-            getValidToken(getTokenCredentials(newUser), function (data) {
-        
-            });
         });
     });
+
     test("valid token get valid user info", function () {
         
-        var newUser = getRandomUser();
-        
-        
-        postUser(newUser, function (dataUserCreated) {
-            ok(dataUserCreated.isValid === true, "Expected user created. Instead found not valid result");
-            ok(dataUserCreated.userId !== null, "Expected userId value");
+        getValidToken(getTokenCredentials(newUser, newClient), function (dataTokenCreated) {
             
-            getValidToken(getTokenCredentials(newUser), function (dataTokenCreated) {
-                
-                jQuery
-                    .ajax({
-                        url: server.getBaseAddress() + "/api/user/",
-                        type: "GET",
-                        beforeSend: function (xhr, settings) {
-                            xhr.setRequestHeader("Authorization", dataTokenCreated.token_type + " " + dataTokenCreated.access_token);
-                        }
-                    })
-                    .done(function (dataUserInfo, textStatus, jqXHR) {
-                        equal(newUser.username, dataUserInfo.name, "token user match username");
-                    })
-                    .fail(function (jqXHR, textStatus, errorThrown) {
-                        ok(false, "Something went wrong getting userinfo");
-                    });
-            });
+            jQuery
+                .ajax({
+                    url: server.getBaseAddress() + "/api/user/",
+                    type: "GET",
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("Authorization", dataTokenCreated.token_type + " " + dataTokenCreated.access_token);
+                    }
+                })
+                .done(function (dataUserInfo, textStatus, jqXHR) {
+                    equal(newUser.username, dataUserInfo.name, "token user match username");
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    ok(false, "Something went wrong getting userinfo");
+                });
         });
     });
 
