@@ -3,7 +3,7 @@ var log         = require('../libs/log')(module);
 var config      = require('../libs/config');
 
 
-mongoose.connect(config.get('mongoose:uri'));
+//mongoose.connect(config.get('mongoose:uri'));
 
 //var db = mongoose.connection;
 
