@@ -7,7 +7,7 @@
     
     var server = {
         name : "localhost",
-        port : 1337,
+        port : 3000,
         getBaseAddress: function () {
             return "http://" + this.name + ":" + this.port;
         }

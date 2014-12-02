@@ -1,7 +1,14 @@
-﻿var nconf = require('nconf');
+﻿var config = require('nconf');
 //
-nconf.argv()
-    .env()
-    .file({ file: './src/config.json' });// relative to application entry
 
-module.exports = nconf;
+var p = 'src/config.json';
+console.log(p);
+
+config.argv()
+    .env()
+    .file({ file: p })// relative to application entry
+;
+
+
+
+module.exports = config;
