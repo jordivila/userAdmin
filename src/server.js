@@ -31,7 +31,7 @@ app.get('/', function (req, res, next) {
 });
 
 
-
+/*
 if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {
     
     // Add headers
@@ -56,7 +56,7 @@ if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {
     // allowing this at test time lets me create those pregenrated clients
     app.post('/api/client', clientController.postClients);
 }
-
+*/
 
 
 
