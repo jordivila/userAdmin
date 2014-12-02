@@ -57,6 +57,7 @@
     <Content Include="src\public\index.html" />
     <Content Include="test\qunit\libs\qunit.css" />
     <Content Include="test\qunit\index.html" />
+    <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\libs\" />
