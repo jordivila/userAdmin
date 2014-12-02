@@ -452,7 +452,8 @@ app.use(methodOverride('X-HTTP-Method-Override'));
 
 
 
-if ( (process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev') ) {
+if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {
+    
     // Add headers
     app.use(function (req, res, next) {
         // Website you wish to allow to connect
@@ -469,6 +470,13 @@ if ( (process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev') ) {
         // Pass to next layer of middleware
         next();
     });
+    
+    
+
+    // testing authentication needs clientId's pregenerated
+    // allowing this at test time lets me create those pregenrated clients
+    app.post('/api/client', clientController.postClients);
+
 }
 
 
@@ -492,7 +500,7 @@ app.post('/api/user', usersController.postUsers);
 
 
 
-app.post('/api/client', clientController.postClients);
+
 
 
 

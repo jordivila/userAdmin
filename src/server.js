@@ -22,6 +22,9 @@ app.use(passport.initialize());
 app.use(methodOverride('X-HTTP-Method-Override'));
 
 
+app.get('/', function (req, res, next) { 
+    res.sendFile('public/index.html', { root: __dirname });
+});
 
 
 if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {
