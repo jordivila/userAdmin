@@ -27,6 +27,7 @@
     app.use(methodOverride('X-HTTP-Method-Override'));
     app.use(express.static(path.join(__dirname, "public")));
     
+    
     if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {
         commonController.setAccessControlOrigin(app);
         // testing authentication needs clientId's pregenerated

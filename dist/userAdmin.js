@@ -15,6 +15,9 @@
     
     passport.use(new BasicStrategy(
             function (username, password, done) {
+                
+                console.log("entra en BASIC *********************************");
+  
                 ClientModel.findOne({ clientId: username }, function (err, client) {
                     if (err) { return done(err); }
                     if (!client) { return done(null, false); }
@@ -31,6 +34,9 @@
                     if (err) { return done(err); }
                     if (!client) { return done(null, false); }
                     if (client.clientSecret != clientSecret) { return done(null, false); }
+                    
+                    
+                    console.log("client found **********************");
                     
                     return done(null, client);
                 });
