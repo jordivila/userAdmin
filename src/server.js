@@ -27,6 +27,7 @@ app.get('/', function (req, res, next) {
 });
 
 
+/*
 if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {
     
     // Add headers
@@ -46,14 +47,13 @@ if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {
         next();
     });
     
-    
 
     // testing authentication needs clientId's pregenerated
     // allowing this at test time lets me create those pregenrated clients
     app.post('/api/client', clientController.postClients);
 
 }
-
+*/
 
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -127,8 +127,13 @@ process.on('uncaughtException', function (err) {
 });
 
 
-app.listen(config.get('port'), function () {
-    log.info('Express server listening on port ' + config.get('port'));
+//app.listen(config.get('port'), function () {
+//    log.info('Express server listening on port ' + config.get('port'));
+//});
+
+
+app.listen(process.env.PORT || 3000, function () {
+    log.info('Express server listening on port ' + process.env.PORT || 3000);
 });
 
 
