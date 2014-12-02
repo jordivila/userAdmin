@@ -1,4 +1,4 @@
-(function () {
+(function (module) {
     
     "use strict";
     
@@ -42,15 +42,51 @@
         });
     }
     
-    exports.create = create;
-    exports.postUsers = function (req, res, next) {
-        var result = create(req.body, function (err, user) {
-            if (err) {
-                next(err);
-            }
-            else {
-                res.json(user);
-            }
+    
+    
+    
+
+    module.exports.create = create;
+
+    //exports.postUsers = function (req, res, next) {
+    //    var result = create(req.body, function (err, user) {
+    //        if (err) {
+    //            next(err);
+    //        }
+    //        else {
+    //            res.json(user);
+    //        }
+    //    });
+    //};
+
+    
+
+
+    module.exports.setRoutes = function (app, oauth2) {
+
+        app.get('/api/user',
+                oauth2.isAuthenticated,
+                function (req, res) {
+            res.json({
+                user_id: req.user.userId, 
+                name: req.user.username, 
+                scope: req.authInfo.scope
+            });
+        });
+
+        app.post('/api/user', function (req, res, next) {
+            var result = create(req.body, function (err, user) {
+                if (err) {
+                    next(err);
+                }
+                else {
+                    res.json(user);
+                }
+            });
         });
     };
-})();
+
+    
+    
+
+})(module);

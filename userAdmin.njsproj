@@ -30,6 +30,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="src\controllers\common.js" />
     <Compile Include="src\controllers\home.js" />
     <Compile Include="src\controllers\client.js" />
     <Compile Include="src\controllers\users.js" />

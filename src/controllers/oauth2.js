@@ -1,4 +1,4 @@
-(function () {
+(function (module) {
     
     "use strict";
     
@@ -82,19 +82,16 @@
         }));
     
     
-    // token endpoint
-    //
-    // `token` middleware handles client requests to exchange authorization grants
-    // for access tokens.  Based on the grant type being exchanged, the above
-    // exchange middleware will be invoked to handle the request.  Clients must
-    // authenticate when making requests to this endpoint.
     
-    exports.token = [
-        passport.authenticate(['basic', 'oauth2-client-password'], { session: false }),
-        server.token(),
-        server.errorHandler()
-    ];
     
-    exports.isAuthenticated = passport.authenticate('bearer', { session: false });
+    module.exports.isAuthenticated = passport.authenticate('bearer', { session: false });
 
-})();
+    module.exports.setRoutes = function (app) {
+        app.post('/oauth/token', [
+            passport.authenticate(['basic', 'oauth2-client-password'], { session: false }),
+            server.token(),
+            server.errorHandler()
+        ]);
+    };
+
+})(module);

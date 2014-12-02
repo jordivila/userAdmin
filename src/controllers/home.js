@@ -1,8 +1,11 @@
-    module.exports = function (app) {
+(function (module) {
     
-    app.get('/', function (req, res, next) {
-        res.sendFile('public/index.html', { root: __dirname });
-    });
-  
-};
+    "use strict";
+    
+    module.exports.setRoutes = function (app) {
+        app.get('/', function (req, res, next) {
+            res.sendFile('public/index.html', { root: __dirname });
+        });
+    };
 
+})(module);
