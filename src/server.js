@@ -15,15 +15,12 @@ var clientController        = require('./controllers/client');
 
 var app = express();
 
-app.configure(function () {
-    app.use(favicon(__dirname + '/public/favicon.ico'));
-    app.use(bodyParser.urlencoded({ extended: true }));
-    app.use(bodyParser.json());
-    app.use(passport.initialize());
-    app.use(methodOverride('X-HTTP-Method-Override'));
-    app.use(express.static(path.join(__dirname, "public")));
-});
 
+app.use(favicon(__dirname + '/public/favicon.ico'));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(methodOverride('X-HTTP-Method-Override'));
 
 
 app.get('/', function (req, res, next) { 
@@ -55,10 +52,11 @@ if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {
     // testing authentication needs clientId's pregenerated
     // allowing this at test time lets me create those pregenrated clients
     app.post('/api/client', clientController.postClients);
+
 }
 */
 
-
+app.use(express.static(path.join(__dirname, "public")));
 
 app.post('/oauth/token', oauth2.token);
 app.get('/api', oauth2.isAuthenticated, function (req, res) {
@@ -138,3 +136,163 @@ process.on('uncaughtException', function (err) {
 app.listen(process.env.PORT || 3000, function () {
     log.info('Express server listening on port ' + process.env.PORT || 3000);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//app.get('/api/articles', oauth2.isAuthenticated, function (req, res) {
+//    return ArticleModel.find(function (err, articles) {
+//        if (!err) {
+//            return res.send(articles);
+//        } else {
+//            res.statusCode = 500;
+//            log.error('Internal error(%d): %s', res.statusCode, err.message);
+//            return res.send({ error: 'Server error' });
+//        }
+//    });
+//});
+
+//app.post('/api/articles', oauth2.isAuthenticated, function (req, res) {
+//    var article = new ArticleModel({
+//        title: req.body.title,
+//        author: req.body.author,
+//        description: req.body.description,
+//        images: req.body.images
+//    });
+    
+//    article.save(function (err) {
+//        if (!err) {
+//            log.info("article created");
+//            return res.send({ status: 'OK', article: article });
+//        } else {
+//            console.log(err);
+//            if (err.name == 'ValidationError') {
+//                res.statusCode = 400;
+//                res.send({ error: 'Validation error' });
+//            } else {
+//                res.statusCode = 500;
+//                res.send({ error: 'Server error' });
+//            }
+//            log.error('Internal error(%d): %s', res.statusCode, err.message);
+//        }
+//    });
+//});
+
+//app.get('/api/articles/:id', oauth2.isAuthenticated, function (req, res) {
+//    return ArticleModel.findById(req.params.id, function (err, article) {
+//        if (!article) {
+//            res.statusCode = 404;
+//            return res.send({ error: 'Not found' });
+//        }
+//        if (!err) {
+//            return res.send({ status: 'OK', article: article });
+//        } else {
+//            res.statusCode = 500;
+//            log.error('Internal error(%d): %s', res.statusCode, err.message);
+//            return res.send({ error: 'Server error' });
+//        }
+//    });
+//});
+
+//app.put('/api/articles/:id', oauth2.isAuthenticated, function (req, res) {
+//    return ArticleModel.findById(req.params.id, function (err, article) {
+//        if (!article) {
+//            res.statusCode = 404;
+//            return res.send({ error: 'Not found' });
+//        }
+        
+//        article.title = req.body.title;
+//        article.description = req.body.description;
+//        article.author = req.body.author;
+//        article.images = req.body.images;
+//        return article.save(function (err) {
+//            if (!err) {
+//                log.info("article updated");
+//                return res.send({ status: 'OK', article: article });
+//            } else {
+//                if (err.name == 'ValidationError') {
+//                    res.statusCode = 400;
+//                    res.send({ error: 'Validation error' });
+//                } else {
+//                    res.statusCode = 500;
+//                    res.send({ error: 'Server error' });
+//                }
+//                log.error('Internal error(%d): %s', res.statusCode, err.message);
+//            }
+//        });
+//    });
+//});
+
+//app.delete('/api/articles/:id', oauth2.isAuthenticated, function (req, res) {
+//    return ArticleModel.findById(req.params.id, function (err, article) {
+//        if (!article) {
+//            res.statusCode = 404;
+//            return res.send({ error: 'Not found' });
+//        }
+//        return article.remove(function (err) {
+//            if (!err) {
+//                log.info("article removed");
+//                return res.send({ status: 'OK' });
+//            } else {
+//                res.statusCode = 500;
+//                log.error('Internal error(%d): %s', res.statusCode, err.message);
+//                return res.send({ error: 'Server error' });
+//            }
+//        });
+//    });
+//});
+
+
