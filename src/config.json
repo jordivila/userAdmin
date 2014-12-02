@@ -1,5 +1,4 @@
 {
-    "port" : 1337,
     "security": {
         "tokenLife" : 3600
     },
