@@ -265,7 +265,8 @@
 
     module.exports.setRoutes = function (app) {
         app.post('/oauth/token', [
-            passport.authenticate(['basic', 'oauth2-client-password'], { session: false }),
+            //passport.authenticate(['basic', 'oauth2-client-password'], { session: false }),
+            passport.authenticate(['oauth2-client-password'], { session: false }),
             server.token(),
             server.errorHandler()
         ]);
@@ -533,11 +534,13 @@ module.exports.UserModel = mongoose.model('User', User);;(function (module) {
     var favicon = require('serve-favicon');
     var methodOverride = require('method-override');
     var path = require('path');
+    var compression = require('compression');
     var passport = require('passport');
     var bodyParser = require('body-parser');
     var config = require('./libs/config');
     var mongoose = require('./libs/db').mongoose;
     var log = require('./libs/log')(module);
+
     var oauth2Controller = require('./controllers/oauth2');
     var authController = require('./controllers/auth');
     var homeController = require('./controllers/home');
@@ -552,14 +555,22 @@ module.exports.UserModel = mongoose.model('User', User);;(function (module) {
     app.use(bodyParser.json());
     app.use(passport.initialize());
     app.use(methodOverride('X-HTTP-Method-Override'));
-    app.use(express.static(path.join(__dirname, "public")));
+    app.use(compression());
+    
     
     
     if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {
+        
+        app.use(express.static(__dirname + '/public', { maxAge: 0 }));
+        
         commonController.setAccessControlOrigin(app);
         // testing authentication needs clientId's pregenerated
         // allowing this at test time lets me create those pregenrated clients
         app.post('/api/client', clientController.postClients);
+    }
+    else { 
+        //set the Cache-Control header to one day using milliseconds
+        app.use(express.static(__dirname + '/public', { maxAge: 86400000 })); 
     }
     
     

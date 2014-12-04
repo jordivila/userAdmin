@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "body-parser": "1.9.x",
+    "compression": "^1.2.1",
     "express": "4.10.x",
     "method-override": "2.3.x",
     "mongoose": "3.8.x",
