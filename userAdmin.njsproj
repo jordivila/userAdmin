@@ -32,23 +32,20 @@
   <ItemGroup>
     <Compile Include="src\controllers\common.js" />
     <Compile Include="src\controllers\home.js" />
-    <Compile Include="src\controllers\client.js" />
     <Compile Include="src\controllers\users.js" />
     <Compile Include="src\libs\db.js" />
     <Compile Include="test\mocha\libs\utils.js" />
     <Compile Include="test\mocha\users.js" />
     <Compile Include="test\qunit\authTest.js" />
+    <Compile Include="test\qunit\basicAuth\basicAuthTest.js" />
+    <Compile Include="test\qunit\common.js" />
     <Compile Include="test\qunit\libs\jquery-1.11.1.min.js" />
     <Compile Include="test\qunit\libs\qunit.js" />
     <Compile Include="src\server.js" />
     <Compile Include="gruntfile.js" />
     <Compile Include="src\controllers\auth.js" />
     <Compile Include="src\libs\log.js" />
-    <Compile Include="src\controllers\oauth2.js" />
     <Compile Include="src\libs\config.js" />
-    <Compile Include="src\models\refreshToken.js" />
-    <Compile Include="src\models\accessToken.js" />
-    <Compile Include="src\models\client.js" />
     <Compile Include="src\models\users.js" />
     <Content Include="src\config.json" />
     <Content Include="package.json" />
@@ -70,6 +67,7 @@
     <Folder Include="src\models\" />
     <Folder Include="src\" />
     <Folder Include="test\qunit\" />
+    <Folder Include="test\qunit\basicAuth\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
 </Project>

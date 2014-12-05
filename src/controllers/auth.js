@@ -2,62 +2,33 @@
     
     "use strict";
     
-    
-    var config = require('../libs/config');
+    // Load required packages
     var passport = require('passport');
     var BasicStrategy = require('passport-http').BasicStrategy;
-    var ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy;
-    var BearerStrategy = require('passport-http-bearer').Strategy;
-    var UserModel = require('../models/users').UserModel;
-    var ClientModel = require('../models/client').ClientModel;
-    var AccessTokenModel = require('../models/accessToken').AccessTokenModel;
-    var RefreshTokenModel = require('../models/refreshToken').RefreshTokenModel;
-    
+    var User = require('../models/users');
+
     passport.use(new BasicStrategy(
-            function (username, password, done) {
-                ClientModel.findOne({ clientId: username }, function (err, client) {
-                    if (err) { return done(err); }
-                    if (!client) { return done(null, false); }
-                    if (client.clientSecret != password) { return done(null, false); }
+            function (username, password, callback) {
+                User.findOne({ username: username }, function (err, user) {
+                    if (err) { return callback(err); }
                     
-                    return done(null, client);
-                });
-            }
-        ));
-    
-    passport.use(new ClientPasswordStrategy(
-            function (clientId, clientSecret, done) {
-                ClientModel.findOne({ clientId: clientId }, function (err, client) {
-                    if (err) { return done(err); }
-                    if (!client) { return done(null, false); }
-                    if (client.clientSecret != clientSecret) { return done(null, false); }
+                    // No user found with that username
+                    if (!user) { return callback(null, false); }
                     
-                    return done(null, client);
-                });
-            }
-        ));
-    
-    passport.use(new BearerStrategy(
-            function (accessToken, done) {
-                AccessTokenModel.findOne({ token: accessToken }, function (err, token) {
-                    if (err) { return done(err); }
-                    if (!token) { return done(null, false); }
-                    
-                    if (Math.round((Date.now() - token.created) / 1000) > config.get('security:tokenLife')) {
-                        AccessTokenModel.remove({ token: accessToken }, function (err) {
-                            if (err) return done(err);
-                        });
-                        return done(null, false, { message: 'Token expired' });
-                    }
-                    
-                    UserModel.findById(token.userId, function (err, user) {
-                        if (err) { return done(err); }
-                        if (!user) { return done(null, false, { message: 'Unknown user' }); }
+                    // Make sure the password is correct
+                    user.verifyPassword(password, function (err, isMatch) {
+                        if (err) { return callback(err); }
                         
-                        var info = { scope: '*' };
-                        done(null, user, info);
+                        // Password did not match
+                        if (!isMatch) { return callback(null, false); }
+                        
+                        // Success
+                        return callback(null, user);
                     });
                 });
             }
         ));
+    
+    module.exports.isAuthenticated = passport.authenticate('basic', { session : false });
+
 })(module);

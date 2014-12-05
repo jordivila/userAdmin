@@ -3,9 +3,7 @@
     "use strict";
     
     var log = require('../libs/log')(module);
-    var UserModel = require('../models/users').UserModel;
-    
-    // Create endpoint /api/users for POST
+    var UserModel = require('../models/users');
     
     function create(userReq, cb) {
         
@@ -48,32 +46,16 @@
 
     module.exports.create = create;
 
-    //exports.postUsers = function (req, res, next) {
-    //    var result = create(req.body, function (err, user) {
-    //        if (err) {
-    //            next(err);
-    //        }
-    //        else {
-    //            res.json(user);
-    //        }
-    //    });
-    //};
-
-    
-
-
-    module.exports.setRoutes = function (app, oauth2) {
-
+    module.exports.setRoutes = function (app, authController) {
+        
         app.get('/api/user',
-                oauth2.isAuthenticated,
+                authController.isAuthenticated,
                 function (req, res) {
             res.json({
-                user_id: req.user.userId, 
-                name: req.user.username, 
-                scope: req.authInfo.scope
+                user: req.user // passport sets user object when authenticated
             });
         });
-
+        
         app.post('/api/user', function (req, res, next) {
             var result = create(req.body, function (err, user) {
                 if (err) {

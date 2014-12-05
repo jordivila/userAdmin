@@ -13,10 +13,8 @@
     var mongoose = require('./libs/db').mongoose;
     var log = require('./libs/log')(module);
 
-    var oauth2Controller = require('./controllers/oauth2');
     var authController = require('./controllers/auth');
     var homeController = require('./controllers/home');
-    var clientController = require('./controllers/client');
     var usersController = require('./controllers/users');
     var commonController = require('./controllers/common');
     
@@ -28,27 +26,16 @@
     app.use(passport.initialize());
     app.use(methodOverride('X-HTTP-Method-Override'));
     app.use(compression());
-    
-    
+    //set the Cache-Control header to one day using milliseconds
+    app.use(express.static(__dirname + '/public', { maxAge: process.env.NODE_ENV === 'production' ? 86400000:0 }));
+
     
     if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {
-        
-        app.use(express.static(__dirname + '/public', { maxAge: 0 }));
-        
         commonController.setAccessControlOrigin(app);
-        // testing authentication needs clientId's pregenerated
-        // allowing this at test time lets me create those pregenrated clients
-        app.post('/api/client', clientController.postClients);
     }
-    else { 
-        //set the Cache-Control header to one day using milliseconds
-        app.use(express.static(__dirname + '/public', { maxAge: 86400000 })); 
-    }
-    
     
     homeController.setRoutes(app);
-    oauth2Controller.setRoutes(app);
-    usersController.setRoutes(app, oauth2Controller);
+    usersController.setRoutes(app, authController);
     commonController.setRoutes(app, log);
     
     //programmer errors
