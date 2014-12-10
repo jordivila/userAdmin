@@ -200,11 +200,11 @@ function getLogger(module) {
 
     return new winston.Logger({
         transports : [
-            new winston.transports.Console({
-                colorize:   true,
-                level:      'debug',
-                label:      path
-            }),
+            //new winston.transports.Console({
+            //    colorize:   true,
+            //    level:      'debug',
+            //    label:      path
+            //}),
             new (winston.transports.File)({ filename: 'src/public/somefile.log' })
         ]
     });
