@@ -8,7 +8,7 @@
     
     // Define our user schema
     var UserSchema = new mongoose.Schema({
-        username: {
+        email: {
             type: String,
             unique: true,
             required: true

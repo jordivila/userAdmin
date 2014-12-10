@@ -12,6 +12,8 @@
     var config = require('./libs/config');
     var mongoose = require('./libs/db').mongoose;
     var log = require('./libs/log')(module);
+    var cookieParser = require('cookie-parser');
+    var i18n = require('i18n-2');
 
     var authController = require('./controllers/auth');
     var homeController = require('./controllers/home');
@@ -19,6 +21,7 @@
     var commonController = require('./controllers/common');
     
     var app = express();
+    app.use(cookieParser(config.get('encryptKeyForCookieParser')));
     app.set('port', process.env.PORT || config.get('port'));
     app.use(favicon(__dirname + '/public/favicon.ico'));
     app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,7 +30,21 @@
     app.use(methodOverride('X-HTTP-Method-Override'));
     app.use(compression());
     //set the Cache-Control header to one day using milliseconds
-    app.use(express.static(__dirname + '/public', { maxAge: process.env.NODE_ENV === 'production' ? 86400000:0 }));
+    app.use('/public', express.static(__dirname + '/public', { maxAge: process.env.NODE_ENV === 'production' ? 86400000:0 }));
+
+
+
+    i18n.expressBind(app, config.get("i18n"));
+
+
+    // set up the middleware
+    app.use(function(req, res, next) {
+        req.i18n.setLocaleFromCookie();
+        next();
+    });
+
+
+    
 
     
     if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {

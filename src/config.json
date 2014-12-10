@@ -5,5 +5,14 @@
     },
     "mongoose": {
         "uri": "mongodb://localhost:27017/testAPI3"
-    }
+    },
+    "encryptKeyForCookieParser": "someEncriptiongKey",
+
+	"i18n": {
+        "directory": "./src/public/locales",
+        "locales": ["es", "en"],
+        "defaultLocale": "en",
+        "cookieName": "locale",
+        "extension": ".json"
+    }    
 }

@@ -3,45 +3,47 @@
     "use strict";
     
     var log = require('../libs/log')(module);
+
+    var validator = require('validator');
     var UserModel = require('../models/users');
+    var UserValidator = require('../models/users.validate.client');
     
-    function create(userReq, cb) {
-        
-        var userReqModel = new UserModel(userReq);
-        
-        var result = {
-            isValid : null,
-            messages : [],
-            userId: null
-        };
-        
-        UserModel.findOne({ username : userReqModel.username }, function (err, user) {
-            if (err) {
-                cb(err);
-            }
-            if (!user) {
-                userReqModel.save(function (err, userCreated) {
-                    if (err) {
-                        cb(err);
-                    }
-                    else {
-                        result.isValid = true;
-                        result.userId = userCreated.userId;
-                        result.messages.push("User created");
-                        cb(null, result);
-                    }
-                });
-            }
-            else {
-                result.isValid = false;
-                result.messages.push("User already exists");
-                cb(null, result);
-            }
-        });
+    function create(req, i18n,  cb) {
+    
+        var result = UserValidator.validate(req, i18n, validator);
+
+        if(result.isValid)
+        {
+            var userReqModel = new UserModel(req);
+            
+            UserModel.findOne({ email : userReqModel.email }, function (err, user) {
+                if (err) {
+                    cb(err);
+                }
+                if (!user) {
+                    userReqModel.save(function (err, userCreated) {
+                        if (err) {
+                            cb(err);
+                        }
+                        else {
+                            result.isValid = true;
+                            result.userId = userCreated.userId;
+                            result.messages.push(i18n.__("User created"));
+                            cb(null, result);
+                        }
+                    });
+                }
+                else {
+                    result.isValid = false;
+                    result.messages.push(i18n.__("User already exists"));
+                    cb(null, result);
+                }
+            });
+        }
+        else{
+            cb(null, result);
+        }
     }
-    
-    
-    
     
 
     module.exports.create = create;
@@ -51,13 +53,11 @@
         app.get('/api/user',
                 authController.isAuthenticated,
                 function (req, res) {
-            res.json({
-                user: req.user // passport sets user object when authenticated
-            });
-        });
+                    res.json({user:req.user}); // passport sets user object when authenticated
+                });
         
         app.post('/api/user', function (req, res, next) {
-            var result = create(req.body, function (err, user) {
+            var result = create(req.body, req.i18n, function (err, user) {
                 if (err) {
                     next(err);
                 }
@@ -67,8 +67,5 @@
             });
         });
     };
-
-    
-    
 
 })(module);

@@ -7,7 +7,7 @@ console.log(p);
 config.argv()
     .env()
     .file({ file: p })// relative to application entry
-;
+	;
 
 
 

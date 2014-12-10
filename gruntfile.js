@@ -22,7 +22,7 @@
             }
         },
         qunit: {
-            files: ['test/qunit/**/*.html']
+            files: ['src/public/test/qunit/**/*.html']
         },
         
          mochaTest: {
@@ -33,7 +33,7 @@
                     quiet: false, // Optionally suppress output to standard out (defaults to false)
                     clearRequireCache: false // Optionally clear the require cache before running tests (defaults to false)
                 },
-                src: ['test/mocha/**/*.js', '!test/mocha/libs/**/*.js']
+                src: ['src/public/test/mocha/**/*.js', '!src/public/test/mocha/libs/**/*.js']
             }
         },
 
@@ -41,10 +41,10 @@
             files: ['gruntfile.js', 
                     'src/**/*.js', 
 
-                    'test/qunit/**/*.js',
-                    '!test/qunit/libs/**/*.js',
+                    'src/public/test/qunit/**/*.js',
+                    '!src/public/test/qunit/libs/**/*.js',
 
-                    'test/mocha/**/*.js'
+                    'src/public/test/mocha/**/*.js'
             ],
             options: {
                 globals: {
@@ -66,7 +66,6 @@
                 }
             }
         },
-        
         express: {
             options: {
       
@@ -100,7 +99,7 @@
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-express-server');
     grunt.loadNpmTasks('grunt-mocha-test');
-    
+
     
     
     

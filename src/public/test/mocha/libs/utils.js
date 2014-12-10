@@ -6,16 +6,17 @@
     * Modified from https://github.com/elliotf/mocha-mongoose
     */
 
-    var db = require('../../../src/libs/db');
-    var config = require('../../../src/libs/config');
+    var db = require('../../../../libs/db');
+    var config = require('../../../../libs/config');
     var mongoose = require('mongoose');
+    var i18n = new (require('i18n-2'))(config.get("i18n"));
     
     // ensure the NODE_ENV is set to 'test'
     // this is helpful when you would like to change behavior when testing
     process.env.NODE_ENV = 'test';
     
     before(function () {
-    
+        global.i18n = i18n;
     });
 
     after(function () {
@@ -25,21 +26,9 @@
     beforeEach(function (done) {
         
         function clearDB() {
-            
             mongoose.connection.db.dropDatabase(function (err, result) { 
-
                 return done();
-            
             });
-
-            //for (var i in mongoose.connection.collections) {
-                
-            //    console.log("DATABASE !!!!!!");
-            //    console.log(mongoose.connection.collections[i]);
-
-            //    mongoose.connection.collections[i].remove(function () { });
-            //}
-            //return done();
         }
         
         if (mongoose.connection.readyState === 0) {

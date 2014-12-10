@@ -1,0 +1,8 @@
+{
+	"User created": "Usuario creado",
+	"User already exists": "El usuario ya existe",
+	"Password and confirmation do not match": "Password and confirmation do not match",
+	"Unhandled error": "Unhandled error",
+	"Invalid password": "Invalid password",
+	"Invalid email address": "Invalid email address"
+}
