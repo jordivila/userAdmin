@@ -41,8 +41,10 @@
             files: ['gruntfile.js', 
                     'src/**/*.js', 
 
+
                     'src/public/test/qunit/**/*.js',
                     '!src/public/test/qunit/libs/**/*.js',
+                    '!src/public/**/*.log',
 
                     'src/public/test/mocha/**/*.js'
             ],
