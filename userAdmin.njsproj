@@ -34,13 +34,14 @@
     <Compile Include="src\controllers\home.js" />
     <Compile Include="src\controllers\users.js" />
     <Compile Include="src\libs\db.js" />
-    <Compile Include="test\mocha\libs\utils.js" />
-    <Compile Include="test\mocha\users.js" />
-    <Compile Include="test\qunit\authTest.js" />
-    <Compile Include="test\qunit\basicAuth\basicAuthTest.js" />
-    <Compile Include="test\qunit\common.js" />
-    <Compile Include="test\qunit\libs\jquery-1.11.1.min.js" />
-    <Compile Include="test\qunit\libs\qunit.js" />
+    <Compile Include="src\public\test\mocha\libs\utils.js" />
+    <Compile Include="src\public\test\mocha\users.js" />
+    <Compile Include="src\public\test\qunit\authTest.js" />
+    <Compile Include="src\public\test\qunit\basicAuth\basicAuthTest.js" />
+    <Compile Include="src\public\test\qunit\common.js" />
+    <Compile Include="src\public\test\qunit\libs\jquery-1.11.1.min.js" />
+    <Compile Include="src\public\test\qunit\libs\qunit.js" />
+    <Compile Include="src\public\test\qunit\libs\validator.js" />
     <Compile Include="src\server.js" />
     <Compile Include="gruntfile.js" />
     <Compile Include="src\controllers\auth.js" />
@@ -52,22 +53,25 @@
     <Content Include="README.md" />
     <Content Include="src\public\favicon.ico" />
     <Content Include="src\public\index.html" />
-    <Content Include="test\qunit\libs\qunit.css" />
-    <Content Include="test\qunit\index.html" />
+    <Content Include="src\public\locales\en.json" />
+    <Content Include="src\public\locales\es.json" />
+    <Content Include="src\public\test\qunit\index.html" />
+    <Content Include="src\public\test\qunit\libs\qunit.css" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="src\libs\" />
     <Folder Include="src\public\" />
-    <Folder Include="test\" />
-    <Folder Include="test\mocha\" />
-    <Folder Include="test\mocha\libs\" />
-    <Folder Include="test\qunit\libs\" />
+    <Folder Include="src\public\locales\" />
+    <Folder Include="src\public\test\" />
+    <Folder Include="src\public\test\mocha\" />
+    <Folder Include="src\public\test\mocha\libs\" />
+    <Folder Include="src\public\test\qunit\" />
+    <Folder Include="src\public\test\qunit\basicAuth\" />
+    <Folder Include="src\public\test\qunit\libs\" />
     <Folder Include="src\controllers\" />
     <Folder Include="src\models\" />
     <Folder Include="src\" />
-    <Folder Include="test\qunit\" />
-    <Folder Include="test\qunit\basicAuth\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
 </Project>
