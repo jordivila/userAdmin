@@ -56,8 +56,8 @@
     
     
     homeController.setRoutes(app);
-    usersController.setRoutes(app, authController);
-    commonController.setRoutes(app, log);
+    //usersController.setRoutes(app, authController);
+    //commonController.setRoutes(app, log);
     
     //programmer errors
     process.on('uncaughtException', function (err) {
@@ -80,7 +80,7 @@
     
     
     app.listen(app.get('port'), function () {
-        log.info('Express server listening on port ' + app.get('port'));
+        //log.info('Express server listening on port ' + app.get('port'));
     });
 
 })(module);
