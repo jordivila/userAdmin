@@ -13,7 +13,7 @@
     var mongoose = require('./libs/db').mongoose;
     var log = require('./libs/log')(module);
     var cookieParser = require('cookie-parser');
-    //var i18n = require('i18n-2');
+    var i18n = require('i18n-2');
     
 
     //var authController = require('./controllers/auth');
