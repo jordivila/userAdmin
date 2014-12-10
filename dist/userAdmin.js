@@ -205,6 +205,8 @@ function getLogger(module) {
                 level:      'debug',
                 label:      path
             })
+            
+            //, new (winston.transports.File)({ filename: 'src/public/somefile.log' }) // -> this is not working in azure site
         ]
     });
 }
