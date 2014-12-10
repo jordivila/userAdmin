@@ -3723,14 +3723,16 @@ function addEvents(elems, type, fn) {
     var mongoose = require('./libs/db').mongoose;
     var log = require('./libs/log')(module);
     var cookieParser = require('cookie-parser');
-    var i18n = require('i18n-2');
+    //var i18n = require('i18n-2');
+    
 
-    var authController = require('./controllers/auth');
-    var homeController = require('./controllers/home');
-    var usersController = require('./controllers/users');
-    var commonController = require('./controllers/common');
+    //var authController = require('./controllers/auth');
+    //var homeController = require('./controllers/home');
+    //var usersController = require('./controllers/users');
+    //var commonController = require('./controllers/common');
     
     var app = express();
+
     app.use(cookieParser(config.get('encryptKeyForCookieParser')));
     app.set('port', process.env.PORT || config.get('port'));
     app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -3743,7 +3745,7 @@ function addEvents(elems, type, fn) {
     app.use('/public', express.static(__dirname + '/public', { maxAge: process.env.NODE_ENV === 'production' ? 86400000:0 }));
 
 
-
+    /*
     i18n.expressBind(app, config.get("i18n"));
 
 
@@ -3784,9 +3786,9 @@ function addEvents(elems, type, fn) {
         process.exit(1);
     });
     
-    
+    */
     app.listen(app.get('port'), function () {
-        log.info('Express server listening on port ' + app.get('port'));
+        //log.info('Express server listening on port ' + app.get('port'));
     });
 
 })(module);
