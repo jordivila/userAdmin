@@ -194,6 +194,9 @@ module.exports.mongoose = mongoose;;var winston = require('winston');
 
 function getLogger(module) {
     var path = module.filename.split('/').slice(-2).join('/');
+    
+    
+    
 
     return new winston.Logger({
         transports : [
@@ -201,7 +204,8 @@ function getLogger(module) {
                 colorize:   true,
                 level:      'debug',
                 label:      path
-            })
+            }),
+            new (winston.transports.File)({ filename: 'src/public/somefile.log' })
         ]
     });
 }
