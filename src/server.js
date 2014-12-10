@@ -19,7 +19,7 @@
     //var authController = require('./controllers/auth');
     //var homeController = require('./controllers/home');
     //var usersController = require('./controllers/users');
-    //var commonController = require('./controllers/common');
+    var commonController = require('./controllers/common');
     
     var app = express();
 
