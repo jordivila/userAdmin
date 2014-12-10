@@ -46,12 +46,14 @@
     });
 
 
-    /*
+    
 
     
     if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {
         commonController.setAccessControlOrigin(app);
     }
+    
+    /*
     
     homeController.setRoutes(app);
     usersController.setRoutes(app, authController);
