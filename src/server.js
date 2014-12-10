@@ -57,7 +57,7 @@
     
     homeController.setRoutes(app);
     usersController.setRoutes(app, authController);
-    //commonController.setRoutes(app, log);
+    commonController.setRoutes(app, log);
     
     //programmer errors
     process.on('uncaughtException', function (err) {
