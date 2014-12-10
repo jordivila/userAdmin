@@ -56,7 +56,7 @@
     
     
     homeController.setRoutes(app);
-    //usersController.setRoutes(app, authController);
+    usersController.setRoutes(app, authController);
     //commonController.setRoutes(app, log);
     
     //programmer errors
