@@ -16,9 +16,9 @@
     var i18n = require('i18n-2');
     
 
-    //var authController = require('./controllers/auth');
-    //var homeController = require('./controllers/home');
-    //var usersController = require('./controllers/users');
+    var authController = require('./controllers/auth');
+    var homeController = require('./controllers/home');
+    var usersController = require('./controllers/users');
     var commonController = require('./controllers/common');
     
     var app = express();
@@ -53,7 +53,7 @@
         commonController.setAccessControlOrigin(app);
     }
     
-    /*
+    
     
     homeController.setRoutes(app);
     usersController.setRoutes(app, authController);
@@ -78,9 +78,9 @@
         process.exit(1);
     });
     
-    */
+    
     app.listen(app.get('port'), function () {
-        //log.info('Express server listening on port ' + app.get('port'));
+        log.info('Express server listening on port ' + app.get('port'));
     });
 
 })(module);
