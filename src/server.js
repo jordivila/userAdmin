@@ -35,7 +35,7 @@
     app.use('/public', express.static(__dirname + '/public', { maxAge: process.env.NODE_ENV === 'production' ? 86400000:0 }));
 
 
-    /*
+    
     i18n.expressBind(app, config.get("i18n"));
 
 
@@ -46,7 +46,7 @@
     });
 
 
-    
+    /*
 
     
     if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {

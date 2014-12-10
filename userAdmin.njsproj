@@ -34,6 +34,7 @@
     <Compile Include="src\controllers\home.js" />
     <Compile Include="src\controllers\users.js" />
     <Compile Include="src\libs\db.js" />
+    <Compile Include="src\models\users.validate.client.js" />
     <Compile Include="src\public\test\mocha\libs\utils.js" />
     <Compile Include="src\public\test\mocha\users.js" />
     <Compile Include="src\public\test\qunit\authTest.js" />
