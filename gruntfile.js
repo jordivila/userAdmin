@@ -28,6 +28,7 @@
          mochaTest: {
             test: {
                 options: {
+                    timeout: 2000,
                     reporter: 'spec',
                     //captureFile: 'results.txt', // Optionally capture the reporter output to a file
                     quiet: false, // Optionally suppress output to standard out (defaults to false)

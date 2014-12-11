@@ -3743,14 +3743,25 @@ function addEvents(elems, type, fn) {
     
     
     
-    i18n.expressBind(app, config.get("i18n"));
     
     
+    
+    //i18n.expressBind(app, config.get("i18n"));
+    i18n.expressBind(app, {
+        directory: "./src/public/locales",
+        locales: ["es", "en"],
+        defaultLocale: "en",
+        cookieName: "locale",
+        extension: ".json"
+    });
+
     // set up the middleware
     app.use(function (req, res, next) {
         req.i18n.setLocaleFromCookie();
         next();
     });
+    
+    
     
     
     
