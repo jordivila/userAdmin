@@ -14,5 +14,5 @@
         "defaultLocale": "en",
         "cookieName": "locale",
         "extension": ".json"
-    }    
+    }
 }

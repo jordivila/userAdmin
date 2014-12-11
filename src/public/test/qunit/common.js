@@ -1,7 +1,7 @@
 ﻿    
     var server = {
-        name : "localhost",
-        port : 3000,
+        name : window.location.hostname===''?'localhost':window.location.hostname,//"localhost",
+        port : window.location.port===''?3000:window.location.port, //3000,
         getBaseAddress: function () {
             return "http://" + this.name + ":" + this.port;
         }

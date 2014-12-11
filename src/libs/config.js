@@ -2,7 +2,6 @@
 //
 
 var p = 'src/config.json';
-console.log(p);
 
 config.argv()
     .env()
