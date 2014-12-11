@@ -39,14 +39,7 @@
     
     
     
-    //i18n.expressBind(app, config.get("i18n"));
-    i18n.expressBind(app, {
-        directory: "./public/locales",
-        locales: ["es", "en"],
-        defaultLocale: "en",
-        cookieName: "locale",
-        extension: ".json"
-    });
+    i18n.expressBind(app, config.get("i18n"));
 
     // set up the middleware
     app.use(function (req, res, next) {
