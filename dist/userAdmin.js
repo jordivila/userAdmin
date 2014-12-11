@@ -164,7 +164,7 @@
 })(module);;var config = require('nconf');
 //
 
-var p = 'src/config.json';
+var p = 'config.json';
 
 config.argv()
     .env()
