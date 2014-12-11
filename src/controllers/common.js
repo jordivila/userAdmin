@@ -21,7 +21,7 @@
             
             log.error(err);
             res.status(err.status || 500);
-            res.send({e:err}); // do not send error messages as it can send private info
+            res.send({}); // do not send error messages as it can send private info
 
         });
     };
