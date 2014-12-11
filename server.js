@@ -48,15 +48,9 @@
     });
     
     
-    log.info('Getting config->' + config.get('i18n'));
-    
-    
-    
-    
     if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {
         commonController.setAccessControlOrigin(app);
     }
-    
     
     
     homeController.setRoutes(app);
