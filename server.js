@@ -53,6 +53,14 @@
     }
     
     
+    //log requests
+    app.use(function (req, res, next) {
+        log.info('\n found URL: %s', req.url);
+        
+        next();
+    });
+
+    
     homeController.setRoutes(app);
     usersController.setRoutes(app, authController);
     commonController.setRoutes(app, log);
