@@ -80,12 +80,6 @@
                     node_env: 'dev'
                 }
             },
-            prod: {
-                options: {
-                    script: './server.js',
-                    node_env: 'prod'
-                }
-            },
             test: {
                 options: {
                     script: './server.js',
