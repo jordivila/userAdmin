@@ -49,6 +49,7 @@
     <Compile Include="src\libs\log.js" />
     <Compile Include="src\libs\config.js" />
     <Compile Include="src\models\users.js" />
+    <Content Include="iisnode.yml" />
     <Content Include="src\config.json" />
     <Content Include="package.json" />
     <Content Include="README.md" />
