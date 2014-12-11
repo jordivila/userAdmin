@@ -8,7 +8,7 @@
     "email": ""
   },
   "scripts": {
-    "start": "node ./src/server.js"
+    "start": "node ./server.js"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

@@ -9,7 +9,7 @@
     "encryptKeyForCookieParser": "someEncriptiongKey",
 
 	"i18n": {
-        "directory": "./public/locales",
+        "directory": "./src/public/locales",
         "locales": ["es", "en"],
         "defaultLocale": "en",
         "cookieName": "locale",

@@ -12,7 +12,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>92f999c9-9c68-4a0a-b50c-1dab548a19af</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>src\server.js</StartupFile>
+    <StartupFile>server.js</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -43,7 +43,7 @@
     <Compile Include="src\public\test\qunit\libs\jquery-1.11.1.min.js" />
     <Compile Include="src\public\test\qunit\libs\qunit.js" />
     <Compile Include="src\public\test\qunit\libs\validator.js" />
-    <Compile Include="src\server.js" />
+    <Compile Include="server.js" />
     <Compile Include="gruntfile.js" />
     <Compile Include="src\controllers\auth.js" />
     <Compile Include="src\libs\log.js" />

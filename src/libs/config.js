@@ -1,7 +1,7 @@
 ﻿var config = require('nconf');
 //
 
-var p = 'config.json';
+var p = 'src/config.json';
 
 config.argv()
     .env()

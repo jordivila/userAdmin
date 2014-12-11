@@ -40,6 +40,7 @@
 
         jshint: {
             files: ['gruntfile.js', 
+                    'server.js',
                     'src/**/*.js', 
 
 
@@ -74,20 +75,20 @@
             },
             dev: {
                 options: {
-                    script: './src/server.js',
+                    script: './server.js',
                     background: false, // --> false = keep server alive after grunt tasks,
                     node_env: 'dev'
                 }
             },
             prod: {
                 options: {
-                    script: './src/server.js',
+                    script: './server.js',
                     node_env: 'prod'
                 }
             },
             test: {
                 options: {
-                    script: './src/server.js',
+                    script: './server.js',
                     node_env: 'test'
                 }
             }

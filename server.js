@@ -9,30 +9,30 @@
     var compression = require('compression');
     var passport = require('passport');
     var bodyParser = require('body-parser');
-    var config = require('./libs/config');
-    var mongoose = require('./libs/db').mongoose;
-    var log = require('./libs/log')(module);
+    var config = require('./src/libs/config');
+    var mongoose = require('./src/libs/db').mongoose;
+    var log = require('./src/libs/log')(module);
     var cookieParser = require('cookie-parser');
     var i18n = require('i18n-2');
     
     
-    var authController = require('./controllers/auth');
-    var homeController = require('./controllers/home');
-    var usersController = require('./controllers/users');
-    var commonController = require('./controllers/common');
+    var authController = require('./src/controllers/auth');
+    var homeController = require('./src/controllers/home');
+    var usersController = require('./src/controllers/users');
+    var commonController = require('./src/controllers/common');
     
     var app = express();
     
     app.use(cookieParser(config.get('encryptKeyForCookieParser')));
     app.set('port', process.env.PORT || config.get('port'));
-    app.use(favicon(__dirname + '/public/favicon.ico'));
+    app.use(favicon(__dirname + '/src/public/favicon.ico'));
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.use(passport.initialize());
     app.use(methodOverride('X-HTTP-Method-Override'));
     app.use(compression());
     //set the Cache-Control header to one day using milliseconds
-    app.use('/public', express.static(__dirname + '/public', { maxAge: process.env.NODE_ENV === 'production' ? 86400000:0 }));
+    app.use('/public', express.static(__dirname + '/src/public', { maxAge: process.env.NODE_ENV === 'production' ? 86400000:0 }));
     
     
     
