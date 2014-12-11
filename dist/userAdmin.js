@@ -31,27 +31,27 @@
     
     module.exports.isAuthenticated = passport.authenticate('basic', { session : false });
 
-})(module);;(function (module) {
-    
+})(module);;(function(module) {
+
     "use strict";
-    
-    module.exports.setRoutes = function (app, log) {
-        
+
+    module.exports.setRoutes = function(app, log) {
+
         //catch 404
-        app.use(function (req, res, next) {
+        app.use(function(req, res, next) {
             log.info('Not found URL: %s', req.url);
-            
+
             res.status(404);
             res.send({});
         });
-        
+
         //operational errors
-        app.use(function (err, req, res, next) {
+        app.use(function(err, req, res, next) {
             if (!err) return next();
-            
+
             console.log(err.message);
             console.log(err.stack);
-            
+
             log.error(err);
             res.status(err.status || 500);
             res.send({}); // do not send error messages as it can send private info
@@ -59,11 +59,11 @@
         });
     };
 
-    module.exports.setAccessControlOrigin = function (app) {
+    module.exports.setAccessControlOrigin = function(app) {
         // This is not intended for production environments
 
 
-        app.use(function (req, res, next) {
+        app.use(function(req, res, next) {
             // Website you wish to allow to connect
             res.setHeader('Access-Control-Allow-Origin', '*');
             // Request methods you wish to allow
