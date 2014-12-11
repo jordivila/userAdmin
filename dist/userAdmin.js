@@ -3762,7 +3762,7 @@ function addEvents(elems, type, fn) {
     });
     
     
-    
+    log.info('Getting config->' + config.get('i18n'));
     
     
     

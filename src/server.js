@@ -55,7 +55,7 @@
     });
     
     
-    
+    log.info('Getting config->' + config.get('i18n'));
     
     
     
