@@ -41,6 +41,7 @@
 
     // set up the middleware
     app.use(function (req, res, next) {
+        log.info('\n found URL: %s', req.url);
         req.i18n.setLocaleFromCookie();
         next();
     });
@@ -51,12 +52,6 @@
     }
     
     
-    //log requests
-    app.use(function (req, res, next) {
-        log.info('\n found URL: %s', req.url);
-        
-        next();
-    });
     
     //set the Cache-Control header to one day using milliseconds
     app.use('/public', express.static(__dirname + '/src/public', { maxAge: process.env.NODE_ENV === 'production' ? 86400000:0 }));
