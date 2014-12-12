@@ -42,8 +42,10 @@
     // set up the middleware
     app.use(function (req, res, next) {
         req.i18n.setLocaleFromCookie();
-        log.info('\n request URL: %s', req.url); // log all requests
-        log.info('\n locale : %s', req.i18n.getLocale()); // log all requests
+
+        //log.info('\n request URL: %s', req.url); // log all requests
+        //log.info('\n locale : %s', req.i18n.getLocale()); // log all requests
+
         next();
     });
     

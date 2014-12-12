@@ -39,10 +39,10 @@
 
         //catch 404
         app.use(function(req, res, next) {
-            log.info('Not found URL: %s', req.url);
-
             res.status(404);
             res.send({});
+
+            log.info('Not found URL: %s', req.url);
         });
 
         //operational errors
@@ -91,74 +91,239 @@
         });
     };
 
-})(module);;(function (module) {
-    
+})(module);;(function(module) {
+
     "use strict";
-    
+
+    var log = require('../libs/log')(module);
+
+    var validator = require('validator');
+    var RoleModel = require('../models/roles');
+    var RoleValidator = require('../models/roles.validate.client');
+
+    function create(req, i18n, cb) {
+
+        var result = RoleValidator.validate(req, i18n, validator);
+
+        if (result.isValid) {
+            var roleReqModel = new RoleModel(req);
+
+            getByName(roleReqModel.name, function(err, role) {
+                if (err) {
+                    cb(err);
+                }
+                if (!role) {
+                    roleReqModel.save(function(err, roleCreated) {
+                        if (err) {
+                            cb(err);
+                        } else {
+                            result.isValid = true;
+                            result.roleId = roleCreated.roleId;
+                            result.messages.push(i18n.__("Role created"));
+                            cb(null, result);
+                        }
+                    });
+                } else {
+                    result.isValid = false;
+                    result.messages.push(i18n.__("Role already exists"));
+                    cb(null, result);
+                }
+            });
+        } else {
+            cb(null, result);
+        }
+    }
+
+    function getByName(roleName, cb) {
+        RoleModel.findOne({
+            name: roleName
+        }, cb);
+    }
+
+
+    module.exports.create = create;
+    module.exports.getByName = getByName;
+
+})(module);;(function(module) {
+
+    "use strict";
+
     var log = require('../libs/log')(module);
 
     var validator = require('validator');
     var UserModel = require('../models/users');
     var UserValidator = require('../models/users.validate.client');
-    
-    function create(req, i18n,  cb) {
-    
+    var usersInRolesController = require('./usersInRoles');
+
+    function create(req, i18n, cb) {
+
         var result = UserValidator.validate(req, i18n, validator);
 
-        if(result.isValid)
-        {
+        if (result.isValid) {
             var userReqModel = new UserModel(req);
-            
-            UserModel.findOne({ email : userReqModel.email }, function (err, user) {
+
+            UserModel.findOne({
+                email: userReqModel.email
+            }, function(err, user) {
                 if (err) {
                     cb(err);
                 }
                 if (!user) {
-                    userReqModel.save(function (err, userCreated) {
+                    userReqModel.save(function(err, userCreated) {
                         if (err) {
                             cb(err);
-                        }
-                        else {
-                            result.isValid = true;
-                            result.userId = userCreated.userId;
-                            result.messages.push(i18n.__("User created"));
-                            cb(null, result);
+                        } else {
+
+                            usersInRolesController.addToRole(
+                                userCreated.userId,
+                                "Guest",
+                                i18n,
+                                function(err, userInRoleAdded) {
+                                    if (err) {
+                                        cb(err);
+                                    } else {
+
+                                        if (!userInRoleAdded.isValid) {
+                                            result.isValid = userInRoleAdded.isValid;
+                                            result.messages = userInRoleAdded.messages;
+                                        } else {
+                                            result.isValid = true;
+                                            result.userId = userCreated.userId;
+                                            result.messages.push(i18n.__("User created"));
+                                        }
+                                        cb(null, result);
+                                    }
+                                });
                         }
                     });
-                }
-                else {
+                } else {
                     result.isValid = false;
                     result.messages.push(i18n.__("User already exists"));
                     cb(null, result);
                 }
             });
-        }
-        else{
+        } else {
             cb(null, result);
         }
     }
-    
+
+    function getById(userId, cb) {
+        UserModel.findById(userId, cb);
+    }
+
 
     module.exports.create = create;
+    module.exports.getById = getById;
 
-    module.exports.setRoutes = function (app, authController) {
-        
-        app.get('/api/user',
-                authController.isAuthenticated,
-                function (req, res) {
-                    res.json({user:req.user}); // passport sets user object when authenticated
-                });
-        
-        app.post('/api/user', function (req, res, next) {
-            var result = create(req.body, req.i18n, function (err, user) {
+    module.exports.setRoutes = function(app, authController) {
+
+        app.get('/api/user', [
+            authController.isAuthenticated,
+            function(req, res, next) {
+                var user = req.user;
+                res.json(user); // passport sets user object when authenticated
+            }
+        ]);
+
+        app.post('/api/user', function(req, res, next) {
+            var result = create(req.body, req.i18n, function(err, user) {
                 if (err) {
                     next(err);
-                }
-                else {
+                } else {
                     res.json(user);
                 }
             });
         });
+    };
+
+})(module);;(function(module) {
+
+    "use strict";
+
+    var log = require('../libs/log')(module);
+
+    var validator = require('validator');
+    var UsersInRoleModel = require('../models/usersInRoles');
+    var rolesController = require('./roles');
+    var usersController = require('./users');
+
+    function addToRole(userId, roleName, i18n, cb) {
+
+        var result = {
+            isValid: null,
+            messages: []
+        };
+
+        rolesController.getByName(roleName, function(errRole, role) {
+
+            if (errRole) {
+                cb(errRole);
+            } else {
+
+                if (!role) {
+                    result.isValid = false;
+                    result.messages.push(i18n.__("Role does not exists"));
+                    cb(null, result);
+                } else {
+                    usersController.getById(userId, function(errUser, user) {
+                        if (errUser) {
+                            cb(errUser);
+                        } else {
+                            if (!user) {
+                                result.isValid = false;
+                                result.messages.push(i18n.__("User does not exists"));
+                                cb(null, result);
+                            } else {
+                                var userInRoleReqModel = new UsersInRoleModel({
+                                    userId: userId,
+                                    roleId: role.roleId
+                                });
+
+                                userInRoleReqModel.save(function(err, userInRole) {
+                                    if (err) {
+                                        cb(err);
+                                    } else {
+
+                                        result.isValid = true;
+                                        result.messages.push(i18n.__("User added to role"));
+
+                                        cb(null, result);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+
+
+    module.exports.addToRole = addToRole;
+
+    module.exports.setRoutes = function(app, authController) {
+
+        /*
+        app.get('/api/user', [
+            authController.isAuthenticated,
+            function(req, res, next) {
+                var user = req.user;
+                res.json(user); // passport sets user object when authenticated
+            }
+        ]);
+
+        app.post('/api/user', function(req, res, next) {
+            var result = create(req.body, req.i18n, function(err, user) {
+                if (err) {
+                    next(err);
+                } else {
+                    res.json(user);
+                }
+            });
+        });
+        */
+
     };
 
 })(module);;var config = require('nconf');
@@ -210,7 +375,86 @@ function getLogger(module) {
     });
 }
 
-module.exports = getLogger;;(function (module) {
+module.exports = getLogger;;(function(module) {
+
+    "use strict";
+
+    // Load required packages
+    var mongoose = require('mongoose');
+
+    // Define our role schema
+    var RoleSchema = new mongoose.Schema({
+        name: {
+            type: String,
+            unique: true,
+            required: true
+        }
+    });
+
+
+    RoleSchema
+        .virtual('roleId')
+        .get(function() {
+            return this.id;
+        });
+
+    // Export the Mongoose model
+    module.exports = mongoose.model('Role', RoleSchema);
+
+})(module);;(function(name, definition) {
+    if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
+        module.exports = definition();
+    } else if (typeof define === 'function' && typeof define.amd === 'object') {
+        define(definition);
+    } else {
+        this[name] = definition();
+    }
+})('roleValidator', function(roleValidator) {
+
+    'use strict';
+
+    roleValidator = {
+        version: '0.0.1'
+    };
+
+    roleValidator.extend = function(name, fn) {
+        roleValidator[name] = function() {
+            var args = Array.prototype.slice.call(arguments);
+            args[0] = roleValidator.toString(args[0]);
+            return fn.apply(roleValidator, args);
+        };
+    };
+
+    roleValidator.validate = function(obj, i18n, validator) {
+
+        var result = {
+            isValid: true,
+            messages: []
+        };
+
+        try {
+
+            if (
+                (validator.toString(obj.name).trim() === '')
+            ) {
+                result.isValid = false;
+                result.messages.push({
+                    password: i18n.__("Invalid role name")
+                });
+            }
+        } catch (e) {
+            result.isValid = false;
+            result.messages.push({
+                0: i18n.__("Unhandled error")
+            });
+        }
+
+        return result;
+    };
+
+    return roleValidator;
+
+});;(function (module) {
     
     "use strict";
     
@@ -267,7 +511,7 @@ module.exports = getLogger;;(function (module) {
     // Export the Mongoose model
     module.exports = mongoose.model('User', UserSchema);
 
-})(module);;(function (name, definition) {
+})(module);;(function(name, definition) {
     if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
         module.exports = definition();
     } else if (typeof define === 'function' && typeof define.amd === 'object') {
@@ -275,112 +519,129 @@ module.exports = getLogger;;(function (module) {
     } else {
         this[name] = definition();
     }
-})('userValidator', function (userValidator) {
+})('userValidator', function(userValidator) {
 
     'use strict';
 
+    userValidator = {
+        version: '0.0.1'
+    };
 
-    userValidator = { version: '3.22.2' };
-
-    userValidator.extend = function (name, fn) {
-        userValidator[name] = function () {
+    userValidator.extend = function(name, fn) {
+        userValidator[name] = function() {
             var args = Array.prototype.slice.call(arguments);
             args[0] = userValidator.toString(args[0]);
             return fn.apply(userValidator, args);
         };
     };
 
-
-    /*
-    //Right before exporting the userValidator object, pass each of the builtins
-    //through extend() so that their first argument is coerced to a string
-    userValidator.init = function () {
-        for (var name in userValidator) {
-            if (typeof userValidator[name] !== 'function' || name === 'toString' ||
-                    name === 'toDate' || name === 'extend' || name === 'init') {
-                continue;
-            }
-            userValidator.extend(name, userValidator[name]);
-        }
-    };
-    */
-
-    userValidator.validate = function (obj, i18n, validator) {
+    userValidator.validate = function(obj, i18n, validator) {
 
         var result = {
-            isValid : true,
-            messages : []
+            isValid: true,
+            messages: []
         };
 
-        try{
+        try {
 
-            if(validator.toString(obj.password).trim() === '')
-            {
+            if (
+                (validator.toString(obj.password).trim() === '') &&
+                (validator.toString(obj.password).trim().length < 6)
+            ) {
                 result.isValid = false;
-                result.messages.push({ password: i18n.__("Invalid password") });
+                result.messages.push({
+                    password: i18n.__("Invalid password")
+                });
             }
 
-            if(validator.toString(obj.password) !== validator.toString(obj.passwordConfirm))
-            {
+            if (validator.toString(obj.password) !== validator.toString(obj.passwordConfirm)) {
                 result.isValid = false;
-                result.messages.push({ passwordConfirmation:i18n.__("Password and confirmation do not match") });
+                result.messages.push({
+                    passwordConfirmation: i18n.__("Password and confirmation do not match")
+                });
             }
 
-            if(!validator.isEmail(obj.email))
-            {
+            if (!validator.isEmail(obj.email)) {
                 result.isValid = false;
-                result.messages.push({ email: i18n.__("Invalid email address") });
+                result.messages.push({
+                    email: i18n.__("Invalid email address")
+                });
             }
 
-        }
-        catch(e)
-        {
+        } catch (e) {
             result.isValid = false;
-            result.messages.push({ 0 : i18n.__("Unhandled error") });
+            result.messages.push({
+                0: i18n.__("Unhandled error")
+            });
         }
 
         return result;
     };
 
-    //userValidator.init();
-
     return userValidator;
 
-});;(function () {
-    
-    'use strict';
-    
-    /*
-    * Modified from https://github.com/elliotf/mocha-mongoose
-    */
+});;(function(module) {
 
-    var db = require('../../../../libs/db');
+    "use strict";
+
+    // Load required packages
+    var mongoose = require('mongoose');
+
+    // Define our role schema
+    var UsersInRolesSchema = new mongoose.Schema({
+        userId: {
+            type: String,
+            required: true
+        },
+        roleId: {
+            type: String,
+            required: true
+        }
+    });
+
+    // Export the Mongoose model
+    module.exports = mongoose.model('UsersInRoles', UsersInRolesSchema);
+
+})(module);;(function() {
+
+    'use strict';
+
+    /*
+     * Modified from https://github.com/elliotf/mocha-mongoose
+     */
+
+    //var db = require('../../../../libs/db');
     var config = require('../../../../libs/config');
     var mongoose = require('mongoose');
-    var i18n = new (require('i18n-2'))(config.get("i18n"));
-    
+    var i18n = new(require('i18n-2'))(config.get("i18n"));
+
     // ensure the NODE_ENV is set to 'test'
     // this is helpful when you would like to change behavior when testing
     process.env.NODE_ENV = 'test';
-    
-    before(function () {
+
+    before(function(done) {
+
         global.i18n = i18n;
+
+        done();
     });
 
-    after(function () {
-        
+    after(function(done) {
+        done();
     });
 
-    beforeEach(function (done) {
-        
+    beforeEach(function(done) {
+
         function clearDB() {
-            mongoose.connection.db.dropDatabase(function (err, result) { 
-                return done();
+
+            mongoose.connection.db.dropDatabase(function(err, result) {
+                done();
             });
         }
-        
+
         if (mongoose.connection.readyState === 0) {
-            mongoose.connect(config.get('mongoose:uri'), function (err) {
+
+            mongoose.connect(config.get('mongoose:uri'), function(err) {
                 if (err) {
                     throw err;
                 }
@@ -389,11 +650,13 @@ module.exports = getLogger;;(function (module) {
         } else {
             return clearDB();
         }
+
+
     });
-    
-    afterEach(function (done) {
+
+    afterEach(function(done) {
         mongoose.disconnect();
-        return done();
+        done();
     });
 
 })();;(function () {
@@ -439,6 +702,118 @@ module.exports = getLogger;;(function (module) {
                 });
             });
             
+        });
+    });
+})();;(function() {
+    'use strict';
+    // import the moongoose helper utilities
+    var utils = require('./libs/utils');
+    var assert = require("assert");
+    var userController = require('../../../controllers/users');
+    var roleController = require('../../../controllers/roles');
+
+
+    describe('Users', function() {
+        describe('Register process', function() {
+
+            var UserNameValid = new Date().toJSON().replace(/\W+/g, '').toLowerCase();
+            var UserEmailValid = UserNameValid + "@valid.com";
+            var UserPassword = "123456";
+            var UserNameValidActivationToken; //Guid
+            var CantAccessMyAccountToken; //Guid
+            var UserNameValidUnActivated = new Date().toJSON().replace(/\W+/g, '').toLowerCase(); //Guid.NewGuid().ToString();
+            var UserEmailValidUnActivated = UserNameValidUnActivated + "@valid.com";
+
+
+            function initUser(email, password, passwordConfirm) {
+                return {
+                    email: email,
+                    password: password,
+                    passwordConfirm: passwordConfirm
+                };
+            }
+
+            function resultHasMessage(messageToSearch, keyValueArray) {
+                for (var j = 0; j < keyValueArray.length; j++) {
+                    for (var i in keyValueArray[j]) {
+                        if (keyValueArray[j][i] == messageToSearch) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+
+            it('no invalid emails allowed', function(done) {
+                userController.create(initUser("invalidEmail", "123456", "123456"), i18n, function(err, createdUser) {
+                    assert.equal(err, null, err === null ? '' : err.message);
+                    assert.equal(createdUser.isValid, false);
+                    assert.equal(resultHasMessage(i18n.__("Invalid email address"), createdUser.messages), true);
+                    done();
+                });
+            });
+
+            it('no invalid passwords allowed', function(done) {
+                userController.create(initUser(UserEmailValid, "    ", "    "), i18n, function(err, createdUser) {
+                    assert.equal(err, null, err === null ? '' : err.message);
+                    assert.equal(createdUser.isValid, false);
+                    assert.equal(resultHasMessage(i18n.__("Invalid password"), createdUser.messages), true);
+                    done();
+                });
+            });
+
+            it('password and password confirmation match', function(done) {
+                userController.create(initUser(UserEmailValid, "123456", "1234567"), i18n, function(err, createdUser) {
+                    assert.equal(err, null, err === null ? '' : err.message);
+                    assert.equal(createdUser.isValid, false);
+                    assert.equal(resultHasMessage(i18n.__("Password and confirmation do not match"), createdUser.messages), true);
+                    done();
+                });
+            });
+
+            it('register succeeds', function(done) {
+
+                var newRole = {
+                    name: "Guest"
+                };
+
+                roleController.create(newRole, i18n, function(errRole, roleCreated) {
+                    assert.equal(errRole, null, errRole === null ? '' : errRole.message);
+
+
+                    userController.create(initUser(UserEmailValid, UserPassword, UserPassword), i18n, function(err, createdUser) {
+                        assert.equal(err, null, err === null ? '' : err.message);
+                        assert.equal(createdUser.isValid, true);
+                        assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
+                        done();
+                    });
+
+                });
+
+
+            });
+
+            /*
+                        it('create unactivated account succeeds', function(done) {
+                            
+                        });
+
+                        it('register duplicated not allowed', function(done) {
+                            assert.equal(false, true);
+                            done();
+                        });
+
+                        it('activating account with invalid token not allowed', function(done) {
+                            assert.equal(false, true);
+                            done();
+                        });
+
+                        it('activate account succeeds', function(done) {
+                            assert.equal(false, true);
+                            done();
+                        });
+            */
         });
     });
 })();;(function (module) {
@@ -589,58 +964,72 @@ module.exports = getLogger;;(function (module) {
 
 
 
-})(module);;(function (module) {
-    
+})(module);;(function(module) {
+
     'use strict';
 
-    module("Create user Tests");
-    
+    module("User Tests");
+
     jQuery(document)
-        .ajaxSend(function (e, x, settings) {
+        .ajaxSend(function(e, x, settings) {
             stop();
         })
-        .ajaxComplete(function (e, x, settings) {
+        .ajaxComplete(function(e, x, settings) {
             start();
         });
-        
 
-    
-    var postUser = function (userCredentials, callback) {
-        
+    var userGenerate = function() {
+
+        return {
+            email: "some_email" + new Date().toJSON().replace(/\W+/g, '').toLowerCase() + "@domain.com",
+            password: "somepassword",
+            passwordConfirm: "somepassword"
+        };
+    };
+
+    var postUser = function(userCredentials, callback) {
+
         jQuery.post(server.getBaseAddress() + "/api/user/", userCredentials)
-            .done(function (data, textStatus, jqXHR) {
+            .done(function(data, textStatus, jqXHR) {
                 callback(data);
             })
-            .fail(function (jqXHR, textStatus, errorThrown) {
+            .fail(function(jqXHR, textStatus, errorThrown) {
                 ok(false, "Unhandled error creating user. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
             });
     };
-    
-    var user = {
-        email: "some_email" + new Date().toJSON().replace(/\W+/g, '').toLowerCase() + "@domain.com",
-        password :"somepassword",
-        passwordConfirm: "somepassword"
-    };
 
-    test("create user", function () {
-        postUser(user, function (data) {
-            ok(data.isValid === true, "Expected user created. Instead found not valid result");
-            ok(data.userId !== null, "Expected userId value");
-            
-                jQuery
-                    .ajax({
-                        url: server.getBaseAddress() + "/api/user/",
-                        type: "GET",
-                        beforeSend: function (xhr, settings) {
-                            xhr.setRequestHeader("Authorization", "Basic " + btoa(user.email + ":" + user.password)); 
-                        }
-                    })
-                    .done(function (dataUserInfo, textStatus, jqXHR) {
-                        equal(user.email, dataUserInfo.user.email, "token user match username");
-                    })
-                    .fail(function (jqXHR, textStatus, errorThrown) {
-                        ok(false, "Something went wrong getting userinfo");
-                    });
+
+    test("user creation", function() {
+
+        var user = userGenerate();
+
+        postUser(user, function(data) {
+            ok(data.isValid === true, "Users can create login credentials");
+            ok(data.userId !== null, "Users credentials generate userId");
+        });
+    });
+
+    test("user authentication", function() {
+
+        var user = userGenerate();
+
+        postUser(user, function(data) {
+            ok(data.isValid === true, "Users can create login credentials");
+
+            jQuery
+                .ajax({
+                    url: server.getBaseAddress() + "/api/user/",
+                    type: "GET",
+                    beforeSend: function(xhr, settings) {
+                        xhr.setRequestHeader("Authorization", "Basic " + btoa(user.email + ":" + user.password));
+                    }
+                })
+                .done(function(dataUserInfo, textStatus, jqXHR) {
+                    equal(user.email, dataUserInfo.email, "token user match username");
+                })
+                .fail(function(jqXHR, textStatus, errorThrown) {
+                    ok(false, "Something went wrong getting userinfo");
+                });
         });
     });
 

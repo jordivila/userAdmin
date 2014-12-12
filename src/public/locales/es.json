@@ -1,8 +1,14 @@
 {
 	"User created": "Usuario creado",
 	"User already exists": "El usuario ya existe",
-	"Password and confirmation do not match": "Password and confirmation do not match",
-	"Unhandled error": "Unhandled error",
-	"Invalid password": "Invalid password",
-	"Invalid email address": "Invalid email address"
+	"Password and confirmation do not match": "La contraseña y la confirmación no son iguales",
+	"Unhandled error": "Error no controlado",
+	"Invalid password": "Contraseña inválida",
+	"Invalid email address": "Dirección de correo electrónico no válida",
+	"Invalid role name": "Nombre de perfil inválido",
+	"Role created": "Perfil creado",
+	"Role already exists": "El nombre de perfil ya existe",
+	"Role does not exists": "El nombre de perfil no existe",
+	"User does not exists": "El usuario no existe",
+	"User added to role": "Usuario añadido al perfil"
 }

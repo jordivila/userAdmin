@@ -1,7 +1,8 @@
-﻿module.exports = function (grunt) {
-    
+﻿module.exports = function(grunt) {
+
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+
         concat: {
             options: {
                 separator: ';'
@@ -22,13 +23,12 @@
             }
         },
         qunit: {
-            files: ['src/public/test/qunit/**/*.html']
+            allTests: ['src/public/test/qunit/**/*.html']
         },
-        
-         mochaTest: {
+        mochaTest: {
             test: {
                 options: {
-                    timeout: 2000,
+                    timeout: 4000,
                     reporter: 'spec',
                     //captureFile: 'results.txt', // Optionally capture the reporter output to a file
                     quiet: false, // Optionally suppress output to standard out (defaults to false)
@@ -37,17 +37,16 @@
                 src: ['src/public/test/mocha/**/*.js', '!src/public/test/mocha/libs/**/*.js']
             }
         },
-
         jshint: {
-            files: ['gruntfile.js', 
-                    'server.js',
-                    'src/**/*.js', 
+            files: ['gruntfile.js',
+                'server.js',
+                'src/**/*.js',
 
 
-                    'src/public/test/qunit/**/*.js',
-                    '!src/public/test/qunit/libs/**/*.js',
+                'src/public/test/qunit/**/*.js',
+                '!src/public/test/qunit/libs/**/*.js',
 
-                    'src/public/test/mocha/**/*.js'
+                'src/public/test/mocha/**/*.js'
             ],
             options: {
                 globals: {
@@ -58,37 +57,56 @@
                 }
             }
         },
+
+
+
+        // Grunt express - our webserver
+        // https://github.com/blai/grunt-express
+        express: {
+            testQunit: {
+                options: {
+                    script: './server.js',
+                    node_env: 'test',
+                    livereload: true,
+                    port: 3000
+                }
+            },
+            testMocha: {
+                options: {
+                    script: './server.js',
+                    node_env: 'test',
+                    livereload: false,
+                    port: 3001
+                }
+            }
+
+        },
+
+        // grunt-watch will monitor the projects files
+        // https://github.com/gruntjs/grunt-contrib-watch
         watch: {
-            
-            files: ['<%= jshint.files %>'],
-            tasks: ['frontend', 'backend'],
-            express: {
+            qunit: {
                 files: ['<%= jshint.files %>'],
                 options: {
-                    spawn: false 
+                    livereload: true
                 }
+            },
+            mocha: {
+                files: ['<%= jshint.files %>'],
+                tasks: ['frontend', 'backendMochaTests'],
             }
         },
-        express: {
-            options: {
-      
-            },
-            dev: {
-                options: {
-                    script: './server.js',
-                    background: false, // --> false = keep server alive after grunt tasks,
-                    node_env: 'dev'
-                }
-            },
-            test: {
-                options: {
-                    script: './server.js',
-                    node_env: 'test'
-                }
+
+        // grunt-open will open your browser at the project's URL
+        // https://www.npmjs.org/package/grunt-open
+        open: {
+            all: {
+                path: 'http://localhost:3000/public/test/qunit/index.html'
             }
         }
+
     });
-    
+
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
@@ -96,13 +114,13 @@
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-express-server');
     grunt.loadNpmTasks('grunt-mocha-test');
+    grunt.loadNpmTasks('grunt-open');
 
-    
-    
-    
     grunt.registerTask('frontend', ['jshint:files', 'concat', 'uglify']);
-    grunt.registerTask('backend', ['express:test', 'mochaTest', 'qunit' ]);
-    grunt.registerTask('backendDev', ['express:dev']);
-    
+    grunt.registerTask('backendMochaTests', ['mochaTest']);
+    //grunt.registerTask('backendDev', ['express:dev']);
+    grunt.registerTask('liveReload', ['express:testQunit', 'open', 'watch:qunit']);
+    //grunt.registerTask('serverMocha', ['express:testMocha', 'mochaTest', 'watch:withNoReload']);
+
 
 };

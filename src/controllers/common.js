@@ -6,10 +6,10 @@
 
         //catch 404
         app.use(function(req, res, next) {
-            log.info('Not found URL: %s', req.url);
-
             res.status(404);
             res.send({});
+
+            log.info('Not found URL: %s', req.url);
         });
 
         //operational errors

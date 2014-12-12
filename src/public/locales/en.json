@@ -1,4 +1,14 @@
 {
 	"User created": "User created",
-	"User already exists":"User already exists"
+	"User already exists": "User already exists",
+	"Password and confirmation do not match": "Password and confirmation do not match",
+	"Unhandled error": "Unhandled error",
+	"Invalid password": "Invalid password",
+	"Invalid email address": "Invalid email address",
+	"Invalid role name": "Invalid role name",
+	"Role created": "Role created",
+	"Role already exists": "Role already exists",
+	"Role does not exists": "Role does not exists",
+	"User does not exists": "User does not exists",
+	"User added to role": "User added to role"
 }
