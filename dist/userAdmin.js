@@ -165,9 +165,7 @@
             UserModel.findOne({
                 email: userReqModel.email
             }, function(err, user) {
-                if (err) {
-                    cb(err);
-                }
+                if (err) cb(err);
                 if (!user) {
                     userReqModel.save(function(err, userCreated) {
                         if (err) {
