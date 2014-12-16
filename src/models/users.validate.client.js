@@ -22,14 +22,15 @@
         };
     };
 
-    userValidator.validate = function(obj, i18n, validator) {
-
-        var result = {
-            isValid: true,
-            messages: []
-        };
+    userValidator.validate = function(obj, i18n, validator, cb) {
 
         try {
+
+            var result = {
+                isValid: true,
+                messages: []
+            };
+
 
             if (
                 (validator.toString(obj.password).trim() === '') &&
@@ -55,14 +56,14 @@
                 });
             }
 
+            return cb(null, result);
+
         } catch (e) {
-            result.isValid = false;
-            result.messages.push({
-                0: i18n.__("Unhandled error")
-            });
+
+            return cb(e);
         }
 
-        return result;
+
     };
 
     return userValidator;

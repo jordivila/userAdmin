@@ -10,5 +10,7 @@
 	"Role already exists": "El nombre de perfil ya existe",
 	"Role does not exists": "El nombre de perfil no existe",
 	"User does not exists": "El usuario no existe",
-	"User added to role": "Usuario añadido al perfil"
+	"User added to role": "Usuario añadido al perfil",
+	"Unhandled error->[object Object]": "Unhandled error->[object Object]",
+	"Unhandled error->": "Unhandled error->"
 }

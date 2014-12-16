@@ -6,57 +6,47 @@
 
     var validator = require('validator');
     var UserModel = require('../models/users');
+    var DataResultModel = require('../models/dataResult');
+    var ErrorHandledModel = require('../models/errorHandled');
     var UserValidator = require('../models/users.validate.client');
     var usersInRolesController = require('./usersInRoles');
 
     function create(req, i18n, cb) {
 
-        var result = UserValidator.validate(req, i18n, validator);
+        UserValidator.validate(req, i18n, validator, function(err, resultValidation) {
+            if (err) return cb(err);
+            if (!resultValidation.isValid) return cb(null, resultValidation);
 
-        if (result.isValid) {
+
             var userReqModel = new UserModel(req);
 
             UserModel.findOne({
-                email: userReqModel.email
-            }, function(err, user) {
-                if (err) cb(err);
-                if (!user) {
+                    email: userReqModel.email
+                },
+                function(err, user) {
+
+                    if (err) return cb(err);
+                    if (user) return cb(new ErrorHandledModel(i18n.__("User already exists")));
+
+
                     userReqModel.save(function(err, userCreated) {
-                        if (err) {
-                            cb(err);
-                        } else {
 
-                            usersInRolesController.addToRole(
-                                userCreated.userId,
-                                "Guest",
-                                i18n,
-                                function(err, userInRoleAdded) {
-                                    if (err) {
-                                        cb(err);
-                                    } else {
+                        if (err) return cb(err);
 
-                                        if (!userInRoleAdded.isValid) {
-                                            result.isValid = userInRoleAdded.isValid;
-                                            result.messages = userInRoleAdded.messages;
-                                        } else {
-                                            result.isValid = true;
-                                            result.userId = userCreated.userId;
-                                            result.messages.push(i18n.__("User created"));
-                                        }
-                                        cb(null, result);
-                                    }
-                                });
-                        }
+                        usersInRolesController.addToRole(
+                            userCreated.userId,
+                            "Guest",
+                            i18n,
+                            function(err, userInRoleAdded) {
+                                if (err) return cb(err);
+
+                                return cb(null, new DataResultModel(true, i18n.__("User created"), {
+                                    userId: userCreated.userId
+                                }));
+                            });
                     });
-                } else {
-                    result.isValid = false;
-                    result.messages.push(i18n.__("User already exists"));
-                    cb(null, result);
-                }
-            });
-        } else {
-            cb(null, result);
-        }
+                });
+        });
     }
 
     function getById(userId, cb) {

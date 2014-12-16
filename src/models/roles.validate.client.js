@@ -22,14 +22,14 @@
         };
     };
 
-    roleValidator.validate = function(obj, i18n, validator) {
-
-        var result = {
-            isValid: true,
-            messages: []
-        };
+    roleValidator.validate = function(obj, i18n, validator, cb) {
 
         try {
+
+            var result = {
+                isValid: true,
+                messages: []
+            };
 
             if (
                 (validator.toString(obj.name).trim() === '')
@@ -39,14 +39,12 @@
                     password: i18n.__("Invalid role name")
                 });
             }
-        } catch (e) {
-            result.isValid = false;
-            result.messages.push({
-                0: i18n.__("Unhandled error")
-            });
-        }
 
-        return result;
+            return cb(null, result);
+
+        } catch (e) {
+            return cb(e);
+        }
     };
 
     return roleValidator;

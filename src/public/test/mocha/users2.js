@@ -82,10 +82,7 @@
                         assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
                         done();
                     });
-
                 });
-
-
             });
 
             /*

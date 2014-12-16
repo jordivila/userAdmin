@@ -4,9 +4,11 @@
 var p = 'src/config.json';
 
 config.argv()
-    .env()
-    .file({ file: p })// relative to application entry
-	;
+	.env()
+	.file({
+		file: p
+	}) // relative to application entry
+;
 
 
 

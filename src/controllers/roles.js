@@ -3,42 +3,35 @@
     "use strict";
 
     var log = require('../libs/log')(module);
-
     var validator = require('validator');
     var RoleModel = require('../models/roles');
     var RoleValidator = require('../models/roles.validate.client');
+    var DataResultModel = require('../models/dataResult');
 
     function create(req, i18n, cb) {
 
-        var result = RoleValidator.validate(req, i18n, validator);
+        RoleValidator.validate(req, i18n, validator, function(err, resultValidation) {
+            if (err) return cb(err);
+            if (!resultValidation.isValid) return cb(null, resultValidation);
 
-        if (result.isValid) {
             var roleReqModel = new RoleModel(req);
 
             getByName(roleReqModel.name, function(err, role) {
-                if (err) {
-                    cb(err);
-                }
-                if (!role) {
-                    roleReqModel.save(function(err, roleCreated) {
-                        if (err) {
-                            cb(err);
-                        } else {
-                            result.isValid = true;
-                            result.roleId = roleCreated.roleId;
-                            result.messages.push(i18n.__("Role created"));
-                            cb(null, result);
-                        }
-                    });
-                } else {
-                    result.isValid = false;
-                    result.messages.push(i18n.__("Role already exists"));
-                    cb(null, result);
-                }
+                if (err) return cb(err);
+                if (role) return cb(new ErrorHandledModel(i18n.__("Role already exists")));
+
+
+                roleReqModel.save(function(err, roleCreated) {
+                    if (err) return cb(err);
+
+                    return cb(null, new DataResultModel(true, i18n.__("Role created"), {
+                        roleId: roleCreated.roleId
+                    }));
+                });
+
             });
-        } else {
-            cb(null, result);
-        }
+
+        });
     }
 
     function getByName(roleName, cb) {

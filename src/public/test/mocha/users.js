@@ -1,4 +1,5 @@
-﻿(function () {
+﻿/*
+(function () {
     'use strict';
     // import the moongoose helper utilities
     var utils = require('./libs/utils');
@@ -44,3 +45,4 @@
         });
     });
 })();
+*/

@@ -96,42 +96,35 @@
     "use strict";
 
     var log = require('../libs/log')(module);
-
     var validator = require('validator');
     var RoleModel = require('../models/roles');
     var RoleValidator = require('../models/roles.validate.client');
+    var DataResultModel = require('../models/dataResult');
 
     function create(req, i18n, cb) {
 
-        var result = RoleValidator.validate(req, i18n, validator);
+        RoleValidator.validate(req, i18n, validator, function(err, resultValidation) {
+            if (err) return cb(err);
+            if (!resultValidation.isValid) return cb(null, resultValidation);
 
-        if (result.isValid) {
             var roleReqModel = new RoleModel(req);
 
             getByName(roleReqModel.name, function(err, role) {
-                if (err) {
-                    cb(err);
-                }
-                if (!role) {
-                    roleReqModel.save(function(err, roleCreated) {
-                        if (err) {
-                            cb(err);
-                        } else {
-                            result.isValid = true;
-                            result.roleId = roleCreated.roleId;
-                            result.messages.push(i18n.__("Role created"));
-                            cb(null, result);
-                        }
-                    });
-                } else {
-                    result.isValid = false;
-                    result.messages.push(i18n.__("Role already exists"));
-                    cb(null, result);
-                }
+                if (err) return cb(err);
+                if (role) return cb(new ErrorHandledModel(i18n.__("Role already exists")));
+
+
+                roleReqModel.save(function(err, roleCreated) {
+                    if (err) return cb(err);
+
+                    return cb(null, new DataResultModel(true, i18n.__("Role created"), {
+                        roleId: roleCreated.roleId
+                    }));
+                });
+
             });
-        } else {
-            cb(null, result);
-        }
+
+        });
     }
 
     function getByName(roleName, cb) {
@@ -152,57 +145,47 @@
 
     var validator = require('validator');
     var UserModel = require('../models/users');
+    var DataResultModel = require('../models/dataResult');
+    var ErrorHandledModel = require('../models/errorHandled');
     var UserValidator = require('../models/users.validate.client');
     var usersInRolesController = require('./usersInRoles');
 
     function create(req, i18n, cb) {
 
-        var result = UserValidator.validate(req, i18n, validator);
+        UserValidator.validate(req, i18n, validator, function(err, resultValidation) {
+            if (err) return cb(err);
+            if (!resultValidation.isValid) return cb(null, resultValidation);
 
-        if (result.isValid) {
+
             var userReqModel = new UserModel(req);
 
             UserModel.findOne({
-                email: userReqModel.email
-            }, function(err, user) {
-                if (err) cb(err);
-                if (!user) {
+                    email: userReqModel.email
+                },
+                function(err, user) {
+
+                    if (err) return cb(err);
+                    if (user) return cb(new ErrorHandledModel(i18n.__("User already exists")));
+
+
                     userReqModel.save(function(err, userCreated) {
-                        if (err) {
-                            cb(err);
-                        } else {
 
-                            usersInRolesController.addToRole(
-                                userCreated.userId,
-                                "Guest",
-                                i18n,
-                                function(err, userInRoleAdded) {
-                                    if (err) {
-                                        cb(err);
-                                    } else {
+                        if (err) return cb(err);
 
-                                        if (!userInRoleAdded.isValid) {
-                                            result.isValid = userInRoleAdded.isValid;
-                                            result.messages = userInRoleAdded.messages;
-                                        } else {
-                                            result.isValid = true;
-                                            result.userId = userCreated.userId;
-                                            result.messages.push(i18n.__("User created"));
-                                        }
-                                        cb(null, result);
-                                    }
-                                });
-                        }
+                        usersInRolesController.addToRole(
+                            userCreated.userId,
+                            "Guest",
+                            i18n,
+                            function(err, userInRoleAdded) {
+                                if (err) return cb(err);
+
+                                return cb(null, new DataResultModel(true, i18n.__("User created"), {
+                                    userId: userCreated.userId
+                                }));
+                            });
                     });
-                } else {
-                    result.isValid = false;
-                    result.messages.push(i18n.__("User already exists"));
-                    cb(null, result);
-                }
-            });
-        } else {
-            cb(null, result);
-        }
+                });
+        });
     }
 
     function getById(userId, cb) {
@@ -241,86 +224,51 @@
     var log = require('../libs/log')(module);
 
     var validator = require('validator');
+    var ErrorHandledModel = require('../models/errorHandled');
     var UsersInRoleModel = require('../models/usersInRoles');
+    var DataResultModel = require('../models/dataResult');
     var rolesController = require('./roles');
     var usersController = require('./users');
 
     function addToRole(userId, roleName, i18n, cb) {
 
-        var result = {
-            isValid: null,
-            messages: []
-        };
-
         rolesController.getByName(roleName, function(errRole, role) {
 
-            if (errRole) {
-                cb(errRole);
-            } else {
+            if (errRole) return cb(errRole);
 
-                if (!role) {
-                    result.isValid = false;
-                    result.messages.push(i18n.__("Role does not exists"));
-                    cb(null, result);
-                } else {
-                    usersController.getById(userId, function(errUser, user) {
-                        if (errUser) {
-                            cb(errUser);
-                        } else {
-                            if (!user) {
-                                result.isValid = false;
-                                result.messages.push(i18n.__("User does not exists"));
-                                cb(null, result);
-                            } else {
-                                var userInRoleReqModel = new UsersInRoleModel({
-                                    userId: userId,
-                                    roleId: role.roleId
-                                });
-
-                                userInRoleReqModel.save(function(err, userInRole) {
-                                    if (err) {
-                                        cb(err);
-                                    } else {
-
-                                        result.isValid = true;
-                                        result.messages.push(i18n.__("User added to role"));
-
-                                        cb(null, result);
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
+            if (!role) {
+                return cb(new ErrorHandledModel(i18n.__("Role does not exists"), {
+                    roleNotFound: true
+                }));
             }
+
+            usersController.getById(userId, function(errUser, user) {
+
+                if (errUser) return cb(errUser);
+
+                if (!user) {
+                    return cb(new ErrorHandledModel(i18n.__("User does not exists"), {
+                        userNotFound: true
+                    }));
+                }
+
+                var userInRoleReqModel = new UsersInRoleModel({
+                    userId: userId,
+                    roleId: role.roleId
+                });
+
+                userInRoleReqModel.save(function(errSaving, userInRole) {
+                    if (errSaving) return cb(errSaving);
+
+                    return cb(null, new DataResultModel(true, i18n.__("User added to role")));
+                });
+            });
         });
     }
-
-
 
     module.exports.addToRole = addToRole;
 
     module.exports.setRoutes = function(app, authController) {
-
-        /*
-        app.get('/api/user', [
-            authController.isAuthenticated,
-            function(req, res, next) {
-                var user = req.user;
-                res.json(user); // passport sets user object when authenticated
-            }
-        ]);
-
-        app.post('/api/user', function(req, res, next) {
-            var result = create(req.body, req.i18n, function(err, user) {
-                if (err) {
-                    next(err);
-                } else {
-                    res.json(user);
-                }
-            });
-        });
-        */
 
     };
 
@@ -330,9 +278,11 @@
 var p = 'src/config.json';
 
 config.argv()
-    .env()
-    .file({ file: p })// relative to application entry
-	;
+	.env()
+	.file({
+		file: p
+	}) // relative to application entry
+;
 
 
 
@@ -352,7 +302,27 @@ db.once('open', function callback () {
     log.info("Connected to DB!");
 });
 
-module.exports.mongoose = mongoose;;var winston = require('winston');
+module.exports.mongoose = mongoose;;(function(module) {
+
+	"use strict";
+
+	module.exports = ErrorHandled;
+
+	function ErrorHandled(message, opts) {
+
+		this.message = message;
+
+		if (opts) this.options = opts;
+	}
+
+	ErrorHandled.prototype.toJson = function() {
+		return {
+			isValid: false,
+			messages: [this.message]
+		};
+	};
+
+})(module);;var winston = require('winston');
 
 function getLogger(module) {
     var path = module.filename.split('/').slice(-2).join('/');
@@ -374,6 +344,56 @@ function getLogger(module) {
 }
 
 module.exports = getLogger;;(function(module) {
+
+	"use strict";
+
+	module.exports = DataResult;
+
+	var util = require('util');
+
+	function DataResult(isValid, message, data) {
+
+		this.isValid = isValid;
+		this.messages = [];
+		if (util.isArray(message)) {
+			for (var i = 0; i < message.length; i++) {
+				this.messages.push(message[i]);
+			}
+		} else {
+			this.messages.push(message);
+		}
+
+		if (data) {
+			this.data = data;
+		}
+	}
+
+	DataResult.prototype.addMessage = function(message) {
+		if (message)
+			this.messages.push(message);
+	};
+
+})(module);;(function(module) {
+
+	"use strict";
+
+	module.exports = ErrorHandled;
+
+	var DataResultModel = require('../models/dataResult');
+
+	function ErrorHandled(message, opts) {
+		this.name = "ErrorHandled";
+		this.message = message || "";
+		this.options = opts || {};
+	}
+
+	ErrorHandled.prototype = new Error();
+
+	ErrorHandled.prototype.toDataResult = function() {
+		return new DataResultModel(false, this.message, this.options);
+	};
+
+})(module);;(function(module) {
 
     "use strict";
 
@@ -423,14 +443,14 @@ module.exports = getLogger;;(function(module) {
         };
     };
 
-    roleValidator.validate = function(obj, i18n, validator) {
-
-        var result = {
-            isValid: true,
-            messages: []
-        };
+    roleValidator.validate = function(obj, i18n, validator, cb) {
 
         try {
+
+            var result = {
+                isValid: true,
+                messages: []
+            };
 
             if (
                 (validator.toString(obj.name).trim() === '')
@@ -440,14 +460,12 @@ module.exports = getLogger;;(function(module) {
                     password: i18n.__("Invalid role name")
                 });
             }
-        } catch (e) {
-            result.isValid = false;
-            result.messages.push({
-                0: i18n.__("Unhandled error")
-            });
-        }
 
-        return result;
+            return cb(null, result);
+
+        } catch (e) {
+            return cb(e);
+        }
     };
 
     return roleValidator;
@@ -533,14 +551,15 @@ module.exports = getLogger;;(function(module) {
         };
     };
 
-    userValidator.validate = function(obj, i18n, validator) {
-
-        var result = {
-            isValid: true,
-            messages: []
-        };
+    userValidator.validate = function(obj, i18n, validator, cb) {
 
         try {
+
+            var result = {
+                isValid: true,
+                messages: []
+            };
+
 
             if (
                 (validator.toString(obj.password).trim() === '') &&
@@ -566,14 +585,14 @@ module.exports = getLogger;;(function(module) {
                 });
             }
 
+            return cb(null, result);
+
         } catch (e) {
-            result.isValid = false;
-            result.messages.push({
-                0: i18n.__("Unhandled error")
-            });
+
+            return cb(e);
         }
 
-        return result;
+
     };
 
     return userValidator;
@@ -657,7 +676,8 @@ module.exports = getLogger;;(function(module) {
         done();
     });
 
-})();;(function () {
+})();;/*
+(function () {
     'use strict';
     // import the moongoose helper utilities
     var utils = require('./libs/utils');
@@ -702,7 +722,8 @@ module.exports = getLogger;;(function(module) {
             
         });
     });
-})();;(function() {
+})();
+*/;(function() {
     'use strict';
     // import the moongoose helper utilities
     var utils = require('./libs/utils');
@@ -786,10 +807,7 @@ module.exports = getLogger;;(function(module) {
                         assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
                         done();
                     });
-
                 });
-
-
             });
 
             /*
