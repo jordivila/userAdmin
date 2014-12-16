@@ -1,16 +1,13 @@
 {
-	"User created": "Usuario creado",
-	"User already exists": "El usuario ya existe",
-	"Password and confirmation do not match": "La contraseña y la confirmación no son iguales",
-	"Unhandled error": "Error no controlado",
-	"Invalid password": "Contraseña inválida",
-	"Invalid email address": "Dirección de correo electrónico no válida",
-	"Invalid role name": "Nombre de perfil inválido",
-	"Role created": "Perfil creado",
-	"Role already exists": "El nombre de perfil ya existe",
-	"Role does not exists": "El nombre de perfil no existe",
-	"User does not exists": "El usuario no existe",
-	"User added to role": "Usuario añadido al perfil",
-	"Unhandled error->[object Object]": "Unhandled error->[object Object]",
-	"Unhandled error->": "Unhandled error->"
+	"User added to role": "User added to role",
+	"User created": "User created",
+	"Invalid email address": "Invalid email address",
+	"Invalid password": "Invalid password",
+	"Password and confirmation do not match": "Password and confirmation do not match",
+	"Role created": "Role created",
+	"User already exists": "User already exists",
+	"Role does not exists": "Role does not exists",
+	"Token no exists or token expired": "Token no exists or token expired",
+	"User not found": "User not found",
+	"User email confirmed": "User email confirmed"
 }

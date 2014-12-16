@@ -10,6 +10,13 @@
     var ErrorHandledModel = require('../models/errorHandled');
     var UserValidator = require('../models/users.validate.client');
     var usersInRolesController = require('./usersInRoles');
+    var tokenTempController = require('./tokenTemp');
+
+
+    module.exports.create = create;
+    module.exports.confirmEmail = confirmEmail;
+    module.exports.getById = getById;
+    module.exports.setRoutes = setRoutes;
 
     function create(req, i18n, cb) {
 
@@ -40,9 +47,20 @@
                             function(err, userInRoleAdded) {
                                 if (err) return cb(err);
 
-                                return cb(null, new DataResultModel(true, i18n.__("User created"), {
-                                    userId: userCreated.userId
-                                }));
+                                tokenTempController.create(
+                                    new Date(),
+                                    JSON.stringify({
+                                        userId: userCreated.userId
+                                    }),
+                                    i18n,
+                                    function(err, token) {
+                                        if (err) return cb(err);
+
+                                        return cb(null, new DataResultModel(true, i18n.__("User created"), {
+                                            userId: userCreated.userId,
+                                            tokenId: token.guid
+                                        }));
+                                    });
                             });
                     });
                 });
@@ -53,12 +71,30 @@
         UserModel.findById(userId, cb);
     }
 
+    function confirmEmail(tokenGuid, i18n, cb) {
 
-    module.exports.create = create;
-    module.exports.getById = getById;
+        tokenTempController.getByGuid(tokenGuid, function(err, token) {
+            if (err) return cb(err);
+            if (!token) return cb(new ErrorHandledModel(i18n.__("Token no exists or token expired")));
 
-    module.exports.setRoutes = function(app, authController) {
+            var userId = JSON.parse(token.jsonObject).userId;
 
+            getById(userId, function(err, user) {
+                if (err) return cb(err);
+                if (!user) return cb(new ErrorHandledModel(i18n.__("User not found")));
+
+
+                user.isEmailConfirmed = true;
+                user.save(function(err) {
+                    if (err) return cb(err);
+
+                    return cb(null, new DataResultModel(true, i18n.__("User email confirmed"), {}));
+                });
+            });
+        });
+    }
+
+    function setRoutes(app, authController) {
         app.get('/api/user', [
             authController.isAuthenticated,
             function(req, res, next) {
@@ -69,13 +105,11 @@
 
         app.post('/api/user', function(req, res, next) {
             var result = create(req.body, req.i18n, function(err, user) {
-                if (err) {
-                    next(err);
-                } else {
-                    res.json(user);
-                }
+                if (err) return next(err);
+
+                res.json(user);
             });
         });
-    };
+    }
 
 })(module);

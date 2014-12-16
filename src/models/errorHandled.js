@@ -4,7 +4,7 @@
 
 	module.exports = ErrorHandled;
 
-	var DataResultModel = require('../models/dataResult');
+	var DataResultModel = require('./dataResult');
 
 	function ErrorHandled(message, opts) {
 		this.name = "ErrorHandled";

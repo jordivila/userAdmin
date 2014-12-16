@@ -141,6 +141,38 @@
 
     "use strict";
 
+    var uuid = require('node-uuid');
+    var TokenTempModel = require('../models/tokenTemp');
+
+    function create(destroyDate, jsonObject, i18n, cb) {
+
+        var tokenTempModel = new TokenTempModel({
+            guid: uuid.v1(),
+            destroyDate: destroyDate,
+            jsonObject: jsonObject
+        });
+
+        tokenTempModel.save(function(err, token) {
+            if (err) return cb(err);
+
+            return cb(null, token);
+        });
+    }
+
+    function getByGuid(guid, cb) {
+        TokenTempModel.findOne({
+            guid: guid
+        }, cb);
+    }
+
+
+    module.exports.create = create;
+    module.exports.getByGuid = getByGuid;
+
+})(module);;(function(module) {
+
+    "use strict";
+
     var log = require('../libs/log')(module);
 
     var validator = require('validator');
@@ -149,6 +181,13 @@
     var ErrorHandledModel = require('../models/errorHandled');
     var UserValidator = require('../models/users.validate.client');
     var usersInRolesController = require('./usersInRoles');
+    var tokenTempController = require('./tokenTemp');
+
+
+    module.exports.create = create;
+    module.exports.confirmEmail = confirmEmail;
+    module.exports.getById = getById;
+    module.exports.setRoutes = setRoutes;
 
     function create(req, i18n, cb) {
 
@@ -179,9 +218,20 @@
                             function(err, userInRoleAdded) {
                                 if (err) return cb(err);
 
-                                return cb(null, new DataResultModel(true, i18n.__("User created"), {
-                                    userId: userCreated.userId
-                                }));
+                                tokenTempController.create(
+                                    new Date(),
+                                    JSON.stringify({
+                                        userId: userCreated.userId
+                                    }),
+                                    i18n,
+                                    function(err, token) {
+                                        if (err) return cb(err);
+
+                                        return cb(null, new DataResultModel(true, i18n.__("User created"), {
+                                            userId: userCreated.userId,
+                                            tokenId: token.guid
+                                        }));
+                                    });
                             });
                     });
                 });
@@ -192,12 +242,30 @@
         UserModel.findById(userId, cb);
     }
 
+    function confirmEmail(tokenGuid, i18n, cb) {
 
-    module.exports.create = create;
-    module.exports.getById = getById;
+        tokenTempController.getByGuid(tokenGuid, function(err, token) {
+            if (err) return cb(err);
+            if (!token) return cb(new ErrorHandledModel(i18n.__("Token no exists or token expired")));
 
-    module.exports.setRoutes = function(app, authController) {
+            var userId = JSON.parse(token.jsonObject).userId;
 
+            getById(userId, function(err, user) {
+                if (err) return cb(err);
+                if (!user) return cb(new ErrorHandledModel(i18n.__("User not found")));
+
+
+                user.isEmailConfirmed = true;
+                user.save(function(err) {
+                    if (err) return cb(err);
+
+                    return cb(null, new DataResultModel(true, i18n.__("User email confirmed"), {}));
+                });
+            });
+        });
+    }
+
+    function setRoutes(app, authController) {
         app.get('/api/user', [
             authController.isAuthenticated,
             function(req, res, next) {
@@ -208,14 +276,12 @@
 
         app.post('/api/user', function(req, res, next) {
             var result = create(req.body, req.i18n, function(err, user) {
-                if (err) {
-                    next(err);
-                } else {
-                    res.json(user);
-                }
+                if (err) return next(err);
+
+                res.json(user);
             });
         });
-    };
+    }
 
 })(module);;(function(module) {
 
@@ -379,7 +445,7 @@ module.exports = getLogger;;(function(module) {
 
 	module.exports = ErrorHandled;
 
-	var DataResultModel = require('../models/dataResult');
+	var DataResultModel = require('./dataResult');
 
 	function ErrorHandled(message, opts) {
 		this.name = "ErrorHandled";
@@ -470,7 +536,33 @@ module.exports = getLogger;;(function(module) {
 
     return roleValidator;
 
-});;(function (module) {
+});;(function(module) {
+
+    "use strict";
+
+    var mongoose = require('mongoose');
+
+
+    var TokenTempSchema = new mongoose.Schema({
+        guid: {
+            type: String,
+            unique: true,
+            required: true
+        },
+        destroyDate: {
+            type: Date,
+            required: true
+        },
+        jsonObject: {
+            type: String,
+            required: true
+        }
+
+    });
+
+    module.exports = mongoose.model('TokenTemp', TokenTempSchema);
+
+})(module);;(function (module) {
     
     "use strict";
     
@@ -730,10 +822,12 @@ module.exports = getLogger;;(function(module) {
     var assert = require("assert");
     var userController = require('../../../controllers/users');
     var roleController = require('../../../controllers/roles');
+    var ErrorHandled = require('../../../models/errorHandled');
 
 
     describe('Users', function() {
         describe('Register process', function() {
+
 
             var UserNameValid = new Date().toJSON().replace(/\W+/g, '').toLowerCase();
             var UserEmailValid = UserNameValid + "@valid.com";
@@ -742,6 +836,7 @@ module.exports = getLogger;;(function(module) {
             var CantAccessMyAccountToken; //Guid
             var UserNameValidUnActivated = new Date().toJSON().replace(/\W+/g, '').toLowerCase(); //Guid.NewGuid().ToString();
             var UserEmailValidUnActivated = UserNameValidUnActivated + "@valid.com";
+
 
 
             function initUser(email, password, passwordConfirm) {
@@ -791,7 +886,7 @@ module.exports = getLogger;;(function(module) {
                 });
             });
 
-            it('register succeeds', function(done) {
+            it('register unactivated account succeeds', function(done) {
 
                 var newRole = {
                     name: "Guest"
@@ -799,7 +894,6 @@ module.exports = getLogger;;(function(module) {
 
                 roleController.create(newRole, i18n, function(errRole, roleCreated) {
                     assert.equal(errRole, null, errRole === null ? '' : errRole.message);
-
 
                     userController.create(initUser(UserEmailValid, UserPassword, UserPassword), i18n, function(err, createdUser) {
                         assert.equal(err, null, err === null ? '' : err.message);
@@ -810,26 +904,61 @@ module.exports = getLogger;;(function(module) {
                 });
             });
 
+            it('register duplicated not allowed', function(done) {
+                var newRole = {
+                    name: "Guest"
+                };
+
+                roleController.create(newRole, i18n, function(errRole, roleCreated) {
+                    assert.equal(errRole, null, errRole === null ? '' : errRole.message);
+
+                    userController.create(initUser(UserEmailValid, UserPassword, UserPassword), i18n, function(err, createdUser) {
+                        assert.equal(err, null, err === null ? '' : err.message);
+                        assert.equal(createdUser.isValid, true);
+                        assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
+
+                        userController.create(initUser(UserEmailValid, UserPassword, UserPassword), i18n, function(err, createdUser) {
+                            assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
+                            assert.equal(err.message, i18n.__("User already exists"), "error should be '" + i18n.__("User already exists") + "'");
+                            done();
+                        });
+                    });
+                });
+            });
+
+
+            it('activating account with invalid token not allowed', function(done) {
+                var newRole = {
+                    name: "Guest"
+                };
+
+                roleController.create(newRole, i18n, function(errRole, roleCreated) {
+                    assert.equal(errRole, null, errRole === null ? '' : errRole.message);
+
+                    userController.create(initUser(UserEmailValid, UserPassword, UserPassword), i18n, function(err, createdUser) {
+                        assert.equal(err, null, err === null ? '' : err.message);
+                        assert.equal(createdUser.isValid, true);
+                        assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
+
+
+                        userController.confirmEmail(createdUser.data.tokenId, i18n, function(err, confirmResult) {
+                            assert.equal(err, null, err === null ? '' : err.message);
+                            assert.equal(createdUser.isValid, true);
+                            assert.equal(resultHasMessage(i18n.__("User email confirmed"), confirmResult.messages), true);
+                            done();
+                        });
+                    });
+                });
+            });
+
             /*
-                        it('create unactivated account succeeds', function(done) {
-                            
-                        });
 
-                        it('register duplicated not allowed', function(done) {
-                            assert.equal(false, true);
-                            done();
-                        });
-
-                        it('activating account with invalid token not allowed', function(done) {
-                            assert.equal(false, true);
-                            done();
-                        });
-
-                        it('activate account succeeds', function(done) {
-                            assert.equal(false, true);
-                            done();
-                        });
+            it('activate account succeeds', function(done) {
+                assert.equal(false, true);
+                done();
+            });
             */
+
         });
     });
 })();;(function (module) {
