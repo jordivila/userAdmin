@@ -36,6 +36,9 @@
     <Compile Include="src\controllers\users.js" />
     <Compile Include="src\controllers\usersInRoles.js" />
     <Compile Include="src\libs\db.js" />
+    <Compile Include="src\libs\errorHandling.js" />
+    <Compile Include="src\models\dataResult.js" />
+    <Compile Include="src\models\errorHandled.js" />
     <Compile Include="src\models\roles.js" />
     <Compile Include="src\models\roles.validate.client.js" />
     <Compile Include="src\models\users.validate.client.js" />
