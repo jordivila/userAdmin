@@ -1,71 +1,69 @@
-﻿(function(name, definition) {
-    if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
-        module.exports = definition();
-    } else if (typeof define === 'function' && typeof define.amd === 'object') {
-        define(definition);
-    } else {
-        this[name] = definition();
+﻿(function(module) {
+
+    "use strict";
+
+    module.exports.validatePasswordStrength = validatePasswordStrength;
+    module.exports.validate = validate;
+
+
+    var validator = require('validator');
+    var ErrorHandled = require('../models/errorHandled');
+
+    function validatePasswordStrength(req, password, cb) {
+
+        var i18n = req.i18n;
+
+        password = password || '';
+
+        if (
+            (password.trim() === '') &&
+            (password.trim().length < 6)
+        ) {
+            return cb(new ErrorHandled(i18n.__("AccountResources.InvalidPassword")));
+        }
+
+        return cb(null, {});
     }
-})('userValidator', function(userValidator) {
 
-    'use strict';
+    function validate(req, obj, cb) {
 
-    userValidator = {
-        version: '0.0.1'
-    };
+        var i18n = req.i18n;
 
-    userValidator.extend = function(name, fn) {
-        userValidator[name] = function() {
-            var args = Array.prototype.slice.call(arguments);
-            args[0] = userValidator.toString(args[0]);
-            return fn.apply(userValidator, args);
-        };
-    };
+        validatePasswordStrength(req, obj.password, function(err, valPassword) {
 
-    userValidator.validate = function(obj, i18n, validator, cb) {
-
-        try {
-
-            var result = {
-                isValid: true,
-                messages: []
+            var keyValuePair = [];
+            var keyValuePairGet = function(key, value) {
+                return {
+                    key: key,
+                    value: value
+                };
             };
 
-
-            if (
-                (validator.toString(obj.password).trim() === '') &&
-                (validator.toString(obj.password).trim().length < 6)
-            ) {
-                result.isValid = false;
-                result.messages.push({
-                    password: i18n.__("Invalid password")
-                });
+            if (err) {
+                if (err instanceof ErrorHandled) {
+                    keyValuePair.push(keyValuePairGet("password", err.message));
+                } else {
+                    return cb(err);
+                }
             }
 
-            if (validator.toString(obj.password) !== validator.toString(obj.passwordConfirm)) {
-                result.isValid = false;
-                result.messages.push({
-                    passwordConfirmation: i18n.__("Password and confirmation do not match")
-                });
+            if (obj.password !== obj.passwordConfirm) {
+                keyValuePair.push(keyValuePairGet("passwordConfirmation", i18n.__("AccountResources.NewPasswordConfirmError")));
             }
 
             if (!validator.isEmail(obj.email)) {
-                result.isValid = false;
-                result.messages.push({
-                    email: i18n.__("Invalid email address")
-                });
+                keyValuePair.push(keyValuePairGet("email", i18n.__("DataAnnotations.EmailNotValid")));
             }
 
-            return cb(null, result);
+            if (keyValuePair.length > 0) {
+                return cb(new ErrorHandled(i18n.__("AccountResources.ThereAreErrorsInForm_SeeDetails"), keyValuePair));
+            } else {
+                return cb(null, {});
+            }
+        });
 
-        } catch (e) {
-
-            return cb(e);
-        }
 
 
-    };
+    }
 
-    return userValidator;
-
-});
+})(module);

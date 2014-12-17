@@ -2,10 +2,8 @@
 
     "use strict";
 
-    // Load required packages
     var mongoose = require('mongoose');
 
-    // Define our role schema
     var RoleSchema = new mongoose.Schema({
         name: {
             type: String,

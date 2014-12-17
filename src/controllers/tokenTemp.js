@@ -2,6 +2,11 @@
 
     "use strict";
 
+    module.exports.create = create;
+    module.exports.getByGuid = getByGuid;
+    module.exports.deleteByGuid = deleteByGuid;
+
+
     var uuid = require('node-uuid');
     var TokenTempModel = require('../models/tokenTemp');
 
@@ -26,8 +31,12 @@
         }, cb);
     }
 
+    function deleteByGuid(guid, cb) {
+        TokenTempModel.where().findOneAndRemove({
+            guid: guid
+        }, cb);
+    }
 
-    module.exports.create = create;
-    module.exports.getByGuid = getByGuid;
+
 
 })(module);

@@ -2,8 +2,11 @@
 
     "use strict";
 
-    var log = require('../libs/log')(module);
+    module.exports.addToRole = addToRole;
+    module.exports.setRoutes = setRoutes;
 
+
+    var log = require('../libs/log')(module);
     var validator = require('validator');
     var ErrorHandledModel = require('../models/errorHandled');
     var UsersInRoleModel = require('../models/usersInRoles');
@@ -47,10 +50,8 @@
         });
     }
 
-    module.exports.addToRole = addToRole;
+    function setRoutes(app, authController) {
 
-    module.exports.setRoutes = function(app, authController) {
-
-    };
+    }
 
 })(module);

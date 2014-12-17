@@ -95,11 +95,90 @@
 
     "use strict";
 
+    module.exports.cantAccessYourAccount = cantAccessYourAccount;
+    module.exports.resetPassword = resetPassword;
+
+    var util = require('util');
+    var DataResultModel = require('../models/dataResult');
+    var ErrorHandledModel = require('../models/errorHandled');
+    var MailMessage = require('../models/mailMessage');
+
+    function cantAccessYourAccount(req, activateFormVirtualPath, user, token, cb) {
+
+        var i18n = req.i18n;
+
+        try {
+
+            var mailMessage = new MailMessage();
+            mailMessage.From('jordi.vila@gmail.com'); //ApplicationConfiguration.MailingSettingsSection.SupportTeamEmailAddress
+            mailMessage.Bcc(user.email);
+            mailMessage.Subject(util.format('%s: %s',
+                'ApplicationConfiguration.DomainInfoSettingsSection.DomainName',
+                i18n.__("AccountResources.CantAccessYourAccount_EmailTitle")));
+
+
+            var backUri = util.format('%s://%s%s/%s',
+                "https", //ApplicationConfiguration.DomainInfoSettingsSection.SecurityProtocol
+                "domainname.com", //ApplicationConfiguration.DomainInfoSettingsSection.DomainName
+                activateFormVirtualPath,
+                token.guid);
+
+            mailMessage.Body(
+                util.format(i18n.__("AccountResources.CantAccessYourAccount_Email"),
+                    backUri,
+                    "domainname.com" //ApplicationConfiguration.DomainInfoSettingsSection.DomainName
+                ));
+
+            /*
+                using (ISmtpClient smtp = DependencyFactory.Resolve<ISmtpClient>())
+                {
+                    // Do not use SendAsync -> otherwise transaction could commit without sending mail
+                    smtp.Send(mail);
+                }
+
+            */
+
+            return cb(null, new DataResultModel(true, i18n.__("AccountResources.CantAccessYourAccount_EmailSent"), {
+                userId: user.userId,
+                tokenId: token.guid
+            }));
+
+        } catch (errMailing) {
+            return cb(errMailing);
+        }
+    }
+
+    function resetPassword(req, user, token, cb) {
+
+        /*
+        MailMessage mail = new MailMessage();
+        mail.From = new MailAddress(ApplicationConfiguration.MailingSettingsSection.SupportTeamEmailAddress);
+        mail.Bcc.Add(new MailAddress(result.Data.User.Email));
+        mail.Subject = string.Format(AccountResources.ChangePassword_EmailTitle, ApplicationConfiguration.DomainInfoSettingsSection.DomainName);
+        mail.Body = string.Format(AccountResources.ChangePassword_EmailBody, ApplicationConfiguration.DomainInfoSettingsSection.DomainName);
+
+        */
+
+        return cb(null, {});
+    }
+
+
+
+})(module);;(function(module) {
+
+    "use strict";
+
+    module.exports.create = create;
+    module.exports.getByName = getByName;
+
+
+
     var log = require('../libs/log')(module);
     var validator = require('validator');
     var RoleModel = require('../models/roles');
     var RoleValidator = require('../models/roles.validate.client');
     var DataResultModel = require('../models/dataResult');
+    var ErrorHandledModel = require('../models/errorHandled');
 
     function create(req, i18n, cb) {
 
@@ -133,13 +212,14 @@
         }, cb);
     }
 
-
-    module.exports.create = create;
-    module.exports.getByName = getByName;
-
 })(module);;(function(module) {
 
     "use strict";
+
+    module.exports.create = create;
+    module.exports.getByGuid = getByGuid;
+    module.exports.deleteByGuid = deleteByGuid;
+
 
     var uuid = require('node-uuid');
     var TokenTempModel = require('../models/tokenTemp');
@@ -165,38 +245,141 @@
         }, cb);
     }
 
+    function deleteByGuid(guid, cb) {
+        TokenTempModel.where().findOneAndRemove({
+            guid: guid
+        }, cb);
+    }
 
-    module.exports.create = create;
-    module.exports.getByGuid = getByGuid;
+
 
 })(module);;(function(module) {
 
     "use strict";
 
-    var log = require('../libs/log')(module);
+    module.exports.create = create;
+    module.exports.confirmEmail = confirmEmail;
+    module.exports.getById = getById;
+    module.exports.cantAccessYourAccount = cantAccessYourAccount;
+    module.exports.resetPassword = resetPassword;
+    module.exports.setRoutes = setRoutes;
 
+
+    var log = require('../libs/log')(module);
+    var util = require('util');
     var validator = require('validator');
+    var MailMessage = require('../models/mailMessage');
     var UserModel = require('../models/users');
     var DataResultModel = require('../models/dataResult');
     var ErrorHandledModel = require('../models/errorHandled');
     var UserValidator = require('../models/users.validate.client');
     var usersInRolesController = require('./usersInRoles');
+    var mailingController = require('./mailing');
     var tokenTempController = require('./tokenTemp');
 
+    function resetPassword(req, params, cb) {
+        var i18n = req.i18n;
+        var token = params.token;
+        var newPassword = params.newPassword;
+        var confirmNewPassword = params.confirmNewPassword;
 
-    module.exports.create = create;
-    module.exports.confirmEmail = confirmEmail;
-    module.exports.getById = getById;
-    module.exports.setRoutes = setRoutes;
-
-    function create(req, i18n, cb) {
-
-        UserValidator.validate(req, i18n, validator, function(err, resultValidation) {
+        UserValidator.validatePasswordStrength(req, newPassword, function(err, resultValidation) {
             if (err) return cb(err);
-            if (!resultValidation.isValid) return cb(null, resultValidation);
+
+            if (newPassword != confirmNewPassword)
+                return cb(new ErrorHandledModel(i18n.__("AccountResources.NewPasswordConfirmError")));
 
 
-            var userReqModel = new UserModel(req);
+
+            tokenTempController.getByGuid(token, function(err, token) {
+                if (err) return cb(err);
+                if (!token) return cb(new ErrorHandledModel(i18n.__("AccountResources.CantAccessYourAccount_TokenExpired")));
+
+                var userId = JSON.parse(token.jsonObject).userId;
+
+                getById(userId, function(err, user) {
+                    if (err) return cb(err);
+                    if (!user) return cb(new ErrorHandledModel(i18n.__("User not found")));
+
+
+                    user.password = newPassword;
+                    user.passwordLastChanged = new Date();
+
+                    user.save(function(err) {
+                        if (err) return cb(err);
+
+                        tokenTempController.deleteByGuid(token, function(err, tokenDeleteResult) {
+                            if (err) return cb(err);
+
+                            mailingController.resetPassword(
+                                req,
+                                user,
+                                token,
+                                function(err, mailingResult) {
+                                    if (err) return cb(err);
+
+                                    return cb(null, new DataResultModel(true, i18n.__("AccountResources.CantAccessYourAccount_PasswordChanged"), {
+                                        userId: user.userId,
+                                        tokenId: token.guid
+                                    }));
+                                });
+                        });
+                    });
+                });
+            });
+
+
+
+        });
+    }
+
+    function cantAccessYourAccount(req, params, cb) {
+
+        var i18n = req.i18n;
+        var activateFormVirtualPath = params.activateFormVirtualPath;
+        var email = params.email;
+
+        UserModel.findOne({
+                email: email
+            },
+            function(err, user) {
+                if (err) return cb(err);
+                if (!user) return cb(new ErrorHandledModel(i18n.__("User not found")));
+
+                tokenTempController.create(
+                    new Date(),
+                    JSON.stringify({
+                        userId: user.userId
+                    }),
+                    i18n,
+                    function(err, token) {
+                        if (err) return cb(err);
+
+                        mailingController.cantAccessYourAccount(
+                            req,
+                            activateFormVirtualPath,
+                            user,
+                            token,
+                            function(err, mailingResult) {
+                                if (err) return cb(err);
+
+                                return cb(null, new DataResultModel(true, i18n.__("An email was sent to the email address provided"), {
+                                    userId: user.userId,
+                                    tokenId: token.guid
+                                }));
+                            });
+                    });
+            });
+    }
+
+    function create(req, params, cb) {
+
+        var i18n = req.i18n;
+
+        UserValidator.validate(req, params, function(err, resultValidation) {
+            if (err) return cb(err);
+
+            var userReqModel = new UserModel(params);
 
             UserModel.findOne({
                     email: userReqModel.email
@@ -242,7 +425,9 @@
         UserModel.findById(userId, cb);
     }
 
-    function confirmEmail(tokenGuid, i18n, cb) {
+    function confirmEmail(req, tokenGuid, cb) {
+
+        var i18n = req.i18n;
 
         tokenTempController.getByGuid(tokenGuid, function(err, token) {
             if (err) return cb(err);
@@ -259,7 +444,11 @@
                 user.save(function(err) {
                     if (err) return cb(err);
 
-                    return cb(null, new DataResultModel(true, i18n.__("User email confirmed"), {}));
+                    tokenTempController.deleteByGuid(tokenGuid, function(err, tokenDeleteResult) {
+                        if (err) return cb(err);
+
+                        return cb(null, new DataResultModel(true, i18n.__("User email confirmed"), {}));
+                    });
                 });
             });
         });
@@ -287,8 +476,11 @@
 
     "use strict";
 
-    var log = require('../libs/log')(module);
+    module.exports.addToRole = addToRole;
+    module.exports.setRoutes = setRoutes;
 
+
+    var log = require('../libs/log')(module);
     var validator = require('validator');
     var ErrorHandledModel = require('../models/errorHandled');
     var UsersInRoleModel = require('../models/usersInRoles');
@@ -332,11 +524,9 @@
         });
     }
 
-    module.exports.addToRole = addToRole;
+    function setRoutes(app, authController) {
 
-    module.exports.setRoutes = function(app, authController) {
-
-    };
+    }
 
 })(module);;var config = require('nconf');
 //
@@ -447,26 +637,69 @@ module.exports = getLogger;;(function(module) {
 
 	var DataResultModel = require('./dataResult');
 
-	function ErrorHandled(message, opts) {
+	function ErrorHandled(message, details) {
 		this.name = "ErrorHandled";
 		this.message = message || "";
-		this.options = opts || {};
+		this.details = details || {};
 	}
 
 	ErrorHandled.prototype = new Error();
 
 	ErrorHandled.prototype.toDataResult = function() {
-		return new DataResultModel(false, this.message, this.options);
+		return new DataResultModel(false, this.message, this.details);
+	};
+
+})(module);;(function(module) {
+
+	"use strict";
+
+	module.exports = MailMessage;
+
+	function MailMessage() {
+		this._from = '';
+		this._bcc = [];
+		this._subject = '';
+		this._body = '';
+	}
+
+	MailMessage.prototype.From = function(from) {
+		if (from) {
+			this._from = from;
+		}
+
+		return this._from;
+	};
+
+	MailMessage.prototype.Bcc = function(emailAddress) {
+		if (emailAddress) {
+			this._bcc.push(emailAddress);
+		}
+
+		return this._bcc;
+	};
+
+	MailMessage.prototype.Subject = function(subject) {
+		if (subject) {
+			this._subject = subject;
+		}
+
+		return this._subject;
+	};
+
+	MailMessage.prototype.Body = function(body) {
+		if (body) {
+			this._body = body;
+		}
+
+		return this._body;
 	};
 
 })(module);;(function(module) {
 
     "use strict";
 
-    // Load required packages
     var mongoose = require('mongoose');
 
-    // Define our role schema
     var RoleSchema = new mongoose.Schema({
         name: {
             type: String,
@@ -562,14 +795,14 @@ module.exports = getLogger;;(function(module) {
 
     module.exports = mongoose.model('TokenTemp', TokenTempSchema);
 
-})(module);;(function (module) {
-    
+})(module);;(function(module) {
+
     "use strict";
-    
+
     // Load required packages
     var mongoose = require('mongoose');
     var bcrypt = require('bcrypt-nodejs');
-    
+
     // Define our user schema
     var UserSchema = new mongoose.Schema({
         email: {
@@ -580,116 +813,125 @@ module.exports = getLogger;;(function(module) {
         password: {
             type: String,
             required: true
+        },
+        passwordLastChanged: {
+            type: Date
+        },
+        createDate: {
+            type: Date,
+            default: Date.now
+        },
+        isEmailConfirmed: {
+            type: Boolean,
+            default: false
         }
     });
-    
-    
+
+
     UserSchema
-    .virtual('userId')
-        .get(function () {
+        .virtual('userId')
+        .get(function() {
             return this.id;
         });
 
     // Execute before each user.save() call
-    UserSchema.pre('save', function (callback) {
+    UserSchema.pre('save', function(callback) {
         var user = this;
-        
+
         // Break out if the password hasn't changed
         if (!user.isModified('password')) return callback();
-        
+
         // Password changed so we need to hash it
-        bcrypt.genSalt(5, function (err, salt) {
+        bcrypt.genSalt(5, function(err, salt) {
             if (err) return callback(err);
-            
-            bcrypt.hash(user.password, salt, null, function (err, hash) {
+
+            bcrypt.hash(user.password, salt, null, function(err, hash) {
                 if (err) return callback(err);
                 user.password = hash;
                 callback();
             });
         });
     });
-    
-    UserSchema.methods.verifyPassword = function (password, cb) {
-        bcrypt.compare(password, this.password, function (err, isMatch) {
+
+    UserSchema.methods.verifyPassword = function(password, cb) {
+        bcrypt.compare(password, this.password, function(err, isMatch) {
             if (err) return cb(err);
             cb(null, isMatch);
         });
     };
-    
+
     // Export the Mongoose model
     module.exports = mongoose.model('User', UserSchema);
 
-})(module);;(function(name, definition) {
-    if (typeof exports !== 'undefined' && typeof module !== 'undefined') {
-        module.exports = definition();
-    } else if (typeof define === 'function' && typeof define.amd === 'object') {
-        define(definition);
-    } else {
-        this[name] = definition();
+})(module);;(function(module) {
+
+    "use strict";
+
+    module.exports.validatePasswordStrength = validatePasswordStrength;
+    module.exports.validate = validate;
+
+
+    var validator = require('validator');
+    var ErrorHandled = require('../models/errorHandled');
+
+    function validatePasswordStrength(req, password, cb) {
+
+        var i18n = req.i18n;
+
+        password = password || '';
+
+        if (
+            (password.trim() === '') &&
+            (password.trim().length < 6)
+        ) {
+            return cb(new ErrorHandled(i18n.__("AccountResources.InvalidPassword")));
+        }
+
+        return cb(null, {});
     }
-})('userValidator', function(userValidator) {
 
-    'use strict';
+    function validate(req, obj, cb) {
 
-    userValidator = {
-        version: '0.0.1'
-    };
+        var i18n = req.i18n;
 
-    userValidator.extend = function(name, fn) {
-        userValidator[name] = function() {
-            var args = Array.prototype.slice.call(arguments);
-            args[0] = userValidator.toString(args[0]);
-            return fn.apply(userValidator, args);
-        };
-    };
+        validatePasswordStrength(req, obj.password, function(err, valPassword) {
 
-    userValidator.validate = function(obj, i18n, validator, cb) {
-
-        try {
-
-            var result = {
-                isValid: true,
-                messages: []
+            var keyValuePair = [];
+            var keyValuePairGet = function(key, value) {
+                return {
+                    key: key,
+                    value: value
+                };
             };
 
-
-            if (
-                (validator.toString(obj.password).trim() === '') &&
-                (validator.toString(obj.password).trim().length < 6)
-            ) {
-                result.isValid = false;
-                result.messages.push({
-                    password: i18n.__("Invalid password")
-                });
+            if (err) {
+                if (err instanceof ErrorHandled) {
+                    keyValuePair.push(keyValuePairGet("password", err.message));
+                } else {
+                    return cb(err);
+                }
             }
 
-            if (validator.toString(obj.password) !== validator.toString(obj.passwordConfirm)) {
-                result.isValid = false;
-                result.messages.push({
-                    passwordConfirmation: i18n.__("Password and confirmation do not match")
-                });
+            if (obj.password !== obj.passwordConfirm) {
+                keyValuePair.push(keyValuePairGet("passwordConfirmation", i18n.__("AccountResources.NewPasswordConfirmError")));
             }
 
             if (!validator.isEmail(obj.email)) {
-                result.isValid = false;
-                result.messages.push({
-                    email: i18n.__("Invalid email address")
-                });
+                keyValuePair.push(keyValuePairGet("email", i18n.__("DataAnnotations.EmailNotValid")));
             }
 
-            return cb(null, result);
+            if (keyValuePair.length > 0) {
+                return cb(new ErrorHandled(i18n.__("AccountResources.ThereAreErrorsInForm_SeeDetails"), keyValuePair));
+            } else {
+                return cb(null, {});
+            }
+        });
 
-        } catch (e) {
-
-            return cb(e);
-        }
 
 
-    };
+    }
 
-    return userValidator;
-
-});;(function(module) {
+})(module);;(function(module) {
 
     "use strict";
 
@@ -723,6 +965,9 @@ module.exports = getLogger;;(function(module) {
     var config = require('../../../../libs/config');
     var mongoose = require('mongoose');
     var i18n = new(require('i18n-2'))(config.get("i18n"));
+    var roleController = require('../../../../controllers/roles');
+    var assert = require("assert");
+    var ErrorHandled = require('../../../../models/errorHandled');
 
     // ensure the NODE_ENV is set to 'test'
     // this is helpful when you would like to change behavior when testing
@@ -741,10 +986,24 @@ module.exports = getLogger;;(function(module) {
 
     beforeEach(function(done) {
 
+        function createRoleGuest() {
+
+            var newRole = {
+                name: "Guest"
+            };
+
+            roleController.create(newRole, i18n, function(errRole, roleCreated) {
+                assert.equal(errRole, null, errRole === null ? '' : errRole.message);
+                done();
+            });
+
+
+        }
+
         function clearDB() {
 
             mongoose.connection.db.dropDatabase(function(err, result) {
-                done();
+                createRoleGuest();
             });
         }
 
@@ -818,148 +1077,233 @@ module.exports = getLogger;;(function(module) {
 */;(function() {
     'use strict';
     // import the moongoose helper utilities
-    var utils = require('./libs/utils');
+    var utils = require('./libs/initMochaTests');
+    var util = require('util');
     var assert = require("assert");
     var userController = require('../../../controllers/users');
     var roleController = require('../../../controllers/roles');
     var ErrorHandled = require('../../../models/errorHandled');
 
 
-    describe('Users', function() {
-        describe('Register process', function() {
+    describe('User\'s account', function() {
 
-
-            var UserNameValid = new Date().toJSON().replace(/\W+/g, '').toLowerCase();
-            var UserEmailValid = UserNameValid + "@valid.com";
-            var UserPassword = "123456";
-            var UserNameValidActivationToken; //Guid
-            var CantAccessMyAccountToken; //Guid
-            var UserNameValidUnActivated = new Date().toJSON().replace(/\W+/g, '').toLowerCase(); //Guid.NewGuid().ToString();
-            var UserEmailValidUnActivated = UserNameValidUnActivated + "@valid.com";
+        var UserNameValid = new Date().toJSON().replace(/\W+/g, '').toLowerCase();
+        var UserEmailValid = UserNameValid + "@valid.com";
+        var UserPassword = "123456";
+        var UserNameValidActivationToken; //Guid
+        var CantAccessMyAccountToken; //Guid
+        var UserNameValidUnActivated = new Date().toJSON().replace(/\W+/g, '').toLowerCase(); //Guid.NewGuid().ToString();
+        var UserEmailValidUnActivated = UserNameValidUnActivated + "@valid.com";
 
 
 
-            function initUser(email, password, passwordConfirm) {
-                return {
-                    email: email,
-                    password: password,
-                    passwordConfirm: passwordConfirm
-                };
-            }
+        function initUser(email, password, passwordConfirm) {
+            return {
+                email: email,
+                password: password,
+                passwordConfirm: passwordConfirm
+            };
+        }
 
-            function resultHasMessage(messageToSearch, keyValueArray) {
-                for (var j = 0; j < keyValueArray.length; j++) {
-                    for (var i in keyValueArray[j]) {
-                        if (keyValueArray[j][i] == messageToSearch) {
-                            return true;
-                        }
+        function resultHasMessage(messageToSearch, keyValueArray) {
+            for (var j = 0; j < keyValueArray.length; j++) {
+                for (var i in keyValueArray[j]) {
+                    if (keyValueArray[j][i] == messageToSearch) {
+                        return true;
                     }
                 }
-                return false;
             }
+            return false;
+        }
 
+
+        describe('Register process', function() {
 
             it('no invalid emails allowed', function(done) {
-                userController.create(initUser("invalidEmail", "123456", "123456"), i18n, function(err, createdUser) {
-                    assert.equal(err, null, err === null ? '' : err.message);
-                    assert.equal(createdUser.isValid, false);
-                    assert.equal(resultHasMessage(i18n.__("Invalid email address"), createdUser.messages), true);
+                userController.create(global, initUser("invalidEmail", "123456", "123456"), function(err, createdUser) {
+                    assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
+                    assert.equal(resultHasMessage(i18n.__("DataAnnotations.EmailNotValid"), err.details), true);
                     done();
                 });
             });
 
             it('no invalid passwords allowed', function(done) {
-                userController.create(initUser(UserEmailValid, "    ", "    "), i18n, function(err, createdUser) {
-                    assert.equal(err, null, err === null ? '' : err.message);
-                    assert.equal(createdUser.isValid, false);
-                    assert.equal(resultHasMessage(i18n.__("Invalid password"), createdUser.messages), true);
+                userController.create(global, initUser(UserEmailValid, "    ", "    "), function(err, createdUser) {
+                    assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
+                    assert.equal(resultHasMessage(i18n.__("AccountResources.InvalidPassword"), err.details), true);
                     done();
                 });
             });
 
             it('password and password confirmation match', function(done) {
-                userController.create(initUser(UserEmailValid, "123456", "1234567"), i18n, function(err, createdUser) {
-                    assert.equal(err, null, err === null ? '' : err.message);
-                    assert.equal(createdUser.isValid, false);
-                    assert.equal(resultHasMessage(i18n.__("Password and confirmation do not match"), createdUser.messages), true);
+                userController.create(global, initUser(UserEmailValid, "123456", "1234567"), function(err, createdUser) {
+                    assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
+                    assert.equal(resultHasMessage(i18n.__("AccountResources.NewPasswordConfirmError"), err.details), true);
                     done();
                 });
             });
 
             it('register unactivated account succeeds', function(done) {
+                userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function(err, createdUser) {
+                    assert.equal(err, null, err === null ? '' : err.message);
+                    assert.equal(createdUser.isValid, true);
+                    assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
+                    done();
+                });
+            });
 
-                var newRole = {
-                    name: "Guest"
-                };
+            it('register duplicated not allowed', function(done) {
+                userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function(err, createdUser) {
+                    assert.equal(err, null, err === null ? '' : err.message);
+                    assert.equal(createdUser.isValid, true);
+                    assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
 
-                roleController.create(newRole, i18n, function(errRole, roleCreated) {
-                    assert.equal(errRole, null, errRole === null ? '' : errRole.message);
+                    userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function(err, createdUser) {
+                        assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
+                        assert.equal(err.message, i18n.__("User already exists"));
+                        done();
+                    });
+                });
+            });
+        });
 
-                    userController.create(initUser(UserEmailValid, UserPassword, UserPassword), i18n, function(err, createdUser) {
+
+
+        describe('Confirm email address', function() {
+
+            it('confirm user email with valid token suceeds', function(done) {
+                userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function(err, createdUser) {
+                    assert.equal(err, null, err === null ? '' : err.message);
+                    assert.equal(createdUser.isValid, true);
+                    assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
+
+
+                    userController.confirmEmail(global, createdUser.data.tokenId, function(err, confirmResult) {
                         assert.equal(err, null, err === null ? '' : err.message);
                         assert.equal(createdUser.isValid, true);
-                        assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
+                        assert.equal(resultHasMessage(i18n.__("User email confirmed"), confirmResult.messages), true);
                         done();
                     });
                 });
             });
 
-            it('register duplicated not allowed', function(done) {
-                var newRole = {
-                    name: "Guest"
-                };
-
-                roleController.create(newRole, i18n, function(errRole, roleCreated) {
-                    assert.equal(errRole, null, errRole === null ? '' : errRole.message);
-
-                    userController.create(initUser(UserEmailValid, UserPassword, UserPassword), i18n, function(err, createdUser) {
-                        assert.equal(err, null, err === null ? '' : err.message);
-                        assert.equal(createdUser.isValid, true);
-                        assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
-
-                        userController.create(initUser(UserEmailValid, UserPassword, UserPassword), i18n, function(err, createdUser) {
-                            assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
-                            assert.equal(err.message, i18n.__("User already exists"), "error should be '" + i18n.__("User already exists") + "'");
-                            done();
-                        });
-                    });
+            it('confirm user email with invalid token not allowed', function(done) {
+                userController.confirmEmail(global, 'unexistingTokenId', function(err, confirmResult) {
+                    assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
+                    assert.equal(err.message, i18n.__("Token no exists or token expired"));
+                    done();
                 });
             });
-
-
-            it('activating account with invalid token not allowed', function(done) {
-                var newRole = {
-                    name: "Guest"
-                };
-
-                roleController.create(newRole, i18n, function(errRole, roleCreated) {
-                    assert.equal(errRole, null, errRole === null ? '' : errRole.message);
-
-                    userController.create(initUser(UserEmailValid, UserPassword, UserPassword), i18n, function(err, createdUser) {
-                        assert.equal(err, null, err === null ? '' : err.message);
-                        assert.equal(createdUser.isValid, true);
-                        assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
-
-
-                        userController.confirmEmail(createdUser.data.tokenId, i18n, function(err, confirmResult) {
-                            assert.equal(err, null, err === null ? '' : err.message);
-                            assert.equal(createdUser.isValid, true);
-                            assert.equal(resultHasMessage(i18n.__("User email confirmed"), confirmResult.messages), true);
-                            done();
-                        });
-                    });
-                });
-            });
-
-            /*
-
-            it('activate account succeeds', function(done) {
-                assert.equal(false, true);
-                done();
-            });
-            */
-
         });
+
+        describe('Can\'t access your account', function() {
+
+            it('unexisting email address rises error', function(done) {
+
+                userController.cantAccessYourAccount(global, {
+                    activateFormVirtualPath: '/appVirtualPath/',
+                    email: 'unexisting@email.com'
+                }, function(err, cantAccessResult) {
+                    assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
+                    assert.equal(err.message, i18n.__("User not found"));
+                    done();
+                });
+            });
+
+            it('existing email address gets token from cantAccessYourAccount', function(done) {
+
+
+                var userToCreate = initUser(UserEmailValid, UserPassword, UserPassword);
+
+                userController.create(global, userToCreate, function(err, createdUser) {
+                    assert.equal(err, null, err === null ? '' : err.message);
+                    assert.equal(createdUser.isValid, true);
+                    assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
+
+                    userController.cantAccessYourAccount(global, {
+                        activateFormVirtualPath: '/appVirtualPath/',
+                        email: userToCreate.email
+                    }, function(err, cantAccessResult) {
+                        assert.equal(err, null, err === null ? '' : err.message);
+                        assert.equal(cantAccessResult.isValid, true);
+                        assert.equal(resultHasMessage(i18n.__("An email was sent to the email address provided"), cantAccessResult.messages), true);
+                        done();
+                    });
+
+                });
+
+            });
+        });
+
+
+        describe('Reset password', function() {
+
+            it('strength password is checked', function(done) {
+                userController.resetPassword(global, {
+                    token: '  ',
+                    newPassword: '  ',
+                    confirmNewPassword: ''
+                }, function(err, result) {
+                    assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
+                    assert.equal(err.message, i18n.__("AccountResources.InvalidPassword"));
+                    done();
+                });
+            });
+
+            it('invalid confirmation password is not allowed', function(done) {
+                userController.resetPassword(global, {
+                    token: '  ',
+                    newPassword: '123456',
+                    confirmNewPassword: ''
+                }, function(err, result) {
+                    assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
+                    assert.equal(err.message, i18n.__("AccountResources.NewPasswordConfirmError"));
+                    done();
+                });
+            });
+
+            it('invalid token is not allowed', function(done) {
+                userController.resetPassword(global, {
+                    token: 'une3xistin6token',
+                    newPassword: '123456',
+                    confirmNewPassword: '123456'
+                }, function(err, result) {
+                    assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
+                    assert.equal(err.message, i18n.__("AccountResources.CantAccessYourAccount_TokenExpired"));
+                    done();
+                });
+            });
+
+            it('reset password succeed', function(done) {
+
+                var userToCreate = initUser(UserEmailValid, UserPassword, UserPassword);
+
+                userController.create(global, userToCreate, function(err, createdUser) {
+                    assert.equal(err, null, err === null ? '' : err.message);
+
+                    userController.cantAccessYourAccount(global, {
+                        activateFormVirtualPath: '/appVirtualPath/',
+                        email: userToCreate.email
+                    }, function(err, cantAccessResult) {
+                        assert.equal(err, null, err === null ? '' : err.message);
+
+                        userController.resetPassword(global, {
+                            token: cantAccessResult.data.tokenId,
+                            newPassword: '123456',
+                            confirmNewPassword: '123456'
+                        }, function(err, result) {
+                            assert.equal(err, null, err === null ? '' : err.message);
+                            assert.equal(cantAccessResult.isValid, true);
+                            assert.equal(resultHasMessage(i18n.__("AccountResources.CantAccessYourAccount_PasswordChanged"), result.messages), true);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+
+
+
     });
 })();;(function (module) {
     

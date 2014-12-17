@@ -2,11 +2,17 @@
 
     "use strict";
 
+    module.exports.create = create;
+    module.exports.getByName = getByName;
+
+
+
     var log = require('../libs/log')(module);
     var validator = require('validator');
     var RoleModel = require('../models/roles');
     var RoleValidator = require('../models/roles.validate.client');
     var DataResultModel = require('../models/dataResult');
+    var ErrorHandledModel = require('../models/errorHandled');
 
     function create(req, i18n, cb) {
 
@@ -39,9 +45,5 @@
             name: roleName
         }, cb);
     }
-
-
-    module.exports.create = create;
-    module.exports.getByName = getByName;
 
 })(module);
