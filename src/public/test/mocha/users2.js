@@ -6,6 +6,7 @@
     var assert = require("assert");
     var userController = require('../../../controllers/users');
     var roleController = require('../../../controllers/roles');
+    var authController = require('../../../controllers/auth');
     var ErrorHandled = require('../../../models/errorHandled');
 
 
@@ -40,6 +41,7 @@
             return false;
         }
 
+        /*
 
         describe('Register process', function() {
 
@@ -224,6 +226,71 @@
                     });
                 });
             });
+        });
+*/
+
+        describe('Users authentication', function() {
+
+            it('invalid credentials are not wellcome', function(done) {
+
+                authController.basicCredentialsCheck(
+                    'invalidUserName',
+                    'invalidPassword',
+                    function(err, result) {
+                        assert.equal(result, false);
+                        done();
+                    });
+
+            });
+
+            it('unactivated email address account are not wellcome', function(done) {
+
+                var unConfirmedUser = initUser(UserEmailValid, UserPassword, UserPassword);
+
+                userController.create(global, unConfirmedUser, function(err, createdUser) {
+                    assert.equal(err, null, err === null ? '' : err.message);
+
+                    authController.basicCredentialsCheck(
+                        UserEmailValid,
+                        UserPassword,
+                        function(err, result) {
+                            assert.equal(result, false);
+
+                            done();
+                        });
+                });
+            });
+
+            it('activated email address account are wellcome', function(done) {
+
+                var userToTest = initUser(UserEmailValid, UserPassword, UserPassword);
+
+                userController.create(global, userToTest, function(err, createdUser) {
+                    assert.equal(err, null, err === null ? '' : err.message);
+                    assert.equal(createdUser.isValid, true);
+                    assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
+
+
+                    userController.confirmEmail(global, createdUser.data.tokenId, function(err, confirmResult) {
+                        assert.equal(err, null, err === null ? '' : err.message);
+                        assert.equal(createdUser.isValid, true);
+                        assert.equal(resultHasMessage(i18n.__("User email confirmed"), confirmResult.messages), true);
+
+
+                        authController.basicCredentialsCheck(
+                            UserEmailValid,
+                            UserPassword,
+                            function(err, result) {
+                                assert.equal(err, null);
+                                assert.equal(result.email, userToTest.email);
+                                done();
+                            });
+                    });
+                });
+            });
+
+
+
         });
 
 

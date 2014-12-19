@@ -1,35 +1,53 @@
-(function (module) {
-    
+(function(module) {
+
     "use strict";
-    
+
     // Load required packages
     var passport = require('passport');
     var BasicStrategy = require('passport-http').BasicStrategy;
     var User = require('../models/users');
 
-    passport.use(new BasicStrategy(
-            function (username, password, callback) {
-                User.findOne({ email: username }, function (err, user) {
-                    if (err) { return callback(err); }
-                    
-                    // No user found with that username
-                    if (!user) { return callback(null, false); }
-                    
-                    // Make sure the password is correct
-                    user.verifyPassword(password, function (err, isMatch) {
-                        if (err) { return callback(err); }
-                        
-                        // Password did not match
-                        if (!isMatch) { return callback(null, false); }
-                        
-                        // Success
-                        return callback(null, user);
-                    });
-                });
+
+    module.exports.isAuthenticated = passport.authenticate('basic', {
+        session: false
+    });
+    module.exports.basicCredentialsCheck = basicCredentialsCheck;
+
+    passport.use(new BasicStrategy(basicCredentialsCheck));
+
+
+
+    function basicCredentialsCheck(username, password, callback) {
+        User.findOne({
+            email: username
+        }, function(err, user) {
+            if (err) {
+                return callback(err);
             }
-        ));
-    
-    module.exports.isAuthenticated = passport.authenticate('basic', { session : false });
+
+            if (!user) {
+                return callback(null, false);
+            }
+
+            user.verifyPassword(password, function(err, isMatch) {
+                if (err) {
+                    return callback(err);
+                }
+
+                if (!isMatch) {
+                    return callback(null, false);
+                }
+
+                if (!user.isEmailConfirmed) {
+                    return callback(null, false);
+                }
+
+                return callback(null, user);
+            });
+        });
+    }
+
+
 
 })(module);;(function(module) {
 
@@ -62,8 +80,8 @@
     module.exports.setAccessControlOrigin = function(app) {
         // This is not intended for production environments
 
-
         app.use(function(req, res, next) {
+
             // Website you wish to allow to connect
             res.setHeader('Access-Control-Allow-Origin', '*');
             // Request methods you wish to allow
@@ -464,7 +482,7 @@
         ]);
 
         app.post('/api/user', function(req, res, next) {
-            var result = create(req.body, req.i18n, function(err, user) {
+            var result = create(req, req.body, function(err, user) {
                 if (err) return next(err);
 
                 res.json(user);
@@ -1082,6 +1100,7 @@ module.exports = getLogger;;(function(module) {
     var assert = require("assert");
     var userController = require('../../../controllers/users');
     var roleController = require('../../../controllers/roles');
+    var authController = require('../../../controllers/auth');
     var ErrorHandled = require('../../../models/errorHandled');
 
 
@@ -1116,6 +1135,7 @@ module.exports = getLogger;;(function(module) {
             return false;
         }
 
+        /*
 
         describe('Register process', function() {
 
@@ -1300,6 +1320,71 @@ module.exports = getLogger;;(function(module) {
                     });
                 });
             });
+        });
+*/
+
+        describe('Users authentication', function() {
+
+            it('invalid credentials are not wellcome', function(done) {
+
+                authController.basicCredentialsCheck(
+                    'invalidUserName',
+                    'invalidPassword',
+                    function(err, result) {
+                        assert.equal(result, false);
+                        done();
+                    });
+
+            });
+
+            it('unactivated email address account are not wellcome', function(done) {
+
+                var unConfirmedUser = initUser(UserEmailValid, UserPassword, UserPassword);
+
+                userController.create(global, unConfirmedUser, function(err, createdUser) {
+                    assert.equal(err, null, err === null ? '' : err.message);
+
+                    authController.basicCredentialsCheck(
+                        UserEmailValid,
+                        UserPassword,
+                        function(err, result) {
+                            assert.equal(result, false);
+
+                            done();
+                        });
+                });
+            });
+
+            it('activated email address account are wellcome', function(done) {
+
+                var userToTest = initUser(UserEmailValid, UserPassword, UserPassword);
+
+                userController.create(global, userToTest, function(err, createdUser) {
+                    assert.equal(err, null, err === null ? '' : err.message);
+                    assert.equal(createdUser.isValid, true);
+                    assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
+
+
+                    userController.confirmEmail(global, createdUser.data.tokenId, function(err, confirmResult) {
+                        assert.equal(err, null, err === null ? '' : err.message);
+                        assert.equal(createdUser.isValid, true);
+                        assert.equal(resultHasMessage(i18n.__("User email confirmed"), confirmResult.messages), true);
+
+
+                        authController.basicCredentialsCheck(
+                            UserEmailValid,
+                            UserPassword,
+                            function(err, result) {
+                                assert.equal(err, null);
+                                assert.equal(result.email, userToTest.email);
+                                done();
+                            });
+                    });
+                });
+            });
+
+
+
         });
 
 

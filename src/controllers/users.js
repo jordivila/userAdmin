@@ -209,7 +209,7 @@
         ]);
 
         app.post('/api/user', function(req, res, next) {
-            var result = create(req.body, req.i18n, function(err, user) {
+            var result = create(req, req.body, function(err, user) {
                 if (err) return next(err);
 
                 res.json(user);
