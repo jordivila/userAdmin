@@ -21,6 +21,7 @@
     var homeController = require('./src/controllers/home');
     var usersController = require('./src/controllers/users');
     var commonController = require('./src/controllers/common');
+    var ErrorHandled = require('./src/models/errorHandled');
 
     var app = express();
 
@@ -71,14 +72,30 @@
     process.on('uncaughtException', function(err) {
         try {
             //try logging
+
+            console.log(err.stack);
+            /*
+            console.log("******************Unexcpected Error**************************");
+            for (var i in err) {
+                console.log("\n err->" + i + "=" + err[i]);
+            }
+            */
+
+            //console.log("isInstanceof ErrorHandled->" + (err instanceof ErrorHandled).toString());
+
+
+
             log.error(err);
+
         } catch (errLogging) {
 
             try {
                 //try sending email
+                console.log(errLogging);
                 log.error(err);
             } catch (errSendingEmail) {
                 // do nothing here
+
             }
         }
         process.exit(1);

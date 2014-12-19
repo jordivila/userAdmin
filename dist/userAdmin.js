@@ -8,16 +8,52 @@
     var User = require('../models/users');
 
 
-    module.exports.isAuthenticated = passport.authenticate('basic', {
-        session: false
-    });
     module.exports.basicCredentialsCheck = basicCredentialsCheck;
+    module.exports.isAuthenticated = function(req, res, next) {
 
-    passport.use(new BasicStrategy(basicCredentialsCheck));
+        //  when using basic auth passports sends header WWW-Authenticate
+        //  which forces browser to show a dialog box asking for user credentials 
+        //  
+        /*
+                passport.authenticate('basic', {
+                    session: false
+                })(req, res, next);
+        */
+        // I use a custom callback on passport baic auth
+        // avoiding this header to be sent
+        passport.authenticate(
+            'basic', {
+                session: false
+            },
+            function(err, user, info) {
+
+                if (err) {
+                    return next(err);
+                }
+                if (!user) {
+                    res.status(401);
+                }
+
+                next();
+
+            })(req, res, next);
 
 
 
-    function basicCredentialsCheck(username, password, callback) {
+    };
+
+
+
+    passport.use(new BasicStrategy({
+        passReqToCallback: true
+    }, basicCredentialsCheck));
+
+
+
+    function basicCredentialsCheck(req, username, password, callback) {
+
+        var i18n = req.i18n;
+
         User.findOne({
             email: username
         }, function(err, user) {
@@ -26,7 +62,9 @@
             }
 
             if (!user) {
-                return callback(null, false);
+                return callback(null, false, {
+                    message: i18n.__("AccountResources.InvalidCredentials")
+                });
             }
 
             user.verifyPassword(password, function(err, isMatch) {
@@ -35,14 +73,20 @@
                 }
 
                 if (!isMatch) {
-                    return callback(null, false);
+                    return callback(null, false, {
+                        message: i18n.__("AccountResources.InvalidCredentials")
+                    });
                 }
 
                 if (!user.isEmailConfirmed) {
-                    return callback(null, false);
+                    return callback(null, false, {
+                        message: i18n.__("AccountResources.PleaseConfirmAccount")
+                    });
                 }
 
-                return callback(null, user);
+                return callback(null, true, {
+                    email: user.email
+                });
             });
         });
     }
@@ -317,7 +361,7 @@
 
                 getById(userId, function(err, user) {
                     if (err) return cb(err);
-                    if (!user) return cb(new ErrorHandledModel(i18n.__("User not found")));
+                    if (!user) return cb(new ErrorHandledModel(i18n.__("UserAdminTexts.UserNotFound")));
 
 
                     user.password = newPassword;
@@ -336,10 +380,23 @@
                                 function(err, mailingResult) {
                                     if (err) return cb(err);
 
-                                    return cb(null, new DataResultModel(true, i18n.__("AccountResources.CantAccessYourAccount_PasswordChanged"), {
-                                        userId: user.userId,
-                                        tokenId: token.guid
-                                    }));
+                                    var resultData = {};
+
+                                    if (process.env.node_env === 'test') {
+                                        resultData = {
+                                            userId: user.userId,
+                                            tokenId: token.guid
+                                        };
+                                    } else {
+                                        //send token via email
+                                        return cb(new ErrorHandledModel(i18n.__("Not implemented")));
+                                    }
+
+                                    return cb(null,
+                                        new DataResultModel(
+                                            true,
+                                            i18n.__("AccountResources.CantAccessYourAccount_PasswordChanged"),
+                                            resultData));
                                 });
                         });
                     });
@@ -362,7 +419,7 @@
             },
             function(err, user) {
                 if (err) return cb(err);
-                if (!user) return cb(new ErrorHandledModel(i18n.__("User not found")));
+                if (!user) return cb(new ErrorHandledModel(i18n.__("UserAdminTexts.UserNotFound")));
 
                 tokenTempController.create(
                     new Date(),
@@ -381,10 +438,20 @@
                             function(err, mailingResult) {
                                 if (err) return cb(err);
 
-                                return cb(null, new DataResultModel(true, i18n.__("An email was sent to the email address provided"), {
-                                    userId: user.userId,
-                                    tokenId: token.guid
-                                }));
+                                var resultData = {};
+
+                                if (process.env.node_env === 'test') {
+                                    resultData = {
+                                        userId: user.userId,
+                                        tokenId: token.guid
+                                    };
+                                } else {
+                                    //send token via email
+                                    return cb(new ErrorHandledModel(i18n.__("Not implemented")));
+                                }
+
+
+                                return cb(null, new DataResultModel(true, i18n.__("AccountResources.CreateNewAccount_EmailSent"), resultData));
                             });
                     });
             });
@@ -405,7 +472,7 @@
                 function(err, user) {
 
                     if (err) return cb(err);
-                    if (user) return cb(new ErrorHandledModel(i18n.__("User already exists")));
+                    if (user) return cb(new ErrorHandledModel(i18n.__("UserAdminTexts.DuplicateEmail")));
 
 
                     userReqModel.save(function(err, userCreated) {
@@ -428,10 +495,23 @@
                                     function(err, token) {
                                         if (err) return cb(err);
 
-                                        return cb(null, new DataResultModel(true, i18n.__("User created"), {
-                                            userId: userCreated.userId,
-                                            tokenId: token.guid
-                                        }));
+                                        var resultData = {};
+
+                                        if (process.env.node_env === 'test') {
+                                            resultData = {
+                                                userId: userCreated.userId,
+                                                tokenId: token.guid
+                                            };
+                                        } else {
+                                            //send token via email
+                                            return cb(new ErrorHandledModel(i18n.__("Not implemented")));
+                                        }
+
+                                        return cb(null,
+                                            new DataResultModel(
+                                                true,
+                                                i18n.__("AccountResources.CreateNewAccount_EmailSent"),
+                                                resultData));
                                     });
                             });
                     });
@@ -449,13 +529,13 @@
 
         tokenTempController.getByGuid(tokenGuid, function(err, token) {
             if (err) return cb(err);
-            if (!token) return cb(new ErrorHandledModel(i18n.__("Token no exists or token expired")));
+            if (!token) return cb(new ErrorHandledModel(i18n.__("AccountResourcesTexts.CantAccessYourAccount_TokenExpired")));
 
             var userId = JSON.parse(token.jsonObject).userId;
 
             getById(userId, function(err, user) {
                 if (err) return cb(err);
-                if (!user) return cb(new ErrorHandledModel(i18n.__("User not found")));
+                if (!user) return cb(new ErrorHandledModel(i18n.__("UserAdminTexts.UserNotFound")));
 
 
                 user.isEmailConfirmed = true;
@@ -465,7 +545,7 @@
                     tokenTempController.deleteByGuid(tokenGuid, function(err, tokenDeleteResult) {
                         if (err) return cb(err);
 
-                        return cb(null, new DataResultModel(true, i18n.__("User email confirmed"), {}));
+                        return cb(null, new DataResultModel(true, i18n.__("AccountResourcesTexts.AccountActivated"), {}));
                     });
                 });
             });
@@ -600,19 +680,22 @@ module.exports.mongoose = mongoose;;(function(module) {
 
 function getLogger(module) {
     var path = module.filename.split('/').slice(-2).join('/');
-    
-    
-    
+
+
 
     return new winston.Logger({
-        transports : [
+        transports: [
             new winston.transports.Console({
-                colorize:   true,
-                level:      'debug',
-                label:      path
+                colorize: true,
+                level: 'debug',
+                label: path
             })
-            
-            //, new (winston.transports.File)({ filename: 'src/public/somefile.log' }) // -> this is not working in azure site
+            /*,
+                        new(winston.transports.File)({
+                            filename: 'somefile.log',
+                            level: 'debug',
+                        }) // -> this is not working in azure site
+                        */
         ]
     });
 }
@@ -1045,54 +1128,7 @@ module.exports = getLogger;;(function(module) {
         done();
     });
 
-})();;/*
-(function () {
-    'use strict';
-    // import the moongoose helper utilities
-    var utils = require('./libs/utils');
-    var assert = require("assert");
-    var userController = require('../../../controllers/users'); 
-    
-
-    describe('Users: models', function () {
-        describe('#create()', function () {
-
-            // Create a User object to pass to User.create()
-            var u = {
-                email: null, //faker.name.firstName().toLowerCase(),
-                password: null, //faker.lorem.words(1)[0],
-                passwordConfirm: null
-            };
-
-            it('should fail when no valid user is set', function (done) {
-                userController.create(u, i18n, function (err, createdUser) {
-                    assert.equal(err, null);
-                    assert.equal(createdUser.isValid, false);
-                    done();
-                });
-            });
-
-            it('should fail creating duplicated user', function (done) {
-
-                u.email = "valid@emailaddress.com";
-                u.password = "validpassword";
-                u.passwordConfirm = u.password;
-
-                userController.create(u, i18n, function (err, createdUser) {
-                    
-                    userController.create(u, i18n,  function (err, repeatedUser) {
-                        assert.equal(err, null);
-                        assert.equal(repeatedUser.isValid, false);
-                        assert.equal(repeatedUser.userId, null);
-                        done();
-                    });
-                });
-            });
-            
-        });
-    });
-})();
-*/;(function() {
+})();;(function() {
     'use strict';
     // import the moongoose helper utilities
     var utils = require('./libs/initMochaTests');
@@ -1135,7 +1171,7 @@ module.exports = getLogger;;(function(module) {
             return false;
         }
 
-        /*
+
 
         describe('Register process', function() {
 
@@ -1167,7 +1203,7 @@ module.exports = getLogger;;(function(module) {
                 userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function(err, createdUser) {
                     assert.equal(err, null, err === null ? '' : err.message);
                     assert.equal(createdUser.isValid, true);
-                    assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
+                    assert.equal(resultHasMessage(i18n.__("AccountResources.CreateNewAccount_EmailSent"), createdUser.messages), true);
                     done();
                 });
             });
@@ -1176,11 +1212,11 @@ module.exports = getLogger;;(function(module) {
                 userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function(err, createdUser) {
                     assert.equal(err, null, err === null ? '' : err.message);
                     assert.equal(createdUser.isValid, true);
-                    assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
+                    assert.equal(resultHasMessage(i18n.__("AccountResources.CreateNewAccount_EmailSent"), createdUser.messages), true);
 
                     userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function(err, createdUser) {
                         assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
-                        assert.equal(err.message, i18n.__("User already exists"));
+                        assert.equal(err.message, i18n.__("UserAdminTexts.DuplicateEmail"));
                         done();
                     });
                 });
@@ -1195,13 +1231,13 @@ module.exports = getLogger;;(function(module) {
                 userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function(err, createdUser) {
                     assert.equal(err, null, err === null ? '' : err.message);
                     assert.equal(createdUser.isValid, true);
-                    assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
+                    assert.equal(resultHasMessage(i18n.__("AccountResources.CreateNewAccount_EmailSent"), createdUser.messages), true);
 
 
                     userController.confirmEmail(global, createdUser.data.tokenId, function(err, confirmResult) {
                         assert.equal(err, null, err === null ? '' : err.message);
                         assert.equal(createdUser.isValid, true);
-                        assert.equal(resultHasMessage(i18n.__("User email confirmed"), confirmResult.messages), true);
+                        assert.equal(resultHasMessage(i18n.__("AccountResourcesTexts.AccountActivated"), confirmResult.messages), true);
                         done();
                     });
                 });
@@ -1210,7 +1246,7 @@ module.exports = getLogger;;(function(module) {
             it('confirm user email with invalid token not allowed', function(done) {
                 userController.confirmEmail(global, 'unexistingTokenId', function(err, confirmResult) {
                     assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
-                    assert.equal(err.message, i18n.__("Token no exists or token expired"));
+                    assert.equal(err.message, i18n.__("AccountResourcesTexts.CantAccessYourAccount_TokenExpired"));
                     done();
                 });
             });
@@ -1225,7 +1261,7 @@ module.exports = getLogger;;(function(module) {
                     email: 'unexisting@email.com'
                 }, function(err, cantAccessResult) {
                     assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
-                    assert.equal(err.message, i18n.__("User not found"));
+                    assert.equal(err.message, i18n.__("UserAdminTexts.UserNotFound"));
                     done();
                 });
             });
@@ -1238,7 +1274,7 @@ module.exports = getLogger;;(function(module) {
                 userController.create(global, userToCreate, function(err, createdUser) {
                     assert.equal(err, null, err === null ? '' : err.message);
                     assert.equal(createdUser.isValid, true);
-                    assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
+                    assert.equal(resultHasMessage(i18n.__("AccountResources.CreateNewAccount_EmailSent"), createdUser.messages), true);
 
                     userController.cantAccessYourAccount(global, {
                         activateFormVirtualPath: '/appVirtualPath/',
@@ -1246,7 +1282,7 @@ module.exports = getLogger;;(function(module) {
                     }, function(err, cantAccessResult) {
                         assert.equal(err, null, err === null ? '' : err.message);
                         assert.equal(cantAccessResult.isValid, true);
-                        assert.equal(resultHasMessage(i18n.__("An email was sent to the email address provided"), cantAccessResult.messages), true);
+                        assert.equal(resultHasMessage(i18n.__("AccountResources.CreateNewAccount_EmailSent"), cantAccessResult.messages), true);
                         done();
                     });
 
@@ -1321,7 +1357,7 @@ module.exports = getLogger;;(function(module) {
                 });
             });
         });
-*/
+
 
         describe('Users authentication', function() {
 
@@ -1330,8 +1366,9 @@ module.exports = getLogger;;(function(module) {
                 authController.basicCredentialsCheck(
                     'invalidUserName',
                     'invalidPassword',
-                    function(err, result) {
+                    function(err, result, data) {
                         assert.equal(result, false);
+                        assert.equal(data.message, i18n.__("AccountResources.InvalidCredentials"));
                         done();
                     });
 
@@ -1347,9 +1384,9 @@ module.exports = getLogger;;(function(module) {
                     authController.basicCredentialsCheck(
                         UserEmailValid,
                         UserPassword,
-                        function(err, result) {
+                        function(err, result, data) {
                             assert.equal(result, false);
-
+                            assert.equal(data.message, i18n.__("AccountResources.PleaseConfirmAccount"));
                             done();
                         });
                 });
@@ -1362,21 +1399,20 @@ module.exports = getLogger;;(function(module) {
                 userController.create(global, userToTest, function(err, createdUser) {
                     assert.equal(err, null, err === null ? '' : err.message);
                     assert.equal(createdUser.isValid, true);
-                    assert.equal(resultHasMessage(i18n.__("User created"), createdUser.messages), true);
-
+                    assert.equal(resultHasMessage(i18n.__("AccountResources.CreateNewAccount_EmailSent"), createdUser.messages), true);
 
                     userController.confirmEmail(global, createdUser.data.tokenId, function(err, confirmResult) {
                         assert.equal(err, null, err === null ? '' : err.message);
                         assert.equal(createdUser.isValid, true);
-                        assert.equal(resultHasMessage(i18n.__("User email confirmed"), confirmResult.messages), true);
-
+                        assert.equal(resultHasMessage(i18n.__("AccountResourcesTexts.AccountActivated"), confirmResult.messages), true);
 
                         authController.basicCredentialsCheck(
                             UserEmailValid,
                             UserPassword,
-                            function(err, result) {
+                            function(err, result, data) {
                                 assert.equal(err, null);
-                                assert.equal(result.email, userToTest.email);
+                                assert.equal(result, true);
+                                assert.equal(data.email, userToTest.email);
                                 done();
                             });
                     });

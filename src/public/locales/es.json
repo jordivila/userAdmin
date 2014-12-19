@@ -22,5 +22,13 @@
 	"AccountResources.NewPasswordConfirmError": "AccountResources.NewPasswordConfirmError",
 	"AccountResources.InvalidPassword": "AccountResources.InvalidPassword",
 	"AccountResources.CantAccessYourAccount_TokenExpired": "AccountResources.CantAccessYourAccount_TokenExpired",
-	"AccountResources.CantAccessYourAccount_PasswordChanged": "AccountResources.CantAccessYourAccount_PasswordChanged"
+	"AccountResources.CantAccessYourAccount_PasswordChanged": "AccountResources.CantAccessYourAccount_PasswordChanged",
+	"AccountResources.InvalidCredentials": "AccountResources.InvalidCredentials",
+	"AccountResources.PleaseConfirmAccount": "AccountResources.PleaseConfirmAccount",
+	"AccountResources.CreateNewAccount_EmailSent": "AccountResources.CreateNewAccount_EmailSent",
+	"UserAdminTexts.DuplicateEmail": "UserAdminTexts.DuplicateEmail",
+	"AccountResourcesTexts.AccountActivated": "AccountResourcesTexts.AccountActivated",
+	"AccountResourcesTexts.CantAccessYourAccount_TokenExpired": "AccountResourcesTexts.CantAccessYourAccount_TokenExpired",
+	"UserAdminTexts.UserNotFound": "UserAdminTexts.UserNotFound",
+	"User does not exists": "User does not exists"
 }

@@ -44,7 +44,7 @@
 
                 getById(userId, function(err, user) {
                     if (err) return cb(err);
-                    if (!user) return cb(new ErrorHandledModel(i18n.__("User not found")));
+                    if (!user) return cb(new ErrorHandledModel(i18n.__("UserAdminTexts.UserNotFound")));
 
 
                     user.password = newPassword;
@@ -63,10 +63,23 @@
                                 function(err, mailingResult) {
                                     if (err) return cb(err);
 
-                                    return cb(null, new DataResultModel(true, i18n.__("AccountResources.CantAccessYourAccount_PasswordChanged"), {
-                                        userId: user.userId,
-                                        tokenId: token.guid
-                                    }));
+                                    var resultData = {};
+
+                                    if (process.env.node_env === 'test') {
+                                        resultData = {
+                                            userId: user.userId,
+                                            tokenId: token.guid
+                                        };
+                                    } else {
+                                        //send token via email
+                                        return cb(new ErrorHandledModel(i18n.__("Not implemented")));
+                                    }
+
+                                    return cb(null,
+                                        new DataResultModel(
+                                            true,
+                                            i18n.__("AccountResources.CantAccessYourAccount_PasswordChanged"),
+                                            resultData));
                                 });
                         });
                     });
@@ -89,7 +102,7 @@
             },
             function(err, user) {
                 if (err) return cb(err);
-                if (!user) return cb(new ErrorHandledModel(i18n.__("User not found")));
+                if (!user) return cb(new ErrorHandledModel(i18n.__("UserAdminTexts.UserNotFound")));
 
                 tokenTempController.create(
                     new Date(),
@@ -108,10 +121,20 @@
                             function(err, mailingResult) {
                                 if (err) return cb(err);
 
-                                return cb(null, new DataResultModel(true, i18n.__("An email was sent to the email address provided"), {
-                                    userId: user.userId,
-                                    tokenId: token.guid
-                                }));
+                                var resultData = {};
+
+                                if (process.env.node_env === 'test') {
+                                    resultData = {
+                                        userId: user.userId,
+                                        tokenId: token.guid
+                                    };
+                                } else {
+                                    //send token via email
+                                    return cb(new ErrorHandledModel(i18n.__("Not implemented")));
+                                }
+
+
+                                return cb(null, new DataResultModel(true, i18n.__("AccountResources.CreateNewAccount_EmailSent"), resultData));
                             });
                     });
             });
@@ -132,7 +155,7 @@
                 function(err, user) {
 
                     if (err) return cb(err);
-                    if (user) return cb(new ErrorHandledModel(i18n.__("User already exists")));
+                    if (user) return cb(new ErrorHandledModel(i18n.__("UserAdminTexts.DuplicateEmail")));
 
 
                     userReqModel.save(function(err, userCreated) {
@@ -155,10 +178,23 @@
                                     function(err, token) {
                                         if (err) return cb(err);
 
-                                        return cb(null, new DataResultModel(true, i18n.__("User created"), {
-                                            userId: userCreated.userId,
-                                            tokenId: token.guid
-                                        }));
+                                        var resultData = {};
+
+                                        if (process.env.node_env === 'test') {
+                                            resultData = {
+                                                userId: userCreated.userId,
+                                                tokenId: token.guid
+                                            };
+                                        } else {
+                                            //send token via email
+                                            return cb(new ErrorHandledModel(i18n.__("Not implemented")));
+                                        }
+
+                                        return cb(null,
+                                            new DataResultModel(
+                                                true,
+                                                i18n.__("AccountResources.CreateNewAccount_EmailSent"),
+                                                resultData));
                                     });
                             });
                     });
@@ -176,13 +212,13 @@
 
         tokenTempController.getByGuid(tokenGuid, function(err, token) {
             if (err) return cb(err);
-            if (!token) return cb(new ErrorHandledModel(i18n.__("Token no exists or token expired")));
+            if (!token) return cb(new ErrorHandledModel(i18n.__("AccountResourcesTexts.CantAccessYourAccount_TokenExpired")));
 
             var userId = JSON.parse(token.jsonObject).userId;
 
             getById(userId, function(err, user) {
                 if (err) return cb(err);
-                if (!user) return cb(new ErrorHandledModel(i18n.__("User not found")));
+                if (!user) return cb(new ErrorHandledModel(i18n.__("UserAdminTexts.UserNotFound")));
 
 
                 user.isEmailConfirmed = true;
@@ -192,7 +228,7 @@
                     tokenTempController.deleteByGuid(tokenGuid, function(err, tokenDeleteResult) {
                         if (err) return cb(err);
 
-                        return cb(null, new DataResultModel(true, i18n.__("User email confirmed"), {}));
+                        return cb(null, new DataResultModel(true, i18n.__("AccountResourcesTexts.AccountActivated"), {}));
                     });
                 });
             });
