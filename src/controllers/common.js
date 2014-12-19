@@ -2,7 +2,28 @@
 
     "use strict";
 
-    module.exports.setRoutes = function(app, log) {
+    module.exports.setRoutes = setRoutes;
+    module.exports.setAccessControlOrigin = setAccessControlOrigin;
+    module.exports.initTestEnvironment = initTestEnvironment;
+
+    var userController = require('./users');
+    var roleController = require('./roles');
+    var util = require('util');
+    var mongoose = require('mongoose');
+    var config = require('../libs/config');
+
+
+    function setRoutes(app, log) {
+
+        if (process.env.node_env === 'test') {
+            app.get("/initDb", function(req, res, next) {
+                initDb(req, function(err, roleCreated) {
+                    if (err) return next(err);
+
+                    res.json(roleCreated);
+                });
+            });
+        }
 
         //catch 404
         app.use(function(req, res, next) {
@@ -24,11 +45,56 @@
             res.send({}); // do not send error messages as it can send private info
 
         });
-    };
+    }
 
-    module.exports.setAccessControlOrigin = function(app) {
+    function initDb(req, cb) {
+
+        var i18n = req.i18n;
+        var newRole = {
+            name: "Guest"
+        };
+
+
+        function createRoleGuest() {
+
+            var newRole = {
+                name: "Guest"
+            };
+
+            roleController.create(newRole, i18n, function(errRole, roleCreated) {
+                if (errRole) return cb(errRole);
+
+                return cb(null, roleCreated);
+            });
+        }
+
+        function clearDB() {
+
+            mongoose.connection.db.dropDatabase(function(err, result) {
+                createRoleGuest();
+            });
+        }
+
+        if (mongoose.connection.readyState === 0) {
+
+            mongoose.connect(config.get('mongoose:uri'), function(err) {
+                if (err) {
+                    throw err;
+                }
+                return clearDB();
+            });
+        } else {
+            return clearDB();
+        }
+
+    }
+
+    function initTestEnvironment(app) {
+        setAccessControlOrigin(app);
+    }
+
+    function setAccessControlOrigin(app) {
         // This is not intended for production environments
-
         app.use(function(req, res, next) {
 
             // Website you wish to allow to connect
@@ -44,7 +110,6 @@
             // Pass to next layer of middleware
             next();
         });
-
-    };
+    }
 
 })(module);

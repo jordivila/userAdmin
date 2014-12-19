@@ -32,6 +32,16 @@
             });
     };
 
+    test("initDb", function() {
+        jQuery.get(server.getBaseAddress() + "/initDb")
+            .done(function(result, textStatus, jqXHR) {
+                ok(result.isValid, true);
+                ok(result.data.roleId !== '', true);
+            })
+            .fail(function(jqXHR, textStatus, errorThrown) {
+                ok(false, "Unhandled error initiating db. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
+            });
+    });
 
     test("user creation", function() {
 

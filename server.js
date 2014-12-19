@@ -51,8 +51,8 @@
     });
 
 
-    if ((process.env.NODE_ENV === 'test') || (process.env.NODE_ENV === 'dev')) {
-        commonController.setAccessControlOrigin(app);
+    if (process.env.NODE_ENV === 'test') {
+        commonController.initTestEnvironment(app);
     }
 
 
@@ -74,16 +74,6 @@
             //try logging
 
             console.log(err.stack);
-            /*
-            console.log("******************Unexcpected Error**************************");
-            for (var i in err) {
-                console.log("\n err->" + i + "=" + err[i]);
-            }
-            */
-
-            //console.log("isInstanceof ErrorHandled->" + (err instanceof ErrorHandled).toString());
-
-
 
             log.error(err);
 
@@ -91,8 +81,7 @@
 
             try {
                 //try sending email
-                console.log(errLogging);
-                log.error(err);
+                //sendMail.error(err);
             } catch (errSendingEmail) {
                 // do nothing here
 
