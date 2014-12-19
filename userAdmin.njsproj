@@ -49,8 +49,8 @@
     <Compile Include="src\models\usersInRoles.js" />
     <Compile Include="src\public\test\mocha\libs\initMochaTests.js" />
     <Compile Include="src\public\test\mocha\users.js" />
-    <Compile Include="src\public\test\qunit\authTest.js" />
     <Compile Include="src\public\test\qunit\basicAuth\basicAuthTest.js" />
+    <Compile Include="src\public\test\qunit\Qunit.config.js" />
     <Compile Include="src\public\test\qunit\common.js" />
     <Compile Include="src\public\test\qunit\libs\jquery-1.11.1.min.js" />
     <Compile Include="src\public\test\qunit\libs\qunit.js" />

@@ -213,7 +213,7 @@
         tokenTempController.getByGuid(tokenGuid, function(err, token) {
             if (err) return cb(err);
             if (!token) return cb(new ErrorHandledModel(i18n.__("AccountResourcesTexts.CantAccessYourAccount_TokenExpired")));
-
+            
             var userId = JSON.parse(token.jsonObject).userId;
 
             getById(userId, function(err, user) {
@@ -236,6 +236,20 @@
     }
 
     function setRoutes(app, authController) {
+        app.get('/api/users/confirmation/:tokenId', [
+            function (req, res, next) {
+                confirmEmail(
+                    req, 
+                    req.params.tokenId,
+                    function (err, confirmResult) {
+                        if (err) return next(err);
+                        
+                        res.json(confirmResult);
+                    });
+            }
+        ]);
+        
+
         app.get('/api/user', [
             authController.isAuthenticated,
             function(req, res, next) {

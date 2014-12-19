@@ -11,6 +11,7 @@
     var util = require('util');
     var mongoose = require('mongoose');
     var config = require('../libs/config');
+    var ErrorHandled = require('../models/errorHandled.js');
 
 
     function setRoutes(app, log) {
@@ -35,7 +36,15 @@
 
         //operational errors
         app.use(function(err, req, res, next) {
+            
             if (!err) return next();
+            
+            if (err instanceof ErrorHandled) {
+                res.send(err.toDataResult());
+                res.status(200);
+                res.end();
+                return next();
+            }
 
             console.log(err.message);
             console.log(err.stack);

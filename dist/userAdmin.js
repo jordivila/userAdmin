@@ -106,6 +106,7 @@
     var util = require('util');
     var mongoose = require('mongoose');
     var config = require('../libs/config');
+    var ErrorHandled = require('../models/errorHandled.js');
 
 
     function setRoutes(app, log) {
@@ -130,7 +131,15 @@
 
         //operational errors
         app.use(function(err, req, res, next) {
+            
             if (!err) return next();
+            
+            if (err instanceof ErrorHandled) {
+                res.send(err.toDataResult());
+                res.status(200);
+                res.end();
+                return next();
+            }
 
             console.log(err.message);
             console.log(err.stack);
@@ -595,7 +604,7 @@
         tokenTempController.getByGuid(tokenGuid, function(err, token) {
             if (err) return cb(err);
             if (!token) return cb(new ErrorHandledModel(i18n.__("AccountResourcesTexts.CantAccessYourAccount_TokenExpired")));
-
+            
             var userId = JSON.parse(token.jsonObject).userId;
 
             getById(userId, function(err, user) {
@@ -618,6 +627,20 @@
     }
 
     function setRoutes(app, authController) {
+        app.get('/api/users/confirmation/:tokenId', [
+            function (req, res, next) {
+                confirmEmail(
+                    req, 
+                    req.params.tokenId,
+                    function (err, confirmResult) {
+                        if (err) return next(err);
+                        
+                        res.json(confirmResult);
+                    });
+            }
+        ]);
+        
+
         app.get('/api/user', [
             authController.isAuthenticated,
             function(req, res, next) {
@@ -1193,7 +1216,7 @@ module.exports = getLogger;;(function(module) {
         done();
     });
 
-})();;(function() {
+})();;(function () {
     'use strict';
     // import the moongoose helper utilities
     var utils = require('./libs/initMochaTests');
@@ -1203,10 +1226,10 @@ module.exports = getLogger;;(function(module) {
     var roleController = require('../../../controllers/roles');
     var authController = require('../../../controllers/auth');
     var ErrorHandled = require('../../../models/errorHandled');
-
-
-    describe('User\'s account', function() {
-
+    
+    
+    describe('User\'s account', function () {
+        
         var UserNameValid = new Date().toJSON().replace(/\W+/g, '').toLowerCase();
         var UserEmailValid = UserNameValid + "@valid.com";
         var UserPassword = "123456";
@@ -1214,9 +1237,9 @@ module.exports = getLogger;;(function(module) {
         var CantAccessMyAccountToken; //Guid
         var UserNameValidUnActivated = new Date().toJSON().replace(/\W+/g, '').toLowerCase(); //Guid.NewGuid().ToString();
         var UserEmailValidUnActivated = UserNameValidUnActivated + "@valid.com";
-
-
-
+        
+        
+        
         function initUser(email, password, passwordConfirm) {
             return {
                 email: email,
@@ -1224,7 +1247,7 @@ module.exports = getLogger;;(function(module) {
                 passwordConfirm: passwordConfirm
             };
         }
-
+        
         function resultHasMessage(messageToSearch, keyValueArray) {
             for (var j = 0; j < keyValueArray.length; j++) {
                 for (var i in keyValueArray[j]) {
@@ -1235,51 +1258,51 @@ module.exports = getLogger;;(function(module) {
             }
             return false;
         }
-
-
-
-        describe('Register process', function() {
-
-            it('no invalid emails allowed', function(done) {
-                userController.create(global, initUser("invalidEmail", "123456", "123456"), function(err, createdUser) {
+        
+        
+        
+        describe('Register process', function () {
+            
+            it('no invalid emails allowed', function (done) {
+                userController.create(global, initUser("invalidEmail", "123456", "123456"), function (err, createdUser) {
                     assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
                     assert.equal(resultHasMessage(i18n.__("DataAnnotations.EmailNotValid"), err.details), true);
                     done();
                 });
             });
-
-            it('no invalid passwords allowed', function(done) {
-                userController.create(global, initUser(UserEmailValid, "    ", "    "), function(err, createdUser) {
+            
+            it('no invalid passwords allowed', function (done) {
+                userController.create(global, initUser(UserEmailValid, "    ", "    "), function (err, createdUser) {
                     assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
                     assert.equal(resultHasMessage(i18n.__("AccountResources.InvalidPassword"), err.details), true);
                     done();
                 });
             });
-
-            it('password and password confirmation match', function(done) {
-                userController.create(global, initUser(UserEmailValid, "123456", "1234567"), function(err, createdUser) {
+            
+            it('password and password confirmation match', function (done) {
+                userController.create(global, initUser(UserEmailValid, "123456", "1234567"), function (err, createdUser) {
                     assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
                     assert.equal(resultHasMessage(i18n.__("AccountResources.NewPasswordConfirmError"), err.details), true);
                     done();
                 });
             });
-
-            it('register unactivated account succeeds', function(done) {
-                userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function(err, createdUser) {
+            
+            it('register unactivated account succeeds', function (done) {
+                userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function (err, createdUser) {
                     assert.equal(err, null, err === null ? '' : err.message);
                     assert.equal(createdUser.isValid, true);
                     assert.equal(resultHasMessage(i18n.__("AccountResources.CreateNewAccount_EmailSent"), createdUser.messages), true);
                     done();
                 });
             });
-
-            it('register duplicated not allowed', function(done) {
-                userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function(err, createdUser) {
+            
+            it('register duplicated not allowed', function (done) {
+                userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function (err, createdUser) {
                     assert.equal(err, null, err === null ? '' : err.message);
                     assert.equal(createdUser.isValid, true);
                     assert.equal(resultHasMessage(i18n.__("AccountResources.CreateNewAccount_EmailSent"), createdUser.messages), true);
-
-                    userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function(err, createdUser) {
+                    
+                    userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function (err, createdUser) {
                         assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
                         assert.equal(err.message, i18n.__("UserAdminTexts.DuplicateEmail"));
                         done();
@@ -1287,19 +1310,19 @@ module.exports = getLogger;;(function(module) {
                 });
             });
         });
-
-
-
-        describe('Confirm email address', function() {
-
-            it('confirm user email with valid token suceeds', function(done) {
-                userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function(err, createdUser) {
+        
+        
+        
+        describe('Confirm email address', function () {
+            
+            it('confirm user email with valid token suceeds', function (done) {
+                userController.create(global, initUser(UserEmailValid, UserPassword, UserPassword), function (err, createdUser) {
                     assert.equal(err, null, err === null ? '' : err.message);
                     assert.equal(createdUser.isValid, true);
                     assert.equal(resultHasMessage(i18n.__("AccountResources.CreateNewAccount_EmailSent"), createdUser.messages), true);
-
-
-                    userController.confirmEmail(global, createdUser.data.tokenId, function(err, confirmResult) {
+                    
+                    
+                    userController.confirmEmail(global, createdUser.data.tokenId, function (err, confirmResult) {
                         assert.equal(err, null, err === null ? '' : err.message);
                         assert.equal(createdUser.isValid, true);
                         assert.equal(resultHasMessage(i18n.__("AccountResourcesTexts.AccountActivated"), confirmResult.messages), true);
@@ -1307,44 +1330,44 @@ module.exports = getLogger;;(function(module) {
                     });
                 });
             });
-
-            it('confirm user email with invalid token not allowed', function(done) {
-                userController.confirmEmail(global, 'unexistingTokenId', function(err, confirmResult) {
+            
+            it('confirm user email with invalid token not allowed', function (done) {
+                userController.confirmEmail(global, 'unexistingTokenId', function (err, confirmResult) {
                     assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
                     assert.equal(err.message, i18n.__("AccountResourcesTexts.CantAccessYourAccount_TokenExpired"));
                     done();
                 });
             });
         });
-
-        describe('Can\'t access your account', function() {
-
-            it('unexisting email address rises error', function(done) {
-
+        
+        describe('Can\'t access your account', function () {
+            
+            it('unexisting email address rises error', function (done) {
+                
                 userController.cantAccessYourAccount(global, {
                     activateFormVirtualPath: '/appVirtualPath/',
                     email: 'unexisting@email.com'
-                }, function(err, cantAccessResult) {
+                }, function (err, cantAccessResult) {
                     assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
                     assert.equal(err.message, i18n.__("UserAdminTexts.UserNotFound"));
                     done();
                 });
             });
-
-            it('existing email address gets token from cantAccessYourAccount', function(done) {
-
-
+            
+            it('existing email address gets token from cantAccessYourAccount', function (done) {
+                
+                
                 var userToCreate = initUser(UserEmailValid, UserPassword, UserPassword);
-
-                userController.create(global, userToCreate, function(err, createdUser) {
+                
+                userController.create(global, userToCreate, function (err, createdUser) {
                     assert.equal(err, null, err === null ? '' : err.message);
                     assert.equal(createdUser.isValid, true);
                     assert.equal(resultHasMessage(i18n.__("AccountResources.CreateNewAccount_EmailSent"), createdUser.messages), true);
-
+                    
                     userController.cantAccessYourAccount(global, {
                         activateFormVirtualPath: '/appVirtualPath/',
                         email: userToCreate.email
-                    }, function(err, cantAccessResult) {
+                    }, function (err, cantAccessResult) {
                         assert.equal(err, null, err === null ? '' : err.message);
                         assert.equal(cantAccessResult.isValid, true);
                         assert.equal(resultHasMessage(i18n.__("AccountResources.CreateNewAccount_EmailSent"), cantAccessResult.messages), true);
@@ -1355,64 +1378,64 @@ module.exports = getLogger;;(function(module) {
 
             });
         });
-
-
-        describe('Reset password', function() {
-
-            it('strength password is checked', function(done) {
+        
+        
+        describe('Reset password', function () {
+            
+            it('strength password is checked', function (done) {
                 userController.resetPassword(global, {
                     token: '  ',
                     newPassword: '  ',
                     confirmNewPassword: ''
-                }, function(err, result) {
+                }, function (err, result) {
                     assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
                     assert.equal(err.message, i18n.__("AccountResources.InvalidPassword"));
                     done();
                 });
             });
-
-            it('invalid confirmation password is not allowed', function(done) {
+            
+            it('invalid confirmation password is not allowed', function (done) {
                 userController.resetPassword(global, {
                     token: '  ',
                     newPassword: '123456',
                     confirmNewPassword: ''
-                }, function(err, result) {
+                }, function (err, result) {
                     assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
                     assert.equal(err.message, i18n.__("AccountResources.NewPasswordConfirmError"));
                     done();
                 });
             });
-
-            it('invalid token is not allowed', function(done) {
+            
+            it('invalid token is not allowed', function (done) {
                 userController.resetPassword(global, {
                     token: 'une3xistin6token',
                     newPassword: '123456',
                     confirmNewPassword: '123456'
-                }, function(err, result) {
+                }, function (err, result) {
                     assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
                     assert.equal(err.message, i18n.__("AccountResources.CantAccessYourAccount_TokenExpired"));
                     done();
                 });
             });
-
-            it('reset password succeed', function(done) {
-
+            
+            it('reset password succeed', function (done) {
+                
                 var userToCreate = initUser(UserEmailValid, UserPassword, UserPassword);
-
-                userController.create(global, userToCreate, function(err, createdUser) {
+                
+                userController.create(global, userToCreate, function (err, createdUser) {
                     assert.equal(err, null, err === null ? '' : err.message);
-
+                    
                     userController.cantAccessYourAccount(global, {
                         activateFormVirtualPath: '/appVirtualPath/',
                         email: userToCreate.email
-                    }, function(err, cantAccessResult) {
+                    }, function (err, cantAccessResult) {
                         assert.equal(err, null, err === null ? '' : err.message);
-
+                        
                         userController.resetPassword(global, {
                             token: cantAccessResult.data.tokenId,
                             newPassword: '123456',
                             confirmNewPassword: '123456'
-                        }, function(err, result) {
+                        }, function (err, result) {
                             assert.equal(err, null, err === null ? '' : err.message);
                             assert.equal(cantAccessResult.isValid, true);
                             assert.equal(resultHasMessage(i18n.__("AccountResources.CantAccessYourAccount_PasswordChanged"), result.messages), true);
@@ -1422,59 +1445,62 @@ module.exports = getLogger;;(function(module) {
                 });
             });
         });
-
-
-        describe('Users authentication', function() {
-
-            it('invalid credentials are not wellcome', function(done) {
-
+        
+        
+        describe('Users authentication', function () {
+            
+            it('invalid credentials are not wellcome', function (done) {
+                
                 authController.basicCredentialsCheck(
+                    global,    
                     'invalidUserName',
                     'invalidPassword',
-                    function(err, result, data) {
+                    function (err, result, data) {
                         assert.equal(result, false);
                         assert.equal(data.message, i18n.__("AccountResources.InvalidCredentials"));
                         done();
                     });
 
             });
-
-            it('unactivated email address account are not wellcome', function(done) {
-
+            
+            it('unactivated email address account are not wellcome', function (done) {
+                
                 var unConfirmedUser = initUser(UserEmailValid, UserPassword, UserPassword);
-
-                userController.create(global, unConfirmedUser, function(err, createdUser) {
+                
+                userController.create(global, unConfirmedUser, function (err, createdUser) {
                     assert.equal(err, null, err === null ? '' : err.message);
-
+                    
                     authController.basicCredentialsCheck(
+                        global,
                         UserEmailValid,
                         UserPassword,
-                        function(err, result, data) {
+                        function (err, result, data) {
                             assert.equal(result, false);
                             assert.equal(data.message, i18n.__("AccountResources.PleaseConfirmAccount"));
                             done();
                         });
                 });
             });
-
-            it('activated email address account are wellcome', function(done) {
-
+            
+            it('activated email address account are wellcome', function (done) {
+                
                 var userToTest = initUser(UserEmailValid, UserPassword, UserPassword);
-
-                userController.create(global, userToTest, function(err, createdUser) {
+                
+                userController.create(global, userToTest, function (err, createdUser) {
                     assert.equal(err, null, err === null ? '' : err.message);
                     assert.equal(createdUser.isValid, true);
                     assert.equal(resultHasMessage(i18n.__("AccountResources.CreateNewAccount_EmailSent"), createdUser.messages), true);
-
-                    userController.confirmEmail(global, createdUser.data.tokenId, function(err, confirmResult) {
+                    
+                    userController.confirmEmail(global, createdUser.data.tokenId, function (err, confirmResult) {
                         assert.equal(err, null, err === null ? '' : err.message);
                         assert.equal(createdUser.isValid, true);
                         assert.equal(resultHasMessage(i18n.__("AccountResourcesTexts.AccountActivated"), confirmResult.messages), true);
-
+                        
                         authController.basicCredentialsCheck(
+                            global,
                             UserEmailValid,
                             UserPassword,
-                            function(err, result, data) {
+                            function (err, result, data) {
                                 assert.equal(err, null);
                                 assert.equal(result, true);
                                 assert.equal(data.email, userToTest.email);
@@ -1491,245 +1517,144 @@ module.exports = getLogger;;(function(module) {
 
 
     });
-})();;(function(module) {
-
-    'use strict';
-
-    module("Auth Tests");
-
-
-    var server = {
-        name: "localhost",
-        port: 3000,
-        getBaseAddress: function() {
-            return "http://" + this.name + ":" + this.port;
-        }
-    };
-
-
-    jQuery(document)
-        .ajaxSend(function(e, x, settings) {
-            stop();
+})();;
+var testSetup = {
+    
+    begin       : function (data) /* before any tests start */ {
+        console.log("begin: [" + new Date().toLocaleTimeString() + "]");
+    },
+    moduleStart : function (data) /* before the start of each module */ {
+        console.log("-------\n  moduleStart:", data.name);
+    },
+    testStart   : function (data) /* before the start of each test */ {
+        
+        jQuery
+        .get(server.getBaseAddress() + "/initDb")
+            .done(function (result, textStatus, jqXHR) {
+            ok(result.isValid === true, "Drop Database & Init");
         })
-        .ajaxComplete(function(e, x, settings) {
-            start();
+            .fail(function (jqXHR, textStatus, errorThrown) {
+            ok(false, "Unhandled error initiating db. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
         });
 
-    var getClientData = function(user) {
 
-        return {
-            name: getRandomString(15),
-            clientId: getRandomString(10),
-            clientSecret: getRandomString(10)
-        };
+    },
+    log         : function (data) /* called after every assertion */ {
+        console.log("      log:", data.message);
+    },
+    testDone    : function (data) /* after each test */ {
+        console.log("    testDone:", data);
+    },
+    moduleDone  : function (data) /* after each module */ {
+        console.log("  moduleDone:", data);
+    },
+    done        : function (data) /* all tests done */ {
+        console.log("done:", data);
+    },
+    
+    init : function () {
+        console.log("\n======== QUnit events initialized ==========");
+        
+        QUnit.begin(testSetup.begin);
+        QUnit.moduleStart(testSetup.moduleStart);
+        QUnit.testStart(testSetup.testStart);
+        QUnit.log(testSetup.log);
+        QUnit.testDone(testSetup.testDone);
+        QUnit.moduleDone(testSetup.moduleDone);
+        QUnit.done(testSetup.done);
+        
+    }
+};
 
-    };
-    var getTokenCredentials = function(user, clientData) {
+testSetup.init();
 
-        return {
-            grant_type: "password",
-            client_id: clientData.clientId,
-            client_secret: clientData.clientSecret,
-            username: user.username,
-            password: user.password
-        };
-
-    };
-    var getValidToken = function(tokenCredentials, callback) {
-
-        jQuery.post(server.getBaseAddress() + "/oauth/token/", tokenCredentials)
-            .done(function(data, textStatus, jqXHR) {
-                ok(data.access_token !== null, "Response has access_token");
-                ok(data.refresh_token !== null, "Response has refresh_token");
-                ok(data.expires_in !== null, "Response has expires_in value");
-                ok(data.token_type !== null, "Response has token_type value");
-                callback(data);
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                ok(false, "Something wrong getting token. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
-            });
-    };
-    var postClient = function(clientData, callback) {
-
-        jQuery.post(server.getBaseAddress() + "/api/client/", clientData)
-            .done(function(data, textStatus, jqXHR) {
-                callback(data);
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                ok(false, "Unhandled error creating client. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
-            });
-    };
-    var postUser = function(userCredentials, callback) {
-
-        jQuery.post(server.getBaseAddress() + "/api/user/", userCredentials)
-            .done(function(data, textStatus, jqXHR) {
-                callback(data);
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                ok(false, "Unhandled error creating user. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
-            });
-    };
-    var getRandomString = function(stringLength) {
-        var s = "";
-        while (s.length < stringLength && stringLength > 0) {
-            var r = Math.random();
-            s += (r < 0.1 ? Math.floor(r * 100) : String.fromCharCode(Math.floor(r * 26) + (r > 0.5 ? 97 : 65)));
-        }
-        return s;
-    };
-    var getRandomUser = function() {
-        return {
-            username: getRandomString(10),
-            password: getRandomString(9)
-        };
-    };
-
-
-    var newClient = getClientData();
-    var newUser = getRandomUser();
-
-
-
-    test("initDb", function() {
-        jQuery.get(server.getBaseAddress() + "/initDb")
-            .done(function(data, textStatus, jqXHR) {
-                console.log(data);
-                ok(data, true);
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                ok(false, "Unhandled error initiating db. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
-            });
-    });
-
-
-    test("create client", function() {
-        postClient(newClient, function(data) {
-            ok(data.isValid === true, "Expected client created. Instead found not valid result");
-            ok(data.clientId !== null, "Expected clientId value");
-        });
-    });
-
-
-    test("create user", function() {
-        postUser(newUser, function(data) {
-            ok(data.isValid === true, "Expected user created. Instead found not valid result");
-            ok(data.userId !== null, "Expected userId value");
-
-            postUser(newUser, function(dataUserAlreadyExists) {
-                ok(dataUserAlreadyExists.isValid === false, "Expected not valid result");
-            });
-        });
-    });
-
-    test("valid credentials get valid token", function() {
-        getValidToken(getTokenCredentials(newUser, newClient), function(data) {
-
-        });
-    });
-
-    test("valid token get valid user info", function() {
-
-        getValidToken(getTokenCredentials(newUser, newClient), function(dataTokenCreated) {
-
-            jQuery
-                .ajax({
-                    url: server.getBaseAddress() + "/api/user/",
-                    type: "GET",
-                    beforeSend: function(xhr, settings) {
-                        xhr.setRequestHeader("Authorization", dataTokenCreated.token_type + " " + dataTokenCreated.access_token);
-                    }
-                })
-                .done(function(dataUserInfo, textStatus, jqXHR) {
-                    equal(newUser.username, dataUserInfo.name, "token user match username");
-                })
-                .fail(function(jqXHR, textStatus, errorThrown) {
-                    ok(false, "Something went wrong getting userinfo");
-                });
-        });
-    });
-
-
-
-})(module);;(function(module) {
-
+;(function (QUnit) {
+    
     'use strict';
-
-    module("User Tests");
-
+    
     jQuery(document)
-        .ajaxSend(function(e, x, settings) {
-            stop();
-        })
-        .ajaxComplete(function(e, x, settings) {
-            start();
-        });
+        .ajaxSend(function (e, x, settings) {
+        stop();
+    })
+        .ajaxComplete(function (e, x, settings) {
+        start();
+    });
+    
 
-    var userGenerate = function() {
-
+    
+    
+    
+    var userGenerate = function () {
+        
         return {
             email: "some_email" + new Date().toJSON().replace(/\W+/g, '').toLowerCase() + "@domain.com",
             password: "somepassword",
             passwordConfirm: "somepassword"
         };
     };
-
-    var postUser = function(userCredentials, callback) {
-
+    var postUser = function (userCredentials, callback) {
+        
         jQuery.post(server.getBaseAddress() + "/api/user/", userCredentials)
-            .done(function(data, textStatus, jqXHR) {
-                callback(data);
+            .done(function (data, textStatus, jqXHR) {
+            callback(data);
+        })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+            ok(false, "Unhandled error creating user. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
+        });
+    };
+    
+    
+    module("User account tests");
+
+    test("Register, confirm and login", function () {
+        
+        var user = userGenerate();
+        
+        postUser(user, function (register) {
+            console.log(register);
+            ok(register.isValid === true, "Users can register credentials");
+            ok(register.data.userId !== null, "User credentials generate userId");
+            ok(register.data.tokenId !== null, "User credentials tokenId sent via email");
+            
+            //  
+            jQuery.get(server.getBaseAddress() + "/api/users/confirmation/" + register.data.tokenId)
+            .done(function (confirmation, textStatus, jqXHR) {
+                ok(confirmation.isValid === true, "Users can confirm by token");
             })
-            .fail(function(jqXHR, textStatus, errorThrown) {
+            .fail(function (jqXHR, textStatus, errorThrown) {
                 ok(false, "Unhandled error creating user. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
             });
-    };
 
-    test("initDb", function() {
-        jQuery.get(server.getBaseAddress() + "/initDb")
-            .done(function(result, textStatus, jqXHR) {
-                ok(result.isValid, true);
-                ok(result.data.roleId !== '', true);
-            })
-            .fail(function(jqXHR, textStatus, errorThrown) {
-                ok(false, "Unhandled error initiating db. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
-            });
-    });
-
-    test("user creation", function() {
-
-        var user = userGenerate();
-
-        postUser(user, function(data) {
-            ok(data.isValid === true, "Users can create login credentials");
-            ok(data.userId !== null, "Users credentials generate userId");
         });
     });
+    
+    //test("user authentication", function () {
+        
+    //    var user = userGenerate();
+        
+    //    postUser(user, function (data) {
+    //        ok(data.isValid === true, "Users can create login credentials");
+            
+    //        jQuery
+    //            .ajax({
+    //            url: server.getBaseAddress() + "/api/user/",
+    //            type: "GET",
+    //            beforeSend: function (xhr, settings) {
+    //                xhr.setRequestHeader("Authorization", "Basic " + btoa(user.email + ":" + user.password));
+    //            }
+    //        })
+    //            .done(function (dataUserInfo, textStatus, jqXHR) {
+    //            equal(user.email, dataUserInfo.email, "token user match username");
+    //        })
+    //            .fail(function (jqXHR, textStatus, errorThrown) {
+    //            ok(false, "Something went wrong getting userinfo");
+    //        });
+    //    });
+    //});
 
-    test("user authentication", function() {
+})(QUnit);;
 
-        var user = userGenerate();
 
-        postUser(user, function(data) {
-            ok(data.isValid === true, "Users can create login credentials");
-
-            jQuery
-                .ajax({
-                    url: server.getBaseAddress() + "/api/user/",
-                    type: "GET",
-                    beforeSend: function(xhr, settings) {
-                        xhr.setRequestHeader("Authorization", "Basic " + btoa(user.email + ":" + user.password));
-                    }
-                })
-                .done(function(dataUserInfo, textStatus, jqXHR) {
-                    equal(user.email, dataUserInfo.email, "token user match username");
-                })
-                .fail(function(jqXHR, textStatus, errorThrown) {
-                    ok(false, "Something went wrong getting userinfo");
-                });
-        });
-    });
-
-})(module);;    
 var server = {
     name : window.location.hostname === ''?'localhost':window.location.hostname,
     port : window.location.hostname === ''?3000:window.location.port, 

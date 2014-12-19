@@ -1,4 +1,6 @@
-﻿    
+﻿
+
+
 var server = {
     name : window.location.hostname === ''?'localhost':window.location.hostname,
     port : window.location.hostname === ''?3000:window.location.port, 
