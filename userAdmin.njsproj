@@ -50,6 +50,7 @@
     <Compile Include="src\public\test\mocha\libs\initMochaTests.js" />
     <Compile Include="src\public\test\mocha\users.js" />
     <Compile Include="src\public\test\qunit\basicAuth\basicAuthTest.js" />
+    <Compile Include="src\public\test\qunit\libs\qunit-1.16.0.js" />
     <Compile Include="src\public\test\qunit\Qunit.config.js" />
     <Compile Include="src\public\test\qunit\common.js" />
     <Compile Include="src\public\test\qunit\libs\jquery-1.11.1.min.js" />
@@ -70,6 +71,7 @@
     <Content Include="src\public\locales\en.json" />
     <Content Include="src\public\locales\es.json" />
     <Content Include="src\public\test\qunit\index.html" />
+    <Content Include="src\public\test\qunit\libs\qunit-1.16.0.css" />
     <Content Include="src\public\test\qunit\libs\qunit.css" />
     <Content Include="web.config" />
   </ItemGroup>

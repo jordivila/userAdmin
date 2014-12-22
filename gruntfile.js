@@ -100,7 +100,8 @@
 
       test: {
         files: ['<%= jshint.files %>'],
-        tasks: ['jshint:files', 'mochaTest', 'express:testQunit', 'qunit']
+        //tasks: ['jshint:files', 'mochaTest', 'express:testQunit', 'qunit']
+        tasks: ['jshint:files', 'express:testQunit', 'qunit']
       },
     },
     open: {

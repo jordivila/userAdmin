@@ -9,6 +9,12 @@ var testSetup = {
     },
     testStart   : function (data) /* before the start of each test */ {
         
+        var module = data.module;
+        var testName = data.name;
+        
+
+        console.log("-------\n  testSTart -> " + testName);
+
         jQuery
         .get(server.getBaseAddress() + "/initDb")
             .done(function (result, textStatus, jqXHR) {
@@ -34,7 +40,17 @@ var testSetup = {
     },
     
     init : function () {
-        console.log("\n======== QUnit events initialized ==========");
+        
+        console.log("\n======== QUnit events initialize ==========");
+        
+        jQuery(document)
+        .ajaxSend(function (e, x, settings) {
+                stop();
+            })
+        .ajaxComplete(function (e, x, settings) {
+                start();
+            });
+
         
         QUnit.begin(testSetup.begin);
         QUnit.moduleStart(testSetup.moduleStart);
