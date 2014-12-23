@@ -1,0 +1,5 @@
+﻿.ui-message {position:relative;margin:0.5em;}
+.ui-message .widgetMsgStyleContent{padding:0.9em 0.5em 0.9em .5em;}
+.ui-message .widgetIcon {margin:-0.3em 0.5em 0 0.5em;float:left;padding:0.5em;}
+.ui-message .widgetYesNoButtons {clear:both;text-align:right;margin:1em;position:relative;padding:0 0.2em 0 0.5em;}
+.ui-message .ui-widget-close {margin:-2.6em 1em 0 0;float:right;}
