@@ -30,6 +30,24 @@
                 ok(false, "Unhandled error confirming user email. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
             });
     };
+    var userCanAccessRestrictedArea = function (user, callback) {
+        
+        jQuery
+            .ajax({
+                url: server.getBaseAddress() + "/api/user/",
+                type: "GET",
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("Authorization", "Basic " + btoa(user.email + ":" + user.password));
+                }
+            })
+            .done(function (dataUserInfo, textStatus, jqXHR) {
+                callback(dataUserInfo);
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+
+                ok(false, "Something went wrong accessing restricted area:" + errorThrown);
+            });
+    };
     
     
     module("User account tests");
@@ -47,32 +65,11 @@
             userConfirmEmail(register.data.tokenId, function (confirmation) {
                 ok(confirmation.isValid === true, "Users can confirm by token");
 
+                userCanAccessRestrictedArea(user, function (dataUserInfo) { 
+                    equal(user.email, dataUserInfo.email, "user can access restricted area");
+                });
             });
         });
     });
     
-    //test("user authentication", function () {
-        
-    //    var user = userGenerate();
-        
-    //    userRegister(user, function (data) {
-    //        ok(data.isValid === true, "Users can create login credentials");
-            
-    //        jQuery
-    //            .ajax({
-    //            url: server.getBaseAddress() + "/api/user/",
-    //            type: "GET",
-    //            beforeSend: function (xhr, settings) {
-    //                xhr.setRequestHeader("Authorization", "Basic " + btoa(user.email + ":" + user.password));
-    //            }
-    //        })
-    //            .done(function (dataUserInfo, textStatus, jqXHR) {
-    //            equal(user.email, dataUserInfo.email, "token user match username");
-    //        })
-    //            .fail(function (jqXHR, textStatus, errorThrown) {
-    //            ok(false, "Something went wrong getting userinfo");
-    //        });
-    //    });
-    //});
-
 })(QUnit);
