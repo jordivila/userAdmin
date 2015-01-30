@@ -43,7 +43,7 @@
         'server.js',
         'src/**/*.js',
 
-        '!src/public/scripts/**/*.*', 
+        '!src/public/scripts/**/*.*',
 
         'src/public/test/qunit/**/*.js',
         '!src/public/test/qunit/libs/**/*.js',
