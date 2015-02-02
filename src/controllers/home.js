@@ -15,6 +15,8 @@
 
         app.get('/home', function(req, res, next) {
 
+            console.log("HOOOOOOOOOOOOOOOOOOOLAAAA");
+
             res.render('home', {
                 Title: "Titulo molon",
                 DomainName: "localhost:3001"
