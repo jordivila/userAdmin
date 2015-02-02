@@ -2,6 +2,9 @@
 
     "use strict";
 
+
+    var log = require('../libs/log')(module);
+
     module.exports.setRoutes = function(app) {
 
 
