@@ -17,6 +17,12 @@
 
             console.log("HOOOOOOOOOOOOOOOOOOOLAAAA");
 
+
+            log.info("********************************************************************");
+            log.info("********************************************************************");
+
+
+
             res.render('home', {
                 Title: "Titulo molon",
                 DomainName: "localhost:3001"
