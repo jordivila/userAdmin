@@ -3,9 +3,8 @@
     "use strict";
 
 
-    var log = require('../libs/log')(module);
 
-    module.exports.setRoutes = function(app) {
+    module.exports.setRoutes = function(app, log) {
 
 
         app.get('/', function(req, res, next) {
@@ -23,6 +22,7 @@
 
             log.info("********************************************************************");
             log.info("********************************************************************");
+            log.error("asdasdasdasdasdasdasjkdashdjkashdjkashdjkasjkdhkasjdhksjdhksjdh");
 
 
 
