@@ -107,6 +107,8 @@
         log.info("Express server listening : " + util.format('%s', d.toString()));
         log.info('Express server listening on port ' + app.get('port'));
         log.info("********************************************************************");
+
+        console.log("HOOOOOOOOOOOOOOOOOOOLAAAA");
     });
 
 })(module);

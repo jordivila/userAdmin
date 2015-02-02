@@ -668,7 +668,7 @@
     <Compile Include="src\public\scripts\libs\jquery-validation-1.11.0\localization\methods_de.js" />
     <Compile Include="src\public\scripts\libs\jquery-validation-1.11.0\localization\methods_nl.js" />
     <Compile Include="src\public\scripts\libs\jquery-validation-1.11.0\localization\methods_pt.js" />
-    <Compile Include="src\public\scripts\libs\jquery\jquery-1.9.1-vsdoc.js" />
+    <Compile Include="src\public\scripts\libs\jquery\jquery-1.9.1-vsdoc.js__" />
     <Compile Include="src\public\scripts\libs\jquery\jquery-1.9.1.js" />
     <Compile Include="src\public\scripts\libs\jquery\jquery-1.9.1.min.js" />
     <Compile Include="src\public\scripts\Template.Init.Ajax.js" />
@@ -723,8 +723,6 @@
     <Content Include="src\public\fonts\fontawesome-webfont.ttf" />
     <Content Include="src\public\fonts\fontawesome-webfont.woff" />
     <Content Include="src\public\fonts\FontAwesome.otf" />
-    <Content Include="src\public\index.html" />
-    <Content Include="src\public\layout.html" />
     <Content Include="src\public\locales\en.json" />
     <Content Include="src\public\locales\es.json" />
     <Content Include="src\public\scripts\libs\jquery-ui-1.10.0\ui\.jshintrc" />
@@ -752,6 +750,9 @@
     <Content Include="src\public\test\qunit\index.html" />
     <Content Include="src\public\test\qunit\libs\qunit-1.16.0.css" />
     <Content Include="src\public\test\qunit\libs\qunit.css" />
+    <Content Include="src\public\views\home.handlebars" />
+    <Content Include="src\public\views\index.html" />
+    <Content Include="src\public\views\layouts\layout.handlebars" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -789,6 +790,8 @@
     <Folder Include="src\controllers\" />
     <Folder Include="src\models\" />
     <Folder Include="src\" />
+    <Folder Include="src\public\views\" />
+    <Folder Include="src\public\views\layouts\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
 </Project>
