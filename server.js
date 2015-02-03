@@ -27,7 +27,8 @@
     var app = express();
 
     app.use(cookieParser(config.get('encryptKeyForCookieParser')));
-    app.set('port', process.env.PORT || config.get('port'));
+    //app.set('port', process.env.PORT || config.get('port'));
+    app.set('port', config.get('port'));
     app.use(favicon(__dirname + '/src/public/favicon.ico'));
     app.use(bodyParser.urlencoded({
         extended: true
