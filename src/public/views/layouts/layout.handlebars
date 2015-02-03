@@ -40,14 +40,14 @@
         <div class="ui-breadcrumb">
             <div class="ui-widget-content ui-corner-all ui-state-default">
                 <ul>
-        {{#each Breadcrumb}}
+                    {{#each Breadcrumb}}
                     <li>
                         {{#if this.url }}
                         <span class="ui-icon ui-icon-play"></span>
                         {{/if}}
                         <a href="{{this.url}}">{{this.title}}</a>
                     </li>
-        {{/each}}
+                    {{/each}}
                 </ul>
                 <div class="ui-carriageReturn"></div>
             </div>
