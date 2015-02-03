@@ -3,15 +3,15 @@
 jQuery.widget("ui.widgetBoolean", jQuery.ui.widgetBase,
 {
     options: {
-        isNullable: false
-        , icons: []
-        , values: []
+        isNullable: false, 
+        icons: [], 
+        values: []
     },
     _create: function () {
 
         jQuery.ui.widgetBase.prototype._create.call(this);
 
-        if (jQuery(this.element).attr('data-widget-nullable') != undefined) {
+        if (jQuery(this.element).attr('data-widget-nullable') !== undefined) {
             this.options.isNullable = jQuery(this.element).attr('data-widget-nullable').toString().toLowerCase() == "true";
         }
 
@@ -63,11 +63,11 @@ jQuery.widget("ui.widgetBoolean", jQuery.ui.widgetBase,
                                     }
                                 });
 
-    }
-    , destroy: function () {
+    }, 
+    destroy: function () {
         jQuery.ui.widgetBase.prototype.destroy.call(this);
-    }
-    , _getCurrentIndex: function () {
+    }, 
+    _getCurrentIndex: function () {
 
         //var $el = jQuery(this.element);
         var currentValue = null;
@@ -96,8 +96,8 @@ jQuery.widget("ui.widgetBoolean", jQuery.ui.widgetBase,
 
 
         return result;
-    }
-    , _getNextIndex: function () {
+    }, 
+    _getNextIndex: function () {
         var i = this._getCurrentIndex();
         var result = (i + 1) >= (this.options.values.length) ? 0 : (i + 1);
         return result;

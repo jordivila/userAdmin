@@ -39,9 +39,7 @@ VsixMvcAppResult.Widgets.Page = {
 jQuery.widget("ui.page", jQuery.ui.widgetBase, {
     options: {
         cultureGlobalization: null,
-        cultureDatePicker: null
-            //, controllerSelected: null
-            ,
+        cultureDatePicker: null,
         defaultTheme: null
     },
     _init: function() {
@@ -91,12 +89,12 @@ jQuery.widget("ui.page", jQuery.ui.widgetBase, {
             errorClass: "ui-state-error"
         });
 
-        jQuery.validator.methods.number = function(value, element) {
+        jQuery.validator.methods.number = function (value, element) {
             if (Globalize.parseFloat(value)) {
                 return true;
             }
             return false;
-        }
+        };
     },
     initJQueryzer: function() {
 

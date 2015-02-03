@@ -5,8 +5,9 @@ if (!window.console) {
 
         }
     };
-};
+}
 
+/*jslint evil: true */
 String.prototype.toDateFromAspNet = function () {
     var dte = eval("new " + this.replace(/\//g, '') + ";");
     dte.setMinutes(dte.getMinutes() - dte.getTimezoneOffset());

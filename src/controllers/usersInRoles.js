@@ -11,7 +11,7 @@
     var ErrorHandledModel = require('../models/errorHandled');
     var UsersInRoleModel = require('../models/usersInRoles');
     var DataResultModel = require('../models/dataResult');
-    var rolesController = require('./roles');
+    var rolesController = require('./usersRoles');
     var usersController = require('./users');
 
     function addToRole(userId, roleName, i18n, cb) {

@@ -4,11 +4,11 @@ jQuery.widget("ui.widgetGrid", jQuery.ui.widgetBase,
 {
     options: {
 
-    }
-    , _create: function () {
-        jQuery.ui.widgetBase.prototype._create.call(this)
-    }
-    , _init: function () {
+    }, 
+    _create: function () {
+        jQuery.ui.widgetBase.prototype._create.call(this);
+    }, 
+    _init: function () {
 
         jQuery.ui.widgetBase.prototype._init.call(this);
 
@@ -20,8 +20,8 @@ jQuery.widget("ui.widgetGrid", jQuery.ui.widgetBase,
 //        self._doResize();
 //        self._initPaginable();
 //        self._initSortable();
-    }
-    , destroy: function () {
+    }, 
+    destroy: function () {
         jQuery.ui.widgetBase.prototype.destroy.call(this);
     }
 //    , _doResize: function () {

@@ -7,7 +7,7 @@
     module.exports.initTestEnvironment = initTestEnvironment;
 
     var userController = require('./users');
-    var roleController = require('./roles');
+    var roleController = require('./usersRoles');
     var util = require('util');
     var mongoose = require('mongoose');
     var config = require('../libs/config');

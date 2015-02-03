@@ -8,7 +8,7 @@
 
 VsixMvcAppResult.Widgets.jQueryzer = function (selector) {
     jQuery(selector).widgetJqueryzer();
-}
+};
 
 
 /*******************************************************************************
@@ -42,11 +42,11 @@ jQuery.widget('ui.widgetJqueryzer', jQuery.ui.widgetBase,
             this.item($listItem, widgetName);
 
         }
-    }
-    , destroy: function () {
+    }, 
+    destroy: function () {
         jQuery.ui.widgetBase.prototype.destroy.call(this);
-    }
-    , item: function ($listItem, widgetName) {
+    }, 
+    item: function ($listItem, widgetName) {
         switch (widgetName) {
             case 'widgetBase':
                 $listItem.widgetBase({
@@ -55,9 +55,10 @@ jQuery.widget('ui.widgetJqueryzer', jQuery.ui.widgetBase,
                     isCollapsed: parseBoolean($listItem.attr('data-widget-isCollapsed')),
                     onCollapsed: function (e, isVisible) {
                         try {
+                            /*jslint evil: true */
                             eval($listItem.attr('data-widget-jsOnCollapse'));
                         }
-                        catch (e) {
+                        catch (ex) {
 
                         }
                     }
@@ -78,8 +79,8 @@ jQuery.widget('ui.widgetJqueryzer', jQuery.ui.widgetBase,
                 break;
             case 'dateSelector':
                 $listItem.dateSelector({
-                    text: VsixMvcAppResult.Resources.clickToPickDate
-                            , value: Globalize.parseDate($listItem.attr('data-value'))
+                    text: VsixMvcAppResult.Resources.clickToPickDate,
+                    value: Globalize.parseDate($listItem.attr('data-value'))
                 });
                 break;
             case 'widgetMsg':

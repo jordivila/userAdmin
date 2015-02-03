@@ -1,42 +1,36 @@
 (function(module) {
 
     "use strict";
+    
 
-
+    var config = require('../libs/config');
+    var pkg = require('../../package.json');
+    var i18n = require('i18n-2');
 
     module.exports.setRoutes = function(app, log) {
-
 
         app.get('/', function(req, res, next) {
             res.sendFile('index.html', {
                 root: app.get('views')
             });
-            //res.sendFile('../public/index.html', { root: __dirname });
-            //res.redirect(301, '/public/index.html');
         });
 
-        app.get('/home', function(req, res, next) {
+        app.get('/home', function (req, res, next) {
+            
+            
+            var i18n = req.i18n;
 
-            console.log("HOOOOOOOOOOOOOOOOOOOLAAAA");
-
-
-            log.info("********************************************************************");
-            log.info("********************************************************************");
-            log.error("asdasdasdasdasdasdasjkdashdjkashdjkashdjkasjkdhkasjdhksjdhksjdh");
-
-
-
-            res.render('home', {
-                Title: "Titulo molon",
-                DomainName: "localhost:3001"
+            res.render('home/home', {
+                Title: "Azure nodejs appliaction template",
+                DomainName: config.get('domainName'),
+                Package: pkg,
+                Breadcrumb: [
+                    { title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
+                    { title: i18n.__("GeneralTexts.Home"), url: "/" }
+                ],
+                CssFiles: ["/public/views/home/home.css"],
+                JsFiles: ["/public/views/home/home.js"]
             });
-
-            /*
-            res.sendFile('layout.html', {
-                root: app.get('views')
-            });
-            */
-
         });
 
     };

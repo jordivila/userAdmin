@@ -23,8 +23,8 @@ jQuery.widget("ui.widgetFormItem", jQuery.ui.widgetBase,
         // TODO: check this is really needed
         jQuery.ui.widgetBase.prototype._init.call(this);
 
-    }
-    , destroy: function () {
+    }, 
+    destroy: function () {
         // TODO: check this is really needed
         jQuery.ui.widgetBase.prototype.destroy.call(this);
     }
@@ -44,14 +44,14 @@ jQuery.widget("ui.widgetFormSummary", jQuery.ui.widgetBase,
         // TODO: check this is really needed
         jQuery.ui.widgetBase.prototype._init.call(this);
 
-    }
-    , destroy: function () {
+    }, 
+    destroy: function () {
         // TODO: check this is really needed
         jQuery.ui.widgetBase.prototype.destroy.call(this);
-    }
-    , deleteByKey: function (key) {
+    }, 
+    deleteByKey: function (key) {
         jQuery(this.element).find('li[modelkey="' + key + '"]').remove();
-        if (jQuery(this.element).find('ul').find('li').length == 0) {
+        if (jQuery(this.element).find('ul').find('li').length === 0) {
             jQuery(this.element).hide();
         }
     }

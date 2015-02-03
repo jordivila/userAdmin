@@ -8,7 +8,7 @@
 
             var w = this;
 
-            if (this.options.IMenuModel != null) {
+            if (this.options.IMenuModel !== null) {
                 this.bind(this.options.IMenuModel);
             }
 
@@ -39,7 +39,7 @@
                     }
 
 
-                    if ($node != null) {
+                    if ($node !== null) {
                         if ($node.find('ul:first').length > 0) {
                             var b = $node.find('ul:first').is(':visible');
                             if (b) w.closeNode($node);
@@ -138,11 +138,12 @@
             var menuItemRender = function(IMenuItem) {
                 var $li = jQuery('<li></li>');
                 var $a = jQuery('<a>' + IMenuItem.text + '</a>');
-                if (IMenuItem.url != null) {
+                if (IMenuItem.url) {
                     $li.attr('data-action', IMenuItem.url);
                     $a.attr('href', IMenuItem.url);
                 } else {
-                    $a.attr('href', 'javascript:void(0);');
+                    //$a.attr('href', 'javascript:void(0);');
+                    $a.attr('href', '#').click(function () { });
                 }
                 $li.append($a);
 
@@ -150,7 +151,7 @@
                     var $ul = jQuery('<ul></ul>');
                     for (var i = 0; i < IMenuItem.childs.length; i++) {
                         $ul.append(menuItemRender(IMenuItem.childs[i]));
-                    };
+                    }
                     $li.append($ul);
                 }
                 return $li;
@@ -158,7 +159,7 @@
 
             for (var i = 0; i < IMenuModel.length; i++) {
                 jQuery(this.element).append(menuItemRender(IMenuModel[i]));
-            };
+            }
 
 
         }

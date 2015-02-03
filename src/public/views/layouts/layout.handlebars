@@ -2,31 +2,21 @@
 <html>
 <head>
     <meta name="viewport" content="initial-scale=1.0" />
-    <title>this.Model.BaseViewModelInfo.Title</title>
-
-
+    <title>{{Title}}</title>
     <!--Common styles begin-->
     <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" rel="Stylesheet" type="text/css" />
-    <link href="/public/css/reset.css" rel="Stylesheet" type="text/css" />
-    <link href="/public/css/site.css" rel="Stylesheet" type="text/css" />
-    <link href="/public/css/font-awesome.min.css" rel="Stylesheet" type="text/css" />
-    <link href="/public/css/Site.JqueryUI.IconsExtendWithFontAwsome.css" rel="Stylesheet" type="text/css" />
-    <link href="/public/scripts/ui-widgetMsg/ui-widgetMsg.css" rel="Stylesheet" type="text/css" />
-    <link href="/public/scripts/ui-dateSelector/ui-dateSelector.css" rel="Stylesheet" type="text/css" />
-    <link href="/public/scripts/ui-widgetTreeList/ui-widgetTreeList.css" rel="Stylesheet" type="text/css" />
-    <!--<link href="@Url.StylesheetDispatcher(ResourceDispatcherController.ResourceDispatchParamCommonKey, this.Model.BaseViewModelInfo) " rel="stylesheet" type="text/css"  />-->
+    <link href="/public/cdn/{{Package.name}}.{{Package.version}}.ui.css" rel="Stylesheet" type="text/css" />
+    <!--Common styles end-->
 
-
-    <link href="@Url.StylesheetDispatcher(this.ViewContext.Controller.GetType().ToString(), this.Model.BaseViewModelInfo) " rel="stylesheet" type="text/css" />
-
-
-
-
-    @RenderSection(HtmlHelperExtensions.SectionInlineStyles, true)
+    <!--View specific styles begin-->
+    {{#each CssFiles}}
+        <link href="{{this}}" rel="Stylesheet" type="text/css" />
+    {{/each}}
+    <!--View specific styles end-->
 </head>
 <body class="ui-widget-content ui-hidden">
     <div class="ui-sitePage ui-widget">
-        <div data-widget="userOptions" data-widget-url="@Url.Account_UserUpdateLastActivity()">
+        <div data-widget="userOptions">
             <div class="ui-site-header ui-widget-header ui-widget-content ui-corner-all">
                 <div id="menuToggle" class="ui-menuToggle">
                     <div class="ui-menuToggle-icon fa fa-bars fa-2x"></div>
@@ -46,7 +36,24 @@
             <hr />
         </div>
 
-        @Html.PartialBreadcrumb()
+        <!--Breadcrumb begin-->
+        <div class="ui-breadcrumb">
+            <div class="ui-widget-content ui-corner-all ui-state-default">
+                <ul>
+        {{#each Breadcrumb}}
+                    <li>
+                        {{#if this.url }}
+                        <span class="ui-icon ui-icon-play"></span>
+                        {{/if}}
+                        <a href="{{this.url}}">{{this.title}}</a>
+                    </li>
+        {{/each}}
+                </ul>
+                <div class="ui-carriageReturn"></div>
+            </div>
+        </div>
+        <br />
+        <!--Breadcrumb end-->
 
         <div class="ui-siteContent">
             <ul id="panelMenu" class="ui-menuNav ui-menuNav-Expand"></ul>
@@ -60,7 +67,7 @@
                 <div>Copyright © 2012 Company Co. All rights reserved</div>
                 <div class="ui-siteFooter-html5Logo"></div>
                 <div class="ui-siteVersion">
-                    v. - @VsixMvcAppResult.UI.Web.MvcApplication.Version
+                    v. - {{Package.version}}
                 </div>
             </div>
         </div>
@@ -72,39 +79,19 @@
 
 
     <!--Common Jquery-->
-    <script type="text/javascript" src="/public/scripts/libs/jQuery/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="/public/scripts/libs/jquery-validation-1.11.0/dist/jquery.validate.min.js"></script>
-    <script type="text/javascript" src="/public/scripts/libs/jQuery-globalize/lib/globalize.js"></script>
-
+    <script type="text/javascript" src="/public/cdn/{{Package.name}}.{{Package.version}}.ui_libs.js"></script>
     <!--Common jQuery localized-->
     <script type="text/javascript" src="/public/scripts/libs/jquery-ui-1.10.0/ui/i18n/jquery.ui.datepicker-es.js"></script>
     <script type="text/javascript" src="/public/scripts/libs/jquery-validation-1.11.0/localization/messages_es.js"></script>
     <script type="text/javascript" src="/public/scripts/libs/jQuery-globalize/lib/cultures/globalize.culture.es.js"></script>
-
     <!--Common application-->
-    <script type="text/javascript" src="/public/scripts/Template.Init.js"></script>
-    <script type="text/javascript" src="/public/scripts/Template.Init.Ajax.js"></script>
-    <script type="text/javascript" src="/public/scripts/Template.Init.Widget.js"></script>
-    <script type="text/javascript" src="/public/scripts/Template.Widget.Base.js"></script>
-    <script type="text/javascript" src="/public/scripts/Template.Widget.jQueryzer.js"></script>
-    <script type="text/javascript" src="/public/scripts/Template.Widget.Form.js"></script>
-    <script type="text/javascript" src="/public/scripts/Template.Widget.Boolean.js"></script>
-    <script type="text/javascript" src="/public/scripts/Template.Widget.Grid.js"></script>
-    <script type="text/javascript" src="/public/scripts/Template.Widget.AjaxProgress.js"></script>
-    <script type="text/javascript" src="/public/scripts/Template.Widget.ButtonWrapper.js"></script>
-    <script type="text/javascript" src="/public/scripts/Template.Widget.UserOptions.js"></script>
-    <script type="text/javascript" src="/public/scripts/ui-dateSelector/ui-dateSelector.js"></script>
-    <script type="text/javascript" src="/public/scripts/ui-widgetMsg/ui-widgetMsg.js"></script>
-    <script type="text/javascript" src="/public/scripts/Template.Widget.Dialogs.js"></script>
-    <script type="text/javascript" src="/public/scripts/Template.Widget.DialogInline.js"></script>
-    <script type="text/javascript" src="/public/scripts/Template.Widget.NavMenu.js"></script>
-    <script type="text/javascript" src="/public/scripts/ui-widgetTreeList/ui-widgetTreeList.js"></script>
+    <script type="text/javascript" src="/public/cdn/{{Package.name}}.{{Package.version}}.ui_appCommon.js"></script>
     <!--common javascript resources-->
     <script type="text/javascript">
-        VsixMvcAppResult.Resources = { accept: "Aceptar", cancel: "Cancelar", clickToPickDate: "Click aqui para seleccionar una fecha", close: "Cerrar", confirmToContinue: "Porfavor, confirma para continuar", email: "Email", emailFormatNotValid: "Formato de email incorrecto", errorsInForm: "Existen errores en el formulario", mandatoryField: "Campo obligatorio", minLengthIs: "el mínimo número de caracteres es ", noResultsFound: "No se encontraron resultados", password: "Contraseña", passwordsDoNotMatch: "Las contraseñas no correspondes", siteTitle: "Template MVC III", unExpectedError: "Ha ocurrido un error no controlado", userName: "Usuario", validate: "Validar" };
+        VsixMvcAppResult.Resources = {
+            accept: "Aceptar", cancel: "Cancelar", clickToPickDate: "Click aqui para seleccionar una fecha", close: "Cerrar", confirmToContinue: "Porfavor, confirma para continuar", email: "Email", emailFormatNotValid: "Formato de email incorrecto", errorsInForm: "Existen errores en el formulario", mandatoryField: "Campo obligatorio", minLengthIs: "el mínimo número de caracteres es ", noResultsFound: "No se encontraron resultados", password: "Contraseña", passwordsDoNotMatch: "Las contraseñas no correspondes", siteTitle: "Template MVC III", unExpectedError: "Ha ocurrido un error no controlado", userName: "Usuario", validate: "Validar"
+        };
     </script>
-
     <script type="text/javascript">
         jQuery.noConflict();
     </script>
@@ -113,10 +100,9 @@
     <!--Common page init scripts-->
     <script type="text/javascript" src="/public/scripts/Template.Widget.Page.js"></script>
 
-    <!--<script type="text/javascript" src="/ResourceDispatcher/Javascript?controller=Ck8E%2bKLkIQ7RYfDZR0k01WOLF%2btLyXM7Xp3qY%2fRrpKh3dw7RvN8hvBIa0VSH9ZzZ%2b%2fbxqiOHLaBlL12IQfSz0g%3d%3d&amp;version=1.0.0.0&amp;culture=es"></script>-->
-
-
-    @RenderSection(HtmlHelperExtensions.SectionScriptsToAdd, true)
+    {{#each JsFiles}}
+        <script type="text/javascript" src="{{this}}"></script>
+    {{/each}}
     
     <script type="text/javascript">
         (function ($) {

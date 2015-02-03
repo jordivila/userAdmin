@@ -3,10 +3,10 @@
 jQuery.widget("ui.widgetBase",
 {
     options: {
-        allowClose: false                 // creates a close button on the top-right of a widget
-        , allowCollapse: false          // creates a collapse button
-        , isCollapsed: false             // initializes as a collapsed item
-        , allowCssClasses: true     // apply jquery theme classes to elements in a widget
+        allowClose: false,                 // creates a close button on the top-right of a widget
+        allowCollapse: false,          // creates a collapse button
+        isCollapsed: false,             // initializes as a collapsed item
+        allowCssClasses: true     // apply jquery theme classes to elements in a widget
     },
     _create: function () {
 
@@ -31,23 +31,23 @@ jQuery.widget("ui.widgetBase",
         //            this.log("INIT namespace" + "---" + this.namespace + "widgetBaseClass" + "---" + this.widgetBaseClass + "widgetName" + "---" + this.widgetName);
         //        }
 
-    }
-    , destroy: function () {
+    },
+    destroy: function () {
         // TODO: check this is really needed
         jQuery.Widget.prototype.destroy.call(this);
 
         //this.log("DESTROY namespace" + "---" + this.namespace + "widgetBaseClass" + "---" + this.widgetBaseClass + "widgetName" + "---" + this.widgetName);
-    }
-    , log: function (logMessage) {
+    },
+    log: function (logMessage) {
         if (window.console) {
             console.log(logMessage);
         }
-    }
-    , addCss: function (css) {
+    },
+    addCss: function (css) {
         // TODO: check 'head' exists
         jQuery('head').append(css);
-    }
-    , dumpProps: function (obj, parent, tmp) {
+    },
+    dumpProps: function (obj, parent, tmp) {
         // creates an array of name/value properties recursively
         // var propertiesArray = dumpProps(objectInstance, nullOrParentObject, []);
         for (var i in obj) {
@@ -65,15 +65,14 @@ jQuery.widget("ui.widgetBase",
             }
         }
         return tmp;
-    }
-
-    , boxButtonsContainerGet: function () {
+    }, 
+    boxButtonsContainerGet: function () {
         var self = this;
 
         if(jQuery(this.element)
             .find('div.ui-widget-header:first')
                 .find('div.ui-widget-boxButtons:first')
-                .length == 0)
+                .length === 0)
         {
             jQuery(this.element)
                 .find('div.ui-widget-header:first')
@@ -84,8 +83,8 @@ jQuery.widget("ui.widgetBase",
         return jQuery(this.element)
                 .find('div.ui-widget-header:first')
                     .find('div.ui-widget-boxButtons:first');
-    }
-    , allowClose: function () {
+    }, 
+    allowClose: function () {
 
         if (this.options.allowClose) {
 
@@ -100,8 +99,8 @@ jQuery.widget("ui.widgetBase",
                 })
                 .show();
         }
-    }
-    , allowCollapse: function () {
+    }, 
+    allowCollapse: function () {
 
         if (this.options.allowCollapse) {
             var self = this;
