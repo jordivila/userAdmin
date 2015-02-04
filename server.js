@@ -50,12 +50,10 @@
     i18n.expressBind(app, config.get("i18n"));
 
     // set up the middleware
-    app.use(function(req, res, next) {
+    app.use(function (req, res, next) {
         req.i18n.setLocaleFromCookie();
-
         //log.info('\n request URL: %s', req.url); // log all requests
         //log.info('\n locale : %s', req.i18n.getLocale()); // log all requests
-
         next();
     });
 

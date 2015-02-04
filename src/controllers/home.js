@@ -16,14 +16,14 @@
         });
 
         app.get('/home', function (req, res, next) {
-            
-            
+
             var i18n = req.i18n;
 
             res.render('home/home', {
                 Title: "Azure nodejs appliaction template",
                 DomainName: config.get('domainName'),
                 Package: pkg,
+                IsTest: (process.env.NODE_ENV === 'test'),
                 Breadcrumb: [
                     { title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
                     { title: i18n.__("GeneralTexts.Home"), url: "/" }

@@ -174,12 +174,15 @@
             test: {
                 files: ['<%= jshint.files %>'],
                 //tasks: ['jshint:files', 'mochaTest', 'express:testQunit', 'qunit']
-                tasks: ['jshint:files', 'bump', 'express:testQunit', 'qunit']
+                tasks: ['jshint:files', 'bump', 'mochaTest', 'express:testQunit', 'qunit']
             },
         },
         open: {
-            all: {
+            qunit: {
                 path: 'http://localhost:3001/public/test/qunit/index.html'
+            },
+            home: {
+                path: 'http://localhost:3001/home'
             }
         }
 

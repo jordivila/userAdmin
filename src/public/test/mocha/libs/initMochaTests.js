@@ -10,7 +10,7 @@
     var config = require('../../../../libs/config');
     var mongoose = require('mongoose');
     var i18n = new(require('i18n-2'))(config.get("i18n"));
-    var roleController = require('../../../../controllers/roles');
+    var roleController = require('../../../../controllers/usersRoles');
     var assert = require("assert");
     var ErrorHandled = require('../../../../models/errorHandled');
 

@@ -1,4 +1,4 @@
-{
+﻿{
     "port": 1337,
     "security": {
         "tokenLife": 3600
@@ -9,11 +9,11 @@
     "encryptKeyForCookieParser": "someEncriptiongKey",
 
     "i18n": {
-        "directory": "./src/public/locales",
-        "locales": [ "es", "en" ],
+        "directory": "./src/libs/locales",
+        "locales": ["en", "es"],
         "defaultLocale": "en",
         "cookieName": "locale",
         "extension": ".json"
     },
-    "domainName":  "localhost:3001"
+    "domainName": "localhost:3001"
 }

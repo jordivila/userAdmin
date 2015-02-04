@@ -5,7 +5,7 @@
     var util = require('util');
     var assert = require("assert");
     var userController = require('../../../controllers/users');
-    var roleController = require('../../../controllers/roles');
+    var roleController = require('../../../controllers/usersRoles');
     var authController = require('../../../controllers/auth');
     var ErrorHandled = require('../../../models/errorHandled');
     
@@ -282,10 +282,9 @@
                             global,
                             UserEmailValid,
                             UserPassword,
-                            function (err, result, data) {
+                            function (err, resultCredentialsCheck) {
                                 assert.equal(err, null);
-                                assert.equal(result, true);
-                                assert.equal(data.email, userToTest.email);
+                                assert.equal(resultCredentialsCheck.email, userToTest.email);
                                 done();
                             });
                     });

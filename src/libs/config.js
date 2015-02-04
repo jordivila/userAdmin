@@ -1,14 +1,15 @@
 ﻿var config = require('nconf');
 //
 
-var p = 'src/config.json';
+var path = 'src/libs/config.json';
 
 config
-    .argv()
+	.argv()
 	.env()
     .file({
-    file: p
-}); // relative to application entry
+        file: path	// --> relative to application entry
+    })
+    ;
 
 config.set('port', process.env.PORT || config.get('port'));
 
