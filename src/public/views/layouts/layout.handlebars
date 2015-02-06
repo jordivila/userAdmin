@@ -14,8 +14,12 @@
     {{/each}}
     <!--View specific styles end-->
 </head>
-<body class="ui-widget-content ui-hidden">
-    <div class="ui-sitePage ui-widget">
+<body class="ui-widget ui-widget-content ui-hidden">
+
+    <ul id="panelMenu" class="ui-menuNav ui-menuNav-Expand"></ul>
+
+    <div class="ui-sitePage ">
+
         <div data-widget="userOptions">
             <div class="ui-site-header ui-widget-header ui-widget-content ui-corner-all">
                 <div id="menuToggle" class="ui-menuToggle">
@@ -56,7 +60,7 @@
         <!--Breadcrumb end-->
 
         <div class="ui-siteContent">
-            <ul id="panelMenu" class="ui-menuNav ui-menuNav-Expand"></ul>
+            
             <div id="panelContent" class="ui-siteContent-Container ui-siteContent-Container-Collapse">
                 {{{body}}}
             </div>

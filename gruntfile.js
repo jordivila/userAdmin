@@ -163,8 +163,8 @@
         // https://github.com/gruntjs/grunt-contrib-watch
         watch: {
             testLiveReload: {
-                files: ['<%= jshint.files %>'],
-                tasks: ['jshint:files', 'bump', 'clean', 'concat', 'uglify', 'express:testLiveReload'],
+                files: ['<%= jshint.files %>', '<%= concat.ui_css.src %>'],
+                tasks: ['jshint:files', 'bump', 'clean', 'concat', /*'uglify', */'express:testLiveReload'],
                 options: {
                     spawn: false, //Must have for reload
                     livereload: true //Enable LiveReload

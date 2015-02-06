@@ -52,7 +52,10 @@
                     }
 
                 })
+                .css('height', jQuery(document).height()-20)
                 .disableSelection();
+
+
         },
         destroy: function() {
 
