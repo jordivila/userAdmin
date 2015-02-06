@@ -17,6 +17,7 @@
                 src: ["src/public/css/reset.css",
                       "src/public/css/site.css",
                       "src/public/css/font-awesome.min.css",
+                      "src/public/css/Site.FontSizes.css",
                       "src/public/css/Site.JqueryUI.IconsExtendWithFontAwsome.css",
                       "src/public/scripts/ui-widgetMsg/ui-widgetMsg.css",
                       "src/public/scripts/ui-dateSelector/ui-dateSelector.css",
