@@ -21,7 +21,8 @@ input[type=text], input[type=password], input[type=email], select {padding:0.5em
 input[type=checkbox].ui-widget-content { border:0px solid transparent !important; }
 input[type='radio'] {height:1em;width:1em;}
 
-body{padding:0.5em;}
+body{padding:0em;}
+html, body {height:100%;}
 
 .ui-wordWrap {white-space: pre-wrap;      /* CSS3 */              white-space: -moz-pre-wrap; /* Firefox */               white-space: -pre-wrap;     /* Opera 7 previous */              white-space: -o-pre-wrap;   /* Opera 7 */               word-wrap: break-word;      /* IE */        }
 .ui-site-nameBox{font-size:1em;padding:0.5em;margin:0em;}
@@ -29,7 +30,7 @@ body{padding:0.5em;}
 .ui-site-title h1{font-size:1.4em;margin:0em;}
 .ui-site-title hr{border:0.1em solid;margin:0.5em 0em 0.5em 0em;}
 
-.ui-sitePage{display:table; width:90%; margin:0 auto 0 auto;}
+.ui-sitePage{display:table; width:99%; margin:0 auto 0 auto;}
 .ui-widget {font-size:1em !important;}
 .ui-widget-header {font-weight:bold;padding:1em 1em 1em 1em;}
 .ui-dialog-content { padding:3em 0em 3em 1em !important; }
@@ -59,7 +60,7 @@ body{padding:0.5em;}
 .ui-site-header .ui-menuToggle .ui-menuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
 
 /* menu */
-.ui-menuNav { padding:0em 0em 0em 0em !important; z-index:9999;position:absolute !important;}
+.ui-menuNav { padding:0em 0em 0em 0em !important; z-index:9999;position:absolute !important;height:99%;}
 .ui-menuNav .ui-treeList-toggle{margin:-0.45em 0.5em 0 0 !important;padding: 0.5em;border:0;}
 .ui-menuNav li { margin:0em !important;padding:1em 0.1em 1em 0.3em !important;background-image:none;border-left:none !important;border-right:none !important; border-top:none !important;}
 .ui-menuNav li ul {margin:0.1em 0.1em 0.1em 0.1em;padding:0.1em 0.1em 0.1em 0.3em;background-image:none;}
@@ -206,6 +207,7 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
     font-size: 1em;
   }
 }
+/*
 @media screen and (min-width: 1300px){
   html{
     font-size: 1.1em;
@@ -225,7 +227,8 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
   html{
     font-size: 1.4em;
   }
-} 
+}
+*/ 
 /* Corner radius */
 .ui-corner-all,
 .ui-corner-top,

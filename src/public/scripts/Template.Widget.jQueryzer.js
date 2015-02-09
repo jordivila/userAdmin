@@ -49,6 +49,8 @@ jQuery.widget('ui.widgetJqueryzer', jQuery.ui.widgetBase,
     item: function ($listItem, widgetName) {
         switch (widgetName) {
             case 'widgetBase':
+
+
                 $listItem.widgetBase({
                     allowCollapse: parseBoolean($listItem.attr('data-widget-allowCollapse')),
                     allowClose: parseBoolean($listItem.attr('data-widget-allowClose')),

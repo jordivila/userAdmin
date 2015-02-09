@@ -177,7 +177,7 @@
         watch: {
             testLiveReload: {
                 files: ['<%= jshint.files %>', '<%= concat.ui_css.src %>'],
-                tasks: ['jshint:files', 'bump', 'clean', 'concat', 'uglify', 'express:testLiveReload'],
+                tasks: ['jshint:files', 'bump', 'clean', 'concat', /*'uglify', */'express:testLiveReload'],
                 options: {
                     spawn: false, //Must have for reload
                     livereload: true //Enable LiveReload

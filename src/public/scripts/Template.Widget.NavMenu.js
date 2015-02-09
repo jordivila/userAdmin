@@ -75,7 +75,7 @@
                     }
 
                 })
-                .css('min-height', jQuery(document).height() - 20)
+                //.css('min-height', jQuery(document).height() - 20)
                 .disableSelection();
 
 
