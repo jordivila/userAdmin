@@ -1,7 +1,4 @@
-﻿/// <reference path="../../Scripts.T4Templates/VsixMvcAppResult.Js.Intellisense.js" />
-
-
-
+﻿
 jQuery.widget("ui.dateSelector", 
 {
     options: {

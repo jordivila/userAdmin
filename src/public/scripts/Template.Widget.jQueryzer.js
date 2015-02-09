@@ -21,11 +21,11 @@ jQuery.widget('ui.widgetJqueryzer', jQuery.ui.widgetBase,
 
     },
     _init: function () {
-        jQuery.ui.widgetBase.prototype._init.call(this);
+        this._super();
     },
     _create: function () {
 
-        jQuery.ui.widgetBase.prototype._create.call(this);
+        this._super();
 
         var $list = jQuery(this.element).find(
                                     'div[data-widget],' +
@@ -44,7 +44,7 @@ jQuery.widget('ui.widgetJqueryzer', jQuery.ui.widgetBase,
         }
     }, 
     destroy: function () {
-        jQuery.ui.widgetBase.prototype.destroy.call(this);
+        this._super();
     }, 
     item: function ($listItem, widgetName) {
         switch (widgetName) {

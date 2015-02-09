@@ -10,33 +10,30 @@ jQuery.widget("ui.widgetBase",
     },
     _create: function () {
 
-        jQuery.Widget.prototype._create.call(this);
+        this._super();
 
         jQuery(this.element).addClass(this.namespace + '-' + this.widgetName);
 
-        //        if (window.console) {
-        //            this.log(this.element);
-        //            this.log("CREATE namespace" + "---" + this.namespace + "widgetBaseClass" + "---" + this.widgetBaseClass + "widgetName" + "---" + this.widgetName);
-        //        }
+        this.log(this.element);
+        this.log(this.namespace + "." + this.widgetName + " -> create");
     },
     _init: function () {
 
-        // TODO: check this is really needed
-        jQuery.Widget.prototype._init.call(this);
+        this._super();
 
         this.allowClose();
         this.allowCollapse();
 
-        //        if (window.console) {
-        //            this.log("INIT namespace" + "---" + this.namespace + "widgetBaseClass" + "---" + this.widgetBaseClass + "widgetName" + "---" + this.widgetName);
-        //        }
+
+        this.log(this.namespace + "." + this.widgetName + " -> init");
 
     },
     destroy: function () {
-        // TODO: check this is really needed
-        jQuery.Widget.prototype.destroy.call(this);
 
-        //this.log("DESTROY namespace" + "---" + this.namespace + "widgetBaseClass" + "---" + this.widgetBaseClass + "widgetName" + "---" + this.widgetName);
+        this._super();
+
+        this.log(this.namespace + "." + this.widgetName + " -> destroy");
+
     },
     log: function (logMessage) {
         if (window.console) {

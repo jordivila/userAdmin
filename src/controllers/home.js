@@ -20,7 +20,7 @@
             var i18n = req.i18n;
 
             res.render('home/home', {
-                Title: "Azure nodejs appliaction template",
+                Title: "Azure nodejs application template",
                 DomainName: config.get('domainName'),
                 Package: pkg,
                 IsTest: (process.env.NODE_ENV === 'test'),

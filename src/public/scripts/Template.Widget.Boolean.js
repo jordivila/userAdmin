@@ -9,7 +9,7 @@ jQuery.widget("ui.widgetBoolean", jQuery.ui.widgetBase,
     },
     _create: function () {
 
-        jQuery.ui.widgetBase.prototype._create.call(this);
+        this._super();
 
         if (jQuery(this.element).attr('data-widget-nullable') !== undefined) {
             this.options.isNullable = jQuery(this.element).attr('data-widget-nullable').toString().toLowerCase() == "true";
@@ -26,7 +26,7 @@ jQuery.widget("ui.widgetBoolean", jQuery.ui.widgetBase,
     },
     _init: function () {
 
-        jQuery.ui.widgetBase.prototype._init.call(this);
+        this._super();
 
         var self = this;
         var $el = jQuery(this.element);
@@ -39,8 +39,6 @@ jQuery.widget("ui.widgetBoolean", jQuery.ui.widgetBase,
 
                                     var nextIndex = self._getNextIndex();
                                     var nextClassName = self.options.icons[nextIndex];
-
-                                    console.log(nextClassName);
 
                                     jQuery(this)
                                         .find('span')
@@ -65,7 +63,7 @@ jQuery.widget("ui.widgetBoolean", jQuery.ui.widgetBase,
 
     }, 
     destroy: function () {
-        jQuery.ui.widgetBase.prototype.destroy.call(this);
+        this._super();
     }, 
     _getCurrentIndex: function () {
 

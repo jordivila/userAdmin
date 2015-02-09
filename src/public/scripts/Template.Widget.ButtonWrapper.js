@@ -7,12 +7,12 @@ jQuery.widget("ui.widgetButton", jQuery.ui.widgetBase,
     },
     _create: function () {
 
-        jQuery.ui.widgetBase.prototype._create.call(this);
+        this._super();
 
     },
     _init: function () {
 
-        jQuery.ui.widgetBase.prototype._init.call(this);
+        this._super();
 
         var $el = jQuery(this.element);
 
@@ -59,6 +59,6 @@ jQuery.widget("ui.widgetButton", jQuery.ui.widgetBase,
         }
     },
     destroy: function () {
-        jQuery.ui.widgetBase.prototype.destroy.call(this);
+        this._super();
     }
 });

@@ -18,6 +18,7 @@
                       "src/public/css/site.css",
                       "src/public/css/font-awesome.min.css",
                       "src/public/css/Site.FontSizes.css",
+                      "src/public/css/Site.jQuery.OverrideRoundCorners.css",
                       "src/public/css/Site.JqueryUI.IconsExtendWithFontAwsome.css",
                       "src/public/scripts/ui-widgetMsg/ui-widgetMsg.css",
                       "src/public/scripts/ui-dateSelector/ui-dateSelector.css",
@@ -27,7 +28,13 @@
             },
             ui_js_libs: {
                 options: {
-                    separator: ';'
+                    separator: ';',
+                    // Replace all 'use strict' statements in the code with a single one at the top
+                    banner: "'use strict';\n",
+                    process: function (src, filepath) {
+                        return '// Source: ' + filepath + '\n' +
+                          src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
+                    },
                 },
                 src: ["src/public/scripts/libs/jQuery/jquery-1.9.1.min.js",
                       "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery-ui.min.js",
@@ -38,7 +45,13 @@
             },
             ui_js_appCommon: {
                 options: {
-                    separator: ";"
+                    separator: ";",
+                    // Replace all 'use strict' statements in the code with a single one at the top
+                    banner: "'use strict';\n",
+                    process: function (src, filepath) {
+                        return '// Source: ' + filepath + '\n' +
+                          src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
+                    },
                 }, 
                 src: ["src/public/scripts/Template.Init.js",
                     "src/public/scripts/Template.Init.Ajax.js",
@@ -50,7 +63,7 @@
                     "src/public/scripts/Template.Widget.Grid.js",
                     "src/public/scripts/Template.Widget.AjaxProgress.js",
                     "src/public/scripts/Template.Widget.ButtonWrapper.js",
-                    "src/public/scripts/Template.Widget.UserOptions.js",
+                    "src/public/scripts/Template.Widget.UserActivity.js",
                     "src/public/scripts/ui-dateSelector/ui-dateSelector.js",
                     "src/public/scripts/ui-widgetMsg/ui-widgetMsg.js",
                     "src/public/scripts/Template.Widget.Dialogs.js",
@@ -68,7 +81,6 @@
             },
             dist: {
                 files: {
-                    //'<%= cdnFolder %>/<%= pkg.name %>.ui.css': ['<%= concat.ui_css.dest %>'],
                     '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_libs.js': ['<%= concat.ui_js_libs.dest %>'],
                     '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_appCommon.js': ['<%= concat.ui_js_appCommon.dest %>'],
                 }

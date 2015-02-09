@@ -6,11 +6,11 @@ jQuery.widget("ui.widgetGrid", jQuery.ui.widgetBase,
 
     }, 
     _create: function () {
-        jQuery.ui.widgetBase.prototype._create.call(this);
+        this._super();
     }, 
     _init: function () {
 
-        jQuery.ui.widgetBase.prototype._init.call(this);
+        this._super();
 
 //        var self = this;
 
@@ -22,7 +22,7 @@ jQuery.widget("ui.widgetGrid", jQuery.ui.widgetBase,
 //        self._initSortable();
     }, 
     destroy: function () {
-        jQuery.ui.widgetBase.prototype.destroy.call(this);
+        this._super();
     }
 //    , _doResize: function () {
 //        var self = this;

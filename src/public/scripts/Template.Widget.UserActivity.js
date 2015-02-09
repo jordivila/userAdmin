@@ -1,21 +1,21 @@
 ﻿/// <reference path="VsixMvcAppResult.A.Intellisense.js" />
 
-jQuery.widget("ui.userOptions", jQuery.ui.widgetBase, {
+jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
     options: {
 
     },
     _create: function() {
-        jQuery.ui.widgetBase.prototype._create.call(this);
+        this._super();
     },
     _init: function() {
 
-        jQuery.ui.widgetBase.prototype._init.call(this);
+        this._super();
 
         //this.initMenuNav();
         this._updateUserLastActivity();
     },
     destroy: function() {
-        jQuery.ui.widgetBase.prototype.destroy.call(this);
+        this._super();
     },
     _errMsgSet: function(selector, msg) {
         jQuery(selector)
@@ -36,7 +36,8 @@ jQuery.widget("ui.userOptions", jQuery.ui.widgetBase, {
             function(jqXHR, textStatus, errorThrown) {
                 self._errMsgSet(jQuery(self.element), VsixMvcAppResult.Resources.unExpectedError);
             },
-            function() {
+            function () {
+                //self._trigger('complete', null, null);
                 self._initMenuNav();
             });
     },
@@ -45,14 +46,13 @@ jQuery.widget("ui.userOptions", jQuery.ui.widgetBase, {
         //TODO: load async Menu based on user identity
         var self = this;
         var $panelMenu = jQuery('#panelMenu');
-        var $panelContent = jQuery('#panelContent');
 
         VsixMvcAppResult.Ajax.UserMenu(
             function(data, textStatus, jqXHR) {
 
-                $panelMenu.navMenu({
-                    IMenuModel: data
-                });
+                
+                var menu = $panelMenu.navMenu();
+                $panelMenu.navMenu('bind', data);
 
                 jQuery('#menuToggle').click(function() {
 

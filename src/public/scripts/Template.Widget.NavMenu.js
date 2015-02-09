@@ -1,16 +1,39 @@
 ﻿(function($) {
-    jQuery.widget("ui.navMenu", {
+    jQuery.widget("ui.navMenu", jQuery.ui.widgetBase, {
         options: {
             selectable: true,
             IMenuModel: null
         },
         _create: function() {
 
-            var w = this;
+            this._super();
 
-            if (this.options.IMenuModel !== null) {
-                this.bind(this.options.IMenuModel);
-            }
+        },
+        _init: function () {
+
+            this._super();
+
+        },
+        destroy: function() {
+
+            jQuery(this.element)
+                .unbind('click')
+                .removeClass('ui-treeList ui-widget-content ui-corner-all')
+                .find('li')
+                .unbind('mouseenter mouseleave')
+                .removeClass('ui-treeList-item ui-widget-content ui-corner-all ui-state-default ui-state-active ui-state-hover')
+                .children('div.ui-treeList-toggle')
+                .remove()
+                .end()
+                .find('ul')
+                .unbind('mouseenter mouseleave')
+                .removeClass('ui-treeList-childs');
+
+            this._super();
+        },
+        _dataBound: function () {
+
+            var w = this;
 
             w._initItem(jQuery(this.element).find("li"));
             w._initChildList(jQuery(this.element).find("ul"));
@@ -21,7 +44,7 @@
 
             jQuery(this.element)
                 .addClass('ui-treeList ui-widget-content ui-corner-all')
-                .bind('click', function(e) {
+                .bind('click', function (e) {
                     var $t = jQuery(e.target);
 
                     var $node = null;
@@ -52,27 +75,10 @@
                     }
 
                 })
-                .css('height', jQuery(document).height()-20)
+                .css('min-height', jQuery(document).height() - 20)
                 .disableSelection();
 
 
-        },
-        destroy: function() {
-
-            jQuery(this.element)
-                .unbind('click')
-                .removeClass('ui-treeList ui-widget-content ui-corner-all')
-                .find('li')
-                .unbind('mouseenter mouseleave')
-                .removeClass('ui-treeList-item ui-widget-content ui-corner-all ui-state-default ui-state-active ui-state-hover')
-                .children('div.ui-treeList-toggle')
-                .remove()
-                .end()
-                .find('ul')
-                .unbind('mouseenter mouseleave')
-                .removeClass('ui-treeList-childs');
-
-            jQuery.Widget.prototype.destroy.call(this);
         },
         _initItem: function($lis) {
             $lis.addClass('ui-treeList-item ui-widget-content ui-corner-all ui-state-default')
@@ -138,6 +144,8 @@
             }];
             */
 
+            this.options.IMenuModel = IMenuModel;
+
             var menuItemRender = function(IMenuItem) {
                 var $li = jQuery('<li></li>');
                 var $a = jQuery('<a>' + IMenuItem.text + '</a>');
@@ -163,6 +171,8 @@
             for (var i = 0; i < IMenuModel.length; i++) {
                 jQuery(this.element).append(menuItemRender(IMenuModel[i]));
             }
+
+            this._dataBound();
 
 
         }

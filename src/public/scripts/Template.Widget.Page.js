@@ -44,26 +44,28 @@ jQuery.widget("ui.page", jQuery.ui.widgetBase, {
     },
     _init: function() {
 
-        jQuery.ui.widgetBase.prototype._init.call(this);
+        this._super();
 
         this.initAjaxProgress();
         this.initGlobalization();
         this.initValidate();
-        this.initUserOptions();
+        this.initUserActivity();
     },
     _create: function() {
-        jQuery.ui.widgetBase.prototype._create.call(this);
+        this._super();
     },
     destroy: function() {
-        jQuery.ui.widgetBase.prototype.destroy.call(this);
+        
+        this._super();
+
     },
-    initUserOptions: function() {
+    initUserActivity: function () {
 
         var self = this;
 
-        jQuery(this.element).find('div[data-widget="userOptions"]:first').userOptions({
-            complete: function() {
-                self.initJQueryzer();
+        jQuery(this.element).find('div[data-widget="userActivity"]:first').userActivity({
+            complete: function () {
+                //self.initJQueryzer();
                 self._trigger('initComplete', null, null);
             }
         });
