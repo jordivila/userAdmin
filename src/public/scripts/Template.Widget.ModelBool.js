@@ -138,6 +138,9 @@ jQuery.widget("ui.widgetModelItemBool", jQuery.ui.widgetBase,
         var i = this._getCurrentIndex();
         var result = (i + 1) >= (this.options.values.length) ? 0 : (i + 1);
         return result;
+    },
+    val: function () {
+        return this.options.values[this._getCurrentIndex()];
     }
 
 });

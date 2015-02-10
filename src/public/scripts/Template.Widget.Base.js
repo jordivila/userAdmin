@@ -3,9 +3,10 @@
 jQuery.widget("ui.widgetBase",
 {
     options: {
-        allowClose: false,                 // creates a close button on the top-right of a widget
-        allowCollapse: false,          // creates a collapse button
-        isCollapsed: false,             // initializes as a collapsed item
+        allowClose: false,      // creates a close button on the top-right of a widget
+        allowCollapse: false,   // creates a collapse button
+        isCollapsed: false,     // initializes as a collapsed item
+        onCollapsed: function (e, isVisible) { },      // callback used when onCollapsed is fired 
     },
     _create: function () {
 
@@ -106,7 +107,7 @@ jQuery.widget("ui.widgetBase",
                 var $content = jQuery(self.element).find('div.ui-widget-content');
                 $content.toggle();
                 jQuery(self.element).find('div.ui-widget-collapse:first').toggleClass('ui-icon-triangle-1-n', $content.is(':visible')).toggleClass('ui-icon-triangle-1-s', !$content.is(':visible'));
-                self._trigger('onCollapsed', null, $content.is(':visible') ? true : false);
+                self._trigger('onCollapsed', null, ($content.is(':visible') ? true : false));
             };
 
             var $p = self.boxButtonsContainerGet();

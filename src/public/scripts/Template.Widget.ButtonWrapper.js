@@ -8,7 +8,6 @@ jQuery.widget("ui.widgetButton", jQuery.ui.widgetBase,
     _create: function () {
 
         this._super();
-
     },
     _init: function () {
 

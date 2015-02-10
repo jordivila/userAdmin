@@ -1,14 +1,4 @@
-﻿
-
-jQuery('#pp')
-    .click(function () {
-
-        jQuery('*[data-widget="widgetModel"]').widgetModel('value');
-
-    });
-
-
-jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
+﻿jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
 {
     options: {
         displayName: null,
@@ -51,13 +41,13 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
         return this._template().format(this.options.displayName);
     },
     value: function () {
-
+        var o = {};
         for (var i = 0; i < this.options.formItems.length; i++) {
-            console.log(jQuery('*[data-widgetModelItem-id="{0}"]'.format(this.options.formItems[i].id)).widgetModelItem('val'));
-            //console.log("{0}={1}".format(
-            //    this.options.formItems[i].id,
-            //    jQuery('*[data-widgetModelItem-id="{0}"]'.format(this.options.formItems[i].id).widgetModelItem('val'))));
+            var propName = this.options.formItems[i].id;
+            var propValue = jQuery('*[data-widgetModelItem-id="{0}"]'.format(propName)).widgetModelItem('val');
+            o[propName] = propValue;
         }
+        return o;
     }
 });
 
@@ -123,6 +113,7 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
 
         var self = this;
         var t = '';
+        var jqSelector = '#{0}'.format(this.options.id);
 
         switch (this.options.input.type) {
             case "date":
@@ -131,13 +122,13 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
 
                 jQuery($parent)
                     .append(t)
-                    .find('#{0}'.format(this.options.id))
+                    .find(jqSelector)
                     .widgetModelItemDate({
                         value: this.options.input.value
                     });
 
                 this.val = function () {
-                    alert("valor de fecha");
+                    return jQuery(jqSelector).widgetModelItemDate('getDate');
                 };
 
                 break;
@@ -148,9 +139,8 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 jQuery($parent).append(t);
 
                 this.val = function () {
-                    alert("valor de float");
+                    return jQuery(jqSelector).val();
                 };
-
                 
                 break;
             case "bool":
@@ -159,7 +149,7 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
 
                 jQuery($parent)
                     .append(t)
-                    .find('#{0}'.format(this.options.id))
+                    .find(jqSelector)
                     .widgetModelItemBool({
                         value: self.options.input.value,
                         nullable: self.options.input.nullable,
@@ -167,12 +157,12 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                     });
 
                 this.val = function () {
-                    alert("valor booleano");
+                    return jQuery(jqSelector).widgetModelItemBool('val');
                 };
 
                 break;
             default:
-                res = "";
+                this.val = function () { return null; };
                 break;
         }
 

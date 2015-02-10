@@ -85,7 +85,7 @@ jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
     },
     getDate: function () {
         if (jQuery(this.element).find('input').val() !== '') {
-            return jQuery(this.element).find('input').datepicker('getDate');
+            return jQuery(this.element).datepicker('getDate');
         }
         else {
             return null;
