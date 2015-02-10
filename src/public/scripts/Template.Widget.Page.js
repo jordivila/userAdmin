@@ -2,9 +2,8 @@
                                 HELPER PUBLIC METHODS
 ********************************************************************************/
 
-VsixMvcAppResult.Widgets.Page = {
+VsixMvcAppResult.Widgets.PageOptions = {
     selector: null,
-    allowCssClasses: false,
     cultureSelected: null,
     cultureGlobalization: null,
     cultureDatePicker: null,
@@ -98,24 +97,24 @@ jQuery.widget("ui.page", jQuery.ui.widgetBase, {
             return false;
         };
     },
-    initJQueryzer: function() {
+    //initJQueryzer: function() {
 
-        VsixMvcAppResult.Widgets.jQueryzer(this.element);
+    //    VsixMvcAppResult.Widgets.jQueryzer(this.element);
 
-        jQuery(this.element)
-            .find(':input:not([type=hidden]):not([type=checkbox]):not([type=radio]), textarea')
-            .addClass('ui-widget-content ui-corner-all')
-            .focus(function() {
-                jQuery(this).addClass('ui-state-focus');
-            })
-            .blur(function() {
-                jQuery(this).removeClass('ui-state-focus');
-            })
-            .end()
-            .find('fieldset')
-            .addClass('ui-widget-content  ui-corner-all')
-            .end()
-            .find('hr')
-            .addClass('ui-widget-content');
-    }
+    //    jQuery(this.element)
+    //        .find(':input:not([type=hidden]):not([type=checkbox]):not([type=radio]), textarea')
+    //        .addClass('ui-widget-content ui-corner-all')
+    //        .focus(function() {
+    //            jQuery(this).addClass('ui-state-focus');
+    //        })
+    //        .blur(function() {
+    //            jQuery(this).removeClass('ui-state-focus');
+    //        })
+    //        .end()
+    //        .find('fieldset')
+    //        .addClass('ui-widget-content  ui-corner-all')
+    //        .end()
+    //        .find('hr')
+    //        .addClass('ui-widget-content');
+    //}
 });

@@ -3,13 +3,13 @@
 
 (function ($) {
     jQuery(document).ready(function () {
-        VsixMvcAppResult.Widgets.Page.onInit(function () {
+        VsixMvcAppResult.Widgets.PageOptions.onInit(function () {
             
 
             
 
 
-            jQuery('#uiControls').widgetForm({
+            jQuery('#uiControls').widgetModel({
                 displayName: "Demo UI Controls",
                 formItems: [
                 {
@@ -37,9 +37,9 @@
 
 
 
-            jQuery('#homeForms').widgetJqueryzer();
+            //jQuery('#homeForms').widgetJqueryzer();
 
-            //jQuery('#formWidgetFormItems').widgetJqueryzer();
+            //jQuery('#formwidgetModelItems').widgetJqueryzer();
 
         });
     });

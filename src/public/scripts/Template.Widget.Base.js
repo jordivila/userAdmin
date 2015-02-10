@@ -6,7 +6,6 @@ jQuery.widget("ui.widgetBase",
         allowClose: false,                 // creates a close button on the top-right of a widget
         allowCollapse: false,          // creates a collapse button
         isCollapsed: false,             // initializes as a collapsed item
-        allowCssClasses: true     // apply jquery theme classes to elements in a widget
     },
     _create: function () {
 
@@ -25,6 +24,7 @@ jQuery.widget("ui.widgetBase",
         this.allowCollapse();
 
 
+        this.log(this.element);
         this.log(this.namespace + "." + this.widgetName + " -> init");
 
     },

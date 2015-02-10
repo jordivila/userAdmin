@@ -7,7 +7,7 @@ if (!window.console) {
     };
 }
 
-// C# String.Format
+// C# String.Format-> "Hello {0}".format("world")
 if (!String.prototype.format) {
     String.prototype.format = function () {
         var args = arguments;

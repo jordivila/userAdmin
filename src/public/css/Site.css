@@ -38,8 +38,8 @@ html, body {height:100%;}
 
 
 /* Widget Boolean */
-.ui-widgetBoolean {}
-.ui-widgetBoolean input {display:none !important;}
+.ui-widgetModelItemBool {}
+.ui-widgetModelItemBool input {display:none !important;}
 
 /* menu toggle */
 .ui-menuToggle {display:block !important;cursor:pointer;}
@@ -51,7 +51,7 @@ html, body {height:100%;}
 .ui-site-header .ui-menuToggle .ui-menuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
 
 /* menu */
-.ui-menuNav { padding:0em 0em 0em 0em !important; z-index:9999;position:absolute !important;height:99%;}
+.ui-menuNav { padding:0em 0em 0em 0em !important; z-index:9999;position:absolute !important;height:99%;border-top:0;}
 .ui-menuNav .ui-treeList-toggle{margin:-0.45em 0.5em 0 0 !important;padding: 0.5em;border:0;}
 .ui-menuNav li { margin:0em !important;padding:1em 0.1em 1em 0.3em !important;background-image:none;border-left:none !important;border-right:none !important; border-top:none !important;}
 .ui-menuNav li ul {margin:0.1em 0.1em 0.1em 0.1em;padding:0.1em 0.1em 0.1em 0.3em;background-image:none;}
@@ -150,30 +150,30 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
 .ui-template-dialog .ui-template-dialogIcon {float:left;margin:0 1em 0 0;}
 
 /* GENERIC FORM */
-.ui-widgetForm {padding:0 0 0 0;margin:0em auto 0em auto;   }
-.ui-widgetForm .ui-state-error {border:1px solid;}
-.ui-widgetForm div.ui-widget-header  {padding:1em 1em 1em 1em;border:none;}
-.ui-widgetForm div.ui-widgetForm-content {padding:.5em .5em .5em .5em ;border:none;}
-.ui-widgetForm fieldset {padding:1em;margin:.5em 1em 0 1em;}
-.ui-widgetForm fieldset legend {font-size:.8em;}
-.ui-widgetForm hr {border-top-width:.1em;border-bottom:0;border-left:0;border-right:0;}
-.ui-widgetForm .ui-widgetFormItem {padding:.5em .5em .5em .5em;clear:both;margin:0.1em 0 0 0; border-width:0 !important;}
-.ui-widgetForm .ui-widgetFormItem div.ui-widgetForm-inputLabel {padding:.5em 0 0 0;width:24.5%;float:left;}
-.ui-widgetForm .ui-widgetFormItem div.ui-widgetForm-inputValue {width:75%;float:left;}
-.ui-widgetForm .ui-widgetFormItem div.ui-widgetForm-inputValue input {width:100%;}
-.ui-widgetForm .ui-widgetFormItem div.ui-widgetForm-inputError {clear:both;margin:.5em 0 .5em 0; width:100%;}
-.ui-widgetForm .ui-widgetFormItem div.ui-widgetForm-inputError div.ui-state-error  {padding:.5em 0 .5em  0;width:99.5%;border:0;}
-.ui-widgetForm .ui-widgetFormItem div.ui-widgetForm-inputError div.ui-state-error  span {margin:0em;display:table;}
+.ui-widgetModel {padding:0 0 0 0;margin:0em auto 0em auto;   }
+.ui-widgetModel .ui-state-error {border:1px solid;}
+.ui-widgetModel div.ui-widget-header  {padding:1em 1em 1em 1em;border:none;}
+.ui-widgetModel div.ui-widgetModel-content {padding:.5em .5em .5em .5em ;border:none;}
+.ui-widgetModel fieldset {padding:1em;margin:.5em 1em 0 1em;}
+.ui-widgetModel fieldset legend {font-size:.8em;}
+.ui-widgetModel hr {border-top-width:.1em;border-bottom:0;border-left:0;border-right:0;}
+.ui-widgetModel .ui-widgetModelItem {padding:.5em .5em .5em .5em;clear:both;margin:0.1em 0 0 0; border-width:0 !important;}
+.ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputLabel {padding:.5em 0 0 0;width:24.5%;float:left;}
+.ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputValue {width:75%;float:left;}
+.ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputValue input {width:100%;}
+.ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputError {clear:both;margin:.5em 0 .5em 0; width:100%;}
+.ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputError div.ui-state-error  {padding:.5em 0 .5em  0;width:99.5%;border:0;}
+.ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputError div.ui-state-error  span {margin:0em;display:table;}
 
-.ui-widgetForm .ui-widget-radioHorizontal { float:none;}
-.ui-widgetForm .ui-widget-radioHorizontal div {float:left;}
-.ui-widgetForm .ui-widget-radioHorizontal input[type=radio] {float:left;width:2em !important;margin:0 2em 0 0;}
-.ui-widgetForm .ui-widget-radioVertical { clear:both;width:15em;}
-.ui-widgetForm .ui-widget-radioVertical div {float:left;}
-.ui-widgetForm .ui-widget-radioVertical input[type=radio] {float:right;width:2em !important;margin:0 2em 0 0;}
+.ui-widgetModel .ui-widget-radioHorizontal { float:none;}
+.ui-widgetModel .ui-widget-radioHorizontal div {float:left;}
+.ui-widgetModel .ui-widget-radioHorizontal input[type=radio] {float:left;width:2em !important;margin:0 2em 0 0;}
+.ui-widgetModel .ui-widget-radioVertical { clear:both;width:15em;}
+.ui-widgetModel .ui-widget-radioVertical div {float:left;}
+.ui-widgetModel .ui-widget-radioVertical input[type=radio] {float:right;width:2em !important;margin:0 2em 0 0;}
 
-.ui-widgetForm .ui-widgetForm-buttons {padding:0.5em 0.5em 0.5em 0.5em ;text-align:right;margin:0 0em 0 0;}
-.ui-widgetForm .ui-widgetForm-ValidationSummary {padding:.5em;}
-.ui-widgetForm .ui-widgetForm-ValidationSummary span {}
-.ui-widgetForm .ui-widgetForm-ValidationSummary ul {margin:.5em 0 0 0;}
-.ui-widgetForm .ui-widgetForm-ValidationSummary ul li {}
+.ui-widgetModel .ui-widgetModel-buttons {padding:0.5em 0.5em 0.5em 0.5em ;text-align:right;margin:0 0em 0 0;}
+.ui-widgetModel .ui-widgetModel-ValidationSummary {padding:.5em;}
+.ui-widgetModel .ui-widgetModel-ValidationSummary span {}
+.ui-widgetModel .ui-widgetModel-ValidationSummary ul {margin:.5em 0 0 0;}
+.ui-widgetModel .ui-widgetModel-ValidationSummary ul li {}

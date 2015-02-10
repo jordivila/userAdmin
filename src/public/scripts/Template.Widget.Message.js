@@ -4,11 +4,11 @@
 window.$wMsgGlobal =
 {
     // template used to decorate message content
-    htmlTemplate: '<div class="ui-widget ui-widgetMsgWrapper ui-corner-all"><p class="widgetMsgStyleContent"><span class="widgetIcon ui-icon"></span></p></div>'
+    htmlTemplate: '<div class="ui-widget ui-widgetMsgWrapper ui-corner-all"><p class="widgetMsgStyleContent"><span class="widgetIcon ui-icon"></span></p></div>',
     // template used to decorate Yes/No buttons in case widget's type is enumMsgType.ConfirmYesNo
     //, yesNoButtonsTmpl: '<div class="widgetYesNoButtons"><div class="ui-message-yes ui-button ui-state-default ui-corner-all"><span class="ui-icon ui-icon-check"></span>Ok</div><div class="ui-message-no ui-button ui-state-default ui-corner-all"><span class="ui-icon ui-icon-close"></span>Cancel</div></div>'
-    , yesNoButtonsTmpl: '<div class="widgetYesNoButtons"><button type="button">Ok</button><button type="button">Cancel</button></div>'
-}
+    yesNoButtonsTmpl: '<div class="widgetYesNoButtons"><button type="button">Ok</button><button type="button">Cancel</button></div>'
+};
 
 //enumeration message types
 function enumMsgType() { }
@@ -16,72 +16,70 @@ enumMsgType.Success = 0;
 enumMsgType.Warning = 1;
 enumMsgType.Error = 2;
 enumMsgType.ConfirmYesNo = 3;
-enumMsgType.GetEnumTypeByNum = function(num){
+enumMsgType.GetEnumTypeByNum = function (num) {
     switch (num) {
         case 1:
             return enumMsgType.Warning;
-            break;
         case 2:
             return enumMsgType.Error;
-            break;
         case 3:
             return enumMsgType.ConfirmYesNo;
-            break;
         default:
-                return enumMsgType.Success;
-                break;
+            return enumMsgType.Success;
     }
 };
 
 
 (function($) {
     jQuery.widget('ui.widgetMsg', {
-        options:{
-            msgType :null
-            , allowClose: null
-            , autoHide: null
-            , onAccept: null
-            , onCancel: null
-        }
-        , _create: function() {
+        options: {
+            msgType: null,
+            allowClose: null,
+            autoHide: null,
+            onAccept: null,
+            onCancel: null,
+        },
+        _create: function() {
 
             var $el = jQuery(this.element);
             var o = this.options;
 
-            if(o.msgType == null)
+            if(o.msgType === null)
             {
                 o.msgType = enumMsgType.GetEnumTypeByNum(parseInt($el.attr('data-widget-msgType')));
             }
-            if(o.msgType == null)
+            if (o.msgType === null)
             {
                 o.msgType = enumMsgType.Success;
             }
             
-            if(o.allowClose == null)
+            if (o.allowClose === null)
             {
                 o.allowClose = $el.attr('data-widget-allowClose') == 'true';
             }
-            if(o.allowClose == null)
+            if (o.allowClose === null)
             {
                 o.allowClose = false;
             }
 
-            if(o.autoHide == null)
+            if (o.autoHide === null)
             {
                 o.autoHide = $el.attr('data-widget-autoHide') == 'true';
             }
-            if(o.autoHide == null)
+            if (o.autoHide === null)
             {
                 o.autoHide = false;
             }
 
-            if($el.attr('data-widget-onAccept')!='')
+            if($el.attr('data-widget-onAccept')!=='')
             {
+                /*jslint evil: true */
                 o.onAccept = function(){ eval($el.attr('data-widget-onAccept')); };
             }
 
-            if($el.attr('data-widget-onCancel')!='')
+            if($el.attr('data-widget-onCancel')!=='')
             {
+                /*jslint evil: true */
                 o.onCancel = function(){ eval($el.attr('data-widget-onCancel')); };
             }
 
@@ -120,7 +118,7 @@ enumMsgType.GetEnumTypeByNum = function(num){
                             }
                         })
                         .click(function(){
-                            if(o.onAccept!=null)
+                            if(o.onAccept!==null)
                             {
                                 o.onAccept(this, true);
                             }
@@ -136,7 +134,7 @@ enumMsgType.GetEnumTypeByNum = function(num){
                             }
                         })
                         .click(function(){
-                            if(o.onCancel!=null)
+                            if(o.onCancel!==null)
                             {
                                 o.onCancel(this, false);
                             }
@@ -163,12 +161,12 @@ enumMsgType.GetEnumTypeByNum = function(num){
                     break;
             }
 
-            if(o.allowClose==true)
+            if(o.allowClose===true)
             {
                 this.allowClose();
             }
 
-            if(o.autoHide==true)
+            if(o.autoHide===true)
             {
                 $el.delay(1000).fadeOut(2000);
             }

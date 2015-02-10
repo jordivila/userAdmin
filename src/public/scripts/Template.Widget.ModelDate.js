@@ -1,48 +1,38 @@
 ﻿
-jQuery.widget("ui.dateSelector", 
+jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
 {
     options: {
-        value: null
-        , text: 'Pick up a date'
-    }
-    , getDate: function () {
-        if (jQuery(this.element).find('input').val() != '') {
-            return jQuery(this.element).find('input').datepicker('getDate');
-        }
-        else {
-            return null;
-        }
-    }
-    , _create: function () {
-        jQuery.Widget.prototype._create.call(this);
-    }
-    , destroy: function () {
-        jQuery(this.element).unwrap();
-        jQuery.Widget.prototype.destroy.call(this);
-    }
-    , _init: function () {
+        value: null,
+        text: VsixMvcAppResult.Resources.clickToPickDate
+    },
+    _create: function () {
+        this._super();
+    },
+    _init: function () {
 
         var self = this;
 
-        jQuery.Widget.prototype._init.call(this);
+        this._super();
 
         if (!jQuery(this.element).hasClass('hasDatepicker')) {
 
             jQuery(this.element)
                 .hide()
                 .datepicker({
-                    showButtonPanel: true
-                    , changeMonth: true
-                    , changeYear: true
-                    , gotoCurrent: true
-                    , onSelect: function () {
+                    showButtonPanel: true,
+                    changeMonth: true,
+                    changeYear: true,
+                    gotoCurrent: true,
+                    onSelect: function () {
                         self._setDateLabel();
                     }
                 });
 
+            
+
             if (jQuery(this.element).attr('data-isWrapped') === undefined) {
-                jQuery(this.element).wrap('<div class="ui-dateSelector"></div>')
-                                    .parents('div.ui-dateSelector:first')
+                jQuery(this.element).wrap('<div class="ui-widgetModelItemDate"></div>')
+                                    .parents('div.ui-widgetModelItemDate:first')
                                     .append('<a href="javascript:void(0);">' + self.options.text + '</a>')
                                     .append('<div class="ui-state-error"><span class="ui-icon ui-icon-circle-close"></span></div>')
                                     .find('div.ui-state-error')
@@ -72,12 +62,18 @@ jQuery.widget("ui.dateSelector",
                         });
 
             jQuery(this.element).datepicker('setDate', self.options.value);
-            if (self.options.value != null) {
+            if (self.options.value !== null) {
                 self._setDateLabel();
             }
         }
-    }
-    , _setDateLabel: function () {
+    },
+    destroy: function () {
+
+        jQuery(this.element).unwrap();
+
+        this._super();
+    },
+    _setDateLabel: function () {
         var self = this;
         jQuery(self.element)
             .parents('div:first')
@@ -86,5 +82,13 @@ jQuery.widget("ui.dateSelector",
             .end()
             .find('div')
                 .show();
-    }
+    },
+    getDate: function () {
+        if (jQuery(this.element).find('input').val() !== '') {
+            return jQuery(this.element).find('input').datepicker('getDate');
+        }
+        else {
+            return null;
+        }
+    },
 });

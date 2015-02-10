@@ -31,7 +31,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         VsixMvcAppResult.Ajax.UserUpdateLastActivity(
             function(data, textStatus, jqXHR) {
                 jQuery(self.element).append(data);
-                VsixMvcAppResult.Widgets.jQueryzer(self.element);
+                //VsixMvcAppResult.Widgets.jQueryzer(self.element);
             },
             function(jqXHR, textStatus, errorThrown) {
                 self._errMsgSet(jQuery(self.element), VsixMvcAppResult.Resources.unExpectedError);

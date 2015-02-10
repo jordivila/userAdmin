@@ -1,4 +1,5 @@
-﻿module.exports = function (grunt) {
+﻿
+module.exports = function (grunt) {
     
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -20,13 +21,13 @@
                       "src/public/css/Site.FontSizes.css",
                       "src/public/css/Site.jQuery.OverrideRoundCorners.css",
                       "src/public/css/Site.JqueryUI.IconsExtendWithFontAwsome.css",
-                      "src/public/scripts/ui-widgetMsg/ui-widgetMsg.css",
-                      "src/public/scripts/ui-dateSelector/ui-dateSelector.css",
-                      "src/public/scripts/ui-widgetTreeList/ui-widgetTreeList.css"
+                      "src/public/css/ui-widgetMsg.css",
+                      "src/public/css/ui-dateSelector.css",
+                      "src/public/css/ui-widgetTreeList.css"
                     ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.css'
             },
-            ui_js_libs: {
+            ui_js: {
                 options: {
                     separator: ';',
                     // Replace all 'use strict' statements in the code with a single one at the top
@@ -36,14 +37,97 @@
                           src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
                     },
                 },
-                src: ["src/public/scripts/libs/jQuery/jquery-1.9.1.min.js",
-                      "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery-ui.min.js",
-                      "src/public/scripts/libs/jquery-validation-1.11.0/dist/jquery.validate.min.js",
-                      "src/public/scripts/libs/jQuery-globalize/lib/globalize.js"
+                src: [
+                    "src/public/scripts/libs/jQuery/jquery-1.9.1.min.js",
+                    //"src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery-ui.min.js",
+                    // jQuery UI components Begin 
+                    "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.core.min.js",
+                    "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.widget.min.js",
+                    "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.datepicker.min.js",
+                    // jQuery UI components End
+                    "src/public/scripts/libs/jquery-validation-1.11.0/dist/jquery.validate.min.js",
+                    "src/public/scripts/libs/jQuery-globalize/lib/globalize.js",
+                    // app 
+                    "src/public/scripts/Template.ExtendPrototypes.js",
+                    "src/public/scripts/Template.App.Init.js",
+                    "src/public/scripts/Template.App.Ajax.Init.js",
+                    "src/public/scripts/Template.App.Widgets.Init.js",
+                    "src/public/scripts/Template.App.Resources.Init.js",
+                    "src/public/scripts/Template.Widget.Base.js",
+                    //"src/public/scripts/Template.Widget.jQueryzer.js",
+                    "src/public/scripts/Template.Widget.Model.js",
+                    "src/public/scripts/Template.Widget.ModelDate.js",
+                    "src/public/scripts/Template.Widget.ModelBool.js",
+                    "src/public/scripts/Template.Widget.Grid.js",
+                    "src/public/scripts/Template.Widget.AjaxProgress.js",
+                    "src/public/scripts/Template.Widget.ButtonWrapper.js",
+                    "src/public/scripts/Template.Widget.UserActivity.js",
+                    "src/public/scripts/Template.Widget.Message.js",
+                    "src/public/scripts/Template.Widget.Dialogs.js",
+                    "src/public/scripts/Template.Widget.DialogInline.js",
+                    "src/public/scripts/Template.Widget.NavMenu.js",
+                    //"src/public/scripts/ui-widgetTreeList/ui-widgetTreeList.js"
+                    "src/public/scripts/Template.Widget.Page.js",
                 ],
-                dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_libs.js'
+                dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_js.js'
             },
-            ui_js_appCommon: {
+            //ui_js_libs: {
+            //    options: {
+            //        separator: ';',
+            //        // Replace all 'use strict' statements in the code with a single one at the top
+            //        banner: "'use strict';\n",
+            //        process: function (src, filepath) {
+            //            return '// Source: ' + filepath + '\n' +
+            //              src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
+            //        },
+            //    },
+            //    src: ["src/public/scripts/libs/jQuery/jquery-1.9.1.min.js",
+            //          //"src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery-ui.min.js",
+            //          // jQuery UI components Begin 
+            //          "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.core.min.js",
+            //          "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.widget.min.js",
+            //          "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.datepicker.min.js",
+            //          // jQuery UI components End
+            //          "src/public/scripts/libs/jquery-validation-1.11.0/dist/jquery.validate.min.js",
+            //          "src/public/scripts/libs/jQuery-globalize/lib/globalize.js"
+            //    ],
+            //    dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_libs.js'
+            //},
+            //ui_js_appCommon: {
+            //    options: {
+            //        separator: ";",
+            //        // Replace all 'use strict' statements in the code with a single one at the top
+            //        banner: "'use strict';\n",
+            //        process: function (src, filepath) {
+            //            return '// Source: ' + filepath + '\n' +
+            //              src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
+            //        },
+            //    }, 
+            //    src: [
+            //        "src/public/scripts/Template.ExtendPrototypes.js",
+            //        "src/public/scripts/Template.Init.App.js",
+            //        "src/public/scripts/Template.Init.App.Ajax.js",
+            //        "src/public/scripts/Template.Init.App.Widgets.js",
+            //        "src/public/scripts/Template.Init.App.Resources.js",
+            //        "src/public/scripts/Template.Widget.Base.js",
+            //        "src/public/scripts/Template.Widget.jQueryzer.js",
+            //        "src/public/scripts/Template.Widget.Model.js",
+            //        "src/public/scripts/Template.Widget.ModelDate.js",
+            //        "src/public/scripts/Template.Widget.Boolean.js",
+            //        "src/public/scripts/Template.Widget.Grid.js",
+            //        "src/public/scripts/Template.Widget.AjaxProgress.js",
+            //        "src/public/scripts/Template.Widget.ButtonWrapper.js",
+            //        "src/public/scripts/Template.Widget.UserActivity.js",
+            //        "src/public/scripts/Template.Widget.Message.js",
+            //        "src/public/scripts/Template.Widget.Dialogs.js",
+            //        "src/public/scripts/Template.Widget.DialogInline.js",
+            //        "src/public/scripts/Template.Widget.NavMenu.js",
+            //        //"src/public/scripts/ui-widgetTreeList/ui-widgetTreeList.js"
+            //        "src/public/scripts/Template.Widget.Page.js",
+            //    ],
+            //    dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_appCommon.js'
+            //},
+            ui_regional_es: {
                 options: {
                     separator: ";",
                     // Replace all 'use strict' statements in the code with a single one at the top
@@ -53,26 +137,13 @@
                           src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
                     },
                 }, 
-                src: ["src/public/scripts/Template.Init.js",
-                    "src/public/scripts/Template.Init.Ajax.js",
-                    "src/public/scripts/Template.Init.Widget.js",
-                    "src/public/scripts/Template.Widget.Base.js",
-                    "src/public/scripts/Template.Widget.jQueryzer.js",
-                    "src/public/scripts/Template.Widget.Form.js",
-                    "src/public/scripts/Template.Widget.Boolean.js",
-                    "src/public/scripts/Template.Widget.Grid.js",
-                    "src/public/scripts/Template.Widget.AjaxProgress.js",
-                    "src/public/scripts/Template.Widget.ButtonWrapper.js",
-                    "src/public/scripts/Template.Widget.UserActivity.js",
-                    "src/public/scripts/ui-dateSelector/ui-dateSelector.js",
-                    "src/public/scripts/ui-widgetMsg/ui-widgetMsg.js",
-                    "src/public/scripts/Template.Widget.Dialogs.js",
-                    "src/public/scripts/Template.Widget.DialogInline.js",
-                    "src/public/scripts/Template.Widget.NavMenu.js",
-                    "src/public/scripts/ui-widgetTreeList/ui-widgetTreeList.js"
+                src: ["src/public/scripts/libs/jquery-ui-1.10.0/ui/i18n/jquery.ui.datepicker-es.js",
+                        "src/public/scripts/libs/jquery-validation-1.11.0/localization/messages_es.js",
+                        "src/public/scripts/libs/jQuery-globalize/lib/cultures/globalize.culture.es.js",
                 ],
-                dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_appCommon.js'
+                dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_regional_es.js'
             }
+
 
         },
         uglify: {

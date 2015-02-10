@@ -4,7 +4,8 @@
     <meta name="viewport" content="initial-scale=1.0" />
     <title>{{Title}}</title>
     <!--Common styles begin-->
-    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" rel="Stylesheet" type="text/css" />
+    <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" rel="Stylesheet" type="text/css" />
+    <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">-->
     <link href="/public/cdn/{{Package.name}}.{{Package.version}}.ui.css" rel="Stylesheet" type="text/css" />
     <!--Common styles end-->
 
@@ -78,43 +79,24 @@
     
 
 
-
-    <!--Common Jquery-->
-    <script type="text/javascript" src="/public/cdn/{{Package.name}}.{{Package.version}}.ui_libs.js"></script>
-    <!--Common jQuery localized-->
-    <script type="text/javascript" src="/public/scripts/libs/jquery-ui-1.10.0/ui/i18n/jquery.ui.datepicker-es.js"></script>
-    <script type="text/javascript" src="/public/scripts/libs/jquery-validation-1.11.0/localization/messages_es.js"></script>
-    <script type="text/javascript" src="/public/scripts/libs/jQuery-globalize/lib/cultures/globalize.culture.es.js"></script>
-    <!--Common application-->
-    <script type="text/javascript" src="/public/cdn/{{Package.name}}.{{Package.version}}.ui_appCommon.js"></script>
-    <!--common javascript resources-->
-    <script type="text/javascript">
-        VsixMvcAppResult.Resources = {
-            accept: "Aceptar", cancel: "Cancelar", clickToPickDate: "Click aqui para seleccionar una fecha", close: "Cerrar", confirmToContinue: "Porfavor, confirma para continuar", email: "Email", emailFormatNotValid: "Formato de email incorrecto", errorsInForm: "Existen errores en el formulario", mandatoryField: "Campo obligatorio", minLengthIs: "el mínimo número de caracteres es ", noResultsFound: "No se encontraron resultados", password: "Contraseña", passwordsDoNotMatch: "Las contraseñas no correspondes", siteTitle: "Template MVC III", unExpectedError: "Ha ocurrido un error no controlado", userName: "Usuario", validate: "Validar"
-        };
-    </script>
+    <script type="text/javascript" src="/public/cdn/{{Package.name}}.{{Package.version}}.ui_js.js"></script>
+    <script type="text/javascript" src="/public/cdn/{{Package.name}}.{{Package.version}}.ui_regional_es.js"></script>
     <script type="text/javascript">
         jQuery.noConflict();
     </script>
-
-
-    <!--Common page init scripts-->
-    <script type="text/javascript" src="/public/scripts/Template.Widget.Page.js"></script>
-
     {{#each JsFiles}}
-        <script type="text/javascript" src="{{this}}"></script>
+    <script type="text/javascript" src="{{this}}"></script>
     {{/each}}
-    
     <script type="text/javascript">
         (function ($) {
             jQuery(document).ready(function () {
-                VsixMvcAppResult.Widgets.Page.selector = "body";
-                VsixMvcAppResult.Widgets.Page.cultureSelected = 'es';
-                VsixMvcAppResult.Widgets.Page.cultureGlobalization = "es";
-                VsixMvcAppResult.Widgets.Page.cultureDatePicker = "es";
-                VsixMvcAppResult.Widgets.Page.defaultTheme = "Redmond";
-                VsixMvcAppResult.Widgets.Page.onInit(function () { jQuery('body').removeClass('ui-hidden'); });
-                VsixMvcAppResult.Widgets.Page.Init();
+                VsixMvcAppResult.Widgets.PageOptions.selector = "body";
+                VsixMvcAppResult.Widgets.PageOptions.cultureSelected = 'es';
+                VsixMvcAppResult.Widgets.PageOptions.cultureGlobalization = "es";
+                VsixMvcAppResult.Widgets.PageOptions.cultureDatePicker = "es";
+                VsixMvcAppResult.Widgets.PageOptions.defaultTheme = "Redmond";
+                VsixMvcAppResult.Widgets.PageOptions.onInit(function () { jQuery('body').removeClass('ui-hidden'); });
+                VsixMvcAppResult.Widgets.PageOptions.Init();
             });
         })(jQuery);
     </script>
