@@ -1,4 +1,14 @@
-﻿jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
+﻿
+
+jQuery('#pp')
+    .click(function () {
+
+        jQuery('*[data-widget="widgetModel"]').widgetModel('value');
+
+    });
+
+
+jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
 {
     options: {
         displayName: null,
@@ -9,7 +19,7 @@
         this._super();
 
         jQuery(this.element)
-            //.attr('data-widget', 'widgetBase')
+            .attr('data-widget', this.widgetName)
             .addClass('ui-corner-all ui-widget-content')
             .append(this._templateFormat());
         
@@ -43,7 +53,10 @@
     value: function () {
 
         for (var i = 0; i < this.options.formItems.length; i++) {
-            console.log("{0}={1}".format(this.options.formItems[i].id, jQuery('#' + this.options.formItems[i].id).val()));
+            console.log(jQuery('*[data-widgetModelItem-id="{0}"]'.format(this.options.formItems[i].id)).widgetModelItem('val'));
+            //console.log("{0}={1}".format(
+            //    this.options.formItems[i].id,
+            //    jQuery('*[data-widgetModelItem-id="{0}"]'.format(this.options.formItems[i].id).widgetModelItem('val'))));
         }
     }
 });
@@ -63,7 +76,8 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
         var self = this;
 
         jQuery(this.element)
-            .attr('data-widget', 'widgetModelItem')
+            .attr('data-widget', this.widgetName)
+            .attr('data-{0}-id'.format(this.widgetName), this.options.id)
             .addClass('{0}-{1}-{2}'.format(this.namespace, this.widgetName, this.options.id))
             .append(this._templateFormat())
             .find('div.ui-widgetModel-inputValue:first')
@@ -132,6 +146,11 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 t = '<input id="{1}" name="{1}" type="text" value="{0}" />'.format(this.options.input.value, this.options.id);
 
                 jQuery($parent).append(t);
+
+                this.val = function () {
+                    alert("valor de float");
+                };
+
                 
                 break;
             case "bool":
