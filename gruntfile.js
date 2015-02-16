@@ -22,8 +22,12 @@ module.exports = function (grunt) {
                       "src/public/css/Site.jQuery.OverrideRoundCorners.css",
                       "src/public/css/Site.JqueryUI.IconsExtendWithFontAwsome.css",
                       "src/public/css/ui-widgetMsg.css",
+                      "src/public/css/ui-breadcrumb.css",
                       "src/public/css/ui-dateSelector.css",
-                      "src/public/css/ui-widgetTreeList.css"
+                      "src/public/css/ui-widgetTreeList.css",
+                      "src/public/css/ui-widgetModel.css",
+                      "src/public/css/ui-widgetGrid.css",
+                      "src/public/css/ui-buttonRibbon.css"
                     ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.css'
             },
@@ -62,6 +66,7 @@ module.exports = function (grunt) {
                     "src/public/scripts/Template.Widget.Grid.js",
                     "src/public/scripts/Template.Widget.AjaxProgress.js",
                     "src/public/scripts/Template.Widget.ButtonWrapper.js",
+                    "src/public/scripts/Template.Widget.ButtonRibbon.js",
                     "src/public/scripts/Template.Widget.UserActivity.js",
                     "src/public/scripts/Template.Widget.Message.js",
                     "src/public/scripts/Template.Widget.Dialogs.js",
@@ -72,62 +77,6 @@ module.exports = function (grunt) {
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_js.js'
             },
-            //ui_js_libs: {
-            //    options: {
-            //        separator: ';',
-            //        // Replace all 'use strict' statements in the code with a single one at the top
-            //        banner: "'use strict';\n",
-            //        process: function (src, filepath) {
-            //            return '// Source: ' + filepath + '\n' +
-            //              src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
-            //        },
-            //    },
-            //    src: ["src/public/scripts/libs/jQuery/jquery-1.9.1.min.js",
-            //          //"src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery-ui.min.js",
-            //          // jQuery UI components Begin 
-            //          "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.core.min.js",
-            //          "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.widget.min.js",
-            //          "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.datepicker.min.js",
-            //          // jQuery UI components End
-            //          "src/public/scripts/libs/jquery-validation-1.11.0/dist/jquery.validate.min.js",
-            //          "src/public/scripts/libs/jQuery-globalize/lib/globalize.js"
-            //    ],
-            //    dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_libs.js'
-            //},
-            //ui_js_appCommon: {
-            //    options: {
-            //        separator: ";",
-            //        // Replace all 'use strict' statements in the code with a single one at the top
-            //        banner: "'use strict';\n",
-            //        process: function (src, filepath) {
-            //            return '// Source: ' + filepath + '\n' +
-            //              src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
-            //        },
-            //    }, 
-            //    src: [
-            //        "src/public/scripts/Template.ExtendPrototypes.js",
-            //        "src/public/scripts/Template.Init.App.js",
-            //        "src/public/scripts/Template.Init.App.Ajax.js",
-            //        "src/public/scripts/Template.Init.App.Widgets.js",
-            //        "src/public/scripts/Template.Init.App.Resources.js",
-            //        "src/public/scripts/Template.Widget.Base.js",
-            //        "src/public/scripts/Template.Widget.jQueryzer.js",
-            //        "src/public/scripts/Template.Widget.Model.js",
-            //        "src/public/scripts/Template.Widget.ModelDate.js",
-            //        "src/public/scripts/Template.Widget.Boolean.js",
-            //        "src/public/scripts/Template.Widget.Grid.js",
-            //        "src/public/scripts/Template.Widget.AjaxProgress.js",
-            //        "src/public/scripts/Template.Widget.ButtonWrapper.js",
-            //        "src/public/scripts/Template.Widget.UserActivity.js",
-            //        "src/public/scripts/Template.Widget.Message.js",
-            //        "src/public/scripts/Template.Widget.Dialogs.js",
-            //        "src/public/scripts/Template.Widget.DialogInline.js",
-            //        "src/public/scripts/Template.Widget.NavMenu.js",
-            //        //"src/public/scripts/ui-widgetTreeList/ui-widgetTreeList.js"
-            //        "src/public/scripts/Template.Widget.Page.js",
-            //    ],
-            //    dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_appCommon.js'
-            //},
             ui_regional_es: {
                 options: {
                     separator: ";",

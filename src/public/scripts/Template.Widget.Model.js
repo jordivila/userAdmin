@@ -57,7 +57,17 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
     options: {
         id: null,
         displayName: null,
-        input: { type: null, value: null, nullable: false }
+        input: {
+            type: null,
+            value: null,
+            nullable: false,
+            onItemBuild: function (parent) {
+                throw new Error("{0}.onItemBuild callback is an abstract function and should be overriden when type='custom'".format(this.widgetName));
+            },
+            onItemValue: function () {
+                throw new Error("{0}.onItemValue callback is an abstract function and should be overriden when type='custom'".format(this.widgetName));
+            }
+        }
     },
     _create: function () {
 
@@ -160,6 +170,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                     return jQuery(jqSelector).widgetModelItemBool('val');
                 };
 
+                break;
+            case "custom":
+                this.options.input.onItemBuild($parent);
+                this.val = this.options.input.onItemValue;
                 break;
             default:
                 this.val = function () { return null; };

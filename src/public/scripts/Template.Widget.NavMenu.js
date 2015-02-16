@@ -13,6 +13,9 @@
 
             this._super();
 
+            jQuery(this.element).addClass('ui-state-default');
+
+
         },
         destroy: function() {
 

@@ -295,7 +295,7 @@
 
                 res.json([{
                     url: "/user/logon",
-                    text: "Log ON",
+                    text: "Log on",
                 }, {
                     url: "/",
                     text: "Inicio"

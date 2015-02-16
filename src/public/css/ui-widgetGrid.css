@@ -1,0 +1,47 @@
+﻿/* Data lists Common */
+.ui-widgetGrid {width:100%;display:table;}
+.ui-widgetGrid a {text-decoration:underline !important;}
+.ui-widgetGrid .ui-widgetGrid-row {font-weight:normal !important;}
+.ui-widgetGrid .ui-widgetGrid-header { border:0;}
+.ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content {cursor:pointer;text-decoration:underline;font-weight:bold;}
+.ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content div {width:auto;display: inline-block;}
+.ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content span.ui-icon {float:left;margin:0 0.5em 0 0; /*border:0.1em solid;*/}
+.ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content button {margin:0; padding:0;background:none;border:0;}
+.ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content button.ui-state-default {color:inherit;}
+.ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content button .ui-button-text {color:inherit;margin:0; padding:0;}
+.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row  {border-left-width:0em !important;border-right-width:0em !important;border-top-width:0em !important;}
+.ui-widgetGrid .ui-widgetGrid-pager {border:0 !important;}
+.ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info {clear:both;padding:0.5em 0.5em 0em 0.5em;margin:0 0 0 0;border:0;}
+.ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info table {width:100%;}
+.ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info .ui-widgetGrid-pager-showPages{width:25%;vertical-align:middle;}
+.ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info .ui-widgetGrid-pager-numbers {vertical-align:middle;}
+.ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info .ui-widgetGrid-pager-numbers ul {margin:0 auto 0 auto;}
+.ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info .ui-widgetGrid-pager-numbers ul li { text-align:center;float:left;}
+.ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info .ui-widgetGrid-pager-numbers ul li button { min-width:2em;}
+.ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info .ui-widgetGrid-pager-numbers ul li button span { padding:0.5em 0.2em 0.5em 0.2em;}
+.ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info .ui-widgetGrid-pager-totalPages{width:25%;text-align:right;vertical-align:middle;}
+
+/* Data lists TableLess*/
+div.ui-widgetGrid {display:block;}
+div.ui-widgetGrid .ui-widgetGrid-row{display:block;width:100%;height:2em;overflow:hidden;padding:0 0 0 0;margin:.1em 0 .1em 0;}
+div.ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column {text-align:center;display:block;white-space:nowrap;float:left;}
+div.ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column .ui-widgetGrid-column-content {overflow:hidden;padding:0 .5em 0 .5em;width:95% !important;}
+div.ui-widgetGrid .ui-widgetGrid-header {padding:.8em .5em 0.3em .5em !important;}
+div.ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-row .ui-widgetGrid-column {text-align:center !important;}
+div.ui-widgetGrid .ui-widgetGrid-body {}
+div.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row {}
+div.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column {padding-top:.5em;padding-bottom:.5em;}
+
+/* Data lists With Tables */
+table.ui-widgetGrid {table-layout:fixed;}
+table.ui-widgetGrid .ui-widgetGrid-row{}
+table.ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column {padding:.5em;text-align:center;overflow:hidden;white-space:nowrap;}
+table.ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column div.ui-widgetGrid-column-content {overflow:hidden;white-space:nowrap;}
+table.ui-widgetGrid .ui-widgetGrid-header {background-image:none;}
+table.ui-widgetGrid .ui-widgetGrid-header a {}
+table.ui-widgetGrid .ui-widgetGrid-header a div  {}
+table.ui-widgetGrid .ui-widgetGrid-header a div span.ui-icon {float:left;}
+table.ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-row .ui-widgetGrid-column {padding:1em;}
+table.ui-widgetGrid .ui-widgetGrid-body {}
+table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row {}
+table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column {}

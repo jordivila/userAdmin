@@ -19,17 +19,25 @@
 
             var i18n = req.i18n;
 
+            console.log(req.i18n);
+
             res.render('home/home', {
                 Title: "Azure nodejs application template",
                 DomainName: config.get('domainName'),
                 Package: pkg,
                 IsTest: (process.env.NODE_ENV === 'test'),
+                Globalization: {
+                    cultureSelected: i18n.locale,
+                    cultureGlobalization: i18n.locale,
+                    cultureDatePicker: i18n.locale,
+                },
                 Breadcrumb: [
                     { title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
                     { title: i18n.__("GeneralTexts.Home"), url: "/" }
                 ],
                 CssFiles: ["/public/views/home/home.css"],
-                JsFiles: ["/public/views/home/home.js"]
+                JsFiles: ["/public/views/home/home.js"],
+
             });
         });
 

@@ -34,11 +34,9 @@ jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
                 jQuery(this.element).wrap('<div class="ui-widgetModelItemDate"></div>')
                                     .parents('div.ui-widgetModelItemDate:first')
                                     .append('<a href="javascript:void(0);">' + self.options.text + '</a>')
-                                    .append('<div class="ui-state-error"><span class="ui-icon ui-icon-circle-close"></span></div>')
+                                    //.append('<div class="ui-state-error"><span class="ui-icon ui-icon-circle-close"></span></div>')
+                                    .append('<div class="ui-state-error ui-widget-close ui-corner-all ui-icon ui-icon-close" style="display: block;"></div>')
                                     .find('div.ui-state-error')
-                                        .css('width', '17')
-                                        .css('height', '17')
-                                        .css('margin-right', '10px')
                                         .css('float', 'left')
                                         .css('cursor', 'pointer')
                                         .hide();

@@ -1,0 +1,6 @@
+﻿.ui-breadcrumb { clear:both;padding:0 0 0 0;margin:1em 0 0 0 ;clear:both;}
+.ui-breadcrumb .ui-state-default {/*background:none !important;*//*border:0px !important;*/padding:0.5em 0.5em 0.5em 0.5em;}
+.ui-breadcrumb ul li  { float:left;text-align:left;border:.1em solid transparent !important;margin:0.5em 0 0.5em 1em;}
+.ui-breadcrumb ul li.ui-breadcrumb-next {cursor:default !important;}
+.ui-breadcrumb ul li span {border:0 !important;}
+.ui-breadcrumb ul li span.ui-icon {border:0 !important; float:left;margin:0 0.5em 0 0;}

@@ -1950,7 +1950,17 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
     options: {
         id: null,
         displayName: null,
-        input: { type: null, value: null, nullable: false }
+        input: {
+            type: null,
+            value: null,
+            nullable: false,
+            onItemBuild: function (parent) {
+                throw new Error("{0}.onItemBuild callback is an abstract function and should be overriden when type='custom'".format(this.widgetName));
+            },
+            onItemValue: function () {
+                throw new Error("{0}.onItemValue callback is an abstract function and should be overriden when type='custom'".format(this.widgetName));
+            }
+        }
     },
     _create: function () {
 
@@ -2054,6 +2064,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 };
 
                 break;
+            case "custom":
+                this.options.input.onItemBuild($parent);
+                this.val = this.options.input.onItemValue;
+                break;
             default:
                 this.val = function () { return null; };
                 break;
@@ -2129,11 +2143,9 @@ jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
                 jQuery(this.element).wrap('<div class="ui-widgetModelItemDate"></div>')
                                     .parents('div.ui-widgetModelItemDate:first')
                                     .append('<a href="javascript:void(0);">' + self.options.text + '</a>')
-                                    .append('<div class="ui-state-error"><span class="ui-icon ui-icon-circle-close"></span></div>')
+                                    //.append('<div class="ui-state-error"><span class="ui-icon ui-icon-circle-close"></span></div>')
+                                    .append('<div class="ui-state-error ui-widget-close ui-corner-all ui-icon ui-icon-close" style="display: block;"></div>')
                                     .find('div.ui-state-error')
-                                        .css('width', '17')
-                                        .css('height', '17')
-                                        .css('margin-right', '10px')
                                         .css('float', 'left')
                                         .css('cursor', 'pointer')
                                         .hide();
@@ -2484,6 +2496,28 @@ jQuery.widget("ui.widgetButton", jQuery.ui.widgetBase,
     destroy: function () {
         this._super();
     }
+});;// Source: src/public/scripts/Template.Widget.ButtonRibbon.js
+jQuery.widget("ui.buttonRibbon", jQuery.ui.widgetBase,
+{
+    options: {
+
+    },
+    _create: function () {
+
+        this._super();
+
+        jQuery(this.element)
+            .attr('data-widget', this.widgetName)
+            .addClass('ui-corner-all ui-widget-content');
+    },
+    _init: function () {
+
+        this._super();
+    },
+    destroy: function () {
+
+        this._super();
+    },
 });;// Source: src/public/scripts/Template.Widget.UserActivity.js
 /// <reference path="VsixMvcAppResult.A.Intellisense.js" />
 
@@ -2912,6 +2946,9 @@ VsixMvcAppResult.Widgets.DialogInline =
         _init: function () {
 
             this._super();
+
+            jQuery(this.element).addClass('ui-state-default');
+
 
         },
         destroy: function() {

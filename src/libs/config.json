@@ -10,8 +10,9 @@
 
     "i18n": {
         "directory": "./src/libs/locales",
-        "locales": ["en", "es"],
-        "defaultLocale": "en",
+        "locales": ["es", "en"],
+        "defaultLocale": "es",
+        "prefLocale":  "es",
         "cookieName": "locale",
         "extension": ".json"
     },
