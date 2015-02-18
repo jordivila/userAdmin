@@ -38,7 +38,7 @@
     _templateFormat: function () {
         return this._template().format(this.options.displayName);
     },
-    value: function () {
+    val: function () {
         var o = this.cloneObject(this.options.modelItems);
         for (var i = 0; i < o.length; i++) {
             var propName = o[i].id;
@@ -56,10 +56,16 @@
         var $body = jQuery(this.element).find('div.ui-widgetModel-content:first');
 
         if (this.options.modelItems !== null) {
+
+            var onItemChanged = function () {
+                alert("webas");
+            };
+
             for (var i = 0; i < this.options.modelItems.length; i++) {
                 var $f = jQuery('<div></div>');
                 $body.append($f);
-                $f.widgetModelItem(this.options.modelItems[i]);
+
+                $f.widgetModelItem(jQuery.extend({}, { change: onItemChanged }, this.options.modelItems[i]));
             }
         }
     },
@@ -230,9 +236,6 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
 
         if (errVisible) {
             jQuery(this.element)
-                //.parent('div.ui-widgetFormItem:first')
-                    //.addClass('ui-state-error')
-                //.end()
                 .find('div.ui-widgetModel-inputError:first')
                 .addClass('ui-state-error')
                 .html(errors.join('<br/>'))
@@ -240,9 +243,6 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
         }
         else {
             jQuery(this.element)
-                //.parent('div.ui-widgetFormItem:first')
-                    //.removeClass('ui-state-error')
-                //.end()
                 .find('div.ui-widgetModel-inputError:first')
                 .removeClass('ui-state-error')
                 .empty()

@@ -81,7 +81,7 @@
                 .find('button')
                     .button()
                     .click(function () {
-                        var modelValue = $modelForm.widgetModel('value');
+                        var modelValue = $modelForm.widgetModel('val');
                         
                         VsixMvcAppResult.Ajax.HomePost(
                             modelValue,
