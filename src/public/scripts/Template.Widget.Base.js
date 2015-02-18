@@ -45,25 +45,39 @@ jQuery.widget("ui.widgetBase",
         // TODO: check 'head' exists
         jQuery('head').append(css);
     },
-    dumpProps: function (obj, parent, tmp) {
-        // creates an array of name/value properties recursively
-        // var propertiesArray = dumpProps(objectInstance, nullOrParentObject, []);
-        for (var i in obj) {
-            var tmpProp = { name: null, value: null };
-            tmpProp.name = i;
-            tmpProp.value = obj[i];
-            tmp.push(tmpProp);
-            if (typeof obj[i] == "object") {
-                if (parent) {
-                    tmp = this.dumpProps(obj[i], parent + "." + i, tmp);
-                }
-                else {
-                    tmp = this.dumpProps(obj[i], i, tmp);
-                }
-            }
+    cloneObject: function (obj) {
+        var copy;
+
+        // Handle the 3 simple types, and null or undefined
+        if (null === obj || "object" != typeof obj) return obj;
+
+        // Handle Date
+        if (obj instanceof Date) {
+            copy = new Date();
+            copy.setTime(obj.getTime());
+            return copy;
         }
-        return tmp;
-    }, 
+
+        // Handle Array
+        if (obj instanceof Array) {
+            copy = [];
+            for (var i = 0, len = obj.length; i < len; i++) {
+                copy[i] = this.cloneObject(obj[i]);
+            }
+            return copy;
+        }
+
+        // Handle Object
+        if (obj instanceof Object) {
+            copy = {};
+            for (var attr in obj) {
+                if (obj.hasOwnProperty(attr)) copy[attr] = this.cloneObject(obj[attr]);
+            }
+            return copy;
+        }
+
+        throw new Error("Unable to copy obj! Its type isn't supported.");
+    },
     boxButtonsContainerGet: function () {
         var self = this;
 

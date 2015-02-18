@@ -2,7 +2,7 @@
 {
     options: {
         displayName: null,
-        formItems: null
+        modelItems: null
     },
     _create: function () {
 
@@ -10,19 +10,9 @@
 
         jQuery(this.element)
             .attr('data-widget', this.widgetName)
-            .addClass('ui-corner-all ui-widget-content')
-            .append(this._templateFormat());
-        
-        var $body = jQuery(this.element).find('div.ui-widgetModel-content:first');
+            .addClass('ui-corner-all ui-widget-content');
 
-        if (this.options.formItems !== null)
-        {
-            for (var i = 0; i < this.options.formItems.length; i++) {
-                var $f = jQuery('<div></div>');
-                $body.append($f);
-                $f.widgetModelItem(this.options.formItems[i]);
-            }
-        }
+        this._bind(this.options.modelItems);
     },
     _init: function () {
 
@@ -34,20 +24,51 @@
     },
     _template: function () {
 
-        return "<div class='ui-corner-top ui-widget-header'>{0}</div><div class='ui-corner-bottom ui-widget-content ui-widgetModel-content'></div>";
+        var valSummary = '' +
+        '<div class="ui-widgetForm-ValidationSummary ui-state-error ui-corner-all" data-widget="widgetFormSummary">' +
+            '<span>Por favor, revise el formulario</span>' +
+            '<ul>' +
+                '<li modelKey="Email">El campo "Correo electrónico" es obligatorio</li>' +
+                '<li modelKey="Password">El campo "Contraseña" es obligatorio</li>' +
+            '</ul>' +
+        '</div>';
 
+        return "<div class='ui-corner-top ui-widget-header'>{0}</div><div class='ui-corner-bottom ui-widget-content ui-widgetModel-content'></div>" + valSummary;
     },
     _templateFormat: function () {
         return this._template().format(this.options.displayName);
     },
     value: function () {
-        var o = {};
-        for (var i = 0; i < this.options.formItems.length; i++) {
-            var propName = this.options.formItems[i].id;
+        var o = this.cloneObject(this.options.modelItems);
+        for (var i = 0; i < o.length; i++) {
+            var propName = o[i].id;
             var propValue = jQuery('*[data-widgetModelItem-id="{0}"]'.format(propName)).widgetModelItem('val');
-            o[propName] = propValue;
+            o[i].currentValue = propValue;
         }
         return o;
+    },
+    _bind: function () {
+
+        jQuery(this.element)
+            .empty()
+            .append(this._templateFormat());
+
+        var $body = jQuery(this.element).find('div.ui-widgetModel-content:first');
+
+        if (this.options.modelItems !== null) {
+            for (var i = 0; i < this.options.modelItems.length; i++) {
+                var $f = jQuery('<div></div>');
+                $body.append($f);
+                $f.widgetModelItem(this.options.modelItems[i]);
+            }
+        }
+    },
+    bindErrors: function (keyValueArray) {
+
+        for (var i = 0; i < keyValueArray.length; i++) {
+            jQuery('div[data-widgetModelItem-id="{0}"]'.format(keyValueArray[i].key))
+                .widgetModelItem('setErrors', keyValueArray[i].value);
+        }
     }
 });
 
@@ -67,7 +88,8 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
             onItemValue: function () {
                 throw new Error("{0}.onItemValue callback is an abstract function and should be overriden when type='custom'".format(this.widgetName));
             }
-        }
+        },
+        errors: []
     },
     _create: function () {
 
@@ -92,11 +114,9 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
             })
             .blur(function () {
                 jQuery(this).removeClass('ui-state-focus');
-            })
-            .change(function () {
-                jQuery(self.element).removeClass('ui-state-error').find('div.ui-widgetModel-inputError').remove();
-                self._trigger('changed', null, jQuery(this).attr('id'));
             });
+
+        this.setErrors(this.options.errors);
 
     },
     _init: function () {
@@ -108,16 +128,26 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
 
         this._super();
     },
+    change: function () {
+
+        var self = this;
+
+        self.setErrors([]);
+        self._trigger('change', null, self.options.id);
+    },
     _template: function () {
-        return "<div class='ui-widgetModel-inputLabel'>{1}</div>" +
+        return "<div class='ui-widgetModel-inputLabel'>{0}</div>" +
                 "<div class='ui-widgetModel-inputValue'></div>" +
                 "<div class='ui-widgetModel-inputError ui-hidden'>" +
-                    "{2}" +
+                    "{1}" +
                 "</div>" +
                 "<div class='ui-carriageReturn'></div>";
     },
     _templateFormat: function () {
-        return this._template().format(this.options.id, this.options.displayName, []);
+
+        return this._template().format(
+            this.options.displayName,
+            this.options.errors.join('<br/>'));
     },
     _formItemBuild: function ($parent) {
 
@@ -134,11 +164,15 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                     .append(t)
                     .find(jqSelector)
                     .widgetModelItemDate({
-                        value: this.options.input.value
+                        value: this.options.input.value,
+                        change: function () {
+                            self.change();
+                        }
                     });
 
                 this.val = function () {
-                    return jQuery(jqSelector).widgetModelItemDate('getDate');
+                    //return jQuery(jqSelector).widgetModelItemDate('getDate');
+                    return jQuery(jqSelector).val();
                 };
 
                 break;
@@ -146,7 +180,12 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
 
                 t = '<input id="{1}" name="{1}" type="text" value="{0}" />'.format(this.options.input.value, this.options.id);
 
-                jQuery($parent).append(t);
+                jQuery($parent)
+                    .append(t)
+                    .find(jqSelector)
+                    .change(function () {
+                        self.change();
+                    });
 
                 this.val = function () {
                     return jQuery(jqSelector).val();
@@ -163,7 +202,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                     .widgetModelItemBool({
                         value: self.options.input.value,
                         nullable: self.options.input.nullable,
-                        id: self.options.id
+                        id: self.options.id,
+                        change: function () {
+                            self.change();
+                        }
                     });
 
                 this.val = function () {
@@ -172,8 +214,8 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
 
                 break;
             case "custom":
-                this.options.input.onItemBuild($parent);
-                this.val = this.options.input.onItemValue;
+                this.options.input.onItemBuildCb(jQuery(this.element), $parent);
+                this.val = this.options.input.onItemValueCb;
                 break;
             default:
                 this.val = function () { return null; };
@@ -181,6 +223,31 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
         }
 
         
+    },
+    setErrors: function (errors) {
+
+        var errVisible = jQuery.isArray(errors) && (errors.length > 0);
+
+        if (errVisible) {
+            jQuery(this.element)
+                //.parent('div.ui-widgetFormItem:first')
+                    //.addClass('ui-state-error')
+                //.end()
+                .find('div.ui-widgetModel-inputError:first')
+                .addClass('ui-state-error')
+                .html(errors.join('<br/>'))
+                .removeClass('ui-hidden');
+        }
+        else {
+            jQuery(this.element)
+                //.parent('div.ui-widgetFormItem:first')
+                    //.removeClass('ui-state-error')
+                //.end()
+                .find('div.ui-widgetModel-inputError:first')
+                .removeClass('ui-state-error')
+                .empty()
+                .addClass('ui-hidden');
+        }
     },
     val: function () {
         throw new Error("{0}.val is an abstract function".format(this.widgetName));
@@ -212,4 +279,3 @@ jQuery.widget("ui.widgetModelSummary", jQuery.ui.widgetBase,
         }
     }
 });
-

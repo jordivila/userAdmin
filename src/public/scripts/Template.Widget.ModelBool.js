@@ -57,6 +57,9 @@ jQuery.widget("ui.widgetModelItemBool", jQuery.ui.widgetBase,
                                             if (self.options.nullable) { $el.find('input[type="hidden"]').val(''); }
                                             break;
                                     }
+
+                                    self._trigger('change', null, {});
+
                                 });
     },
     destroy: function () {

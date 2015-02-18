@@ -1811,19 +1811,25 @@ html, body {height:100%;}
 .ui-treeList .ui-sortable-placeholder {border-style:dashed; border-width:thin; min-height:4em;}
 .ui-treeList .ui-sortable-helper {border-style:dashed !important; border-width:thin !important;} /* GENERIC FORM */
 .ui-widgetModel {padding:0 0 0 0;margin:0em auto 0em auto;   }
-.ui-widgetModel .ui-state-error {border:1px solid;}
+.ui-widgetModel .ui-state-error {border:0.1em solid;}
 .ui-widgetModel div.ui-widget-header  {padding:1em 1em 1em 1em;border:none;}
 .ui-widgetModel div.ui-widgetModel-content {padding:.5em .5em .5em .5em ;border:none;}
 .ui-widgetModel fieldset {padding:1em;margin:.5em 1em 0 1em;}
 .ui-widgetModel fieldset legend {font-size:.8em;}
 .ui-widgetModel hr {border-top-width:.1em;border-bottom:0;border-left:0;border-right:0;}
 .ui-widgetModel .ui-widgetModelItem {padding:.5em .5em .5em .5em;clear:both;margin:0.1em 0 0 0; border-width:0 !important;}
-.ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputLabel {padding:.5em 0 0 0;width:24.5%;float:left;}
+.ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputLabel {padding:0 0 0 0;width:24.5%;float:left;}
 .ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputValue {width:75%;float:left;}
 .ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputValue input {width:100%;}
-.ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputError {clear:both;margin:.5em 0 .5em 0; width:100%;}
+.ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputError {clear:both;margin:.5em 0 .5em 0; width:100%;border:0;background:none;}
 .ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputError div.ui-state-error  {padding:.5em 0 .5em  0;width:99.5%;border:0;}
 .ui-widgetModel .ui-widgetModelItem div.ui-widgetModel-inputError div.ui-state-error  span {margin:0em;display:table;}
+
+
+.ui-widgetModel .ui-widgetModelItem.ui-state-error {background-image:none;}
+.ui-widgetModel .ui-widgetModelItem.ui-state-error div.ui-widgetModel-inputLabel {color:initial;}
+.ui-widgetModel .ui-widgetModelItem.ui-state-error div.ui-widgetModel-inputValue {color:initial;}
+
 
 .ui-widgetModel .ui-widget-radioHorizontal { float:none;}
 .ui-widgetModel .ui-widget-radioHorizontal div {float:left;}

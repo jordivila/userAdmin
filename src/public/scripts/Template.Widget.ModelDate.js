@@ -25,6 +25,7 @@ jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
                     gotoCurrent: true,
                     onSelect: function () {
                         self._setDateLabel();
+                        self._change();
                     }
                 });
 
@@ -52,6 +53,8 @@ jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
                                     .parents('div:first')
                                         .find('a')
                                             .html(self.options.text);
+                            self._change();
+
                         })
                     .end()
                     .find('a')
@@ -70,6 +73,11 @@ jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
         jQuery(this.element).unwrap();
 
         this._super();
+    },
+    _change: function () {
+
+        this._trigger('change', null, {});
+
     },
     _setDateLabel: function () {
         var self = this;
