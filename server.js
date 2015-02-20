@@ -10,7 +10,7 @@
     var passport = require('passport');
     var bodyParser = require('body-parser');
     var config = require('./src/libs/config');
-    var mongoose = require('./src/libs/db').mongoose;
+    var mongoose = require('./src/libs/db');
     var log = require('./src/libs/log')(module);
     var cookieParser = require('cookie-parser');
     var i18n = require('i18n-2');
@@ -49,34 +49,46 @@
 
     i18n.expressBind(app, config.get("i18n"));
 
-    // set up the middleware
-    app.use(function (req, res, next) {
-        req.i18n.setLocaleFromCookie();
-        //log.info('\n request URL: %s', req.url); // log all requests
-        //log.info('\n locale : %s', req.i18n.getLocale()); // log all requests
-        next();
+
+
+    mongoose.dbInit(function (err, cnn) {
+
+
+
+
+        // set up the middleware
+        app.use(function (req, res, next) {
+            req.i18n.setLocaleFromCookie();
+            //log.info('\n request URL: %s', req.url); // log all requests
+            //log.info('\n locale : %s', req.i18n.getLocale()); // log all requests
+            next();
+        });
+
+
+        if (process.env.NODE_ENV === 'test') {
+            commonController.initTestEnvironment(app);
+        }
+
+
+
+        //set the Cache-Control header to one day using milliseconds
+        app.use('/public', express.static(__dirname + '/src/public', {
+            maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
+        }));
+
+
+
+        homeController.setRoutes(app, log);
+        usersController.setRoutes(app, authController);
+        commonController.setRoutes(app, log);
+
+
+
+
     });
 
-
-    if (process.env.NODE_ENV === 'test') {
-        commonController.initTestEnvironment(app);
-    }
-
-
-
-    //set the Cache-Control header to one day using milliseconds
-    app.use('/public', express.static(__dirname + '/src/public', {
-        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-    }));
-
-
-
-    homeController.setRoutes(app, log);
-    usersController.setRoutes(app, authController);
-    commonController.setRoutes(app, log);
-
     //programmer errors
-    process.on('uncaughtException', function(err) {
+    process.on('uncaughtException', function (err) {
         try {
             //try logging
 
@@ -98,7 +110,7 @@
     });
 
 
-    app.listen(app.get('port'), function() {
+    app.listen(app.get('port'), function () {
 
         var d = new Date();
 
@@ -110,5 +122,6 @@
 
 
     });
+
 
 })(module);
