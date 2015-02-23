@@ -27,7 +27,6 @@
     var app = express();
 
     app.use(cookieParser(config.get('encryptKeyForCookieParser')));
-    //app.set('port', process.env.PORT || config.get('port'));
     app.set('port', config.get('port'));
     app.use(favicon(__dirname + '/src/public/favicon.ico'));
     app.use(bodyParser.urlencoded({
@@ -37,8 +36,6 @@
     app.use(passport.initialize());
     app.use(methodOverride('X-HTTP-Method-Override'));
     app.use(compression());
-
-
     app.set('views', __dirname + '/src/public/views');
     app.engine('handlebars', exphbs({
         layoutsDir: 'src/public/views/layouts/',
@@ -53,39 +50,34 @@
 
     mongoose.dbInit(function (err, cnn) {
 
-
-
-
-        // set up the middleware
-        app.use(function (req, res, next) {
-            req.i18n.setLocaleFromCookie();
-            //log.info('\n request URL: %s', req.url); // log all requests
-            //log.info('\n locale : %s', req.i18n.getLocale()); // log all requests
-            next();
-        });
-
-
-        if (process.env.NODE_ENV === 'test') {
-            commonController.initTestEnvironment(app);
-        }
-
-
-
-        //set the Cache-Control header to one day using milliseconds
-        app.use('/public', express.static(__dirname + '/src/public', {
-            maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-        }));
-
-
-
-        homeController.setRoutes(app, log);
-        usersController.setRoutes(app, authController);
-        commonController.setRoutes(app, log);
-
-
-
-
     });
+
+    // set up the middleware
+    app.use(function (req, res, next) {
+        req.i18n.setLocaleFromCookie();
+        //log.info('\n request URL: %s', req.url); // log all requests
+        //log.info('\n locale : %s', req.i18n.getLocale()); // log all requests
+        next();
+    });
+
+
+    if (process.env.NODE_ENV === 'test') {
+        commonController.initTestEnvironment(app);
+    }
+
+
+
+    //set the Cache-Control header to one day using milliseconds
+    app.use('/public', express.static(__dirname + '/src/public', {
+        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
+    }));
+
+
+
+    homeController.setRoutes(app, log);
+    usersController.setRoutes(app, authController);
+    commonController.setRoutes(app, log);
+
 
     //programmer errors
     process.on('uncaughtException', function (err) {

@@ -14,7 +14,7 @@ function dbInit(cb)
         log.error('connection error:', err.message);
     });
 
-    mongoose.connection.once('open', function callback() {
+    mongoose.connection.on('open', function callback() {
         log.info("Connected to DB!");
 
         cb(null, cb(mongoose.connection));
@@ -22,7 +22,7 @@ function dbInit(cb)
 
     // When the connection is disconnected
     mongoose.connection.on('disconnected', function () {
-        console.log('Mongoose default connection disconnected');
+        log.error('Mongoose default connection disconnected');
     });
 
     // If the Node process ends, close the Mongoose connection

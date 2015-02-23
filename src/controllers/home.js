@@ -72,7 +72,7 @@
                 ];
             }
 
-            console.log(cloned);
+            log.info(cloned);
 
             var result = new DataResult(isValid, "Existen errores en el formulario", cloned);
 

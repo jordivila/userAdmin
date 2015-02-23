@@ -23,17 +23,19 @@
         this._super();
     },
     _template: function () {
+        return "<div class='ui-corner-top ui-widget-header'>{0}</div><div class='ui-corner-bottom ui-widget-content ui-widgetModel-content'></div>";
 
-        var valSummary = '' +
-        '<div class="ui-widgetForm-ValidationSummary ui-state-error ui-corner-all" data-widget="widgetFormSummary">' +
-            '<span>Por favor, revise el formulario</span>' +
-            '<ul>' +
-                '<li modelKey="Email">El campo "Correo electrónico" es obligatorio</li>' +
-                '<li modelKey="Password">El campo "Contraseña" es obligatorio</li>' +
-            '</ul>' +
-        '</div>';
 
-        return "<div class='ui-corner-top ui-widget-header'>{0}</div><div class='ui-corner-bottom ui-widget-content ui-widgetModel-content'></div>" + valSummary;
+        //var valSummary = '' +
+        //'<div class="ui-widgetForm-ValidationSummary ui-state-error ui-corner-all" data-widget="widgetFormSummary">' +
+        //    '<span>Por favor, revise el formulario</span>' +
+        //    '<ul>' +
+        //        '<li modelKey="Email">El campo "Correo electrónico" es obligatorio</li>' +
+        //        '<li modelKey="Password">El campo "Contraseña" es obligatorio</li>' +
+        //    '</ul>' +
+        //'</div>';
+
+        //return "<div class='ui-corner-top ui-widget-header'>{0}</div><div class='ui-corner-bottom ui-widget-content ui-widgetModel-content'></div>" + valSummary;
     },
     _templateFormat: function () {
         return this._template().format(this.options.displayName);
@@ -93,7 +95,8 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
             },
             onItemValue: function () {
                 throw new Error("{0}.onItemValue callback is an abstract function and should be overriden when type='custom'".format(this.widgetName));
-            }
+            },
+            listValues: [], //[{ value: "", text: "" }]
         },
         errors: []
     },
@@ -219,6 +222,34 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 };
 
                 break;
+            case "list":
+
+                t = '<select id="{0}" name="{0}" />'.format(this.options.id);
+
+                var opts = '';
+
+                if (jQuery.isArray(this.options.input.listValues))
+                {
+                    for (var i = 0; i < this.options.input.listValues.length; i++) {
+                        opts += "<option value='{0}'>{1}</option>".format(this.options.input.listValues[i].value, this.options.input.listValues[i].text);
+                    }
+                }
+
+
+                jQuery($parent)
+                    .append(t)
+                    .find(jqSelector)
+                        .append(opts)
+                        .change(function () {
+                            self.change();
+                        });
+
+                this.val = function () {
+                    return jQuery(jqSelector).val();
+                };
+
+                break;
+
             case "custom":
                 this.options.input.onItemBuildCb(jQuery(this.element), $parent);
                 this.val = this.options.input.onItemValueCb;

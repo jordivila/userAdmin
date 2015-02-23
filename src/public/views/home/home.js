@@ -42,6 +42,10 @@
                     displayName: "Some Boolean Nullable Value",
                     input: { type: "bool", value: null, nullable: true },
                 }, {
+                    id: "SomeStringFromList",
+                    displayName: "Some String From List",
+                    input: { type: "list", value: null, listValues: [{ value: "", text: "Select from list" }, { value: "1", text: "First value" }] },
+                }, {
                     id: "SomeCustomValue",
                     displayName: "Some Custom Value",
                     input: {
