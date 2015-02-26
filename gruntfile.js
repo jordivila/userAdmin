@@ -27,7 +27,7 @@ module.exports = function (grunt) {
                       "src/public/css/ui-widgetTreeList.css",
                       "src/public/css/ui-widgetModel.css",
                       "src/public/css/ui-widgetGrid.css",
-                      "src/public/css/ui-buttonRibbon.css",
+
 
                       "src/public/scripts/crud/common.widget.crud.css",
                       "src/public/scripts/crud/cir.css",
@@ -70,7 +70,6 @@ module.exports = function (grunt) {
                     "src/public/scripts/Template.Widget.Grid.js",
                     "src/public/scripts/Template.Widget.AjaxProgress.js",
                     "src/public/scripts/Template.Widget.ButtonWrapper.js",
-                    "src/public/scripts/Template.Widget.ButtonRibbon.js",
                     "src/public/scripts/Template.Widget.UserActivity.js",
                     "src/public/scripts/Template.Widget.Message.js",
                     "src/public/scripts/Template.Widget.Dialogs.js",

@@ -23,7 +23,7 @@
 
     jQuery(document).ready(function () {
         VsixMvcAppResult.Widgets.PageOptions.onInit(function () {
-
+            /*
             var modelItems = function () {
                 return [{
                     id: "SomeString",
@@ -109,10 +109,11 @@
                                 console.log("HOMKE POST COMLPETED");
                             });
                     })
-                .end()
-                .buttonRibbon();
+                .end();
+
 
             setTimeout(function () { return jQuery('#modelButtons').find('button').click(); }, 1000);
+            */
 
 
 

@@ -263,8 +263,110 @@ jQuery.widget("ui.product", jQuery.ui.crud,
             return defaultButtons;
         },
         formInit: function (self, formOptions) {
-            jQuery(self.options.formDOMId).productForm(formOptions);
+            jQuery(self.options.formDOMId)
+                .productForm(jQuery.extend({}, formOptions,
+                    {
+                        formModel: self.options.formModel,
+                        formButtonsGet: self.options.formButtonsGet,
+                        formBind: self.options.formBind,
+                        formValueGet: self.options.formValueGet,
+                        formSave: self.options.formSave
+                    }));
         },
+        formButtonsGet: function (self, defaultButtons) {
+            return defaultButtons;
+        },
+        formBind: function (self, dataItem) {
+            //throw new Error(self.namespace + '.' + self.widgetName + ".bind() is an abstract method. Child class method must be implemented");
+        },
+        formValueGet: function (self) {
+            //throw new Error(this.namespace + '.' + this.widgetName + ".formValueGet() is an abstract method. Child class method must be implemented");
+
+            var val = jQuery(self.element).widgetModel('valAsObject');
+            console.log(val);
+        },
+        formSave: function (self) {
+
+            var dfd = jQuery.Deferred();
+
+            console.log(self);
+
+            dfd.notify("Guardando informacion del producto...");
+
+            var viewModel = self.val();
+
+            jQuery.when(productAjax.ajax.productSave(viewModel))
+                .then(
+                    function (result, statusText, jqXHR) {
+                        if (result.IsValid) {
+                            self._trigger('messagedisplayAutoHide', null, 'Producto guardado', 50);
+                            self._trigger('change', null, result.Data);
+                            self.bind(result.Data.Model);
+                            dfd.resolve();
+                        }
+                        else {
+                            if (result.Data) {
+                                self._bindModelValidation(result.Data.ModelState);
+                            }
+                            dfd.reject(result.Message);
+                        }
+                    },
+                    function (jqXHR, textStatus, errorThrown) {
+                        dfd.reject("Error no controlado guadando el producto");
+                    })
+                .done(function () {
+
+                });
+
+            return dfd.promise();
+
+
+        },
+        formModel: [{
+            id: "SomeString",
+            displayName: "Some String value",
+            input: { value: "some characaters" },
+        }, {
+            id: "SomeDate",
+            displayName: "Some Date value",
+            input: { type: "date", value: "09/02/2015" },
+        }, {
+            id: "SomeFloat",
+            displayName: "Some Float Value",
+            input: { type: "float", value: 24.67 },
+        }, {
+            id: "SomeBoolean",
+            displayName: "Some Boolean Value",
+            input: { type: "bool", value: false },
+        }, {
+            id: "SomeBooleanNullable",
+            displayName: "Some Boolean Nullable Value",
+            input: { type: "bool", value: null, nullable: true },
+        }, {
+            id: "SomeStringFromList",
+            displayName: "Some String From List",
+            input: { type: "list", value: null, listValues: [{ value: "", text: "Select from list" }, { value: "1", text: "First value" }] },
+        }, {
+            id: "SomeCustomValue",
+            displayName: "Some Custom Value",
+            input: {
+                type: "custom",
+                value: null,
+                nullable: true,
+                onItemBuild: function (widget, parent) {
+                    jQuery(parent)
+                        .append('<p>some hidden value with custom widget functionality</p>')
+                        .find('p:first')
+                            .click(function () {
+                                jQuery(widget).widgetModelItem('change');
+                            });
+                },
+                onItemValue: function (parent) {
+                    return 2;
+                },
+            },
+        },
+        ],
 
     },
     _create: function () {
@@ -301,8 +403,7 @@ jQuery.widget("ui.productFilter", jQuery.ui.crudFilter,
         Model: null,
         filterButtonsInit: function (self, defaultButtons) {
             for (var i = 0; i < defaultButtons.length; i++) {
-                if (defaultButtons[i].id == "filter")
-                {
+                if (defaultButtons[i].id == "filter") {
                     defaultButtons[i].text = "Buscar productos";
                 }
             }
@@ -420,6 +521,47 @@ jQuery.widget("ui.productGrid", jQuery.ui.crudGrid,
     }
 });
 
+
+
+jQuery.widget("ui.productForm", jQuery.ui.crudForm,
+{
+    options: {
+        /*
+        Model: null,
+        formButtonsGet: function (self, defaultButtons) {
+            return defaultButtons;
+        },
+        formBind: function (self, dataItem) {
+            //throw new Error(self.namespace + '.' + self.widgetName + ".bind() is an abstract method. Child class method must be implemented");
+        },
+        formValueGet: function (self) {
+            //throw new Error(this.namespace + '.' + this.widgetName + ".formValueGet() is an abstract method. Child class method must be implemented");
+            return {};
+        }
+        */
+
+    },
+    _create: function () {
+
+        jQuery(this.element).widgetModel({
+            modelItems: this.options.formModel
+        });
+
+        this._super();
+    },
+    _init: function () {
+
+        this._super();
+
+        this._done();
+    },
+    destroy: function () {
+
+        this._super();
+    },
+});
+
+/*
 jQuery.widget("ui.productForm", jQuery.ui.crudForm,
 {
     options: {
@@ -593,3 +735,4 @@ jQuery.widget("ui.productForm", jQuery.ui.crudForm,
     }
 
 });
+*/

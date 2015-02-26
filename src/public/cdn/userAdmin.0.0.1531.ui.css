@@ -1895,7 +1895,7 @@ table.ui-widgetGrid .ui-widgetGrid-header a div span.ui-icon {float:left;}
 table.ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-row .ui-widgetGrid-column {padding:1em;}
 table.ui-widgetGrid .ui-widgetGrid-body {}
 table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row {}
-table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column {} .ui-buttonRibbon { padding:0.5em; border-top:0; } .ui-progress-feedback {padding:2em;width:auto;position:absolute;z-index:999;left:48%;top:48%;display:none;}
+table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column {} .ui-progress-feedback {padding:2em;width:auto;position:absolute;z-index:999;left:48%;top:48%;display:none;}
 
 .ui-crud .ui-widget-error {padding:0.2em;}
 .ui-crud .ui-widget-info {padding:0.2em !important;}
@@ -1926,17 +1926,15 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
 .ui-crud .ui-crudGrid .ui-crudGrid-body table ,
 .ui-crud .ui-crudGrid .ui-crudGrid-body table td {table-layout:fixed;overflow:hidden; white-space: nowrap;width:100%;vertical-align:middle;}
 .ui-crud .ui-crudGrid .ui-crudGrid-body {overflow:auto;overflow-y:scroll;padding-bottom:0.5em;}
-.ui-crud .ui-crudGrid .ui-crudGrid-body {height: 250px;}
+.ui-crud .ui-crudGrid .ui-crudGrid-body {height: 10em;}
 .ui-crud .ui-crudGrid .ui-crudGrid-body .ui-crudGrid_SelectedRow {background-color:#FF9900;}
-.ui-crud .ui-crudGrid .ui-crudGrid-body .ui-CCManServices_View_OperacionesList-gridEmptyRow td {border:0px solid #CCC;padding:5px 5px 5px 5px; text-align:center;}
 .ui-crud .ui-crudGrid .ui-crudGrid-body td {/*border:1px solid #CCC;*/padding:0em 0.2em 0em 0.2em ;font-weight:normal;}
-.ui-crud .ui-crudGrid .ui-crudGrid-body {height: 30em !important;}
 .ui-crud .ui-crudGrid .ui-crudGrid-body-tableBox {width: 100%; border-collapse: collapse;}
 .ui-crud .ui-crudGrid .ui-crudGrid-body-tableBox tr.ui-crudGrid-rowStyle,
 .ui-crud .ui-crudGrid .ui-crudGrid-body-tableBox tr.ui-crudGrid-rowStyleAlternated {height: 2em;}
 .ui-crud .ui-crudGrid .ui-crudGrid-actionsColumn {text-align:center;}
 .ui-crud .ui-crudGrid .ui-crudGrid-actionsColumn table {width:100%;}
-.ui-crud .ui-crudGrid .ui-crudGrid-actionsColumn td {border:0px solid transparent !important;}
+.ui-crud .ui-crudGrid .ui-crudGrid-actionsColumn td {border:0em solid transparent !important;}
 .ui-crud .ui-crudGrid .ui-crudGrid-actionsColumn .ui-crudGrid-action {text-align:center;width:auto;}
 .ui-crud .ui-crudGrid .ui-crudGrid-actionsColumn .ui-crudGrid-action div {float:left;margin:0 0 0 0.5em;cursor:pointer;}
 .ui-crud .ui-crudGrid .ui-crudGrid-actionsColumn .ui-crudGrid-action label { float:left;margin:0 0 0 0.5em;}
@@ -1951,7 +1949,7 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
 
 .ui-crud .ui-crudForm { padding:0em !important; }
 .ui-crud .ui-crudForm h3 {padding: 0em 0.5em 0em 0em;margin:0.5em 0 0.5em 0; border:0; background:none;}
-.ui-crud .ui-crudForm .ui-crudForm-form { background:none;padding:1em !important; }
+.ui-crud .ui-crudForm .ui-crudForm-form { background:none;padding:1em !important; border-left:none;border-right:none;border-bottom:none;}
 .ui-crud .ui-crudForm select {width:22.5em;padding:0.2em;}
 .ui-crud .ui-crudForm input {width:22em;padding:0.2em;}
 .ui-crud .ui-crudForm .ui-field-box {margin:0.5em 0 0 0;}
