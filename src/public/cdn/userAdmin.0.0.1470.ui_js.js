@@ -1768,7 +1768,7 @@ jQuery.widget("ui.widgetBase",
 
         jQuery(this.element).addClass(this.namespace + '-' + this.widgetName);
 
-        this.log(this.element);
+        //this.log(this.element);
         this.log(this.namespace + "." + this.widgetName + " -> create");
     },
     _init: function () {
@@ -1779,7 +1779,7 @@ jQuery.widget("ui.widgetBase",
         this.allowCollapse();
 
 
-        this.log(this.element);
+        //this.log(this.element);
         this.log(this.namespace + "." + this.widgetName + " -> init");
 
     },
@@ -1908,7 +1908,6 @@ jQuery.widget("ui.widgetBase",
 jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
 {
     options: {
-        displayName: null,
         modelItems: null
     },
     _create: function () {
@@ -1930,7 +1929,7 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
         this._super();
     },
     _template: function () {
-        return "<div class='ui-corner-top ui-widget-header'>{0}</div><div class='ui-corner-bottom ui-widget-content ui-widgetModel-content'></div>";
+        return "<div class='ui-corner-bottom ui-widget-content ui-widgetModel-content'></div>";
 
 
         //var valSummary = '' +
@@ -1945,7 +1944,7 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
         //return "<div class='ui-corner-top ui-widget-header'>{0}</div><div class='ui-corner-bottom ui-widget-content ui-widgetModel-content'></div>" + valSummary;
     },
     _templateFormat: function () {
-        return this._template().format(this.options.displayName);
+        return this._template();
     },
     val: function () {
         var o = this.cloneObject(this.options.modelItems);
@@ -1953,6 +1952,15 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
             var propName = o[i].id;
             var propValue = jQuery('*[data-widgetModelItem-id="{0}"]'.format(propName)).widgetModelItem('val');
             o[i].currentValue = propValue;
+        }
+        return o;
+    },
+    valAsObject: function () {
+
+        var r = this.val();
+        var o = {};
+        for (var i = 0; i < r.length; i++) {
+            o[r[i].id] = r[i].currentValue;
         }
         return o;
     },
@@ -2158,11 +2166,26 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 break;
 
             case "custom":
-                this.options.input.onItemBuildCb(jQuery(this.element), $parent);
-                this.val = this.options.input.onItemValueCb;
+                this.options.input.onItemBuild(jQuery(this.element), $parent);
+                this.val = function () {
+                    return self.options.input.onItemValue($parent);
+                };
                 break;
             default:
-                this.val = function () { return null; };
+
+                t = '<input id="{1}" name="{1}" type="text" value="{0}" />'.format(this.options.input.value, this.options.id);
+
+                jQuery($parent)
+                    .append(t)
+                    .find(jqSelector)
+                    .change(function () {
+                        self.change();
+                    });
+
+                this.val = function () {
+                    return jQuery(jqSelector).val();
+                };
+
                 break;
         }
 
@@ -3238,7 +3261,1803 @@ VsixMvcAppResult.Widgets.DialogInline =
 
     });
 
-})(jQuery);;// Source: src/public/scripts/Template.Widget.Page.js
+})(jQuery);;// Source: src/public/scripts/crud/common.widget.base.js
+/// <reference path="inv.ajax.js" />
+
+jQuery.widget("ui.commonBaseWidget", /*jQuery.ui.widgetBase,*/
+{
+    options: {
+        progressFeedbackDOMId: null,
+        errorDOMId: null,
+        errorCustomDOM: false, // errors are shown in a custom DOM element,
+        messagesDOMId: null
+    },
+    _create: function () {
+
+        this._super();
+
+        this.progressInit();
+        this.errorInit();
+
+    },
+    _init: function () {
+
+        this._super();
+
+        var widgetName = this.namespace + '.' + this.widgetName;
+
+        console.log("Init->" + widgetName);
+
+        var dataWidgetInitialized = widgetName + ".IsInitialized";
+
+
+        if (jQuery(this.element).data(dataWidgetInitialized) === undefined) {
+            jQuery(this.element).data(dataWidgetInitialized, true);
+        }
+        else {
+            throw new Error("Se ha intentado crear una instancia de widget que ya estaba creada. Podrian duplicarse eventos." + widgetName);
+        }
+    },
+    destroy: function () {
+
+        this._super();
+    },
+    progressInit: function () {
+
+        // only one progressFeedback per page
+
+        if (jQuery('#progressFeedBack').length === 0) {
+            jQuery('body').prepend('<div id="progressFeedBack" class="ui-progress-feedback ui-widget ui-widget-content ui-state-active">Please wait while loading</div>');
+        }
+
+        this.options.progressFeedbackDOMId = jQuery('#progressFeedBack');
+
+    },
+    progressShow: function (msg) {
+        console.log("Info->" + msg);
+        jQuery(this.options.progressFeedbackDOMId).html(msg).show();
+    },
+    progressHide: function () {
+        jQuery(this.options.progressFeedbackDOMId).hide();
+    },
+    errorInit: function () {
+
+        if (this.options.errorCustomDOM) {
+
+            var errorCustomDOMClassName = this.namespace + '-' + this.widgetName + '-errDisplayBox';
+            var highlightCustomDOMClassName = this.namespace + '-' + this.widgetName + '-highlightDisplayBox';
+
+            var template = '';
+            template += '<div class="ui-widget-error ' + errorCustomDOMClassName + ' ui-state-error "></div>';
+            template += '<div class="ui-widget-info ' + highlightCustomDOMClassName + ' ui-state-highlight "></div>';
+
+            jQuery(this.element).prepend(template);
+
+            this.options.errorDOMId = jQuery(this.element).find('div.' + errorCustomDOMClassName + ':first');
+            this.options.messagesDOMId = jQuery(this.element).find('div.' + highlightCustomDOMClassName + ':first');
+
+            this.errorHide();
+            this.messageHide();
+        }
+    },
+    errorDisplay: function (msg) {
+        console.log("Error->" + msg);
+        jQuery(this.options.errorDOMId).html(msg).fadeTo('slow', 1);
+    },
+    errorHide: function () {
+        jQuery(this.options.errorDOMId).html('').fadeTo('slow', 0);
+    },
+    messageDisplay: function (msg) {
+        jQuery(this.options.messagesDOMId).html(msg).fadeTo('slow', 1);
+    },
+    messageHide: function () {
+        jQuery(this.options.messagesDOMId).html('').fadeTo('slow', 0);
+    },
+    messagedisplayAutoHide: function (msg, miliseconds) {
+
+        var time = 3000;
+
+        if (miliseconds) {
+            time = miliseconds;
+        }
+
+        jQuery(this.options.messagesDOMId).html(msg)
+            .fadeTo(500, 1, function () {
+                jQuery(this).delay(time).fadeTo(time, 0);
+            });
+    },
+    dfdFillCombo: function (selector, KeyValuePairArray) {
+        var dfd = jQuery.Deferred();
+        try {
+            var $domObj = jQuery(selector);
+
+            $domObj.find('option').remove();
+
+            for (var i = 0; i < KeyValuePairArray.length; i++) {
+                $domObj.append(jQuery("<option />").val(KeyValuePairArray[i].value).text(KeyValuePairArray[i].name));
+            }
+
+            dfd.resolve();
+        }
+        catch (e) {
+            dfd.reject("Error inicializando el formulario: " + e.message);
+        }
+        return dfd.promise();
+    }
+});;// Source: src/public/scripts/crud/common.widget.fieldItem.js
+/// <reference path="inv.ajax.js" />
+
+jQuery.widget("ui.fieldItem", jQuery.ui.commonBaseWidget,
+{
+    options: {
+        wrapElement: null
+    },
+    _create: function () {
+
+        this._super();
+
+        this.options.wrapElement = '<div class="ui-field-box">' +
+                                        '<div class="ui-fieldName"></div>' +
+                                        '<div class="ui-fieldValue"></div>' +
+                                        '<div class="ui-carriageReturn"></div>' +
+                                    '</div>';
+    },
+    _init: function () {
+
+        this._super();
+
+        var self = this;
+
+        jQuery(self.element)
+            .find(':input[data-fieldItem], div[data-fieldItem]')
+            .each(function (index, ui) {
+
+                if (jQuery(this).data("isInitialized") === undefined)
+                {
+                    var box = jQuery(self.options.wrapElement).insertBefore(jQuery(this));
+                    box.find("div.ui-fieldName:first").html(jQuery(this).attr('data-fieldItem-name'));
+
+                    jQuery(this).appendTo(box.find("div.ui-fieldValue:first"));
+
+                    jQuery(this).data("isInitialized", true);
+                }
+
+            });
+    },
+    destroy: function () {
+        this._super();
+    }
+ 
+});;// Source: src/public/scripts/crud/common.widget.crud.js
+
+jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
+{
+    options: {
+
+    },
+    _create: function () {
+
+        this._super();
+
+
+    },
+    _init: function () {
+
+        this._super();
+    },
+    destroy: function () {
+
+        this._super();
+    },
+    _initButton: function (widgetInstance, theButtonOptions, buttonsBox) {
+
+        var self = this;
+
+        var theButton = jQuery('<button type="button" class="{0}">{1}</button>'
+                            .format(theButtonOptions.cssClass,
+                                    theButtonOptions.text));
+
+        jQuery(buttonsBox).append(theButton);
+
+        theButton
+            .button({
+                icons: {
+                    primary: theButtonOptions.icon
+                }
+            });
+
+        if (theButtonOptions.click) {
+            theButton.click(function () {
+                theButtonOptions.click(widgetInstance);
+            });
+        }
+    },
+
+});
+
+jQuery.widget("ui.crud", jQuery.ui.crudBase,
+{
+    options: {
+        title: null,
+        errorCustomDOM: true, // errors are shown in a custom DOM element -> overrides base widget option
+        gridButtonsDOMId: null,
+        gridDOMId: null,
+        gridFilterDOMId: null,
+        gridFilterObject: null,
+        formDOMId: null,
+
+        gridSearch: function (self) {
+            var dfd = jQuery.Deferred();
+            dfd.reject(self.namespace + '.' + self.widgetName + "._dfdSearch is an abstract method. Child class must implemented");
+            return dfd.promise();
+        },
+        gridFilterInit: function (self, filterOptions) {
+            throw new Error(self.namespace + '.' + self.widgetName + "._gridFilterInit is an abstract method. Child class method must be implemented");
+        },
+        gridEditSearch: function (self, dataItem) {
+            var dfd = jQuery.Deferred();
+            dfd.reject(this.namespace + '.' + this.widgetName + ".gridEditSearch is an abstract method. Child class must implemented");
+            return dfd.promise();
+        },
+        gridInit: function (self, gridOptions) {
+            throw new Error(self.namespace + '.' + self.widgetName + ".gridInit is an abstract method. Child class method must be implemented");
+        },
+        gridButtonsGet: function (self, defaultButtons) {
+            return defaultButtons;
+        },
+        formInit: function (self, formOptions) {
+            throw new Error(self.namespace + '.' + self.widgetName + ".formInit is an abstract method. Child class method must be implemented");
+        },
+    },
+    _create: function () {
+
+        var self = this;
+
+        this._super();
+
+        var gridFilterClass = 'ui-{0}Crud-filter'.format(this.widgetName);
+        var gridButtonsClass = 'ui-{0}Crud-gridButtons'.format(this.widgetName);
+        var gridControlClass = 'ui-{0}Crud-gridControl'.format(this.widgetName);
+        var formControlClass = 'ui-{0}Crud-form'.format(this.widgetName);
+        var templateGet = function () {
+
+            var crudTitle = self.options.title !== null ?
+                            '<div class="ui-widget-header">{0}</div>'
+                                .format(self.options.title)
+                                :
+                                '';
+
+            var template = '{0}' +
+                '<div class="{1}"></div>' +
+                '<div class="{2} ui-ribbonButtons ui-widget-content"></div>' +
+                '<div class="{3}"></div>' +
+                '<div class="{4}"></div>';
+
+            return template
+                .format(crudTitle,
+                        gridFilterClass,
+                        gridButtonsClass,
+                        gridControlClass,
+                        formControlClass);
+        };
+
+        jQuery(this.element)
+            .addClass('ui-crud')
+            .append(templateGet());
+
+        this.options.gridFilterDOMId = jQuery(this.element).find('div.{0}:first'.format(gridFilterClass));
+        this.options.gridDOMId = jQuery(this.element).find('div.{0}:first'.format(gridControlClass));
+        this.options.gridButtonsDOMId = jQuery(this.element).find('div.{0}:first'.format(gridButtonsClass));
+        this.options.formDOMId = jQuery(this.element).find('div.{0}:first'.format(formControlClass));
+    },
+    _init: function () {
+
+        var self = this;
+
+        this._super();
+        this._gridButtonsInit();
+        this.options.gridInit(self, {
+            errorDisplay: function (e, msg) {
+                self.errorDisplay(msg);
+            },
+            dataBound: function () {
+                if (jQuery(self.options.gridFilterDOMId).is(':visible')) {
+                    self._actionSet(self._actions.list);
+                }
+            },
+            paginated: function (e, pageIndex) {
+                self.options.gridFilterObject.Page = pageIndex;
+                self.errorHide();
+                self._search();
+            },
+            onEdit: function (e, dataItem) {
+                self.errorHide();
+                self._searchForEdit(dataItem);
+            }
+
+        });
+        this.options.gridFilterInit(self, {
+            errorDisplay: function (e, msg) {
+                self.errorDisplay(msg);
+            },
+            change: function (e, filter) {
+                self.options.gridFilterObject = filter;
+                self.errorHide();
+                self._search();
+            },
+            cancel: function () {
+                self.errorHide();
+                self._actionSet(self._actions.list);
+            },
+            done: function () {
+                self.options.formInit(self, {
+                    messagedisplayAutoHide: function (e, msg) {
+                        self.messagedisplayAutoHide(msg);
+                    },
+                    messageDisplay: function (e, msg) {
+                        self.messageDisplay(msg);
+                    },
+                    errorDisplay: function (e, msg) {
+                        self.errorDisplay(msg);
+                    },
+                    errorHide: function () {
+                        self.errorHide();
+                    },
+                    change: function (e, formValue) {
+                        self.errorHide();
+                        self._search();
+                    },
+                    dataBound: function () {
+                        self.errorHide();
+                        self._actionSet(self._actions.form);
+                    },
+                    cancel: function () {
+                        self.errorHide();
+                        self._actionSet(self._actions.list);
+                    },
+                    done: function () {
+                        self._done();
+                    },
+                    fail: function () {
+                        self.errorDisplay(self.namespace + '.' + self.widgetName + " Error iniciando el control de formulario");
+                    }
+                });
+            }
+        });
+    },
+
+    destroy: function () {
+        this._super();
+    },
+    _actions: {
+        list: 1,
+        filter: 2,
+        form: 3
+    },
+    _actionSet: function (actionSelected) {
+
+        var self = this;
+
+        jQuery(self.options.gridFilterDOMId).hide();
+        jQuery(self.options.gridButtonsDOMId).hide();
+        jQuery(self.options.gridDOMId).hide();
+        jQuery(self.options.formDOMId).hide();
+
+        switch (actionSelected) {
+            case self._actions.filter:
+                jQuery(self.options.gridFilterDOMId).removeClass('ui-hidden').show('blind');
+                break;
+            case self._actions.list:
+                jQuery(self.options.gridDOMId).removeClass('ui-hidden').show('blind');
+                jQuery(self.options.gridButtonsDOMId).show();
+                break;
+            case self._actions.form:
+                jQuery(self.options.formDOMId).removeClass('ui-hidden').show('blind');
+                break;
+            default:
+                break;
+        }
+    },
+    _search: function () {
+
+        var self = this;
+
+        self.options.gridSearch(self)
+                .progress(function (status) {
+                    self.progressShow(status);
+                })
+                .fail(function (args) {
+                    self.progressHide();
+                    self.errorDisplay(args);
+                })
+                .always(function () {
+                    self.progressHide();
+                });
+    },
+    _searchForEdit: function (dataItem) {
+
+        var self = this;
+
+        self.options.gridEditSearch(self, dataItem)
+                .progress(function (status) {
+                    self.progressShow(status);
+                })
+                .fail(function (args) {
+                    self.progressHide();
+                    self.errorDisplay(args);
+                })
+                .always(function () {
+                    self.progressHide();
+                });
+    },
+    _gridButtonsInit: function () {
+
+        var defaultButtons = this.options.gridButtonsGet(this, [{
+            id: "search",
+            text: "Buscar",
+            cssClass: "ui-crud-search",
+            icon: "ui-icon-search",
+            click: function (self) {
+                self.errorHide();
+                self._actionSet(self._actions.filter);
+            }
+        }]);
+
+        for (var i = 0; i < defaultButtons.length; i++) {
+            this._initButton(this, defaultButtons[i], jQuery(this.options.gridButtonsDOMId));
+        }
+
+    },
+    _done: function () {
+        this._trigger('done', null, null);
+    }
+});
+
+jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
+{
+    options: {
+        Page: 0,
+        PageSize: 30,
+        SortBy: "",
+        SortAscending: false,
+        filterButtonsInit: function (self, defaultButtons) {
+            return defaultButtons;
+        }
+    },
+    _create: function () {
+
+        this._super();
+
+        jQuery(this.element)
+            .addClass('ui-crudFilter ui-hidden')
+                .children()
+                .wrapAll('<div class="ui-crudFilter-form ui-widget-content" />')
+                .end()
+        .prepend('<div class="ui-crudFilter-buttons ui-ribbonButtons ui-widget-content"></div>');
+
+        this._filterButtonsInit();
+    },
+    _init: function () {
+
+        this._super();
+
+        var self = this;
+
+        jQuery(this.element)
+            .find(':input')
+                .addClass('ui-widget-content')
+                //.blur(function () {
+                    //self._setActiveElementBasedOnValue(jQuery(this));
+                //})
+            .change(function () {
+                jQuery(this).addClass('ui-state-active');
+            })
+            .end()
+        //.fieldItem();
+        ;
+    },
+    _done: function () {
+        this._trigger('done', null, null);
+    },
+    _filterButtonsInit: function () {
+
+        var self = this;
+
+        var defaultButtons = self.options.filterButtonsInit(this, [{
+            id: "cancel",
+            text: "Cancelar",
+            cssClass: "ui-cancel-button ui-state-default",
+            icon: "ui-icon-circle-arrow-w",
+            click: function (self) {
+                self._trigger('cancel', null, null);
+            }
+        }, {
+            id: "filter",
+            text: "Aplicar filtro",
+            cssClass: "ui-search-button ui-state-default",
+            icon: "ui-icon-search",
+            click: function (self) {
+                var filter = self.val();
+                self._trigger('change', null, filter);
+            }
+        }]);
+
+        var $buttonsBox = jQuery(this.element).find('div.ui-crudFilter-buttons:first');
+
+        for (var i = 0; i < defaultButtons.length; i++) {
+            this._initButton(this, defaultButtons[i], $buttonsBox);
+        }
+
+        jQuery($buttonsBox).append('<div class="ui-carriageReturn"></div>');
+    },
+    destroy: function () {
+
+        this._super();
+
+        ///TODO: unbind select change events + button events
+    },
+    val: function () {
+        throw new Error(this.namespace + '.' + this.widgetName + ".val method Not implemented");
+    }
+});
+
+jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
+{
+    options: {
+        gridBodyDOMId: null,
+        gridPagerDOMId: null
+    },
+    _create: function () {
+
+        this._super();
+
+        jQuery(this.element)
+            .addClass('ui-crudGrid')
+            .append(this._gridTemplate());
+
+        this.options.gridBodyDOMId = jQuery(this.element).find('table.ui-crudGrid-body-tableBox:first').find('tbody:first');
+        this.options.gridPagerDOMId = jQuery(this.element).find('div.ui-crudGrid-pager');
+
+    },
+    _init: function () {
+
+        this._super();
+
+        var self = this;
+
+        jQuery(self.options.gridPagerDOMId)
+                .gridPagination({
+                    change: function (e, pageIndex) {
+                        self._trigger('paginated', null, pageIndex);
+                    }
+                });
+    },
+    destroy: function () {
+
+        this._super();
+
+    },
+    bind: function (data) {
+        var self = this;
+        self._bindRows(data);
+        self._bindPagination(data);
+        self._trigger('dataBound', null, data);
+    },
+    _gridTemplate: function () {
+
+        return '<div class="ui-crudGrid">' +
+                    '<div class="ui-crudGrid-header ui-state-default">' +
+                        '<table>' +
+                            '<tbody>' +
+                                '<tr class="ui-crudGrid-header">' +
+                                    this._gridHeaderTemplate() +
+                                '</tr>' +
+                            '</tbody>' +
+                        '</table>' +
+                    '</div>' +
+                    '<div class="ui-crudGrid-body ui-widget-content" >' +
+                        '<table class="ui-crudGrid-body-tableBox">' +
+                            '<tbody>' +
+
+                            '</tbody>' +
+                        '</table>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="ui-crudGrid-pager ui-state-default"></div>';
+    },
+    _gridHeaderTemplate: function () {
+        throw new Error(this.namespace + '.' + this.widgetName + "._gridHeaderTemplate is an abstract method. Child class method must be implemented");
+    },
+    _gridRowTemplate: function () {
+        throw new Error(this.namespace + '.' + this.widgetName + "._gridRowTemplate is an abstract method. Child class method must be implemented");
+    },
+    _bindRowColumns: function ($row, dataItem) {
+        throw new Error(this.namespace + '.' + this.widgetName + "._bindRowColumns is an abstract method. Child class method must be implemented");
+    },
+    _bindRowAlternatedColor: function () {
+
+        var self = this;
+
+        jQuery(self.options.gridBodyDOMId)
+            .children('tr')
+                .each(function (i, ui) {
+                    if (((i % 2) == 1)) {
+                        jQuery(this).addClass('ui-crudGrid-dataRowAlt ui-widget-content');
+                        //.removeClass('ui-crudGrid-rowStyle');
+                    }
+                    else {
+                        jQuery(this).addClass('ui-crudGrid-dataRowAlt ui-widget-content ui-state-default');
+                    }
+                });
+    },
+    _bindRowEvents: function ($row, dataItem) {
+
+        throw new Error(this.namespace + '.' + this.widgetName + "._bindRowEvents is an abstract method. Child class method must be implemented");
+    },
+    _bindRows: function (data) {
+
+        var self = this;
+
+        jQuery(self.options.gridBodyDOMId).empty();
+
+        for (var i = 0; i < data.Data.length; i++) {
+
+            var dataItem = data.Data[i];
+            var $row = jQuery('<tr class="ui-crudGrid-dataRow">' + self._gridRowTemplate() + "</tr>");
+            self._bindRowColumns($row, dataItem);
+            self._bindRowAlternatedColor();
+            self._bindRowEvents($row, dataItem);
+
+
+            jQuery(self.options.gridBodyDOMId).append($row);
+        }
+    },
+    _bindPagination: function (data) {
+
+        var self = this;
+
+        jQuery(self.options.gridPagerDOMId).gridPagination('bind', data.Page, data.PageSize, data.TotalRows);
+    }
+});
+
+jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
+{
+    options: {
+        formButtonsDOMId: null
+    },
+    _create: function () {
+
+        this._super();
+
+        jQuery(this.element)
+            .addClass('ui-crudForm ui-hidden')
+                .children()
+                .wrapAll('<div class="ui-crudForm-form ui-widget-content" />')
+                .end()
+            .prepend(this._formButtonsTemplate());
+
+        this.options.formButtonsDOMId = jQuery(this.element).find('div.ui-crudForm-buttons:first');
+
+
+    },
+    _init: function () {
+
+        this._super();
+
+        var self = this;
+
+        jQuery(this.element)
+            .find(self.options.formButtonsDOMId)
+                .addClass('ui-ribbonButtons ui-widget-content')
+                .find('button.ui-accept-button:first')
+                    .button({
+                        icons: {
+                            primary: 'ui-icon-disk'
+                        }
+                    })
+                    .click(function () {
+                        self._save();
+                        //var form = self.val();
+                        //self._trigger('change', null, form);
+                    })
+                .end()
+                .find('button.ui-cancel-button:first')
+                    .button({
+                        icons: {
+                            primary: 'ui-icon-circle-arrow-w'
+                        }
+                    })
+                    .click(function () {
+                        self._trigger('cancel', null, null);
+                    })
+                .end()
+            .end()
+            .find(':input')
+                .addClass('ui-widget-content')
+            .end()
+            .fieldItem();
+
+        this._done();
+    },
+    _formButtonsTemplate: function () {
+        return '<div class="ui-crudForm-buttons">' +
+                    '<button type="button" class="ui-cancel-button ui-state-default">Volver atras</button>' +
+                    '<button type="button" class="ui-accept-button ui-state-default">Guardar cambios</button>' +
+                    this._formButtonsCustomTemplate() +
+                    '<div class="ui-carriageReturn"></div>' +
+                '</div>';
+    },
+    _formButtonsCustomTemplate: function () {
+        throw new Error(this.namespace + '.' + this.widgetName + "._formButtonsCustomTemplate is an abstract method. Child class method must be implemented");
+    },
+    _done: function () {
+        this._trigger('done', null, null);
+
+    },
+    destroy: function () {
+
+        this._super();
+    },
+    val: function () {
+        throw new Error(this.namespace + '.' + this.widgetName + ".val() is an abstract method. Child class method must be implemented");
+    },
+    bind: function (dataItem) {
+        throw new Error(this.namespace + '.' + this.widgetName + ".bind() is an abstract method. Child class method must be implemented");
+    },
+    _save: function () {
+
+        var self = this;
+
+        self._dfdSave(self.val())
+                .progress(function (status) {
+                    self.progressShow(status);
+                })
+                .fail(function (args) {
+                    self.progressHide();
+                    self._trigger('errorDisplay', null, args);
+
+                    //self.errorDisplay(args);
+                })
+                .always(function () {
+                    self.progressHide();
+                });
+    },
+    _dfdSave: function () {
+
+        var dfd = jQuery.Deferred();
+        dfd.reject(this.namespace + '.' + this.widgetName + "._dfdSave is an abstract method. Child class must implemented");
+        return dfd.promise();
+    }
+
+
+});
+;// Source: src/public/scripts/crud/common.widget.grid.pagination.js
+/// <reference path="inv.ajax.js" />
+
+jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
+{
+    options: {
+
+    },
+    _create: function () {
+
+        this._super();
+    },
+    _init: function () {
+
+        this._super();
+    }, destroy: function () {
+
+        this._super();
+    },
+    bind: function (pageIndex, pageSize, totalRows) {
+
+        var self = this;
+
+        jQuery(self.element).empty();
+
+        try {
+
+            var buildPage = function (page, currentPage, isNavigationItem, text) {
+                var cssClass = ((currentPage == page) && (!isNavigationItem)) ? "ui-state-highlight" : "ui-state-default";
+
+                return "<td class='" + cssClass + "' value='" + page + "'>" + text + "</td>";
+            };
+            var getCurrentPage = function (currentPage) {
+                return currentPage === null ? 0 : currentPage;
+            };
+            var getStartPage = function (nPagesInPaginators, totalPages, currentPage) {
+                var startPage = (currentPage > 0) ?
+                                    (currentPage > (nPagesInPaginators / 2)) ?
+                                        ((currentPage + 1) - Math.ceil((nPagesInPaginators / 2))) : 1 : 1;
+
+                if ((startPage + nPagesInPaginators) > totalPages) {
+                    startPage = totalPages - nPagesInPaginators;
+                }
+
+                if (startPage < 1) {
+                    startPage = 1;
+                }
+
+                return startPage;
+            };
+            var getEndPage = function (nPagesInPaginators, totalPages, startPage) {
+                var endPage = startPage + nPagesInPaginators;
+                endPage = endPage > totalPages ? totalPages : endPage;
+                return endPage;
+            };
+
+            var Page = pageIndex;
+            var PageSize = pageSize;
+            var TotalRows = totalRows;
+            var TotalPages = ((totalRows / pageSize) | 0) + (((totalRows % pageSize) === 0) ? 0 : 1);
+
+            
+
+
+            jQuery(self.element).append("<span class='ui-gridPagination-totalRows'> Total: " + totalRows + "</span>");
+
+            if (TotalPages > 1)
+            {
+                var nPagesInPaginator = 10;    // Must be nPagerItems % 2 == 0
+                var start = getStartPage(nPagesInPaginator, TotalPages, getCurrentPage(Page));
+                var end = getEndPage(nPagesInPaginator, TotalPages, start);
+                var tPager = jQuery("<table><tbody></tbody></table>");
+
+                tPager.append(buildPage(0, getCurrentPage(Page), true, "&lt;&lt;", null));
+                tPager.append(buildPage(getCurrentPage(Page) - 1 < 0 ? 0 : getCurrentPage(Page) - 1, getCurrentPage(Page), true, "&lt;", null));
+                for (var i = start; i <= end; i++) {
+                    tPager.append(buildPage(i - 1, getCurrentPage(Page), false, i.toString(), null));
+                }
+                tPager.append(buildPage(getCurrentPage(Page) + 1 >= TotalPages ? getCurrentPage(Page) : getCurrentPage(Page) + 1, getCurrentPage(Page), true, "&gt;", null));
+                tPager.append(buildPage(TotalPages - 1, getCurrentPage(Page), true, "&gt;&gt;", null));
+
+
+                jQuery(self.element)
+                        .append(tPager)
+                        .find('td')
+                            .click(function () {
+                                var pageIndex = jQuery(this).attr('value');
+                                self._trigger('change', null, pageIndex);
+                            });
+
+                
+
+            }
+        } catch (e) {
+            // just do nothing. Your pagination wont display anytighing
+        }
+    }
+});;// Source: src/public/scripts/crud/cir.widget.crudCustomer.js
+var customerAjax = {
+    ajax: {
+        _ajaxBaseAddress: "../../Controllers/CirDataEntryController.aspx/",
+        _ajaxMergeConfig: function (ajaxProperties) {
+
+            var _ajaxOptions = {
+                cache: false,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            };
+
+            return jQuery.extend({}, _ajaxOptions, ajaxProperties);
+        },
+        customerSearch: function (filter) {
+
+            var self = this;
+            var dfd = jQuery.Deferred();
+
+
+            var ajaxConfig = self._ajaxMergeConfig({
+                url: self._ajaxBaseAddress + 'CustomerSearch',
+                type: "POST",
+                data: JSON.stringify({
+                    filter: filter
+                })
+            });
+
+            jQuery.when(jQuery.ajax(ajaxConfig))
+                    .then(
+                        function (result, statusText, jqXHR) {
+                            dfd.resolve(result.d, statusText, jqXHR);
+                        },
+                        function (jqXHR, textStatus, errorThrown) {
+                            dfd.reject(jqXHR, textStatus, errorThrown);
+                        });
+
+            return dfd.promise();
+        }
+    },
+    cache: {
+
+    }
+};
+
+jQuery.widget("ui.customer", jQuery.ui.crud,
+{
+    options: {
+        filterModel: [{
+            id: "nombre",
+            displayName: "Nombre / Razón Social",
+            input: { value: "" },
+        }, {
+            id: "dni",
+            displayName: "Nº Documento",
+            input: { value: "" },
+        }],
+        gridSearch: function (self) {
+
+            var dfd = jQuery.Deferred();
+
+            dfd.notify("Buscando clientes...");
+
+
+            jQuery.when(customerAjax.ajax.customerSearch(self.options.gridFilterObject))
+                .then(
+                    function (result, statusText, jqXHR) {
+                        if (result.IsValid) {
+                            jQuery(self.options.gridDOMId).customerGrid('bind', result.Data);
+                            dfd.resolve();
+                        }
+                        else {
+                            dfd.reject(result.Message);
+                        }
+                    },
+                    function (jqXHR, textStatus, errorThrown) {
+                        dfd.reject("Error obteniendo clientes");
+                    })
+                .done(function () {
+
+                });
+
+            return dfd.promise();
+        },
+        gridFilterInit: function (self, filterOptions) {
+            jQuery(self.options.gridFilterDOMId).customerFilter(jQuery.extend({}, filterOptions, { Model: self.options.filterModel }));
+        },
+        gridInit: function (self, gridOptions) {
+            jQuery(self.options.gridDOMId).customerGrid(jQuery.extend(gridOptions, {
+                onSelect: function (e, dataItem) {
+                    self.errorHide();
+                    self._trigger('onSelect', null, dataItem);
+                }
+            }));
+        },
+        gridButtonsGet: function (self, defaultButtons) {
+
+            defaultButtons.unshift({
+                id: "cancel",
+                text: "Volver al filtro de productos",
+                cssClass: "ui-cancel-button",
+                icon: "ui-icon-circle-arrow-w",
+                click: function (self) {
+                    self._trigger('onCancel', null, null);
+                }
+            });
+
+            for (var i = 0; i < defaultButtons.length; i++) {
+                if (defaultButtons[i].id == "search") {
+                    defaultButtons[i].text = "Buscar clientes";
+                }
+            }
+
+            return defaultButtons;
+        },
+        formInit: function (self, formOptions) {
+            self._done();
+        },
+
+    },
+    _create: function () {
+
+        this._super();
+    },
+    _init: function () {
+
+        this._super();
+    },
+    destroy: function () {
+        this._super();
+    },
+
+    
+});
+
+jQuery.widget("ui.customerFilter", jQuery.ui.crudFilter,
+{
+    options: {
+        Model: null,
+        filterButtonsInit: function (self, defaultButtons) {
+            for (var i = 0; i < defaultButtons.length; i++) {
+                if (defaultButtons[i].id == "filter") {
+                    defaultButtons[i].text = "Buscar clientes";
+                }
+            }
+            return defaultButtons;
+        }
+
+    },
+    _create: function () {
+
+        jQuery(this.element).widgetModel({
+            modelItems: this.options.Model
+        });
+
+        this._super();
+    },
+    _init: function () {
+
+        this._super();
+
+        this._done();
+    },
+    destroy: function () {
+
+        this._super();
+    },
+    val: function () {
+
+        var self = this;
+
+        var model = {
+
+            Filter: jQuery(this.element).widgetModel('valAsObject'),
+            Page: 0,
+            PageSize: this.options.PageSize,
+            SortBy: this.options.SortBy,
+            SortAscending: this.options.SortAscending
+        };
+
+        return model;
+    }
+});
+
+jQuery.widget("ui.customerGrid", jQuery.ui.crudGrid,
+{
+    options: {
+
+    },
+    _create: function () {
+
+        this._super();
+    },
+    _init: function () {
+
+        this._super();
+    },
+    destroy: function () {
+
+        this._super();
+    },
+    _gridHeaderTemplate: function () {
+        return '<th class="ui-customerGrid-nombre">Nombre/Razón Social</th>' +
+                '<th class="ui-customerGrid-oficinaNombre">Oficina</th>' +
+                '<th class="ui-customerGrid-NumDocumento">NIF</th>' +
+                '<th class="ui-customerGrid-fechaAlta">Fecha Alta</th>' +
+                '<th class="ui-customerGrid-fechaNacimiento">Fecha N/C</th>' +
+                '<th class="ui-customerGrid-gridCommand"></th>';
+    },
+    _gridRowTemplate: function () {
+
+        return '<td class="ui-customerGrid-nombre"></td>' +
+                '<td class="ui-customerGrid-oficinaNombre"></td>' +
+                '<td class="ui-customerGrid-NumDocumento"></td>' +
+                '<td class="ui-customerGrid-fechaAlta"></td>' +
+                '<td class="ui-customerGrid-fechaNacimiento"></td>' +
+                '<td class="ui-customerGrid-gridCommand">' +
+                    '<div class="ui-crudGrid-actionsColumn">' +
+                        '<table>' +
+                            '<tbody>' +
+                                '<tr>' +
+                                    '<td class="ui-crudGrid-action">' +
+                                        '<div class="ui-crudGrid-action-select ui-widget-content" title="Seleccionar">' +
+                                            '<span class="ui-icon  ui-icon-circle-arrow-e"></span>' +
+                                        '</div>' +
+                                    '</td>' +
+                                '</tr>' +
+                            '</tbody>' +
+                        '</table>' +
+                    '</div>' +
+                '</td>';
+    },
+    _bindRowColumns: function ($row, dataItem) {
+
+        var templateRowSetValue = function (node, valueString) {
+            jQuery(node).attr('title', valueString).html(valueString);
+        };
+
+        templateRowSetValue($row.find('td.ui-customerGrid-oficinaNombre:first'), dataItem.oficinaNombre);
+        templateRowSetValue($row.find('td.ui-customerGrid-NumDocumento:first'), dataItem.NumDocumento);
+        templateRowSetValue($row.find('td.ui-customerGrid-nombre:first'), dataItem.nombre);
+        templateRowSetValue($row.find('td.ui-customerGrid-fechaAlta:first'), dataItem.fechaAlta !== null ? Globalize.format(dataItem.fechaAlta, 'd') : '');
+        templateRowSetValue($row.find('td.ui-customerGrid-fechaNacimiento:first'), dataItem.fechaNacimiento !== null ? Globalize.format(dataItem.fechaNacimiento, 'd') : '');
+    },
+    _bindRowEvents: function ($row, dataItem) {
+
+        var self = this;
+
+        $row.data("dataItem", dataItem)
+            .find('div.ui-crudGrid-action-select')
+                .click(function () {
+                    self._trigger('onSelect', null, jQuery(this).parents('tr.ui-crudGrid-dataRow:first').data("dataItem"));
+                })
+                .end();
+    }
+});;// Source: src/public/scripts/crud/cir.widget.crudProduct.js
+var productAjax = {
+    ajax: {
+        _ajaxBaseAddress: "/crud/",
+        _ajaxMergeConfig: function (ajaxProperties) {
+
+            var _ajaxOptions = {
+                cache: false,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json"
+            };
+
+            return jQuery.extend({}, _ajaxOptions, ajaxProperties);
+        },
+        productSearch: function (filter) {
+
+            var self = this;
+            var dfd = jQuery.Deferred();
+
+            var ajaxConfig = self._ajaxMergeConfig({
+                url: self._ajaxBaseAddress + 'ProductSearch',
+                type: "POST",
+                data: JSON.stringify({
+                    filter: filter
+                })
+            });
+
+            jQuery.when(jQuery.ajax(ajaxConfig))
+                    .then(
+                        function (result, statusText, jqXHR) {
+                            dfd.resolve(result.d, statusText, jqXHR);
+                        },
+                        function (jqXHR, textStatus, errorThrown) {
+                            dfd.reject(jqXHR, textStatus, errorThrown);
+                        });
+
+            return dfd.promise();
+        },
+        productSearchTypesAvailable: function () {
+
+            var self = this;
+            var dfd = jQuery.Deferred();
+
+            if (productAjax.cache.productSearchTypes === null) {
+                var action = function () {
+
+                    var ajaxConfig = self._ajaxMergeConfig({
+                        url: self._ajaxBaseAddress + 'productTypes',
+                        type: "GET"
+                    });
+
+                    return jQuery.when(jQuery.ajax(ajaxConfig))
+                            .then(
+                                function (result, statusText, jqXHR) {
+                                    productAjax.cache.productSearchTypes = result;
+                                    dfd.resolve(productAjax.cache.productSearchTypes, statusText, jqXHR);
+                                },
+                                function (jqXHR, textStatus, errorThrown) {
+                                    dfd.reject(jqXHR, textStatus, errorThrown);
+                                });
+                };
+
+                action();
+
+                return dfd.promise();
+            }
+            else {
+                dfd.resolve(productAjax.cache.productSearchTypes);
+                return dfd.promise();
+            }
+        },
+        productSearchForEdit: function (dataItem) {
+
+            var self = this;
+            var dfd = jQuery.Deferred();
+
+            var ajaxConfig = self._ajaxMergeConfig({
+                url: self._ajaxBaseAddress + 'productSearchForEdit',
+                type: "POST",
+                data: JSON.stringify({
+                    dataItem: dataItem
+                })
+            });
+
+            jQuery.when(jQuery.ajax(ajaxConfig))
+                    .then(
+                        function (result, statusText, jqXHR) {
+                            dfd.resolve(result.d, statusText, jqXHR);
+                        },
+                        function (jqXHR, textStatus, errorThrown) {
+                            dfd.reject(jqXHR, textStatus, errorThrown);
+                        });
+
+            return dfd.promise();
+        },
+        productSave: function (dataItem) {
+
+            var self = this;
+            var dfd = jQuery.Deferred();
+            var ajaxConfig = self._ajaxMergeConfig({
+                url: self._ajaxBaseAddress + 'ProductSave',
+                type: "POST",
+                data: JSON.stringify({
+                    form: dataItem
+                })
+            });
+
+            jQuery.when(jQuery.ajax(ajaxConfig))
+                    .then(
+                        function (result, statusText, jqXHR) {
+                            dfd.resolve(result.d, statusText, jqXHR);
+                        },
+                        function (jqXHR, textStatus, errorThrown) {
+                            dfd.reject(jqXHR, textStatus, errorThrown);
+                        });
+
+            return dfd.promise();
+        }
+    },
+    cache: {
+        productSearchTypes: null
+    }
+};
+
+jQuery.widget("ui.product", jQuery.ui.crud,
+{
+    options: {
+        filterModel: [{
+            id: "productId",
+            displayName: "Num. Producto",
+            input: { value: "" },
+        }, {
+            id: "productType",
+            displayName: "Tipo",
+            input: { type: "list", value: null, listValues: [{ value: "", text: "Select from list" }] },
+        }, {
+            id: "customerId",
+            displayName: "Cliente",
+            input: {
+                type: "custom",
+                value: null,
+                nullable: true,
+                onItemBuild: function (widget, parent) {
+                    var selfOption = this;
+
+                    var _templateGet = function () {
+                        return '' +
+                            '<input type="hidden" class="ui-productCrud-filter-custId" />' +
+                            '<a href="javascript:void(0);" class="ui-productCrud-filter-custName"></a>' +
+                            '<div class="ui-productCrud-filter-removeCustomerIcon ui-state-error">' +
+                                '<span class="ui-icon ui-icon-trash"></span>' +
+                            '</div>';
+                    };
+
+                    jQuery(parent).append(_templateGet());
+
+                    var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
+                    var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeCustomerIcon:first');
+
+                    customerTrashDomId
+                        .click(function () {
+                            selfOption.onItemBind(jQuery(parent), { id: "", nombre: "Click para filtrar por cliente" });
+                        });
+
+                    customerNameDomId
+                        .click(function () {
+                            jQuery(parent)
+                                .parents('div.ui-crud:first')
+                                    .product('filterSearchCustomer');
+                        });
+
+                    customerTrashDomId.click();
+                },
+                onItemValue: function (parent) {
+                    var customerIdDomId = jQuery(parent).find('input.ui-productCrud-filter-custId:first');
+                    return customerIdDomId.val();
+                },
+                onItemBind: function (parent, dataItem) {
+
+                    var customerIdDomId = jQuery(parent).find('input.ui-productCrud-filter-custId:first');
+                    var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
+                    var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeCustomerIcon:first');
+
+                    customerIdDomId.val(dataItem.id);
+                    customerNameDomId.html(dataItem.nombre);
+
+                    if (dataItem.id !== "") {
+                        customerTrashDomId.show();
+                    }
+                    else {
+                        customerTrashDomId.hide();
+                    }
+
+
+                }
+            },
+        }],
+        gridSearch: function (self) {
+
+            var dfd = jQuery.Deferred();
+
+            dfd.notify("Buscando productos...");
+
+
+            jQuery.when(productAjax.ajax.productSearch(self.options.gridFilterObject))
+                .then(
+                    function (result, statusText, jqXHR) {
+                        if (result.IsValid) {
+                            jQuery(self.options.gridDOMId).productGrid('bind', result.Data);
+                            dfd.resolve();
+                        }
+                        else {
+                            dfd.reject(result.Message);
+                        }
+                    },
+                    function (jqXHR, textStatus, errorThrown) {
+                        dfd.reject("Error obteniendo productos");
+                    })
+                .done(function () {
+
+                });
+
+            return dfd.promise();
+        },
+        gridFilterInit: function (self, filterOptions) {
+            jQuery(self.options.gridFilterDOMId).productFilter(jQuery.extend({}, filterOptions, { Model: self.options.filterModel }));
+        },
+        gridEditSearch: function (self, dataItem) {
+
+            var dfd = jQuery.Deferred();
+
+            dfd.notify("Buscando información del producto...");
+
+            jQuery.when(productAjax.ajax.productSearchForEdit(dataItem))
+                    .then(
+                        function (result, statusText, jqXHR) {
+                            if (result.IsValid) {
+                                jQuery(self.options.formDOMId).productForm('bind', result.Data);
+                                dfd.resolve();
+                            }
+                            else {
+                                dfd.reject(result.Message);
+                            }
+                        },
+                        function (jqXHR, textStatus, errorThrown) {
+                            dfd.reject("Error obteniendo información del producto");
+                        })
+                    .done(function () {
+
+                    });
+
+            return dfd.promise();
+        },
+        gridInit: function (self, gridOptions) {
+            jQuery(self.options.gridDOMId).productGrid(gridOptions);
+        },
+        gridButtonsGet: function (self, defaultButtons) {
+            for (var i = 0; i < defaultButtons.length; i++) {
+                if (defaultButtons[i].id == "search") {
+                    defaultButtons[i].text = "Buscar productos";
+                }
+            }
+            return defaultButtons;
+        },
+        formInit: function (self, formOptions) {
+            jQuery(self.options.formDOMId).productForm(formOptions);
+        },
+
+    },
+    _create: function () {
+
+        this._super();
+    },
+    _init: function () {
+        this._super();
+    },
+    destroy: function () {
+        this._super();
+    },
+    filterSetCustomer: function (custInfo) {
+
+        for (var i = 0; i < this.options.filterModel.length; i++) {
+            if (this.options.filterModel[i].id == "customerId") {
+                console.log(this.options.filterModel[i]);
+                this.options.filterModel[i].input.onItemBind(jQuery(this.element), custInfo);
+            }
+        }
+
+    },
+    filterSearchCustomer: function () {
+        this._trigger('onSearchCustomer', null, null);
+    },
+
+});
+
+
+
+jQuery.widget("ui.productFilter", jQuery.ui.crudFilter,
+{
+    options: {
+        Model: null,
+        filterButtonsInit: function (self, defaultButtons) {
+            for (var i = 0; i < defaultButtons.length; i++) {
+                if (defaultButtons[i].id == "filter")
+                {
+                    defaultButtons[i].text = "Buscar productos";
+                }
+            }
+            return defaultButtons;
+        }
+    },
+    _create: function () {
+
+        jQuery(this.element).widgetModel({
+            modelItems: this.options.Model
+        });
+
+        this._super();
+    },
+    _init: function () {
+
+        this._super();
+
+        this._done();
+    },
+    destroy: function () {
+
+        this._super();
+    },
+    val: function () {
+
+        var self = this;
+
+        var model = {
+
+            Filter: jQuery(this.element).widgetModel('valAsObject'),
+            Page: 0,
+            PageSize: this.options.PageSize,
+            SortBy: this.options.SortBy,
+            SortAscending: this.options.SortAscending
+        };
+
+        return model;
+    }
+});
+
+jQuery.widget("ui.productGrid", jQuery.ui.crudGrid,
+{
+    options: {
+
+    },
+    _create: function () {
+
+        this._super();
+    },
+    _init: function () {
+
+        this._super();
+    },
+    destroy: function () {
+
+        this._super();
+    },
+    _gridHeaderTemplate: function () {
+        return '<th class="ui-productGrid-nombre">Nombre</th>' +
+                '<th class="ui-productGrid-productId">Producto Nº</th>' +
+                '<th class="ui-productGrid-productTypeDesc">Producto</th>' +
+                '<th class="ui-productGrid-fechaDesde">Fecha alta</th>' +
+                '<th class="ui-productGrid-fechaHasta">Fecha baja</th>' +
+                '<th class="ui-productGrid-gridCommand"></th>';
+    },
+    _gridRowTemplate: function () {
+
+        return '<td class="ui-productGrid-nombre"></td>' +
+                '<td class="ui-productGrid-productId"></td>' +
+                '<td class="ui-productGrid-productTypeDesc"></td>' +
+                '<td class="ui-productGrid-fechaDesde"></td>' +
+                '<td class="ui-productGrid-fechaHasta"></td>' +
+                '<td class="ui-productGrid-gridCommand">' +
+                    '<div class="ui-crudGrid-actionsColumn">' +
+                        '<table>' +
+                            '<tbody>' +
+                                '<tr>' +
+                                    '<td class="ui-crudGrid-action">' +
+                                        '<div class="ui-crudGrid-action-select ui-widget-content" title="Seleccionar">' +
+                                            '<span class="ui-icon ui-state-default ui-icon-circle-arrow-e"></span>' +
+                                        '</div>' +
+                                    '</td>' +
+                                '</tr>' +
+                            '</tbody>' +
+                        '</table>' +
+                    '</div>' +
+                '</td>';
+    },
+    _bindRowColumns: function ($row, dataItem) {
+
+        var templateRowSetValue = function (node, valueString) {
+            jQuery(node).attr('title', valueString).html(valueString);
+        };
+
+
+        $row.data("dataItem", dataItem);
+
+
+        templateRowSetValue($row.find('td.ui-productGrid-nombre:first'), dataItem.nombre);
+        templateRowSetValue($row.find('td.ui-productGrid-productId:first'), dataItem.productId);
+        templateRowSetValue($row.find('td.ui-productGrid-productTypeDesc:first'), dataItem.productTypeDesc);
+        templateRowSetValue($row.find('td.ui-productGrid-fechaDesde:first'), dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '');
+        templateRowSetValue($row.find('td.ui-productGrid-fechaHasta:first'), dataItem.fechaHasta !== null ? Globalize.format(dataItem.fechaHasta, 'd') : '');
+    },
+    _bindRowEvents: function ($row, dataItem) {
+
+        var self = this;
+
+        $row.find('div.ui-crudGrid-action-select')
+                .click(function () {
+                    self._trigger('onEdit', null, jQuery(this).parents('tr.ui-crudGrid-dataRow:first').data("dataItem"));
+                })
+                .end();
+    }
+});
+
+jQuery.widget("ui.productForm", jQuery.ui.crudForm,
+{
+    options: {
+
+    },
+    _create: function () {
+
+        this._super();
+
+        //this.options.productIdDOMId = jQuery(this.element).find('input[data-fieldItem="productId"]');
+        //this.options.productTypeDOMId = jQuery(this.element).find('select[data-fieldItem="productType"]');
+    },
+    _init: function () {
+
+        this._super();
+
+        var self = this;
+
+        jQuery(this.element)
+            .find(':input')
+            .change(function () {
+                jQuery(this)
+                    .parents('div.ui-widgetModelItem:first')
+                        .find('div.ui-widgetModel-inputError:first')
+                            .html('')
+                            .addClass('ui-hidden')
+                        .end();
+
+                var $form = jQuery(this).parents('div.ui-productCrud-form-type:first');
+
+                // si todos los errores estan escondidos
+                var hideSummaryErrors =
+                    $form.find('div.ui-widgetModel-inputError.ui-hidden').length ==
+                    $form.find('div.ui-widgetModel-inputError').length;
+
+                if (hideSummaryErrors === true) {
+                    self._trigger('errorHide', null, null);
+                }
+            });
+
+        self._done();
+    },
+    destroy: function () {
+
+        this._super();
+    },
+    _formButtonsCustomTemplate: function () {
+        return '';
+    },
+    val: function () {
+
+        var self = this;
+
+        var dataItem = jQuery(this.element).data('dataItem');
+
+        var formValues = [];
+
+        jQuery('div.ui-productCrud-form-type')
+            .find('div[data-fielditem]')
+                .each(function () {
+                    var name = jQuery(this).attr('data-fielditem');
+                    var value = jQuery('#' + name).val();
+                    formValues.push({ Key: name, Value: value });
+                });
+
+        return formValues;
+    },
+    bind: function (dataItem) {
+
+        var self = this;
+
+        try {
+
+            console.log("xxxxxxxxxxxxxxxxxxxx");
+            console.log(dataItem);
+
+            jQuery(this.element).data('dataItem', dataItem);
+
+            this._bindCommonData(dataItem);
+
+
+            // do data binding
+            for (var prop in dataItem.DetailExtended) {
+                jQuery('#' + prop).val(dataItem.DetailExtended[prop]);
+            }
+
+            self._trigger('dataBound', null, dataItem);
+
+        } catch (e) {
+            console.log(e);
+            self._trigger('errorDisplay', null, "Ha ocurrido un error en el formulario");
+        }
+    },
+    _bindCommonData: function (dataItem) {
+
+        jQuery(this.element)
+            .find('div.ui-productCrud-form-searchOutput')
+                .find('div[data-fieldItem="productId"]')
+                    .html(dataItem.productId)
+                .end()
+                .find('div[data-fieldItem="nombre"]')
+                    .html(dataItem.nombre)
+                .end()
+                .find('div[data-fieldItem="productTypeDesc"]')
+                    .html(dataItem.productTypeDesc)
+                .end()
+                .find('div[data-fieldItem="fechaDesde"]')
+                    .html(dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '')
+                .end()
+                .find('div[data-fieldItem="fechaHasta"]')
+                    .html(dataItem.fechaHasta !== null ? Globalize.format(dataItem.fechaHasta, 'd') : '')
+                .end()
+            .end();
+    },
+    _bindModelValidation: function (modelValidation) {
+
+        var $form = jQuery('div.ui-productCrud-form-type-' + jQuery(this.element).data('dataItem').ProductParentType.Id);
+
+        $form.find('div.ui-widgetModel-inputError')
+                .addClass('ui-hidden')
+                .html('');
+
+        var setError = function ($elem, errorsArray) {
+            $elem
+                .find('div.ui-widgetModel-inputError')
+                .html(errorsArray.join('<br />'))
+                .removeClass('ui-hidden');
+        };
+
+        for (var i = 0; i < modelValidation.length; i++) {
+
+            $form.find('div[data-widgetmodelitem-id="' + modelValidation[i].Id + '"]:first')
+                .each(setError(jQuery(this), modelValidation[i].Errors));
+        }
+
+    },
+    _dfdSave: function () {
+
+        var self = this;
+        var dfd = jQuery.Deferred();
+
+        dfd.notify("Guardando informacion del producto...");
+
+        var viewModel = jQuery(self.element).data('dataItem');
+        viewModel.FormDataPost = this.val();
+
+        jQuery.when(productAjax.ajax.productSave(viewModel))
+            .then(
+                function (result, statusText, jqXHR) {
+                    if (result.IsValid) {
+                        self._trigger('messagedisplayAutoHide', null, 'Producto guardado', 50);
+                        self._trigger('change', null, result.Data);
+                        self.bind(result.Data.Model);
+                        dfd.resolve();
+                    }
+                    else {
+                        if (result.Data) {
+                            self._bindModelValidation(result.Data.ModelState);
+                        }
+                        dfd.reject(result.Message);
+                    }
+                },
+                function (jqXHR, textStatus, errorThrown) {
+                    dfd.reject("Error no controlado guadando el producto");
+                })
+            .done(function () {
+
+            });
+
+        return dfd.promise();
+    }
+
+});
+;// Source: src/public/scripts/crud/cir.widget.cirDataEntry.js
+/// <reference path="inv.ajax.js" />
+/// <reference path="../../Common/Scripts/ArquiaBackOffice.Widget.Dialogs.js" />
+
+
+jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
+{
+    options: {
+        customerDOMId: null,
+        productDOMId: null
+    },
+    _create: function () {
+
+        this._super();
+
+        this.options.customerDOMId = jQuery(this.element).find('div.ui-customerCrud');
+        this.options.productDOMId = jQuery(this.element).find('div.ui-productCrud');
+    },
+    _init: function () {
+
+        this._super();
+
+        var self = this;
+
+
+
+
+        jQuery(self.options.customerDOMId).customer({
+            title: 'Búsqueda de clientes',
+            onCancel: function (e) {
+                self._pageSet(self._pageViews.products);
+            },
+            onSelect: function (e, dataItem) {
+                jQuery(self.options.productDOMId).product('filterSetCustomer', dataItem);
+                self._pageSet(self._pageViews.products);
+            },
+            done: function () {
+
+                jQuery(self.options.productDOMId).product({
+                    title: 'CIR - Entrada de información adicional',
+                    onSearchCustomer: function () {
+                        self._pageSet(self._pageViews.customers);
+                    },
+                    done: function () {
+                        self._pageSet(self._pageViews.products);
+                    }
+                });
+
+            }
+        });
+
+    },
+    destroy: function () {
+
+        this._super();
+    },
+    _pageViews: {
+        products: 1,
+        customers: 2
+    },
+    _pageSet: function (pageView) {
+
+        var self = this;
+
+        jQuery(self.options.customerDOMId).hide().removeClass('ui-hidden');
+        jQuery(self.options.productDOMId).hide().removeClass('ui-hidden');
+
+        switch (pageView) {
+            case self._pageViews.customers:
+                jQuery(self.options.customerDOMId).fadeIn();
+                break;
+            case self._pageViews.products:
+                jQuery(self.options.productDOMId).fadeIn();
+                break;
+            default: break;
+        }
+    }
+});;// Source: src/public/scripts/Template.Widget.Page.js
 /*******************************************************************************
                                 HELPER PUBLIC METHODS
 ********************************************************************************/

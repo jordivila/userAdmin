@@ -670,10 +670,11 @@ html, body {height:100%;}
 }
 
 
-.ui-icon-circle-triangle-w:before, .ui-icon-triangle-1-w:before, .ui-icon-arrow-left:before {
+
+.ui-icon-circle-arrow-w:before, .ui-icon-circle-triangle-w:before, .ui-icon-triangle-1-w:before, .ui-icon-arrow-left:before {
   content: "\f060";
 }
-.ui-icon-circle-triangle-e:before, .ui-icon-triangle-1-e:before, .ui-icon-arrow-right:before {
+.ui-icon-circle-arrow-e:before, .ui-icon-circle-triangle-e:before, .ui-icon-triangle-1-e:before, .ui-icon-arrow-right:before {
   content: "\f061";
 }
 
@@ -1894,4 +1895,95 @@ table.ui-widgetGrid .ui-widgetGrid-header a div span.ui-icon {float:left;}
 table.ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-row .ui-widgetGrid-column {padding:1em;}
 table.ui-widgetGrid .ui-widgetGrid-body {}
 table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row {}
-table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column {} .ui-buttonRibbon { padding:0.5em; border-top:0; }
+table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column {} .ui-buttonRibbon { padding:0.5em; border-top:0; } .ui-progress-feedback {padding:2em;width:auto;position:absolute;z-index:999;left:48%;top:48%;display:none;}
+
+.ui-crud .ui-widget-error {padding:0.2em;}
+.ui-crud .ui-widget-info {padding:0.2em !important;}
+.ui-crud .ui-ribbonButtons { border-bottom:  0em;padding:0.5em;}
+.ui-crud .ui-ribbonButtons button {margin-bottom: 0.1em !important;font-weight:normal;}
+.ui-crud .ui-ribbonButtons span.ui-button-text {/*font-size:1.1em !important;*/}
+.ui-crud .ui-fieldItem {}
+.ui-crud .ui-fieldItem .ui-field-box {}
+.ui-crud .ui-fieldItem .ui-field-box button {border:0 solid !important;background:none !important;}
+.ui-crud .ui-fieldItem .ui-field-box button .ui-button-text {padding:0 0 0 2em !important;}
+.ui-crud .ui-fieldItem .ui-field-box .ui-fieldName {}
+.ui-crud .ui-fieldItem .ui-field-box .ui-fieldValue {}
+.ui-crud .ui-crudFilter { padding:0em !important; border:none;}
+.ui-crud .ui-crudFilter h3 {padding:0.5em 0.5em 0.5em 0em;border:0; background:none;}
+.ui-crud .ui-crudFilter .ui-crudFilter-form { background:none;padding:1em !important; }
+.ui-crud .ui-crudFilter select {width:22.5em;padding:0.2em;}
+.ui-crud .ui-crudFilter input {width:22em;padding:0.2em;}
+.ui-crud .ui-crudFilter .ui-field-box {margin:0.5em 0 0 0;}
+.ui-crud .ui-crudFilter .ui-fieldName {float:left;width:15em;}
+.ui-crud .ui-crudGrid .ui-crudGrid-dataRow{}
+.ui-crud .ui-crudGrid .ui-crudGrid-dataRowAlt {background-color:#ffe199;}
+.ui-crud .ui-crudGrid .ui-crudGrid-dataRow:hover, 
+.ui-crud .ui-crudGrid .ui-crudGrid-dataRowAlt:hover {background-color:#ff9900;}
+.ui-crud .ui-crudGrid .ui-crudGrid-header {padding:0.5em 2em 0.5em 0; overflow:hidden;border-bottom:none;}
+.ui-crud .ui-crudGrid .ui-crudGrid-header table th {font-weight:bold;}
+.ui-crud .ui-crudGrid .ui-crudGrid-header table ,
+.ui-crud .ui-crudGrid .ui-crudGrid-header table th,
+.ui-crud .ui-crudGrid .ui-crudGrid-body table ,
+.ui-crud .ui-crudGrid .ui-crudGrid-body table td {table-layout:fixed;overflow:hidden; white-space: nowrap;width:100%;vertical-align:middle;}
+.ui-crud .ui-crudGrid .ui-crudGrid-body {overflow:auto;overflow-y:scroll;padding-bottom:0.5em;}
+.ui-crud .ui-crudGrid .ui-crudGrid-body {height: 250px;}
+.ui-crud .ui-crudGrid .ui-crudGrid-body .ui-crudGrid_SelectedRow {background-color:#FF9900;}
+.ui-crud .ui-crudGrid .ui-crudGrid-body .ui-CCManServices_View_OperacionesList-gridEmptyRow td {border:0px solid #CCC;padding:5px 5px 5px 5px; text-align:center;}
+.ui-crud .ui-crudGrid .ui-crudGrid-body td {/*border:1px solid #CCC;*/padding:0em 0.2em 0em 0.2em ;font-weight:normal;}
+.ui-crud .ui-crudGrid .ui-crudGrid-body {height: 30em !important;}
+.ui-crud .ui-crudGrid .ui-crudGrid-body-tableBox {width: 100%; border-collapse: collapse;}
+.ui-crud .ui-crudGrid .ui-crudGrid-body-tableBox tr.ui-crudGrid-rowStyle,
+.ui-crud .ui-crudGrid .ui-crudGrid-body-tableBox tr.ui-crudGrid-rowStyleAlternated {height: 2em;}
+.ui-crud .ui-crudGrid .ui-crudGrid-actionsColumn {text-align:center;}
+.ui-crud .ui-crudGrid .ui-crudGrid-actionsColumn table {width:100%;}
+.ui-crud .ui-crudGrid .ui-crudGrid-actionsColumn td {border:0px solid transparent !important;}
+.ui-crud .ui-crudGrid .ui-crudGrid-actionsColumn .ui-crudGrid-action {text-align:center;width:auto;}
+.ui-crud .ui-crudGrid .ui-crudGrid-actionsColumn .ui-crudGrid-action div {float:left;margin:0 0 0 0.5em;cursor:pointer;}
+.ui-crud .ui-crudGrid .ui-crudGrid-actionsColumn .ui-crudGrid-action label { float:left;margin:0 0 0 0.5em;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager {font-weight:bold;	text-align:left;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager a {text-decoration:none;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totalRows {float:right;margin:0.5em 0 0 0;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager td {cursor:pointer; padding:0.3em;margin:0 0.3em 0 0.3em;}
+
+.ui-crud .ui-crudGrid-pager.ui-widget-header {border:none;}
+.ui-crud .ui-crudGrid-header.ui-widget-header {border:none;}
+.ui-crud .ui-crudGrid-dataRow.ui-widget-content {border-left:none;border-top:none;}
+
+.ui-crud .ui-crudForm { padding:0em !important; }
+.ui-crud .ui-crudForm h3 {padding: 0em 0.5em 0em 0em;margin:0.5em 0 0.5em 0; border:0; background:none;}
+.ui-crud .ui-crudForm .ui-crudForm-form { background:none;padding:1em !important; }
+.ui-crud .ui-crudForm select {width:22.5em;padding:0.2em;}
+.ui-crud .ui-crudForm input {width:22em;padding:0.2em;}
+.ui-crud .ui-crudForm .ui-field-box {margin:0.5em 0 0 0;}
+.ui-crud .ui-crudForm .ui-fieldName {float:left;width:15em;}
+
+
+
+/* GENERIC FORM */
+.ui-crud .ui-crudForm .ui-widgetModelItem {padding:.5em .5em .5em .5em;clear:both;margin:0em 0 0 0; border-width:0 !important;}
+.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputLabel {padding:0 0 0 0;width:24.5%;float:left;}
+.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputValue {width:75%;float:left;}
+.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputValue input {}
+.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputError {clear:both;margin: 2em 0 0em 0 !important; width:100%;border:0;padding:0.2em;}
+.ui-crud .ui-crudForm .ui-widgetModelItem.ui-state-error {background-image:none;}
+.ui-crud .ui-crudForm .ui-widgetModelItem.ui-state-error div.ui-widgetModel-inputLabel {color:initial;}
+.ui-crud .ui-crudForm .ui-widgetModelItem.ui-state-error div.ui-widgetModel-inputValue {color:initial;}
+ .ui-productCrud {}
+.ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-searchCustomerIcon,
+.ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeCustomerIcon { width: 1em; height: 1em;float:left;cursor:pointer; margin: 0 0.5em 0 0;padding:0.2em; }
+.ui-productCrud .ui-productCrud-gridControl .ui-productGrid-nombre {width:40% !important;}
+.ui-productCrud .ui-productCrud-gridControl .ui-productGrid-productId {width:10% !important;text-align:right;}
+.ui-productCrud .ui-productCrud-gridControl .ui-productGrid-productTypeDesc {width:20% !important;padding:0 0 0 0.5em !important;}
+.ui-productCrud .ui-productCrud-gridControl .ui-productGrid-fechaDesde {width:10% !important;text-align:right;}
+.ui-productCrud .ui-productCrud-gridControl .ui-productGrid-fechaHasta {width:10% !important;text-align:right;}
+.ui-productCrud .ui-productCrud-gridControl .ui-productGrid-gridCommand {width:10% !important;}
+
+
+
+
+.ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-nombre {width:45% !important;}
+.ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-oficinaNombre {width:20% !important;}
+.ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-NumDocumento {width:10% !important;text-align:right;}
+.ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-fechaAlta {width:10% !important;text-align:center;}
+.ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-fechaNacimiento {width:10% !important;text-align:center;}
+.ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-gridCommand {width:5% !important;}

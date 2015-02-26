@@ -1,0 +1,19 @@
+﻿.ui-productCrud {}
+.ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-searchCustomerIcon,
+.ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeCustomerIcon { width: 1em; height: 1em;float:left;cursor:pointer; margin: 0 0.5em 0 0;padding:0.2em; }
+.ui-productCrud .ui-productCrud-gridControl .ui-productGrid-nombre {width:40% !important;}
+.ui-productCrud .ui-productCrud-gridControl .ui-productGrid-productId {width:10% !important;text-align:right;}
+.ui-productCrud .ui-productCrud-gridControl .ui-productGrid-productTypeDesc {width:20% !important;padding:0 0 0 0.5em !important;}
+.ui-productCrud .ui-productCrud-gridControl .ui-productGrid-fechaDesde {width:10% !important;text-align:right;}
+.ui-productCrud .ui-productCrud-gridControl .ui-productGrid-fechaHasta {width:10% !important;text-align:right;}
+.ui-productCrud .ui-productCrud-gridControl .ui-productGrid-gridCommand {width:10% !important;}
+
+
+
+
+.ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-nombre {width:45% !important;}
+.ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-oficinaNombre {width:20% !important;}
+.ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-NumDocumento {width:10% !important;text-align:right;}
+.ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-fechaAlta {width:10% !important;text-align:center;}
+.ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-fechaNacimiento {width:10% !important;text-align:center;}
+.ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-gridCommand {width:5% !important;}

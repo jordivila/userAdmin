@@ -504,10 +504,11 @@
 }
 
 
-.ui-icon-circle-triangle-w:before, .ui-icon-triangle-1-w:before, .ui-icon-arrow-left:before {
+
+.ui-icon-circle-arrow-w:before, .ui-icon-circle-triangle-w:before, .ui-icon-triangle-1-w:before, .ui-icon-arrow-left:before {
   content: "\f060";
 }
-.ui-icon-circle-triangle-e:before, .ui-icon-triangle-1-e:before, .ui-icon-arrow-right:before {
+.ui-icon-circle-arrow-e:before, .ui-icon-circle-triangle-e:before, .ui-icon-triangle-1-e:before, .ui-icon-arrow-right:before {
   content: "\f061";
 }
 

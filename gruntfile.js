@@ -27,7 +27,11 @@ module.exports = function (grunt) {
                       "src/public/css/ui-widgetTreeList.css",
                       "src/public/css/ui-widgetModel.css",
                       "src/public/css/ui-widgetGrid.css",
-                      "src/public/css/ui-buttonRibbon.css"
+                      "src/public/css/ui-buttonRibbon.css",
+
+                      "src/public/scripts/crud/common.widget.crud.css",
+                      "src/public/scripts/crud/cir.css",
+
                     ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.css'
             },
@@ -73,6 +77,18 @@ module.exports = function (grunt) {
                     "src/public/scripts/Template.Widget.DialogInline.js",
                     "src/public/scripts/Template.Widget.NavMenu.js",
                     //"src/public/scripts/ui-widgetTreeList/ui-widgetTreeList.js"
+                    //CRUD begin
+                    "src/public/scripts/crud/common.widget.base.js",
+                    "src/public/scripts/crud/common.widget.fieldItem.js",
+                    "src/public/scripts/crud/common.widget.crud.js",
+                    "src/public/scripts/crud/common.widget.grid.pagination.js",
+                    "src/public/scripts/crud/cir.widget.crudCustomer.js",
+                    "src/public/scripts/crud/cir.widget.crudProduct.js",
+                    "src/public/scripts/crud/cir.widget.cirDataEntry.js",
+                    //CRUD end
+
+
+                    
                     "src/public/scripts/Template.Widget.Page.js",
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_js.js'

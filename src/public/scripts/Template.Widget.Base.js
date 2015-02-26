@@ -14,7 +14,7 @@ jQuery.widget("ui.widgetBase",
 
         jQuery(this.element).addClass(this.namespace + '-' + this.widgetName);
 
-        this.log(this.element);
+        //this.log(this.element);
         this.log(this.namespace + "." + this.widgetName + " -> create");
     },
     _init: function () {
@@ -25,7 +25,7 @@ jQuery.widget("ui.widgetBase",
         this.allowCollapse();
 
 
-        this.log(this.element);
+        //this.log(this.element);
         this.log(this.namespace + "." + this.widgetName + " -> init");
 
     },

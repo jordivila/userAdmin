@@ -1,7 +1,6 @@
 ﻿jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
 {
     options: {
-        displayName: null,
         modelItems: null
     },
     _create: function () {
@@ -23,7 +22,7 @@
         this._super();
     },
     _template: function () {
-        return "<div class='ui-corner-top ui-widget-header'>{0}</div><div class='ui-corner-bottom ui-widget-content ui-widgetModel-content'></div>";
+        return "<div class='ui-corner-bottom ui-widget-content ui-widgetModel-content'></div>";
 
 
         //var valSummary = '' +
@@ -38,7 +37,7 @@
         //return "<div class='ui-corner-top ui-widget-header'>{0}</div><div class='ui-corner-bottom ui-widget-content ui-widgetModel-content'></div>" + valSummary;
     },
     _templateFormat: function () {
-        return this._template().format(this.options.displayName);
+        return this._template();
     },
     val: function () {
         var o = this.cloneObject(this.options.modelItems);
@@ -46,6 +45,15 @@
             var propName = o[i].id;
             var propValue = jQuery('*[data-widgetModelItem-id="{0}"]'.format(propName)).widgetModelItem('val');
             o[i].currentValue = propValue;
+        }
+        return o;
+    },
+    valAsObject: function () {
+
+        var r = this.val();
+        var o = {};
+        for (var i = 0; i < r.length; i++) {
+            o[r[i].id] = r[i].currentValue;
         }
         return o;
     },
@@ -251,11 +259,26 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 break;
 
             case "custom":
-                this.options.input.onItemBuildCb(jQuery(this.element), $parent);
-                this.val = this.options.input.onItemValueCb;
+                this.options.input.onItemBuild(jQuery(this.element), $parent);
+                this.val = function () {
+                    return self.options.input.onItemValue($parent);
+                };
                 break;
             default:
-                this.val = function () { return null; };
+
+                t = '<input id="{1}" name="{1}" type="text" value="{0}" />'.format(this.options.input.value, this.options.id);
+
+                jQuery($parent)
+                    .append(t)
+                    .find(jqSelector)
+                    .change(function () {
+                        self.change();
+                    });
+
+                this.val = function () {
+                    return jQuery(jqSelector).val();
+                };
+
                 break;
         }
 
