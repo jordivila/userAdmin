@@ -52,7 +52,7 @@
 
 .ui-crud .ui-crudForm { padding:0em !important; }
 .ui-crud .ui-crudForm h3 {padding: 0em 0.5em 0em 0em;margin:0.5em 0 0.5em 0; border:0; background:none;}
-.ui-crud .ui-crudForm .ui-crudForm-form { background:none;padding:1em !important; border-left:none;border-right:none;border-bottom:none;}
+.ui-crud .ui-crudForm .ui-crudForm-form { background:none;padding:1em !important;}
 .ui-crud .ui-crudForm select {width:22.5em;padding:0.2em;}
 .ui-crud .ui-crudForm input {width:22em;padding:0.2em;}
 .ui-crud .ui-crudForm .ui-field-box {margin:0.5em 0 0 0;}

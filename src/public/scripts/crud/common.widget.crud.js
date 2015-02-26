@@ -499,9 +499,6 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
         formBind: function (self, dataItem) {
             throw new Error(self.namespace + '.' + self.widgetName + ".formBind() is an abstract method. Child class method must be implemented");
         },
-        formValueGet: function (self) {
-            throw new Error(this.namespace + '.' + this.widgetName + ".formValueGet() is an abstract method. Child class method must be implemented");
-        },
         formSave: function (self) {
             var dfd = jQuery.Deferred();
             dfd.reject(this.namespace + '.' + this.widgetName + ".formSave is an abstract method. Child class must implemented");
@@ -512,56 +509,27 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
         this._super();
 
+
         jQuery(this.element)
             .addClass('ui-crudForm ui-hidden')
-                .children()
-                .wrapAll('<div class="ui-crudForm-form ui-widget-content" />')
-                .end()
-        //.prepend(this._formButtonsTemplate());
-        .prepend('<div class="ui-crudForm-buttons ui-ribbonButtons">');
+            .append('<div class="ui-crudForm-modelBinding"></div>')
+            .children()
+                .wrapAll('<div class="ui-crudForm-formContent ui-widget-content" />')
+            .end()
+            .find('div.ui-crudForm-modelBinding:first')
+                .widgetModel({
+                    modelItems: this.options.formModel
+                })
+            .end()
+            .prepend('<div class="ui-crudForm-buttons ui-ribbonButtons ui-widget-content">');
 
         this.options.formButtonsDOMId = jQuery(this.element).find('div.ui-crudForm-buttons:first');
-
-
 
         this._formButtonsInit();
     },
     _init: function () {
 
         this._super();
-
-        var self = this;
-
-        jQuery(this.element)
-            .find(self.options.formButtonsDOMId)
-                //.addClass('ui-ribbonButtons ui-widget-content')
-                //.find('button.ui-accept-button:first')
-                //    .button({
-                //        icons: {
-                //            primary: 'ui-icon-disk'
-                //        }
-                //    })
-                //    .click(function () {
-                //        self._save();
-                //        //var form = self.val();
-                //        //self._trigger('change', null, form);
-                //    })
-                //.end()
-                //.find('button.ui-cancel-button:first')
-                //    .button({
-                //        icons: {
-                //            primary: 'ui-icon-circle-arrow-w'
-                //        }
-                //    })
-                //    .click(function () {
-                //        self._trigger('cancel', null, null);
-                //    })
-                //.end()
-            .end()
-            .find(':input')
-                .addClass('ui-widget-content')
-            .end()
-            .fieldItem();
 
         this._done();
     },
@@ -602,7 +570,7 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
         this._super();
     },
     val: function () {
-        return this.options.formValueGet(this);
+        return jQuery(self.element).widgetModel('valAsObject');
     },
     bind: function (dataItem) {
         try {

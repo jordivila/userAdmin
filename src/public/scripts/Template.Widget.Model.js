@@ -7,9 +7,9 @@
 
         this._super();
 
-        jQuery(this.element)
-            .attr('data-widget', this.widgetName)
-            .addClass('ui-corner-all ui-widget-content');
+        //jQuery(this.element)
+            //.attr('data-widget', this.widgetName);
+            //.addClass('ui-corner-all ui-widget-content');
 
         this._bind(this.options.modelItems);
     },

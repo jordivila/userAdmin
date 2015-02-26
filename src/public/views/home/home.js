@@ -448,7 +448,18 @@ var productAjax = {
             for (var i = 0; i < productAjax.ajax._fakeDataGrid.length; i++) {
                 if (productAjax.ajax._fakeDataGrid[i].productId === dataItem.productId)
                 {
-                    var productForEdit = jQuery.extend({}, productAjax.ajax._fakeDataGrid[i], { someEditInt: true });
+                    var productForEdit =
+                        jQuery.extend({},
+                                    productAjax.ajax._fakeDataGrid[i],
+                                    {
+                                        SomeString: "alguna cadena",
+                                        SomeDate: new Date(),
+                                        SomeFloat: 4.56,
+                                        SomeBoolean: true,
+                                        SomeBooleanNullable: null,
+                                        SomeStringFromList: "1",
+                                        SomeCustomValue: 3,
+                                    });
 
                     dataResult = {
                         Data: productForEdit,

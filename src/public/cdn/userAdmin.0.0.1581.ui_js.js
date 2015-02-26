@@ -1914,9 +1914,9 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
 
         this._super();
 
-        jQuery(this.element)
-            .attr('data-widget', this.widgetName)
-            .addClass('ui-corner-all ui-widget-content');
+        //jQuery(this.element)
+            //.attr('data-widget', this.widgetName);
+            //.addClass('ui-corner-all ui-widget-content');
 
         this._bind(this.options.modelItems);
     },
@@ -3908,9 +3908,6 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
         formBind: function (self, dataItem) {
             throw new Error(self.namespace + '.' + self.widgetName + ".formBind() is an abstract method. Child class method must be implemented");
         },
-        formValueGet: function (self) {
-            throw new Error(this.namespace + '.' + this.widgetName + ".formValueGet() is an abstract method. Child class method must be implemented");
-        },
         formSave: function (self) {
             var dfd = jQuery.Deferred();
             dfd.reject(this.namespace + '.' + this.widgetName + ".formSave is an abstract method. Child class must implemented");
@@ -3921,56 +3918,27 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
         this._super();
 
+
         jQuery(this.element)
             .addClass('ui-crudForm ui-hidden')
-                .children()
-                .wrapAll('<div class="ui-crudForm-form ui-widget-content" />')
-                .end()
-        //.prepend(this._formButtonsTemplate());
-        .prepend('<div class="ui-crudForm-buttons ui-ribbonButtons">');
+            .append('<div class="ui-crudForm-modelBinding"></div>')
+            .children()
+                .wrapAll('<div class="ui-crudForm-formContent ui-widget-content" />')
+            .end()
+            .find('div.ui-crudForm-modelBinding:first')
+                .widgetModel({
+                    modelItems: this.options.formModel
+                })
+            .end()
+            .prepend('<div class="ui-crudForm-buttons ui-ribbonButtons ui-widget-content">');
 
         this.options.formButtonsDOMId = jQuery(this.element).find('div.ui-crudForm-buttons:first');
-
-
 
         this._formButtonsInit();
     },
     _init: function () {
 
         this._super();
-
-        var self = this;
-
-        jQuery(this.element)
-            .find(self.options.formButtonsDOMId)
-                //.addClass('ui-ribbonButtons ui-widget-content')
-                //.find('button.ui-accept-button:first')
-                //    .button({
-                //        icons: {
-                //            primary: 'ui-icon-disk'
-                //        }
-                //    })
-                //    .click(function () {
-                //        self._save();
-                //        //var form = self.val();
-                //        //self._trigger('change', null, form);
-                //    })
-                //.end()
-                //.find('button.ui-cancel-button:first')
-                //    .button({
-                //        icons: {
-                //            primary: 'ui-icon-circle-arrow-w'
-                //        }
-                //    })
-                //    .click(function () {
-                //        self._trigger('cancel', null, null);
-                //    })
-                //.end()
-            .end()
-            .find(':input')
-                .addClass('ui-widget-content')
-            .end()
-            .fieldItem();
 
         this._done();
     },
@@ -4011,7 +3979,7 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
         this._super();
     },
     val: function () {
-        return this.options.formValueGet(this);
+        return jQuery(self.element).widgetModel('valAsObject');
     },
     bind: function (dataItem) {
         try {
@@ -4665,6 +4633,25 @@ jQuery.widget("ui.product", jQuery.ui.crud,
             return defaultButtons;
         },
         formInit: function (self, formOptions) {
+
+            var tBasicInfo = '' +
+                '<div class="ui-productCrud-form-searchOutput">' +
+                    '<h3 class="ui-state-default">Información básica</h3>' +
+                    '<div data-fielditem="nombre" data-fielditem-name="Nombre/Razón Social"></div>' +
+                    '<div data-fielditem="productId" data-fielditem-name="Num. Producto"></div>' +
+                    '<div data-fielditem="productTypeDesc" data-fielditem-name="Producto"></div>' +
+                    '<div data-fielditem="fechaDesde" data-fielditem-name="Fecha desde"></div>' +
+                    '<div data-fielditem="fechaHasta" data-fielditem-name="Fecha hasta"></div>' +
+                '</div>' +
+                '<div class="ui-productCrud-form-type">' +
+                    '<h3 class="ui-state-default">Información detallada del préstamo</h3>' +
+                '</div>';
+
+            jQuery(self.options.formDOMId)
+                .append(tBasicInfo)
+                .fieldItem();
+
+
             jQuery(self.options.formDOMId)
                 .productForm(jQuery.extend({}, formOptions,
                     {
@@ -4679,14 +4666,34 @@ jQuery.widget("ui.product", jQuery.ui.crud,
             return defaultButtons;
         },
         formBind: function (self, dataItem) {
+            jQuery(self.element)
+                .find('div.ui-productCrud-form-searchOutput')
+                    .find('div[data-fieldItem="productId"]')
+                        .html(dataItem.productId)
+                    .end()
+                    .find('div[data-fieldItem="nombre"]')
+                        .html(dataItem.nombre)
+                    .end()
+                    .find('div[data-fieldItem="productTypeDesc"]')
+                        .html(dataItem.productTypeDesc)
+                    .end()
+                    .find('div[data-fieldItem="fechaDesde"]')
+                        .html(dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '')
+                    .end()
+                    .find('div[data-fieldItem="fechaHasta"]')
+                        .html(dataItem.fechaHasta !== null ? Globalize.format(dataItem.fechaHasta, 'd') : '')
+                    .end()
+                .end();
+
+
+            console.log(dataItem);
+
             //throw new Error(self.namespace + '.' + self.widgetName + ".bind() is an abstract method. Child class method must be implemented");
         },
-        formValueGet: function (self) {
-            //throw new Error(this.namespace + '.' + this.widgetName + ".formValueGet() is an abstract method. Child class method must be implemented");
-
-            var val = jQuery(self.element).widgetModel('valAsObject');
-            console.log(val);
-        },
+        //formValueGet: function (self) {
+        //    //throw new Error(this.namespace + '.' + this.widgetName + ".formValueGet() is an abstract method. Child class method must be implemented");
+        //    return jQuery(self.element).widgetModel('valAsObject');
+        //},
         formSave: function (self) {
 
             var dfd = jQuery.Deferred();
@@ -4928,37 +4935,15 @@ jQuery.widget("ui.productGrid", jQuery.ui.crudGrid,
 jQuery.widget("ui.productForm", jQuery.ui.crudForm,
 {
     options: {
-        /*
-        Model: null,
-        formButtonsGet: function (self, defaultButtons) {
-            return defaultButtons;
-        },
-        formBind: function (self, dataItem) {
-            //throw new Error(self.namespace + '.' + self.widgetName + ".bind() is an abstract method. Child class method must be implemented");
-        },
-        formValueGet: function (self) {
-            //throw new Error(this.namespace + '.' + this.widgetName + ".formValueGet() is an abstract method. Child class method must be implemented");
-            return {};
-        }
-        */
 
     },
     _create: function () {
-
-        jQuery(this.element).widgetModel({
-            modelItems: this.options.formModel
-        });
-
         this._super();
     },
     _init: function () {
-
         this._super();
-
-        this._done();
     },
     destroy: function () {
-
         this._super();
     },
 });

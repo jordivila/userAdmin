@@ -263,6 +263,25 @@ jQuery.widget("ui.product", jQuery.ui.crud,
             return defaultButtons;
         },
         formInit: function (self, formOptions) {
+
+            var tBasicInfo = '' +
+                '<div class="ui-productCrud-form-searchOutput">' +
+                    '<h3 class="ui-state-default">Información básica</h3>' +
+                    '<div data-fielditem="nombre" data-fielditem-name="Nombre/Razón Social"></div>' +
+                    '<div data-fielditem="productId" data-fielditem-name="Num. Producto"></div>' +
+                    '<div data-fielditem="productTypeDesc" data-fielditem-name="Producto"></div>' +
+                    '<div data-fielditem="fechaDesde" data-fielditem-name="Fecha desde"></div>' +
+                    '<div data-fielditem="fechaHasta" data-fielditem-name="Fecha hasta"></div>' +
+                '</div>' +
+                '<div class="ui-productCrud-form-type">' +
+                    '<h3 class="ui-state-default">Información detallada del préstamo</h3>' +
+                '</div>';
+
+            jQuery(self.options.formDOMId)
+                .append(tBasicInfo)
+                .fieldItem();
+
+
             jQuery(self.options.formDOMId)
                 .productForm(jQuery.extend({}, formOptions,
                     {
@@ -277,14 +296,34 @@ jQuery.widget("ui.product", jQuery.ui.crud,
             return defaultButtons;
         },
         formBind: function (self, dataItem) {
+            jQuery(self.element)
+                .find('div.ui-productCrud-form-searchOutput')
+                    .find('div[data-fieldItem="productId"]')
+                        .html(dataItem.productId)
+                    .end()
+                    .find('div[data-fieldItem="nombre"]')
+                        .html(dataItem.nombre)
+                    .end()
+                    .find('div[data-fieldItem="productTypeDesc"]')
+                        .html(dataItem.productTypeDesc)
+                    .end()
+                    .find('div[data-fieldItem="fechaDesde"]')
+                        .html(dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '')
+                    .end()
+                    .find('div[data-fieldItem="fechaHasta"]')
+                        .html(dataItem.fechaHasta !== null ? Globalize.format(dataItem.fechaHasta, 'd') : '')
+                    .end()
+                .end();
+
+
+            console.log(dataItem);
+
             //throw new Error(self.namespace + '.' + self.widgetName + ".bind() is an abstract method. Child class method must be implemented");
         },
-        formValueGet: function (self) {
-            //throw new Error(this.namespace + '.' + this.widgetName + ".formValueGet() is an abstract method. Child class method must be implemented");
-
-            var val = jQuery(self.element).widgetModel('valAsObject');
-            console.log(val);
-        },
+        //formValueGet: function (self) {
+        //    //throw new Error(this.namespace + '.' + this.widgetName + ".formValueGet() is an abstract method. Child class method must be implemented");
+        //    return jQuery(self.element).widgetModel('valAsObject');
+        //},
         formSave: function (self) {
 
             var dfd = jQuery.Deferred();
@@ -526,37 +565,15 @@ jQuery.widget("ui.productGrid", jQuery.ui.crudGrid,
 jQuery.widget("ui.productForm", jQuery.ui.crudForm,
 {
     options: {
-        /*
-        Model: null,
-        formButtonsGet: function (self, defaultButtons) {
-            return defaultButtons;
-        },
-        formBind: function (self, dataItem) {
-            //throw new Error(self.namespace + '.' + self.widgetName + ".bind() is an abstract method. Child class method must be implemented");
-        },
-        formValueGet: function (self) {
-            //throw new Error(this.namespace + '.' + this.widgetName + ".formValueGet() is an abstract method. Child class method must be implemented");
-            return {};
-        }
-        */
 
     },
     _create: function () {
-
-        jQuery(this.element).widgetModel({
-            modelItems: this.options.formModel
-        });
-
         this._super();
     },
     _init: function () {
-
         this._super();
-
-        this._done();
     },
     destroy: function () {
-
         this._super();
     },
 });
