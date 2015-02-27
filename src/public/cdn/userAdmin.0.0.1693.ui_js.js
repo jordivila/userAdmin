@@ -1915,10 +1915,10 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
         this._super();
 
         //jQuery(this.element)
-            //.attr('data-widget', this.widgetName);
-            //.addClass('ui-corner-all ui-widget-content');
+        //.attr('data-widget', this.widgetName);
+        //.addClass('ui-corner-all ui-widget-content');
 
-        this._bind(this.options.modelItems);
+        this._bindModelSchema(this.options.modelItems);
     },
     _init: function () {
 
@@ -1950,7 +1950,7 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
         var o = this.cloneObject(this.options.modelItems);
         for (var i = 0; i < o.length; i++) {
             var propName = o[i].id;
-            var propValue = jQuery('*[data-widgetModelItem-id="{0}"]'.format(propName)).widgetModelItem('val');
+            var propValue = jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(propName)).widgetModelItem('val');
             o[i].currentValue = propValue;
         }
         return o;
@@ -1964,7 +1964,9 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
         }
         return o;
     },
-    _bind: function () {
+    _bindModelSchema: function () {
+
+        var self = this;
 
         jQuery(this.element)
             .empty()
@@ -1975,7 +1977,22 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
         if (this.options.modelItems !== null) {
 
             var onItemChanged = function () {
-                alert("webas");
+
+                var clearedErrors = true;
+
+                for (var i = 0; i < self.options.modelItems.length; i++) {
+                    if (jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(self.options.modelItems[i].id))
+                        .hasClass('ui-state-error')) {
+                        clearedErrors = false;
+                        break;
+                    }
+                }
+
+                if (clearedErrors)
+                {
+                    alert("errors cleared");
+                }
+
             };
 
             for (var i = 0; i < this.options.modelItems.length; i++) {
@@ -1989,8 +2006,21 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
     bindErrors: function (keyValueArray) {
 
         for (var i = 0; i < keyValueArray.length; i++) {
-            jQuery('div[data-widgetModelItem-id="{0}"]'.format(keyValueArray[i].key))
-                .widgetModelItem('setErrors', keyValueArray[i].value);
+            jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(keyValueArray[i].key))
+                .widgetModelItem('setErrors', keyValueArray[i].value)
+                .addClass('ui-state-error');
+        }
+    },
+    bindValue: function (dataItem) {
+        for (var i in dataItem) {
+            for (var j = 0; j < this.options.modelItems.length; j++) {
+                if (this.options.modelItems[j].id == i) {
+
+
+                    console.log('div[data-widgetModelItem-id="{0}"]:first'.format(i));
+                    jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(i)).widgetModelItem('setValue', dataItem[i]);
+                }
+            }
         }
     }
 });
@@ -2047,7 +2077,7 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
 
         this._super();
 
-    }, 
+    },
     destroy: function () {
 
         this._super();
@@ -2055,6 +2085,8 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
     change: function () {
 
         var self = this;
+
+        jQuery(self.element).removeClass('ui-state-error');
 
         self.setErrors([]);
         self._trigger('change', null, self.options.id);
@@ -2098,6 +2130,9 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                     //return jQuery(jqSelector).widgetModelItemDate('getDate');
                     return jQuery(jqSelector).val();
                 };
+                this.setValue = function (value) {
+                    return jQuery(jqSelector).widgetModelItemDate('setDate', value);
+                };
 
                 break;
             case "float":
@@ -2114,7 +2149,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 this.val = function () {
                     return jQuery(jqSelector).val();
                 };
-                
+                this.setValue = function (value) {
+                    return jQuery(jqSelector).val(value);
+                };
+
                 break;
             case "bool":
 
@@ -2135,6 +2173,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 this.val = function () {
                     return jQuery(jqSelector).widgetModelItemBool('val');
                 };
+                this.setValue = function (value) {
+                    return jQuery(jqSelector).widgetModelItemBool('setValue', value);
+                };
+
 
                 break;
             case "list":
@@ -2143,8 +2185,7 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
 
                 var opts = '';
 
-                if (jQuery.isArray(this.options.input.listValues))
-                {
+                if (jQuery.isArray(this.options.input.listValues)) {
                     for (var i = 0; i < this.options.input.listValues.length; i++) {
                         opts += "<option value='{0}'>{1}</option>".format(this.options.input.listValues[i].value, this.options.input.listValues[i].text);
                     }
@@ -2162,13 +2203,18 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 this.val = function () {
                     return jQuery(jqSelector).val();
                 };
-
+                this.setValue = function (value) {
+                    return jQuery(jqSelector).val(value);
+                };
                 break;
 
             case "custom":
                 this.options.input.onItemBuild(jQuery(this.element), $parent);
                 this.val = function () {
                     return self.options.input.onItemValue($parent);
+                };
+                this.setValue = function (value) {
+                    return self.options.input.onItemBind($parent, value);
                 };
                 break;
             default:
@@ -2185,11 +2231,14 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 this.val = function () {
                     return jQuery(jqSelector).val();
                 };
+                this.setValue = function (value) {
+                    return jQuery(jqSelector).val(value);
+                };
 
                 break;
         }
 
-        
+
     },
     setErrors: function (errors) {
 
@@ -2212,6 +2261,9 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
     },
     val: function () {
         throw new Error("{0}.val is an abstract function".format(this.widgetName));
+    },
+    setValue: function () {
+        throw new Error("{0}.setValue is an abstract function".format(this.widgetName));
     }
 });
 
@@ -2221,14 +2273,14 @@ jQuery.widget("ui.widgetModelSummary", jQuery.ui.widgetBase,
 
     },
     _create: function () {
-        
+
         this._super();
     },
     _init: function () {
 
         this._super();
 
-    }, 
+    },
     destroy: function () {
 
         this._super();
@@ -2339,6 +2391,10 @@ jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
             return null;
         }
     },
+    setDate: function (value) {
+        jQuery(this.element).datepicker('setDate', value);
+        this._setDateLabel();
+    },
 });;// Source: src/public/scripts/Template.Widget.ModelBool.js
 /// <reference path="VsixMvcAppResult.A.Intellisense.js" />
 
@@ -2348,7 +2404,7 @@ jQuery.widget("ui.widgetModelItemBool", jQuery.ui.widgetBase,
         id: null,
         value: null,
         nullable: null,
-        $container:null
+        $container: null
     },
     _create: function () {
 
@@ -2380,28 +2436,8 @@ jQuery.widget("ui.widgetModelItemBool", jQuery.ui.widgetBase,
                                     var nextIndex = self._getNextIndex();
                                     var nextClassName = self.options.icons[nextIndex];
 
-                                    jQuery(this)
-                                        .find('span')
-                                        .removeClass(self.options.icons.join(" "))
-                                        .addClass(nextClassName);
-
-                                    switch (nextClassName) {
-                                        case 'ui-icon-check':
-                                            $el.find(':checkbox').attr('checked', 'checked');
-                                            if (self.options.nullable) { $el.find('input[type="hidden"]').val(''); }
-                                            break;
-                                        case 'ui-icon-closethick':
-                                            $el.find(':checkbox').removeAttr('checked');
-                                            if (self.options.nullable) { $el.find('input[type="hidden"]').val('false'); }
-                                            break;
-                                        case 'ui-icon-help':
-                                            $el.find(':checkbox').removeAttr('checked');
-                                            if (self.options.nullable) { $el.find('input[type="hidden"]').val(''); }
-                                            break;
-                                    }
-
+                                    self._setValueByClassName(nextClassName);
                                     self._trigger('change', null, {});
-
                                 });
     },
     destroy: function () {
@@ -2476,16 +2512,55 @@ jQuery.widget("ui.widgetModelItemBool", jQuery.ui.widgetBase,
             }
         }
 
-
         return result;
-    }, 
+    },
     _getNextIndex: function () {
         var i = this._getCurrentIndex();
         var result = (i + 1) >= (this.options.values.length) ? 0 : (i + 1);
         return result;
     },
+    _setValueByClassName: function (className) {
+
+        var self = this;
+        var $el = this.options.$container;
+
+        jQuery(this.options.$container)
+            .find('button')
+            .find('span')
+            .removeClass(self.options.icons.join(" "))
+            .addClass(className);
+
+        switch (className) {
+            case 'ui-icon-check':
+                $el.find(':checkbox').attr('checked', 'checked');
+                if (self.options.nullable) { $el.find('input[type="hidden"]').val(''); }
+                break;
+            case 'ui-icon-closethick':
+                $el.find(':checkbox').removeAttr('checked');
+                if (self.options.nullable) { $el.find('input[type="hidden"]').val('false'); }
+                break;
+            case 'ui-icon-help':
+                $el.find(':checkbox').removeAttr('checked');
+                if (self.options.nullable) { $el.find('input[type="hidden"]').val(''); }
+                break;
+        }
+    },
     val: function () {
         return this.options.values[this._getCurrentIndex()];
+    },
+    setValue: function (value) {
+
+        var currentIndex = -1;
+
+        for (var i = 0; i < this.options.values.length; i++) {
+            if (value == (this.options.values[i])) {
+                currentIndex = i;
+            }
+        }
+
+        if (currentIndex != -1) {
+            this._setValueByClassName(this.options.icons[currentIndex]);
+        }
     }
 
 });;// Source: src/public/scripts/Template.Widget.Grid.js
@@ -3925,11 +4000,6 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
             .children()
                 .wrapAll('<div class="ui-crudForm-formContent ui-widget-content" />')
             .end()
-            .find('div.ui-crudForm-modelBinding:first')
-                .widgetModel({
-                    modelItems: this.options.formModel
-                })
-            .end()
             .prepend('<div class="ui-crudForm-buttons ui-ribbonButtons ui-widget-content">');
 
         this.options.formButtonsDOMId = jQuery(this.element).find('div.ui-crudForm-buttons:first');
@@ -3978,14 +4048,15 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
         this._super();
     },
-    val: function () {
-        return jQuery(self.element).widgetModel('valAsObject');
-    },
+    //val: function () {
+        //return jQuery(self.element).widgetModel('valAsObject');
+    //},
     bind: function (dataItem) {
         try {
             this.options.formBind(this, dataItem);
             this._trigger('dataBound', null, dataItem);
         } catch (e) {
+            console.error(e);
             this._trigger('errorDisplay', null, "Ha ocurrido un error en el formulario");
         }
     },
@@ -3993,7 +4064,7 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
         var self = this;
 
-        self.options.formSave(self)
+        self.options.formSave(this)
                 .progress(function (status) {
                     self.progressShow(status);
                 })
@@ -4561,7 +4632,6 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                         customerTrashDomId.hide();
                     }
 
-
                 }
             },
         }],
@@ -4661,48 +4731,50 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                         formValueGet: self.options.formValueGet,
                         formSave: self.options.formSave
                     }));
+
+            jQuery(self.options.formDOMId)
+                .find('div.ui-crudForm-modelBinding:first')
+                    .widgetModel({
+                        modelItems: self.options.formModel
+                    })
+                .end();
+
+
+
         },
         formButtonsGet: function (self, defaultButtons) {
             return defaultButtons;
         },
         formBind: function (self, dataItem) {
+
             jQuery(self.element)
                 .find('div.ui-productCrud-form-searchOutput')
-                    .find('div[data-fieldItem="productId"]')
-                        .html(dataItem.productId)
+                    .find('div[data-fieldItem="productId"]').html(dataItem.productId)
                     .end()
-                    .find('div[data-fieldItem="nombre"]')
-                        .html(dataItem.nombre)
+                    .find('div[data-fieldItem="nombre"]').html(dataItem.nombre)
                     .end()
-                    .find('div[data-fieldItem="productTypeDesc"]')
-                        .html(dataItem.productTypeDesc)
+                    .find('div[data-fieldItem="productTypeDesc"]').html(dataItem.productTypeDesc)
                     .end()
-                    .find('div[data-fieldItem="fechaDesde"]')
-                        .html(dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '')
+                    .find('div[data-fieldItem="fechaDesde"]').html(dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '')
                     .end()
-                    .find('div[data-fieldItem="fechaHasta"]')
-                        .html(dataItem.fechaHasta !== null ? Globalize.format(dataItem.fechaHasta, 'd') : '')
+                    .find('div[data-fieldItem="fechaHasta"]').html(dataItem.fechaHasta !== null ? Globalize.format(dataItem.fechaHasta, 'd') : '')
                     .end()
-                .end();
+                    .find('div.ui-crudForm-modelBinding:first')
+                        .widgetModel('bindValue', dataItem)
+                    .end();
 
-
-            console.log(dataItem);
-
-            //throw new Error(self.namespace + '.' + self.widgetName + ".bind() is an abstract method. Child class method must be implemented");
+            jQuery(self.element)
+                .find('div.ui-crudForm-modelBinding:first')
+                    .widgetModel('bindValue', dataItem.EditData)
+            .end();
         },
-        //formValueGet: function (self) {
-        //    //throw new Error(this.namespace + '.' + this.widgetName + ".formValueGet() is an abstract method. Child class method must be implemented");
-        //    return jQuery(self.element).widgetModel('valAsObject');
-        //},
         formSave: function (self) {
 
             var dfd = jQuery.Deferred();
 
-            console.log(self);
-
             dfd.notify("Guardando informacion del producto...");
 
-            var viewModel = self.val();
+            var viewModel = jQuery(self.element).find('div.ui-crudForm-modelBinding:first').widgetModel('valAsObject');
 
             jQuery.when(productAjax.ajax.productSave(viewModel))
                 .then(
@@ -4715,7 +4787,10 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                         }
                         else {
                             if (result.Data) {
-                                self._bindModelValidation(result.Data.ModelState);
+
+                                jQuery(self.element)
+                                    .find('div.ui-crudForm-modelBinding:first')
+                                    .widgetModel('bindErrors', result.Data.ModelState);
                             }
                             dfd.reject(result.Message);
                         }
@@ -4764,15 +4839,18 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                 nullable: true,
                 onItemBuild: function (widget, parent) {
                     jQuery(parent)
-                        .append('<p>some hidden value with custom widget functionality</p>')
+                        .append('<p>some readOnly value-><span class="SomeCustomValue">2</span></p>')
                         .find('p:first')
                             .click(function () {
                                 jQuery(widget).widgetModelItem('change');
                             });
                 },
                 onItemValue: function (parent) {
-                    return 2;
+                    return jQuery(parent).find('span.SomeCustomValue').html();
                 },
+                onItemBind: function (parent, dataItem) {
+                    return jQuery(parent).find('span.SomeCustomValue').html(dataItem);
+                }
             },
         },
         ],

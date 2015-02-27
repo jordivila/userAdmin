@@ -213,14 +213,36 @@ var productAjax = {
             productAjax.ajax._fakeDataGrid = [];
 
             for (var i = 0; i < 1000; i++) {
+
+                var d = new Date();
+
                 productAjax.ajax._fakeDataGrid.push({
-                    dniCif: "X4752159Z",
-                    fechaDesde: new Date(),
-                    fechaHasta: new Date(),
+                    fechaDesde: new Date(Math.abs(d - (i * 1000 * 60 * 60 * 24))),
+                    fechaHasta: new Date(Math.abs(d - (i * 1000 * 60 * 60 * 24))),
                     nombre: "person {0}".format(i),
                     productId: i,
                     productType: "PRSP1",
                     productTypeDesc: "Prestamo garantia personal-1",
+                });
+            }
+        },
+        _fakeDataEdit: null,
+        _fakeDataEditInit: function () {
+
+            productAjax.ajax._fakeDataEdit = [];
+
+            for (var i = 0; i < 1000; i++) {
+
+                var d = new Date();
+
+                productAjax.ajax._fakeDataEdit.push({
+                    SomeString: "alguna cadena asdjhaskd -> {0}".format(i),
+                    SomeDate: new Date(Math.abs(d - (i * 1000 * 60 * 60 * 24))),
+                    SomeFloat: i,
+                    SomeBoolean: i%2===true,
+                    SomeBooleanNullable: null,
+                    SomeStringFromList: "",
+                    SomeCustomValue: i,
                 });
             }
         },
@@ -233,6 +255,7 @@ var productAjax = {
 
             if (productAjax.ajax._fakeDataGrid === null) {
                 productAjax.ajax._fakeDataGridInit();
+                productAjax.ajax._fakeDataEditInit();
             }
 
             var dataResult = {
@@ -448,21 +471,12 @@ var productAjax = {
             for (var i = 0; i < productAjax.ajax._fakeDataGrid.length; i++) {
                 if (productAjax.ajax._fakeDataGrid[i].productId === dataItem.productId)
                 {
-                    var productForEdit =
-                        jQuery.extend({},
+                    dataResult = {
+                        Data: jQuery.extend({},
                                     productAjax.ajax._fakeDataGrid[i],
                                     {
-                                        SomeString: "alguna cadena",
-                                        SomeDate: new Date(),
-                                        SomeFloat: 4.56,
-                                        SomeBoolean: true,
-                                        SomeBooleanNullable: null,
-                                        SomeStringFromList: "1",
-                                        SomeCustomValue: 3,
-                                    });
-
-                    dataResult = {
-                        Data: productForEdit,
+                                        EditData: productAjax.ajax._fakeDataEdit[i]
+                                    }),
                         IsValid: true,
                         Message: null,
                         MessageType: 0,
@@ -476,16 +490,39 @@ var productAjax = {
         },
         productSave: function (dataItem) {
 
-            var self = this;
             var dfd = jQuery.Deferred();
 
+            var dataResult = null;
+            var modelErrors = [];
 
-            dataResult = {
-                Data: null,
-                IsValid: true,
-                Message: null,
-                MessageType: 0,
-            };
+            if (dataItem.SomeStringFromList === "")
+            {
+                //modelErrors.push({ key: "SomeStringFromList", value: ["este es un campo requerido"] });
+            }
+
+            if (dataItem.SomeBooleanNullable === "") {
+                //modelErrors.push({ key: "SomeBooleanNullable", value: ["por favor informa 'si' o 'no'"] });
+            }
+
+            for (var i in dataItem) {
+                modelErrors.push({ key: i, value: ["este es un campo requerido"] });
+            }
+
+            if (modelErrors.length > 0) {
+                dataResult = {
+                    Data: { ModelState: modelErrors },
+                    IsValid: false,
+                    Message: "Existen errores en el formulario",
+                };
+            }
+            else {
+                dataResult = {
+                    Data: null,
+                    IsValid: true,
+                    Message: null,
+                    MessageType: 0,
+                };
+            }
 
             setTimeout(function () { dfd.resolve(dataResult); }, productAjax.ajax._fakeDelay);
 

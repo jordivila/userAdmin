@@ -6,7 +6,7 @@ jQuery.widget("ui.widgetModelItemBool", jQuery.ui.widgetBase,
         id: null,
         value: null,
         nullable: null,
-        $container:null
+        $container: null
     },
     _create: function () {
 
@@ -38,28 +38,8 @@ jQuery.widget("ui.widgetModelItemBool", jQuery.ui.widgetBase,
                                     var nextIndex = self._getNextIndex();
                                     var nextClassName = self.options.icons[nextIndex];
 
-                                    jQuery(this)
-                                        .find('span')
-                                        .removeClass(self.options.icons.join(" "))
-                                        .addClass(nextClassName);
-
-                                    switch (nextClassName) {
-                                        case 'ui-icon-check':
-                                            $el.find(':checkbox').attr('checked', 'checked');
-                                            if (self.options.nullable) { $el.find('input[type="hidden"]').val(''); }
-                                            break;
-                                        case 'ui-icon-closethick':
-                                            $el.find(':checkbox').removeAttr('checked');
-                                            if (self.options.nullable) { $el.find('input[type="hidden"]').val('false'); }
-                                            break;
-                                        case 'ui-icon-help':
-                                            $el.find(':checkbox').removeAttr('checked');
-                                            if (self.options.nullable) { $el.find('input[type="hidden"]').val(''); }
-                                            break;
-                                    }
-
+                                    self._setValueByClassName(nextClassName);
                                     self._trigger('change', null, {});
-
                                 });
     },
     destroy: function () {
@@ -134,16 +114,55 @@ jQuery.widget("ui.widgetModelItemBool", jQuery.ui.widgetBase,
             }
         }
 
-
         return result;
-    }, 
+    },
     _getNextIndex: function () {
         var i = this._getCurrentIndex();
         var result = (i + 1) >= (this.options.values.length) ? 0 : (i + 1);
         return result;
     },
+    _setValueByClassName: function (className) {
+
+        var self = this;
+        var $el = this.options.$container;
+
+        jQuery(this.options.$container)
+            .find('button')
+            .find('span')
+            .removeClass(self.options.icons.join(" "))
+            .addClass(className);
+
+        switch (className) {
+            case 'ui-icon-check':
+                $el.find(':checkbox').attr('checked', 'checked');
+                if (self.options.nullable) { $el.find('input[type="hidden"]').val(''); }
+                break;
+            case 'ui-icon-closethick':
+                $el.find(':checkbox').removeAttr('checked');
+                if (self.options.nullable) { $el.find('input[type="hidden"]').val('false'); }
+                break;
+            case 'ui-icon-help':
+                $el.find(':checkbox').removeAttr('checked');
+                if (self.options.nullable) { $el.find('input[type="hidden"]').val(''); }
+                break;
+        }
+    },
     val: function () {
         return this.options.values[this._getCurrentIndex()];
+    },
+    setValue: function (value) {
+
+        var currentIndex = -1;
+
+        for (var i = 0; i < this.options.values.length; i++) {
+            if (value == (this.options.values[i])) {
+                currentIndex = i;
+            }
+        }
+
+        if (currentIndex != -1) {
+            this._setValueByClassName(this.options.icons[currentIndex]);
+        }
     }
 
 });

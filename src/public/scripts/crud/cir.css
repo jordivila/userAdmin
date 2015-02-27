@@ -10,7 +10,8 @@
 
 
 .ui-productCrud .ui-crudForm .ui-productCrud-form-searchOutput,
-.ui-productCrud .ui-crudForm .ui-productCrud-form-type {padding:1em;}
+.ui-productCrud .ui-crudForm .ui-productCrud-form-type {padding: 0em 0em 0em 1em;}
+
 
 
 .ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-nombre {width:45% !important;}

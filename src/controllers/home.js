@@ -36,10 +36,10 @@
                     cultureGlobalization: i18n.locale,
                     cultureDatePicker: i18n.locale,
                 },
-                Breadcrumb: [
-                    { title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
-                    { title: i18n.__("GeneralTexts.Home"), url: "/" }
-                ],
+                //Breadcrumb: [
+                    //{ title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
+                    //{ title: i18n.__("GeneralTexts.Home"), url: "/" }
+                //],
                 CssFiles: ["/public/views/home/home.css"],
                 JsFiles: ["/public/views/home/home.js"],
 

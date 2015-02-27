@@ -97,4 +97,8 @@ jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
             return null;
         }
     },
+    setDate: function (value) {
+        jQuery(this.element).datepicker('setDate', value);
+        this._setDateLabel();
+    },
 });

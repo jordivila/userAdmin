@@ -191,7 +191,6 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                         customerTrashDomId.hide();
                     }
 
-
                 }
             },
         }],
@@ -291,48 +290,50 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                         formValueGet: self.options.formValueGet,
                         formSave: self.options.formSave
                     }));
+
+            jQuery(self.options.formDOMId)
+                .find('div.ui-crudForm-modelBinding:first')
+                    .widgetModel({
+                        modelItems: self.options.formModel
+                    })
+                .end();
+
+
+
         },
         formButtonsGet: function (self, defaultButtons) {
             return defaultButtons;
         },
         formBind: function (self, dataItem) {
+
             jQuery(self.element)
                 .find('div.ui-productCrud-form-searchOutput')
-                    .find('div[data-fieldItem="productId"]')
-                        .html(dataItem.productId)
+                    .find('div[data-fieldItem="productId"]').html(dataItem.productId)
                     .end()
-                    .find('div[data-fieldItem="nombre"]')
-                        .html(dataItem.nombre)
+                    .find('div[data-fieldItem="nombre"]').html(dataItem.nombre)
                     .end()
-                    .find('div[data-fieldItem="productTypeDesc"]')
-                        .html(dataItem.productTypeDesc)
+                    .find('div[data-fieldItem="productTypeDesc"]').html(dataItem.productTypeDesc)
                     .end()
-                    .find('div[data-fieldItem="fechaDesde"]')
-                        .html(dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '')
+                    .find('div[data-fieldItem="fechaDesde"]').html(dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '')
                     .end()
-                    .find('div[data-fieldItem="fechaHasta"]')
-                        .html(dataItem.fechaHasta !== null ? Globalize.format(dataItem.fechaHasta, 'd') : '')
+                    .find('div[data-fieldItem="fechaHasta"]').html(dataItem.fechaHasta !== null ? Globalize.format(dataItem.fechaHasta, 'd') : '')
                     .end()
-                .end();
+                    .find('div.ui-crudForm-modelBinding:first')
+                        .widgetModel('bindValue', dataItem)
+                    .end();
 
-
-            console.log(dataItem);
-
-            //throw new Error(self.namespace + '.' + self.widgetName + ".bind() is an abstract method. Child class method must be implemented");
+            jQuery(self.element)
+                .find('div.ui-crudForm-modelBinding:first')
+                    .widgetModel('bindValue', dataItem.EditData)
+            .end();
         },
-        //formValueGet: function (self) {
-        //    //throw new Error(this.namespace + '.' + this.widgetName + ".formValueGet() is an abstract method. Child class method must be implemented");
-        //    return jQuery(self.element).widgetModel('valAsObject');
-        //},
         formSave: function (self) {
 
             var dfd = jQuery.Deferred();
 
-            console.log(self);
-
             dfd.notify("Guardando informacion del producto...");
 
-            var viewModel = self.val();
+            var viewModel = jQuery(self.element).find('div.ui-crudForm-modelBinding:first').widgetModel('valAsObject');
 
             jQuery.when(productAjax.ajax.productSave(viewModel))
                 .then(
@@ -345,7 +346,10 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                         }
                         else {
                             if (result.Data) {
-                                self._bindModelValidation(result.Data.ModelState);
+
+                                jQuery(self.element)
+                                    .find('div.ui-crudForm-modelBinding:first')
+                                    .widgetModel('bindErrors', result.Data.ModelState);
                             }
                             dfd.reject(result.Message);
                         }
@@ -394,15 +398,18 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                 nullable: true,
                 onItemBuild: function (widget, parent) {
                     jQuery(parent)
-                        .append('<p>some hidden value with custom widget functionality</p>')
+                        .append('<p>some readOnly value-><span class="SomeCustomValue">2</span></p>')
                         .find('p:first')
                             .click(function () {
                                 jQuery(widget).widgetModelItem('change');
                             });
                 },
                 onItemValue: function (parent) {
-                    return 2;
+                    return jQuery(parent).find('span.SomeCustomValue').html();
                 },
+                onItemBind: function (parent, dataItem) {
+                    return jQuery(parent).find('span.SomeCustomValue').html(dataItem);
+                }
             },
         },
         ],

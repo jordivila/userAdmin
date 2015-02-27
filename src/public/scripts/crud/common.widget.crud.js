@@ -516,11 +516,6 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
             .children()
                 .wrapAll('<div class="ui-crudForm-formContent ui-widget-content" />')
             .end()
-            .find('div.ui-crudForm-modelBinding:first')
-                .widgetModel({
-                    modelItems: this.options.formModel
-                })
-            .end()
             .prepend('<div class="ui-crudForm-buttons ui-ribbonButtons ui-widget-content">');
 
         this.options.formButtonsDOMId = jQuery(this.element).find('div.ui-crudForm-buttons:first');
@@ -569,14 +564,15 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
         this._super();
     },
-    val: function () {
-        return jQuery(self.element).widgetModel('valAsObject');
-    },
+    //val: function () {
+        //return jQuery(self.element).widgetModel('valAsObject');
+    //},
     bind: function (dataItem) {
         try {
             this.options.formBind(this, dataItem);
             this._trigger('dataBound', null, dataItem);
         } catch (e) {
+            console.error(e);
             this._trigger('errorDisplay', null, "Ha ocurrido un error en el formulario");
         }
     },
@@ -584,7 +580,7 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
         var self = this;
 
-        self.options.formSave(self)
+        self.options.formSave(this)
                 .progress(function (status) {
                     self.progressShow(status);
                 })

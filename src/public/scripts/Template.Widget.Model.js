@@ -8,10 +8,10 @@
         this._super();
 
         //jQuery(this.element)
-            //.attr('data-widget', this.widgetName);
-            //.addClass('ui-corner-all ui-widget-content');
+        //.attr('data-widget', this.widgetName);
+        //.addClass('ui-corner-all ui-widget-content');
 
-        this._bind(this.options.modelItems);
+        this._bindModelSchema(this.options.modelItems);
     },
     _init: function () {
 
@@ -43,7 +43,7 @@
         var o = this.cloneObject(this.options.modelItems);
         for (var i = 0; i < o.length; i++) {
             var propName = o[i].id;
-            var propValue = jQuery('*[data-widgetModelItem-id="{0}"]'.format(propName)).widgetModelItem('val');
+            var propValue = jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(propName)).widgetModelItem('val');
             o[i].currentValue = propValue;
         }
         return o;
@@ -57,7 +57,9 @@
         }
         return o;
     },
-    _bind: function () {
+    _bindModelSchema: function () {
+
+        var self = this;
 
         jQuery(this.element)
             .empty()
@@ -68,7 +70,22 @@
         if (this.options.modelItems !== null) {
 
             var onItemChanged = function () {
-                alert("webas");
+
+                var clearedErrors = true;
+
+                for (var i = 0; i < self.options.modelItems.length; i++) {
+                    if (jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(self.options.modelItems[i].id))
+                        .hasClass('ui-state-error')) {
+                        clearedErrors = false;
+                        break;
+                    }
+                }
+
+                if (clearedErrors)
+                {
+                    alert("errors cleared");
+                }
+
             };
 
             for (var i = 0; i < this.options.modelItems.length; i++) {
@@ -82,8 +99,21 @@
     bindErrors: function (keyValueArray) {
 
         for (var i = 0; i < keyValueArray.length; i++) {
-            jQuery('div[data-widgetModelItem-id="{0}"]'.format(keyValueArray[i].key))
-                .widgetModelItem('setErrors', keyValueArray[i].value);
+            jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(keyValueArray[i].key))
+                .widgetModelItem('setErrors', keyValueArray[i].value)
+                .addClass('ui-state-error');
+        }
+    },
+    bindValue: function (dataItem) {
+        for (var i in dataItem) {
+            for (var j = 0; j < this.options.modelItems.length; j++) {
+                if (this.options.modelItems[j].id == i) {
+
+
+                    console.log('div[data-widgetModelItem-id="{0}"]:first'.format(i));
+                    jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(i)).widgetModelItem('setValue', dataItem[i]);
+                }
+            }
         }
     }
 });
@@ -140,7 +170,7 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
 
         this._super();
 
-    }, 
+    },
     destroy: function () {
 
         this._super();
@@ -148,6 +178,8 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
     change: function () {
 
         var self = this;
+
+        jQuery(self.element).removeClass('ui-state-error');
 
         self.setErrors([]);
         self._trigger('change', null, self.options.id);
@@ -191,6 +223,9 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                     //return jQuery(jqSelector).widgetModelItemDate('getDate');
                     return jQuery(jqSelector).val();
                 };
+                this.setValue = function (value) {
+                    return jQuery(jqSelector).widgetModelItemDate('setDate', value);
+                };
 
                 break;
             case "float":
@@ -207,7 +242,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 this.val = function () {
                     return jQuery(jqSelector).val();
                 };
-                
+                this.setValue = function (value) {
+                    return jQuery(jqSelector).val(value);
+                };
+
                 break;
             case "bool":
 
@@ -228,6 +266,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 this.val = function () {
                     return jQuery(jqSelector).widgetModelItemBool('val');
                 };
+                this.setValue = function (value) {
+                    return jQuery(jqSelector).widgetModelItemBool('setValue', value);
+                };
+
 
                 break;
             case "list":
@@ -236,8 +278,7 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
 
                 var opts = '';
 
-                if (jQuery.isArray(this.options.input.listValues))
-                {
+                if (jQuery.isArray(this.options.input.listValues)) {
                     for (var i = 0; i < this.options.input.listValues.length; i++) {
                         opts += "<option value='{0}'>{1}</option>".format(this.options.input.listValues[i].value, this.options.input.listValues[i].text);
                     }
@@ -255,13 +296,18 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 this.val = function () {
                     return jQuery(jqSelector).val();
                 };
-
+                this.setValue = function (value) {
+                    return jQuery(jqSelector).val(value);
+                };
                 break;
 
             case "custom":
                 this.options.input.onItemBuild(jQuery(this.element), $parent);
                 this.val = function () {
                     return self.options.input.onItemValue($parent);
+                };
+                this.setValue = function (value) {
+                    return self.options.input.onItemBind($parent, value);
                 };
                 break;
             default:
@@ -278,11 +324,14 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 this.val = function () {
                     return jQuery(jqSelector).val();
                 };
+                this.setValue = function (value) {
+                    return jQuery(jqSelector).val(value);
+                };
 
                 break;
         }
 
-        
+
     },
     setErrors: function (errors) {
 
@@ -305,6 +354,9 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
     },
     val: function () {
         throw new Error("{0}.val is an abstract function".format(this.widgetName));
+    },
+    setValue: function () {
+        throw new Error("{0}.setValue is an abstract function".format(this.widgetName));
     }
 });
 
@@ -314,14 +366,14 @@ jQuery.widget("ui.widgetModelSummary", jQuery.ui.widgetBase,
 
     },
     _create: function () {
-        
+
         this._super();
     },
     _init: function () {
 
         this._super();
 
-    }, 
+    },
     destroy: function () {
 
         this._super();
