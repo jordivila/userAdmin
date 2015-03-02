@@ -49,12 +49,9 @@ jQuery.widget("ui.commonBaseWidget", /*jQuery.ui.widgetBase,*/
 
             jQuery(document)
                 .click(function (e) {
-                    jQuery(progressBoxSelector).data('lastClickPosition', { clientX: e.clientX, clientY: e.clientY });
+                    jQuery(progressBoxSelector).find('div:first').css('top', (e.clientY + 20));
                 });
         }
-
-        
-
     },
     progressShow: function (msg) {
 
@@ -64,7 +61,6 @@ jQuery.widget("ui.commonBaseWidget", /*jQuery.ui.widgetBase,*/
 
         $p.find('div:first')
             .html(msg)
-            .css('top', ($p.data('lastClickPosition').clientY + 20))
           .end()
           .show();
     },
