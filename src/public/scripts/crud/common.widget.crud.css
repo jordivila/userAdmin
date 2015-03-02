@@ -1,9 +1,11 @@
-﻿.ui-progress-feedback {padding:2em;width:auto;position:absolute;z-index:999;left:48%;top:48%;display:none;}
+﻿.ui-progress-feedback {display:none; z-index:99999;background: none;opacity: 1;filter: Alpha(Opacity=100);}
+.ui-progress-feedback .ui-widget {top:50%;text-align:center;padding:2em 0 2em 0;position:relative;width:80%;margin:0 auto 0 auto;}
+
 
 .ui-crud .ui-widget-error {padding:0.2em;}
 .ui-crud .ui-widget-info {padding:0.2em !important;}
-.ui-crud .ui-ribbonButtons { border-bottom:  0em;padding:0.5em;}
-.ui-crud .ui-ribbonButtons button {margin-bottom: 0.1em !important;font-weight:normal;}
+.ui-crud .ui-ribbonButtons { border-bottom:  0em;padding:0em;}
+.ui-crud .ui-ribbonButtons button {margin-bottom: 0.1em !important;font-weight:normal;border:none;}
 .ui-crud .ui-ribbonButtons span.ui-button-text {/*font-size:1.1em !important;*/}
 .ui-crud .ui-fieldItem {}
 .ui-crud .ui-fieldItem .ui-field-box {}

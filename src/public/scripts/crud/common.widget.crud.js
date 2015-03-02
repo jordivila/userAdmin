@@ -98,7 +98,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
             var template = '{0}' +
                 '<div class="{1}"></div>' +
-                '<div class="{2} ui-ribbonButtons ui-widget-content"></div>' +
+                '<div class="{2} ui-ribbonButtons ui-widget-content ui-state-default"></div>' +
                 '<div class="{3}"></div>' +
                 '<div class="{4}"></div>';
 
@@ -302,7 +302,7 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
                 .children()
                 .wrapAll('<div class="ui-crudFilter-form ui-widget-content" />')
                 .end()
-        .prepend('<div class="ui-crudFilter-buttons ui-ribbonButtons ui-widget-content"></div>');
+        .prepend('<div class="ui-crudFilter-buttons ui-ribbonButtons ui-widget-content ui-state-default"></div>');
 
         this._filterButtonsInit();
     },
@@ -516,7 +516,7 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
             .children()
                 .wrapAll('<div class="ui-crudForm-formContent ui-widget-content" />')
             .end()
-            .prepend('<div class="ui-crudForm-buttons ui-ribbonButtons ui-widget-content">');
+            .prepend('<div class="ui-crudForm-buttons ui-ribbonButtons ui-widget-content ui-state-default">');
 
         this.options.formButtonsDOMId = jQuery(this.element).find('div.ui-crudForm-buttons:first');
 
@@ -555,7 +555,6 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
         jQuery(this.options.formButtonsDOMId).append('<div class="ui-carriageReturn"></div>');
 
     },
-
     _done: function () {
         this._trigger('done', null, null);
 
@@ -564,9 +563,6 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
         this._super();
     },
-    //val: function () {
-        //return jQuery(self.element).widgetModel('valAsObject');
-    //},
     bind: function (dataItem) {
         try {
             this.options.formBind(this, dataItem);
@@ -592,12 +588,4 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
                     self.progressHide();
                 });
     },
-    //_dfdSave: function () {
-
-    //    var dfd = jQuery.Deferred();
-    //    dfd.reject(this.namespace + '.' + this.widgetName + "._dfdSave is an abstract method. Child class must implemented");
-    //    return dfd.promise();
-    //}
-
-
 });

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="initial-scale=1.0" />
@@ -17,15 +17,15 @@
 </head>
 <body class="ui-widget ui-widget-content ui-hidden">
 
-    <ul id="panelMenu" class="ui-menuNav ui-menuNav-Expand">
-    <li>
-    <div>Copyright © 2012 Company Co. All rightsVgg reserved</div>
-                
-                <div class="ui-siteVersion">
-                    v. - {{Package.version}}
-                </div>
-                </li>
-    </ul>
+    <div id="panelMenu" class="ui-menuNav ui-menuNav-Expand ui-state-default">
+        <ul></ul>
+        <div class="ui-carriageReturn"></div>
+        <div class="ui-site-version">
+            <div>Copyright © 2012 Company Co.</div>
+            <div>All rights reserved</div>
+            <div>v. - {{Package.version}}</div>
+        </div>
+    </div>
 
     <div class="ui-sitePage">
 
@@ -46,7 +46,7 @@
 
         <div class="ui-site-title">
             <h1>{{Title}}</h1>
-            <hr />
+            <hr class="ui-state-default" />
         </div>
 
         <!--Breadcrumb begin-->

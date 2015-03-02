@@ -46,13 +46,14 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         //TODO: load async Menu based on user identity
         var self = this;
         var $panelMenu = jQuery('#panelMenu');
+        var $navMenu = jQuery($panelMenu).find('ul:first');
 
         VsixMvcAppResult.Ajax.UserMenu(
             function(data, textStatus, jqXHR) {
 
                 
-                var menu = $panelMenu.navMenu();
-                $panelMenu.navMenu('bind', data);
+                var menu = $navMenu.navMenu();
+                $navMenu.navMenu('bind', data);
 
                 jQuery('#menuToggle').click(function() {
 
@@ -66,7 +67,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                                 if (!menuClicked) {
 
                                     $panelMenu.hide('slide', function() {
-                                        $panelMenu.navMenu('collapseAll');
+                                        $navMenu.navMenu('collapseAll');
                                     });
 
                                     jQuery(document).unbind("click");

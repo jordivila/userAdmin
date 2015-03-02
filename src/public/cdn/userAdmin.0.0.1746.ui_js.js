@@ -2764,13 +2764,14 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         //TODO: load async Menu based on user identity
         var self = this;
         var $panelMenu = jQuery('#panelMenu');
+        var $navMenu = jQuery($panelMenu).find('ul:first');
 
         VsixMvcAppResult.Ajax.UserMenu(
             function(data, textStatus, jqXHR) {
 
                 
-                var menu = $panelMenu.navMenu();
-                $panelMenu.navMenu('bind', data);
+                var menu = $navMenu.navMenu();
+                $navMenu.navMenu('bind', data);
 
                 jQuery('#menuToggle').click(function() {
 
@@ -2784,7 +2785,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                                 if (!menuClicked) {
 
                                     $panelMenu.hide('slide', function() {
-                                        $panelMenu.navMenu('collapseAll');
+                                        $navMenu.navMenu('collapseAll');
                                     });
 
                                     jQuery(document).unbind("click");
@@ -3317,10 +3318,11 @@ VsixMvcAppResult.Widgets.DialogInline =
 })(jQuery);;// Source: src/public/scripts/crud/common.widget.base.js
 /// <reference path="inv.ajax.js" />
 
+var progressBoxSelector = "#progressFeedBack";
+
 jQuery.widget("ui.commonBaseWidget", /*jQuery.ui.widgetBase,*/
 {
     options: {
-        progressFeedbackDOMId: null,
         errorDOMId: null,
         errorCustomDOM: false, // errors are shown in a custom DOM element,
         messagesDOMId: null
@@ -3358,20 +3360,34 @@ jQuery.widget("ui.commonBaseWidget", /*jQuery.ui.widgetBase,*/
     progressInit: function () {
 
         // only one progressFeedback per page
+        var self = this;
 
-        if (jQuery('#progressFeedBack').length === 0) {
-            jQuery('body').prepend('<div id="progressFeedBack" class="ui-progress-feedback ui-widget ui-widget-content ui-state-active">Please wait while loading</div>');
+        if (jQuery(progressBoxSelector).length === 0) {
+            jQuery('body').prepend('<div id="progressFeedBack" class="ui-progress-feedback ui-widget-overlay"><div class="ui-widget ui-widget-content ui-state-active">Please wait while loading</div></div>');
+
+            jQuery(document)
+                .click(function (e) {
+                    jQuery(progressBoxSelector).data('lastClickPosition', { clientX: e.clientX, clientY: e.clientY });
+                });
         }
 
-        this.options.progressFeedbackDOMId = jQuery('#progressFeedBack');
+        
 
     },
     progressShow: function (msg) {
+
         console.log("Info->" + msg);
-        jQuery(this.options.progressFeedbackDOMId).html(msg).show();
+
+        var $p = jQuery(progressBoxSelector);
+
+        $p.find('div:first')
+            .html(msg)
+            .css('top', ($p.data('lastClickPosition').clientY + 20))
+          .end()
+          .show();
     },
     progressHide: function () {
-        jQuery(this.options.progressFeedbackDOMId).hide();
+        jQuery(progressBoxSelector).hide();
     },
     errorInit: function () {
 
@@ -3582,7 +3598,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
             var template = '{0}' +
                 '<div class="{1}"></div>' +
-                '<div class="{2} ui-ribbonButtons ui-widget-content"></div>' +
+                '<div class="{2} ui-ribbonButtons ui-widget-content ui-state-default"></div>' +
                 '<div class="{3}"></div>' +
                 '<div class="{4}"></div>';
 
@@ -3786,7 +3802,7 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
                 .children()
                 .wrapAll('<div class="ui-crudFilter-form ui-widget-content" />')
                 .end()
-        .prepend('<div class="ui-crudFilter-buttons ui-ribbonButtons ui-widget-content"></div>');
+        .prepend('<div class="ui-crudFilter-buttons ui-ribbonButtons ui-widget-content ui-state-default"></div>');
 
         this._filterButtonsInit();
     },
@@ -4000,7 +4016,7 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
             .children()
                 .wrapAll('<div class="ui-crudForm-formContent ui-widget-content" />')
             .end()
-            .prepend('<div class="ui-crudForm-buttons ui-ribbonButtons ui-widget-content">');
+            .prepend('<div class="ui-crudForm-buttons ui-ribbonButtons ui-widget-content ui-state-default">');
 
         this.options.formButtonsDOMId = jQuery(this.element).find('div.ui-crudForm-buttons:first');
 
@@ -4039,7 +4055,6 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
         jQuery(this.options.formButtonsDOMId).append('<div class="ui-carriageReturn"></div>');
 
     },
-
     _done: function () {
         this._trigger('done', null, null);
 
@@ -4048,9 +4063,6 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
         this._super();
     },
-    //val: function () {
-        //return jQuery(self.element).widgetModel('valAsObject');
-    //},
     bind: function (dataItem) {
         try {
             this.options.formBind(this, dataItem);
@@ -4076,14 +4088,6 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
                     self.progressHide();
                 });
     },
-    //_dfdSave: function () {
-
-    //    var dfd = jQuery.Deferred();
-    //    dfd.reject(this.namespace + '.' + this.widgetName + "._dfdSave is an abstract method. Child class must implemented");
-    //    return dfd.promise();
-    //}
-
-
 });
 ;// Source: src/public/scripts/crud/common.widget.grid.pagination.js
 /// <reference path="inv.ajax.js" />

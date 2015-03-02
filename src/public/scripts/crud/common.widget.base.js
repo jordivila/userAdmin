@@ -1,9 +1,10 @@
 ﻿/// <reference path="inv.ajax.js" />
 
+var progressBoxSelector = "#progressFeedBack";
+
 jQuery.widget("ui.commonBaseWidget", /*jQuery.ui.widgetBase,*/
 {
     options: {
-        progressFeedbackDOMId: null,
         errorDOMId: null,
         errorCustomDOM: false, // errors are shown in a custom DOM element,
         messagesDOMId: null
@@ -41,20 +42,34 @@ jQuery.widget("ui.commonBaseWidget", /*jQuery.ui.widgetBase,*/
     progressInit: function () {
 
         // only one progressFeedback per page
+        var self = this;
 
-        if (jQuery('#progressFeedBack').length === 0) {
-            jQuery('body').prepend('<div id="progressFeedBack" class="ui-progress-feedback ui-widget ui-widget-content ui-state-active">Please wait while loading</div>');
+        if (jQuery(progressBoxSelector).length === 0) {
+            jQuery('body').prepend('<div id="progressFeedBack" class="ui-progress-feedback ui-widget-overlay"><div class="ui-widget ui-widget-content ui-state-active">Please wait while loading</div></div>');
+
+            jQuery(document)
+                .click(function (e) {
+                    jQuery(progressBoxSelector).data('lastClickPosition', { clientX: e.clientX, clientY: e.clientY });
+                });
         }
 
-        this.options.progressFeedbackDOMId = jQuery('#progressFeedBack');
+        
 
     },
     progressShow: function (msg) {
+
         console.log("Info->" + msg);
-        jQuery(this.options.progressFeedbackDOMId).html(msg).show();
+
+        var $p = jQuery(progressBoxSelector);
+
+        $p.find('div:first')
+            .html(msg)
+            .css('top', ($p.data('lastClickPosition').clientY + 20))
+          .end()
+          .show();
     },
     progressHide: function () {
-        jQuery(this.options.progressFeedbackDOMId).hide();
+        jQuery(progressBoxSelector).hide();
     },
     errorInit: function () {
 
