@@ -3780,7 +3780,6 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
         return dfd.promise();
     },
-
     _searchForEdit: function (dataItem) {
 
         var self = this;
@@ -3833,7 +3832,6 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
 
     },
-
     _gridButtonsInit: function () {
 
         var defaultButtons = this.options.gridButtonsGet(this, [{
