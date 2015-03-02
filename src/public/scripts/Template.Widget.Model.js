@@ -83,7 +83,7 @@
 
                 if (clearedErrors)
                 {
-                    alert("errors cleared");
+                    self._trigger('errorsCleared', null, null);
                 }
 
             };
@@ -97,7 +97,6 @@
         }
     },
     bindErrors: function (keyValueArray) {
-
         for (var i = 0; i < keyValueArray.length; i++) {
             jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(keyValueArray[i].key))
                 .widgetModelItem('setErrors', keyValueArray[i].value)
@@ -105,16 +104,27 @@
         }
     },
     bindValue: function (dataItem) {
+        this._clearErrors();
+
         for (var i in dataItem) {
             for (var j = 0; j < this.options.modelItems.length; j++) {
                 if (this.options.modelItems[j].id == i) {
-
-
-                    console.log('div[data-widgetModelItem-id="{0}"]:first'.format(i));
-                    jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(i)).widgetModelItem('setValue', dataItem[i]);
+                    jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(i))
+                        .widgetModelItem('setValue', dataItem[i]);
+                        
                 }
             }
         }
+    },
+    _clearErrors: function () {
+        jQuery(this.element)
+            .find('div.ui-widgetModelItem')
+                .removeClass('ui-state-error')
+                .find('div.ui-widgetModel-inputError')
+                    .empty()
+                    .addClass('ui-hidden')
+                .end()
+            .end();
     }
 });
 
@@ -351,37 +361,13 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 .empty()
                 .addClass('ui-hidden');
         }
+
+        return this;
     },
     val: function () {
         throw new Error("{0}.val is an abstract function".format(this.widgetName));
     },
     setValue: function () {
         throw new Error("{0}.setValue is an abstract function".format(this.widgetName));
-    }
-});
-
-jQuery.widget("ui.widgetModelSummary", jQuery.ui.widgetBase,
-{
-    options: {
-
-    },
-    _create: function () {
-
-        this._super();
-    },
-    _init: function () {
-
-        this._super();
-
-    },
-    destroy: function () {
-
-        this._super();
-    },
-    deleteByKey: function (key) {
-        jQuery(this.element).find('li[modelkey="' + key + '"]').remove();
-        if (jQuery(this.element).find('ul').find('li').length === 0) {
-            jQuery(this.element).hide();
-        }
     }
 });

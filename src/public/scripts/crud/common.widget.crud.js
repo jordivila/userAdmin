@@ -55,27 +55,29 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         gridFilterObject: null,
         formDOMId: null,
 
-        gridSearch: function (self) {
-            var dfd = jQuery.Deferred();
-            dfd.reject(self.namespace + '.' + self.widgetName + "._dfdSearch is an abstract method. Child class must implemented");
-            return dfd.promise();
+        gridCustomOptions: {},
+        gridSearchMethod: null,
+        gridFilterInit: function (crudWidget, filterOptions) {
+            jQuery(crudWidget.options.gridFilterDOMId).crudFilter(jQuery.extend({}, filterOptions, { Model: crudWidget.options.filterModel }));
         },
-        gridFilterInit: function (self, filterOptions) {
-            throw new Error(self.namespace + '.' + self.widgetName + "._gridFilterInit is an abstract method. Child class method must be implemented");
+        gridHeaderTemplate: function (crudGridWidget) {
+            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridHeaderTemplate is an abstract method. Child class method must be implemented");
         },
-        gridEditSearch: function (self, dataItem) {
-            var dfd = jQuery.Deferred();
-            dfd.reject(this.namespace + '.' + this.widgetName + ".gridEditSearch is an abstract method. Child class must implemented");
-            return dfd.promise();
+        gridRowTemplate: function (crudGridWidget) {
+            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridRowTemplate is an abstract method. Child class method must be implemented");
         },
-        gridInit: function (self, gridOptions) {
-            throw new Error(self.namespace + '.' + self.widgetName + ".gridInit is an abstract method. Child class method must be implemented");
+        gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
+            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowColumns is an abstract method. Child class method must be implemented");
         },
-        gridButtonsGet: function (self, defaultButtons) {
+        gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
+            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowEvents is an abstract method. Child class method must be implemented");
+        },
+        gridSearchForEditMethod: null,
+        gridButtonsGet: function (crudWidget, defaultButtons) {
             return defaultButtons;
         },
-        formInit: function (self, formOptions) {
-            throw new Error(self.namespace + '.' + self.widgetName + ".formInit is an abstract method. Child class method must be implemented");
+        formInit: function (crudWidget, formOptions) {
+            throw new Error(crudWidget.namespace + '.' + crudWidget.widgetName + ".formInit is an abstract method. Child class method must be implemented");
         },
     },
     _create: function () {
@@ -125,27 +127,45 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
         this._super();
         this._gridButtonsInit();
-        this.options.gridInit(self, {
-            errorDisplay: function (e, msg) {
-                self.errorDisplay(msg);
-            },
-            dataBound: function () {
-                if (jQuery(self.options.gridFilterDOMId).is(':visible')) {
-                    self._actionSet(self._actions.list);
+
+
+        var gridOptions = jQuery.extend(
+            {},
+            {
+                //this.options.gridInit(self, {
+                gridHeaderTemplate: self.options.gridHeaderTemplate,
+                gridRowTemplate: self.options.gridRowTemplate,
+                gridBindRowColumns: self.options.gridBindRowColumns,
+                gridBindRowEvents: self.options.gridBindRowEvents,
+
+                errorDisplay: function (e, msg) {
+                    self.errorDisplay(msg);
+                },
+                dataBound: function () {
+                    if (jQuery(self.options.gridFilterDOMId).is(':visible')) {
+                        self._actionSet(self._actions.list);
+                    }
+                },
+                paginated: function (e, pageIndex) {
+                    self.options.gridFilterObject.Page = pageIndex;
+                    self.errorHide();
+                    self._search();
+                },
+                onSelect: function (e, dataItem) {
+                    self.errorHide();
+                    self._trigger('onSelect', null, dataItem);
+                },
+                onEdit: function (e, dataItem) {
+                    self.errorHide();
+                    self._searchForEdit(dataItem);
                 }
             },
-            paginated: function (e, pageIndex) {
-                self.options.gridFilterObject.Page = pageIndex;
-                self.errorHide();
-                self._search();
-            },
-            onEdit: function (e, dataItem) {
-                self.errorHide();
-                self._searchForEdit(dataItem);
-            }
+            self.options.gridCustomOptions);
 
-        });
+        jQuery(this.options.gridDOMId).crudGrid(gridOptions);
+
         this.options.gridFilterInit(self, {
+            Model: self.options.filterModel,
             errorDisplay: function (e, msg) {
                 self.errorDisplay(msg);
             },
@@ -231,7 +251,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
         var self = this;
 
-        self.options.gridSearch(self)
+        self._gridSearch()
                 .progress(function (status) {
                     self.progressShow(status);
                 })
@@ -243,11 +263,44 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                     self.progressHide();
                 });
     },
+    _gridSearch: function () {
+
+        var self = this;
+        var dfd = jQuery.Deferred();
+
+        dfd.notify("Buscando...");
+
+        if (self.options.gridSearchMethod === null) {
+            dfd.reject(self.namespace + '.' + self.widgetName + "options.gridSearchMethod is an abstract method. Child class must implement");
+        }
+        else {
+            jQuery.when(self.options.gridSearchMethod(self.options.gridFilterObject))
+                .then(
+                    function (result, statusText, jqXHR) {
+                        if (result.IsValid) {
+                            jQuery(self.options.gridDOMId).crudGrid('bind', result.Data);
+                            dfd.resolve();
+                        }
+                        else {
+                            dfd.reject(result.Message);
+                        }
+                    },
+                    function (jqXHR, textStatus, errorThrown) {
+                        dfd.reject("Error buscando");
+                    })
+                .done(function () {
+
+                });
+        }
+
+        return dfd.promise();
+    },
+
     _searchForEdit: function (dataItem) {
 
         var self = this;
 
-        self.options.gridEditSearch(self, dataItem)
+        self._gridEditSearch(dataItem)
                 .progress(function (status) {
                     self.progressShow(status);
                 })
@@ -259,6 +312,43 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                     self.progressHide();
                 });
     },
+    _gridEditSearch: function (dataItem) {
+
+        var self = this;
+        var dfd = jQuery.Deferred();
+
+        dfd.notify("Buscando información...");
+
+        if (self.options.gridSearchForEditMethod === null) {
+            dfd.reject(self.namespace + '.' + self.widgetName + ".options.gridSearchForEditMethod is an abstract method. Child class must implement");
+        }
+        else {
+
+            jQuery.when(self.options.gridSearchForEditMethod(dataItem))
+                    .then(
+                        function (result, statusText, jqXHR) {
+                            if (result.IsValid) {
+                                jQuery(self.options.formDOMId).crudForm('bind', result.Data);
+
+                                dfd.resolve();
+                            }
+                            else {
+                                dfd.reject(result.Message);
+                            }
+                        },
+                        function (jqXHR, textStatus, errorThrown) {
+                            dfd.reject("Error obteniendo información");
+                        })
+                    .done(function () {
+
+                    });
+        }
+
+        return dfd.promise();
+
+
+    },
+
     _gridButtonsInit: function () {
 
         var defaultButtons = this.options.gridButtonsGet(this, [{
@@ -295,7 +385,12 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
     },
     _create: function () {
 
+
         this._super();
+
+        jQuery(this.element).widgetModel({
+            modelItems: this.options.Model
+        });
 
         jQuery(this.element)
             .addClass('ui-crudFilter ui-hidden')
@@ -324,6 +419,8 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
             .end()
         //.fieldItem();
         ;
+
+        this._done();
     },
     _done: function () {
         this._trigger('done', null, null);
@@ -366,7 +463,19 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
         ///TODO: unbind select change events + button events
     },
     val: function () {
-        throw new Error(this.namespace + '.' + this.widgetName + ".val method Not implemented");
+
+        var self = this;
+
+        var model = {
+
+            Filter: jQuery(this.element).widgetModel('valAsObject'),
+            Page: 0,
+            PageSize: this.options.PageSize,
+            SortBy: this.options.SortBy,
+            SortAscending: this.options.SortAscending
+        };
+
+        return model;
     }
 });
 
@@ -374,7 +483,22 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
 {
     options: {
         gridBodyDOMId: null,
-        gridPagerDOMId: null
+        gridPagerDOMId: null,
+
+
+        gridHeaderTemplate: function (crudGridWidget) {
+            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridHeaderTemplate is an abstract method. Child class method must be implemented");
+        },
+        gridRowTemplate: function (crudGridWidget) {
+            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridRowTemplate is an abstract method. Child class method must be implemented");
+        },
+        gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
+            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowColumns is an abstract method. Child class method must be implemented");
+        },
+        gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
+            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowEvents is an abstract method. Child class method must be implemented");
+        },
+
     },
     _create: function () {
 
@@ -419,7 +543,7 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
                         '<table>' +
                             '<tbody>' +
                                 '<tr class="ui-crudGrid-header">' +
-                                    this._gridHeaderTemplate() +
+                                    this.options.gridHeaderTemplate(this) +
                                 '</tr>' +
                             '</tbody>' +
                         '</table>' +
@@ -433,15 +557,6 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
                     '</div>' +
                 '</div>' +
                 '<div class="ui-crudGrid-pager ui-state-default"></div>';
-    },
-    _gridHeaderTemplate: function () {
-        throw new Error(this.namespace + '.' + this.widgetName + "._gridHeaderTemplate is an abstract method. Child class method must be implemented");
-    },
-    _gridRowTemplate: function () {
-        throw new Error(this.namespace + '.' + this.widgetName + "._gridRowTemplate is an abstract method. Child class method must be implemented");
-    },
-    _bindRowColumns: function ($row, dataItem) {
-        throw new Error(this.namespace + '.' + this.widgetName + "._bindRowColumns is an abstract method. Child class method must be implemented");
     },
     _bindRowAlternatedColor: function () {
 
@@ -459,10 +574,6 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
                     }
                 });
     },
-    _bindRowEvents: function ($row, dataItem) {
-
-        throw new Error(this.namespace + '.' + this.widgetName + "._bindRowEvents is an abstract method. Child class method must be implemented");
-    },
     _bindRows: function (data) {
 
         var self = this;
@@ -472,11 +583,10 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         for (var i = 0; i < data.Data.length; i++) {
 
             var dataItem = data.Data[i];
-            var $row = jQuery('<tr class="ui-crudGrid-dataRow">' + self._gridRowTemplate() + "</tr>");
-            self._bindRowColumns($row, dataItem);
+            var $row = jQuery('<tr class="ui-crudGrid-dataRow">' + self.options.gridRowTemplate(this) + "</tr>");
+            self.options.gridBindRowColumns(this, $row, dataItem);
             self._bindRowAlternatedColor();
-            self._bindRowEvents($row, dataItem);
-
+            self.options.gridBindRowEvents(this, $row, dataItem);
 
             jQuery(self.options.gridBodyDOMId).append($row);
         }

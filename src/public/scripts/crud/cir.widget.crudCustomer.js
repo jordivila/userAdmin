@@ -1,4 +1,5 @@
-﻿var customerAjax = {
+﻿/*
+var customerAjax = {
     ajax: {
         _ajaxBaseAddress: "../../Controllers/CirDataEntryController.aspx/",
         _ajaxMergeConfig: function (ajaxProperties) {
@@ -42,6 +43,75 @@
 
     }
 };
+*/
+
+var customerAjax = {
+    ajax: {
+        _ajaxBaseAddress: null,
+        _ajaxMergeConfig: null,
+        _fakeDataGrid: null,
+        _fakeDataGridInit: function () {
+
+            customerAjax.ajax._fakeDataGrid = [];
+
+            for (var i = 0; i < 1000; i++) {
+                customerAjax.ajax._fakeDataGrid.push({
+                    NumDocumento: Array(11).join(i.toString()),
+                    fechaAlta: new Date(),
+                    fechaNacimiento: new Date(),
+                    id: i,
+                    nombre: "person {0}".format(i),
+                    oficinaNombre: "Bcn",
+                    oficinaOrigen: i,
+                });
+            }
+        },
+        _fakeDelay: 1000,
+        customerSearch: function (filter) {
+
+            var self = this;
+            var dfd = jQuery.Deferred();
+
+
+            if (customerAjax.ajax._fakeDataGrid === null) {
+                customerAjax.ajax._fakeDataGridInit();
+            }
+
+            var dataResult = {
+                "IsValid": true,
+                "Message": "",
+                "MessageType": 0,
+                "Data":
+                    {
+                        "TotalPages": null,
+                        "TotalRows": customerAjax.ajax._fakeDataGrid.length - 10,
+                        "Page": filter.Page,
+                        "PageSize": filter.PageSize,
+                        "SortBy": "",
+                        "SortAscending": false,
+                        "Data": [],
+                        "IsValid": true,
+                        "Message": null,
+                        "MessageType": 0
+                    }
+            };
+
+            for (var i = (filter.Page * filter.PageSize) ; i < ((filter.Page * filter.PageSize) + filter.PageSize) ; i++) {
+
+                dataResult.Data.Data.push(customerAjax.ajax._fakeDataGrid[i]);
+            }
+
+            setTimeout(function () { dfd.resolve(dataResult); }, customerAjax.ajax._fakeDelay);
+
+            return dfd.promise();
+        }
+    },
+    cache: {
+
+    }
+};
+
+
 
 jQuery.widget("ui.customer", jQuery.ui.crud,
 {
@@ -55,43 +125,45 @@ jQuery.widget("ui.customer", jQuery.ui.crud,
             displayName: "Nº Documento",
             input: { value: "" },
         }],
-        gridSearch: function (self) {
 
-            var dfd = jQuery.Deferred();
+        gridCustomOptions: {
+            //onSelect: function (e, dataItem) {
+            //    var $crudParent = jQuery(e.target).parents('div.ui-crud:first');
+            //    $crudParent.customer('fireOnSelect', dataItem);
+            //}
+        },
+        gridSearchMethod: customerAjax.ajax.customerSearch,
+        gridHeaderTemplate: function (crudGridWidget) {
+            return '<th class="ui-customerGrid-nombre">Nombre/Razón Social</th>' +
+                    '<th class="ui-customerGrid-NumDocumento">NIF</th>' +
+                    '<th class="ui-customerGrid-gridCommand"></th>';
+        },
+        gridRowTemplate: function (crudGridWidget) {
 
-            dfd.notify("Buscando clientes...");
+            return '<td class="ui-customerGrid-nombre"></td>' +
+                    '<td class="ui-customerGrid-NumDocumento"></td>' +
+                    '<td class="ui-customerGrid-gridCommand">' +
+                        '<div class="ui-crudGrid-action ui-crudGrid-actionSelect ui-widget-content" title="Seleccionar">' +
+                            '<span class="ui-icon ui-icon-circle-arrow-e ui-state-default"></span>' +
+                        '</div>' +
+                    '</td>';
+        },
+        gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
 
+            var templateRowSetValue = function (node, valueString) {
+                jQuery(node).attr('title', valueString).html(valueString);
+            };
 
-            jQuery.when(customerAjax.ajax.customerSearch(self.options.gridFilterObject))
-                .then(
-                    function (result, statusText, jqXHR) {
-                        if (result.IsValid) {
-                            jQuery(self.options.gridDOMId).customerGrid('bind', result.Data);
-                            dfd.resolve();
-                        }
-                        else {
-                            dfd.reject(result.Message);
-                        }
-                    },
-                    function (jqXHR, textStatus, errorThrown) {
-                        dfd.reject("Error obteniendo clientes");
+            templateRowSetValue($row.find('td.ui-customerGrid-nombre:first'), dataItem.nombre);
+            templateRowSetValue($row.find('td.ui-customerGrid-NumDocumento:first'), dataItem.NumDocumento);
+        },
+        gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
+            $row.data("dataItem", dataItem)
+                .find('div.ui-crudGrid-actionSelect')
+                    .click(function () {
+                        crudGridWidget._trigger('onSelect', null, jQuery(this).parents('tr.ui-crudGrid-dataRow:first').data("dataItem"));
                     })
-                .done(function () {
-
-                });
-
-            return dfd.promise();
-        },
-        gridFilterInit: function (self, filterOptions) {
-            jQuery(self.options.gridFilterDOMId).customerFilter(jQuery.extend({}, filterOptions, { Model: self.options.filterModel }));
-        },
-        gridInit: function (self, gridOptions) {
-            jQuery(self.options.gridDOMId).customerGrid(jQuery.extend(gridOptions, {
-                onSelect: function (e, dataItem) {
-                    self.errorHide();
-                    self._trigger('onSelect', null, dataItem);
-                }
-            }));
+                    .end();
         },
         gridButtonsGet: function (self, defaultButtons) {
 
@@ -116,7 +188,6 @@ jQuery.widget("ui.customer", jQuery.ui.crud,
         formInit: function (self, formOptions) {
             self._done();
         },
-
     },
     _create: function () {
 
@@ -133,124 +204,4 @@ jQuery.widget("ui.customer", jQuery.ui.crud,
     
 });
 
-jQuery.widget("ui.customerFilter", jQuery.ui.crudFilter,
-{
-    options: {
-        Model: null,
-        filterButtonsInit: function (self, defaultButtons) {
-            for (var i = 0; i < defaultButtons.length; i++) {
-                if (defaultButtons[i].id == "filter") {
-                    defaultButtons[i].text = "Buscar clientes";
-                }
-            }
-            return defaultButtons;
-        }
 
-    },
-    _create: function () {
-
-        jQuery(this.element).widgetModel({
-            modelItems: this.options.Model
-        });
-
-        this._super();
-    },
-    _init: function () {
-
-        this._super();
-
-        this._done();
-    },
-    destroy: function () {
-
-        this._super();
-    },
-    val: function () {
-
-        var self = this;
-
-        var model = {
-
-            Filter: jQuery(this.element).widgetModel('valAsObject'),
-            Page: 0,
-            PageSize: this.options.PageSize,
-            SortBy: this.options.SortBy,
-            SortAscending: this.options.SortAscending
-        };
-
-        return model;
-    }
-});
-
-jQuery.widget("ui.customerGrid", jQuery.ui.crudGrid,
-{
-    options: {
-
-    },
-    _create: function () {
-
-        this._super();
-    },
-    _init: function () {
-
-        this._super();
-    },
-    destroy: function () {
-
-        this._super();
-    },
-    _gridHeaderTemplate: function () {
-        return '<th class="ui-customerGrid-nombre">Nombre/Razón Social</th>' +
-                '<th class="ui-customerGrid-oficinaNombre">Oficina</th>' +
-                '<th class="ui-customerGrid-NumDocumento">NIF</th>' +
-                '<th class="ui-customerGrid-fechaAlta">Fecha Alta</th>' +
-                '<th class="ui-customerGrid-fechaNacimiento">Fecha N/C</th>' +
-                '<th class="ui-customerGrid-gridCommand"></th>';
-    },
-    _gridRowTemplate: function () {
-
-        return '<td class="ui-customerGrid-nombre"></td>' +
-                '<td class="ui-customerGrid-oficinaNombre"></td>' +
-                '<td class="ui-customerGrid-NumDocumento"></td>' +
-                '<td class="ui-customerGrid-fechaAlta"></td>' +
-                '<td class="ui-customerGrid-fechaNacimiento"></td>' +
-                '<td class="ui-customerGrid-gridCommand">' +
-                    '<div class="ui-crudGrid-actionsColumn">' +
-                        '<table>' +
-                            '<tbody>' +
-                                '<tr>' +
-                                    '<td class="ui-crudGrid-action">' +
-                                        '<div class="ui-crudGrid-action-select ui-widget-content" title="Seleccionar">' +
-                                            '<span class="ui-icon  ui-icon-circle-arrow-e"></span>' +
-                                        '</div>' +
-                                    '</td>' +
-                                '</tr>' +
-                            '</tbody>' +
-                        '</table>' +
-                    '</div>' +
-                '</td>';
-    },
-    _bindRowColumns: function ($row, dataItem) {
-
-        var templateRowSetValue = function (node, valueString) {
-            jQuery(node).attr('title', valueString).html(valueString);
-        };
-
-        templateRowSetValue($row.find('td.ui-customerGrid-oficinaNombre:first'), dataItem.oficinaNombre);
-        templateRowSetValue($row.find('td.ui-customerGrid-NumDocumento:first'), dataItem.NumDocumento);
-        templateRowSetValue($row.find('td.ui-customerGrid-nombre:first'), dataItem.nombre);
-        templateRowSetValue($row.find('td.ui-customerGrid-fechaAlta:first'), dataItem.fechaAlta !== null ? Globalize.format(dataItem.fechaAlta, 'd') : '');
-        templateRowSetValue($row.find('td.ui-customerGrid-fechaNacimiento:first'), dataItem.fechaNacimiento !== null ? Globalize.format(dataItem.fechaNacimiento, 'd') : '');
-    },
-    _bindRowEvents: function ($row, dataItem) {
-
-        var self = this;
-
-        $row.data("dataItem", dataItem)
-            .find('div.ui-crudGrid-action-select')
-                .click(function () {
-                    self._trigger('onSelect', null, jQuery(this).parents('tr.ui-crudGrid-dataRow:first').data("dataItem"));
-                })
-                .end();
-    }
-});
