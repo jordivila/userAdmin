@@ -58,7 +58,9 @@ html, body {height:100%;}
 .ui-site-header .ui-menuToggle .ui-menuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
 
 /* menu */
+
 .ui-menuNav { padding:0em 0em 0em 0em !important; z-index:9999;position:absolute !important;height:99%;border-top:0;background-image:none !important;}
+.ui-menuNav .ui-treeList {border:0 !important;padding:0 !important;}
 .ui-menuNav .ui-treeList-toggle{margin:-0.45em 0.5em 0 0 !important;padding: 0.5em;border:0;}
 .ui-menuNav li { margin:0em !important;padding:1em 0.1em 1em 0.3em !important;background-image:none !important;border-left:none !important;border-right:none !important; border-top:none !important;}
 .ui-menuNav li ul {margin:0.1em 0.1em 0.1em 0.1em;padding:0.1em 0.1em 0.1em 0.3em;background-image:none;}
