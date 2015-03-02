@@ -1,4 +1,4 @@
-﻿
+﻿/*
 VsixMvcAppResult.Widgets.AjaxProgress = function () {
 
 
@@ -21,5 +21,5 @@ VsixMvcAppResult.Widgets.AjaxProgress = function () {
 
     return me;
 };
-
+*/
 

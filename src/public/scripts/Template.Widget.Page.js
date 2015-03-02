@@ -45,7 +45,7 @@ jQuery.widget("ui.page", jQuery.ui.widgetBase, {
 
         this._super();
 
-        this.initAjaxProgress();
+        //this.initAjaxProgress();
         this.initGlobalization();
         this.initValidate();
         this.initUserActivity();
@@ -69,9 +69,9 @@ jQuery.widget("ui.page", jQuery.ui.widgetBase, {
             }
         });
     },
-    initAjaxProgress: function() {
-        VsixMvcAppResult.Widgets.AjaxProgress().Create();
-    },
+    //initAjaxProgress: function() {
+        //VsixMvcAppResult.Widgets.AjaxProgress().Create();
+    //},
     initFooter: function() {
         jQuery('div.ui-siteFooter').widgetBase();
     },
