@@ -1902,8 +1902,8 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
 .ui-progress-feedback .ui-widget {top:50%;text-align:center;padding:2em 0 2em 0;position:relative;width:80%;margin:0 auto 0 auto;}
 
 
-.ui-crud .ui-widget-error {padding:0.2em;}
-.ui-crud .ui-widget-info {padding:0.2em !important;}
+.ui-crud .ui-crud-error {padding:0.2em;border:0; margin:0.5em 0 0 0.5em;font-weight:normal;}
+.ui-crud .ui-crud-info {padding:0.2em !important;padding:0.2em;border:0; margin:0.5em 0 0 0.5em;font-weight:normal;}
 .ui-crud .ui-ribbonButtons { border-bottom:  0em;padding:0em;}
 .ui-crud .ui-ribbonButtons button {margin-bottom: 0.1em !important;font-weight:normal;border:none;}
 .ui-crud .ui-ribbonButtons span.ui-button-text {/*font-size:1.1em !important;*/}

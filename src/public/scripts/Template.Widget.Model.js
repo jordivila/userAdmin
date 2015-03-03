@@ -171,7 +171,11 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
             })
             .blur(function () {
                 jQuery(this).removeClass('ui-state-focus');
+            })
+            .change(function () {
+                jQuery(this).addClass('ui-state-active');
             });
+
 
         this.setErrors(this.options.errors);
 

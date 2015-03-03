@@ -36,7 +36,7 @@ jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
             done: function () {
 
                 jQuery(self.options.productDOMId).product({
-                    title: 'CIR - Entrada de información adicional',
+                    title: 'Productos - Entrada de información adicional',
                     onSearchCustomer: function () {
                         self._pageSet(self._pageViews.customers);
                     },

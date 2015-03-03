@@ -2078,7 +2078,11 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
             })
             .blur(function () {
                 jQuery(this).removeClass('ui-state-focus');
+            })
+            .change(function () {
+                jQuery(this).addClass('ui-state-active');
             });
+
 
         this.setErrors(this.options.errors);
 
@@ -3302,35 +3306,23 @@ VsixMvcAppResult.Widgets.DialogInline =
     });
 
 })(jQuery);;// Source: src/public/scripts/crud/common.widget.base.js
-/// <reference path="inv.ajax.js" />
 
 var progressBoxSelector = "#progressFeedBack";
 
 jQuery.widget("ui.commonBaseWidget", /*jQuery.ui.widgetBase,*/
 {
     options: {
-        errorDOMId: null,
-        errorCustomDOM: false, // errors are shown in a custom DOM element,
-        messagesDOMId: null
+
     },
     _create: function () {
-
         this._super();
-
-        this.progressInit();
-        this.errorInit();
-
     },
     _init: function () {
 
         this._super();
 
         var widgetName = this.namespace + '.' + this.widgetName;
-
-        console.log("Init->" + widgetName);
-
         var dataWidgetInitialized = widgetName + ".IsInitialized";
-
 
         if (jQuery(this.element).data(dataWidgetInitialized) === undefined) {
             jQuery(this.element).data(dataWidgetInitialized, true);
@@ -3373,52 +3365,6 @@ jQuery.widget("ui.commonBaseWidget", /*jQuery.ui.widgetBase,*/
     },
     progressHide: function () {
         jQuery(progressBoxSelector).hide();
-    },
-    errorInit: function () {
-
-        if (this.options.errorCustomDOM) {
-
-            var errorCustomDOMClassName = this.namespace + '-' + this.widgetName + '-errDisplayBox';
-            var highlightCustomDOMClassName = this.namespace + '-' + this.widgetName + '-highlightDisplayBox';
-
-            var template = '';
-            template += '<div class="ui-widget-error ' + errorCustomDOMClassName + ' ui-state-error "></div>';
-            template += '<div class="ui-widget-info ' + highlightCustomDOMClassName + ' ui-state-highlight "></div>';
-
-            jQuery(this.element).prepend(template);
-
-            this.options.errorDOMId = jQuery(this.element).find('div.' + errorCustomDOMClassName + ':first');
-            this.options.messagesDOMId = jQuery(this.element).find('div.' + highlightCustomDOMClassName + ':first');
-
-            this.errorHide();
-            this.messageHide();
-        }
-    },
-    errorDisplay: function (msg) {
-        console.log("Error->" + msg);
-        jQuery(this.options.errorDOMId).html(msg).fadeTo('slow', 1);
-    },
-    errorHide: function () {
-        jQuery(this.options.errorDOMId).html('').fadeTo('slow', 0);
-    },
-    messageDisplay: function (msg) {
-        jQuery(this.options.messagesDOMId).html(msg).fadeTo('slow', 1);
-    },
-    messageHide: function () {
-        jQuery(this.options.messagesDOMId).html('').fadeTo('slow', 0);
-    },
-    messagedisplayAutoHide: function (msg, miliseconds) {
-
-        var time = 3000;
-
-        if (miliseconds) {
-            time = miliseconds;
-        }
-
-        jQuery(this.options.messagesDOMId).html(msg)
-            .fadeTo(500, 1, function () {
-                jQuery(this).delay(time).fadeTo(time, 0);
-            });
     },
     dfdFillCombo: function (selector, KeyValuePairArray) {
         var dfd = jQuery.Deferred();
@@ -3487,16 +3433,17 @@ jQuery.widget("ui.fieldItem", jQuery.ui.commonBaseWidget,
 jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
 {
     options: {
-
+        errorDOMId: null,
+        messagesDOMId: null
     },
     _create: function () {
 
         this._super();
 
+        this.progressInit();
 
     },
     _init: function () {
-
         this._super();
     },
     destroy: function () {
@@ -3526,14 +3473,62 @@ jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
             });
         }
     },
+    errorInit: function (parent) {
 
+        if (parent) {
+
+            var errorCustomDOMClassName = this.namespace + '-' + this.widgetName + '-errDisplayBox';
+            var highlightCustomDOMClassName = this.namespace + '-' + this.widgetName + '-highlightDisplayBox';
+
+
+            var template = '<div class="ui-crud-error {0} ui-state-error ui-hidden"></div>' +
+                           '<div class="ui-crud-info {1} ui-state-highlight ui-hidden"></div>';
+
+            template = template.format(errorCustomDOMClassName, highlightCustomDOMClassName);
+
+            jQuery(this.element).find(parent).append(template);
+
+            this.options.errorDOMId = jQuery(this.element).find('div.' + errorCustomDOMClassName + ':first');
+            this.options.messagesDOMId = jQuery(this.element).find('div.' + highlightCustomDOMClassName + ':first');
+
+            this.errorHide();
+            this.messageHide();
+        }
+    },
+    errorDisplay: function (msg) {
+        console.log("Error->" + msg);
+        jQuery(this.options.errorDOMId).html(msg).fadeTo('slow', 1);
+    },
+    errorHide: function () {
+        jQuery(this.options.errorDOMId).html('').fadeTo('slow', 0);
+    },
+    messageDisplay: function (msg) {
+        jQuery(this.options.messagesDOMId).html(msg).fadeTo('slow', 1);
+    },
+    messageHide: function () {
+        jQuery(this.options.messagesDOMId).html('').fadeTo('slow', 0);
+    },
+    messagedisplayAutoHide: function (msg, miliseconds) {
+
+        var time = 3000;
+
+        if (miliseconds) {
+            time = miliseconds;
+        }
+
+        jQuery(this.options.messagesDOMId).html(msg)
+            .fadeTo(500, 1, function () {
+                jQuery(this).delay(time).fadeTo(time, 0);
+            });
+    },
 });
 
 jQuery.widget("ui.crud", jQuery.ui.crudBase,
 {
     options: {
         title: null,
-        errorCustomDOM: true, // errors are shown in a custom DOM element -> overrides base widget option
+        
+        crudHeaderDomId: null,
         gridButtonsDOMId: null,
         gridDOMId: null,
         gridFilterDOMId: null,
@@ -3577,20 +3572,15 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var formControlClass = 'ui-{0}Crud-form'.format(this.widgetName);
         var templateGet = function () {
 
-            var crudTitle = self.options.title !== null ?
-                            '<div class="ui-widget-header">{0}</div>'
-                                .format(self.options.title)
-                                :
-                                '';
 
-            var template = '{0}' +
-                '<div class="{1}"></div>' +
-                '<div class="{2} ui-ribbonButtons ui-widget-content ui-state-default"></div>' +
-                '<div class="{3}"></div>' +
-                '<div class="{4}"></div>';
+            var template = '<div class="ui-widget-header">{0}</div>' +
+                            '<div class="{1}"></div>' +
+                            '<div class="{2} ui-ribbonButtons ui-widget-content ui-state-default"></div>' +
+                            '<div class="{3}"></div>' +
+                            '<div class="{4}"></div>';
 
             return template
-                .format(crudTitle,
+                .format(self.options.title,
                         gridFilterClass,
                         gridButtonsClass,
                         gridControlClass,
@@ -3599,7 +3589,14 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
         jQuery(this.element)
             .addClass('ui-crud')
-            .append(templateGet());
+            .append(templateGet())
+            .find('div.ui-widget-header:first')
+                .each(function () {
+                    self.options.crudHeaderDomId = jQuery(this);
+                    self.errorInit(jQuery(this));
+                });
+
+        
 
         this.options.gridFilterDOMId = jQuery(this.element).find('div.{0}:first'.format(gridFilterClass));
         this.options.gridDOMId = jQuery(this.element).find('div.{0}:first'.format(gridControlClass));
@@ -3699,8 +3696,31 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
             }
         });
     },
-
     destroy: function () {
+        this._super();
+    },
+    errorDisplay: function (msg) {
+
+        jQuery(this.options.crudHeaderDomId).addClass('ui-state-error');
+
+        this._super(msg);
+    },
+    errorHide: function () {
+
+        jQuery(this.options.crudHeaderDomId).removeClass('ui-state-error');
+
+        this._super();
+    },
+    messageDisplay: function (msg) {
+
+        jQuery(this.options.crudHeaderDomId).addClass('ui-state-error');
+
+        this._super(msg);
+    },
+    messageHide: function () {
+
+        jQuery(this.options.crudHeaderDomId).removeClass('ui-state-error');
+
         this._super();
     },
     _actions: {
@@ -3887,21 +3907,6 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
     _init: function () {
 
         this._super();
-
-        var self = this;
-
-        jQuery(this.element)
-            .find(':input')
-                .addClass('ui-widget-content')
-                //.blur(function () {
-                    //self._setActiveElementBasedOnValue(jQuery(this));
-                //})
-            .change(function () {
-                jQuery(this).addClass('ui-state-active');
-            })
-            .end()
-        //.fieldItem();
-        ;
 
         this._done();
     },
@@ -5288,7 +5293,7 @@ jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
             done: function () {
 
                 jQuery(self.options.productDOMId).product({
-                    title: 'CIR - Entrada de información adicional',
+                    title: 'Productos - Entrada de información adicional',
                     onSearchCustomer: function () {
                         self._pageSet(self._pageViews.customers);
                     },
