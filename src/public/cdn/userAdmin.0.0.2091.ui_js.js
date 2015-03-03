@@ -1782,6 +1782,21 @@ jQuery.widget("ui.widgetBase",
         //this.log(this.element);
         this.log(this.namespace + "." + this.widgetName + " -> init");
 
+
+
+
+
+        var widgetName = this.namespace + '.' + this.widgetName;
+        var dataWidgetInitialized = widgetName + ".IsInitialized";
+
+        if (jQuery(this.element).data(dataWidgetInitialized) === undefined) {
+            jQuery(this.element).data(dataWidgetInitialized, true);
+        }
+        else {
+            throw new Error("Se ha intentado crear una instancia de widget que ya estaba creada. Podrian duplicarse eventos." + widgetName);
+        }
+
+
     },
     destroy: function () {
 
@@ -3309,7 +3324,7 @@ VsixMvcAppResult.Widgets.DialogInline =
 
 var progressBoxSelector = "#progressFeedBack";
 
-jQuery.widget("ui.commonBaseWidget", /*jQuery.ui.widgetBase,*/
+jQuery.widget("ui.commonBaseWidget", jQuery.ui.widgetBase,
 {
     options: {
 
@@ -3320,16 +3335,6 @@ jQuery.widget("ui.commonBaseWidget", /*jQuery.ui.widgetBase,*/
     _init: function () {
 
         this._super();
-
-        var widgetName = this.namespace + '.' + this.widgetName;
-        var dataWidgetInitialized = widgetName + ".IsInitialized";
-
-        if (jQuery(this.element).data(dataWidgetInitialized) === undefined) {
-            jQuery(this.element).data(dataWidgetInitialized, true);
-        }
-        else {
-            throw new Error("Se ha intentado crear una instancia de widget que ya estaba creada. Podrian duplicarse eventos." + widgetName);
-        }
     },
     destroy: function () {
 
@@ -3495,30 +3500,56 @@ jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
             this.messageHide();
         }
     },
-    errorDisplay: function (msg) {
+    errorDisplay: function (msg, cb) {
+
         console.log("Error->" + msg);
-        jQuery(this.options.errorDOMId).html(msg).fadeTo('slow', 1);
+
+        jQuery(this.options.errorDOMId)
+            .parents('div:first')
+                .addClass('ui-state-error')
+            .end()
+            .html(msg)
+            .fadeTo('slow', 1, cb);
     },
-    errorHide: function () {
-        jQuery(this.options.errorDOMId).html('').fadeTo('slow', 0);
+    errorHide: function (cb) {
+
+        jQuery(this.options.errorDOMId)
+            .parents('div:first')
+                .removeClass('ui-state-error')
+            .end()
+            .html('')
+            .fadeTo('slow', 0, cb);
     },
-    messageDisplay: function (msg) {
-        jQuery(this.options.messagesDOMId).html(msg).fadeTo('slow', 1);
+    messageDisplay: function (msg, cb) {
+        jQuery(this.options.messagesDOMId)
+            .parents('div:first')
+                .addClass('ui-state-highlight')
+            .end()
+            .html(msg)
+            .fadeTo('slow', 1, cb);
     },
-    messageHide: function () {
-        jQuery(this.options.messagesDOMId).html('').fadeTo('slow', 0);
+    messageHide: function (cb) {
+        jQuery(this.options.messagesDOMId)
+            .parents('div:first')
+                .removeClass('ui-state-highlight')
+            .end()
+            .html('')
+            .fadeTo('slow', 0, cb);
     },
     messagedisplayAutoHide: function (msg, miliseconds) {
 
         var time = 3000;
+        var self = this;
 
         if (miliseconds) {
             time = miliseconds;
         }
 
-        jQuery(this.options.messagesDOMId).html(msg)
-            .fadeTo(500, 1, function () {
-                jQuery(this).delay(time).fadeTo(time, 0);
+        this.messageDisplay(msg,
+            function () {
+                jQuery(self.options.messagesDOMId)
+                    .delay(time)
+                    .fadeTo(time, 0, function () { self.messageHide(); });
             });
     },
 });
@@ -3527,7 +3558,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 {
     options: {
         title: null,
-        
+
         crudHeaderDomId: null,
         gridButtonsDOMId: null,
         gridDOMId: null,
@@ -3596,8 +3627,6 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                     self.errorInit(jQuery(this));
                 });
 
-        
-
         this.options.gridFilterDOMId = jQuery(this.element).find('div.{0}:first'.format(gridFilterClass));
         this.options.gridDOMId = jQuery(this.element).find('div.{0}:first'.format(gridControlClass));
         this.options.gridButtonsDOMId = jQuery(this.element).find('div.{0}:first'.format(gridButtonsClass));
@@ -3661,6 +3690,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                 self._actionSet(self._actions.list);
             },
             done: function () {
+
                 self.options.formInit(self, {
                     messagedisplayAutoHide: function (e, msg) {
                         self.messagedisplayAutoHide(msg);
@@ -3697,30 +3727,6 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         });
     },
     destroy: function () {
-        this._super();
-    },
-    errorDisplay: function (msg) {
-
-        jQuery(this.options.crudHeaderDomId).addClass('ui-state-error');
-
-        this._super(msg);
-    },
-    errorHide: function () {
-
-        jQuery(this.options.crudHeaderDomId).removeClass('ui-state-error');
-
-        this._super();
-    },
-    messageDisplay: function (msg) {
-
-        jQuery(this.options.crudHeaderDomId).addClass('ui-state-error');
-
-        this._super(msg);
-    },
-    messageHide: function () {
-
-        jQuery(this.options.crudHeaderDomId).removeClass('ui-state-error');
-
         this._super();
     },
     _actions: {
@@ -4908,21 +4914,14 @@ var productAjax = {
         },
         productSave: function (dataItem) {
 
+
             var dfd = jQuery.Deferred();
 
             var dataResult = null;
             var modelErrors = [];
 
-            if (dataItem.SomeStringFromList === "") {
-                //modelErrors.push({ key: "SomeStringFromList", value: ["este es un campo requerido"] });
-            }
-
-            if (dataItem.SomeBooleanNullable === "") {
-                //modelErrors.push({ key: "SomeBooleanNullable", value: ["por favor informa 'si' o 'no'"] });
-            }
-
-            for (var i in dataItem) {
-                modelErrors.push({ key: i, value: ["este es un campo requerido"] });
+            if (dataItem.FormData.SomeStringFromList === "") {
+                modelErrors.push({ key: "SomeStringFromList", value: ["este es un campo requerido"] });
             }
 
             if (modelErrors.length > 0) {
@@ -4933,10 +4932,32 @@ var productAjax = {
                 };
             }
             else {
+
+
+                console.log("ssssssssssss");
+                console.log(dataItem.FormData);
+
+
+                // Simulate saving data
+                dataItem.EditData.SomeBoolean = dataItem.FormData.SomeBoolean;
+                dataItem.EditData.SomeBooleanNullable = dataItem.FormData.SomeBooleanNullable;
+                dataItem.EditData.SomeCustomValue = dataItem.FormData.SomeCustomValue;
+                dataItem.EditData.SomeDate = new Date();
+                dataItem.EditData.SomeFloat = parseFloat(dataItem.FormData.SomeFloat);
+                dataItem.EditData.SomeString = dataItem.FormData.SomeString;
+                dataItem.EditData.SomeStringFromList = dataItem.FormData.SomeStringFromList;
+                // 
+                dataItem.FormData = undefined;
+
+
+                console.log(productAjax.ajax._fakeDataEdit[dataItem.productId]);
+                productAjax.ajax._fakeDataEdit[dataItem.productId] = dataItem.EditData;
+                console.log(productAjax.ajax._fakeDataEdit[dataItem.productId]);
+
                 dataResult = {
-                    Data: null,
+                    Data: dataItem,
                     IsValid: true,
-                    Message: null,
+                    Message: "Producto guardado",
                     MessageType: 0,
                 };
             }
@@ -5109,7 +5130,6 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                     .widgetModel({
                         modelItems: crudWidget.options.formModel,
                         errorsCleared: function () {
-                            console.log(crudWidget);
                             crudWidget.errorHide();
                         }
                     })
@@ -5122,6 +5142,10 @@ jQuery.widget("ui.product", jQuery.ui.crud,
             return defaultButtons;
         },
         formBind: function (self, dataItem) {
+
+            console.log(dataItem);
+
+            jQuery(self.element).data('lastBoundItem', dataItem);
 
             jQuery(self.element)
                 .find('div.ui-productCrud-form-searchOutput')
@@ -5150,15 +5174,17 @@ jQuery.widget("ui.product", jQuery.ui.crud,
 
             dfd.notify("Guardando informacion del producto...");
 
-            var viewModel = jQuery(self.element).find('div.ui-crudForm-modelBinding:first').widgetModel('valAsObject');
+            var viewModel = self.options.formValueGet(self);
+
+            console.log(viewModel);
 
             jQuery.when(productAjax.ajax.productSave(viewModel))
                 .then(
                     function (result, statusText, jqXHR) {
                         if (result.IsValid) {
-                            self._trigger('messagedisplayAutoHide', null, 'Producto guardado', 50);
+                            self._trigger('messagedisplayAutoHide', null, result.Message, 50);
                             self._trigger('change', null, result.Data);
-                            self.bind(result.Data.Model);
+                            self.bind(result.Data);
                             dfd.resolve();
                         }
                         else {
@@ -5182,25 +5208,30 @@ jQuery.widget("ui.product", jQuery.ui.crud,
 
 
         },
+        formValueGet: function (self) {
+            var result = jQuery(self.element).data('lastBoundItem');
+            result.FormData = jQuery(self.element).find('div.ui-crudForm-modelBinding:first').widgetModel('valAsObject');
+            return result;
+        },
         formModel: [{
             id: "SomeString",
-            displayName: "Some String value",
+            displayName: "Some String",
             input: { value: "some characaters" },
         }, {
             id: "SomeDate",
-            displayName: "Some Date value",
+            displayName: "Some Date",
             input: { type: "date", value: "09/02/2015" },
         }, {
             id: "SomeFloat",
-            displayName: "Some Float Value",
+            displayName: "Some Float",
             input: { type: "float", value: 24.67 },
         }, {
             id: "SomeBoolean",
-            displayName: "Some Boolean Value",
+            displayName: "Some Boolean",
             input: { type: "bool", value: false },
         }, {
             id: "SomeBooleanNullable",
-            displayName: "Some Boolean Nullable Value",
+            displayName: "Some Boolean Nullable",
             input: { type: "bool", value: null, nullable: true },
         }, {
             id: "SomeStringFromList",

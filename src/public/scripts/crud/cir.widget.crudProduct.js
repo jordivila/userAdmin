@@ -413,21 +413,14 @@ var productAjax = {
         },
         productSave: function (dataItem) {
 
+
             var dfd = jQuery.Deferred();
 
             var dataResult = null;
             var modelErrors = [];
 
-            if (dataItem.SomeStringFromList === "") {
-                //modelErrors.push({ key: "SomeStringFromList", value: ["este es un campo requerido"] });
-            }
-
-            if (dataItem.SomeBooleanNullable === "") {
-                //modelErrors.push({ key: "SomeBooleanNullable", value: ["por favor informa 'si' o 'no'"] });
-            }
-
-            for (var i in dataItem) {
-                modelErrors.push({ key: i, value: ["este es un campo requerido"] });
+            if (dataItem.FormData.SomeStringFromList === "") {
+                modelErrors.push({ key: "SomeStringFromList", value: ["este es un campo requerido"] });
             }
 
             if (modelErrors.length > 0) {
@@ -438,10 +431,32 @@ var productAjax = {
                 };
             }
             else {
+
+
+                console.log("ssssssssssss");
+                console.log(dataItem.FormData);
+
+
+                // Simulate saving data
+                dataItem.EditData.SomeBoolean = dataItem.FormData.SomeBoolean;
+                dataItem.EditData.SomeBooleanNullable = dataItem.FormData.SomeBooleanNullable;
+                dataItem.EditData.SomeCustomValue = dataItem.FormData.SomeCustomValue;
+                dataItem.EditData.SomeDate = new Date();
+                dataItem.EditData.SomeFloat = parseFloat(dataItem.FormData.SomeFloat);
+                dataItem.EditData.SomeString = dataItem.FormData.SomeString;
+                dataItem.EditData.SomeStringFromList = dataItem.FormData.SomeStringFromList;
+                // 
+                dataItem.FormData = undefined;
+
+
+                console.log(productAjax.ajax._fakeDataEdit[dataItem.productId]);
+                productAjax.ajax._fakeDataEdit[dataItem.productId] = dataItem.EditData;
+                console.log(productAjax.ajax._fakeDataEdit[dataItem.productId]);
+
                 dataResult = {
-                    Data: null,
+                    Data: dataItem,
                     IsValid: true,
-                    Message: null,
+                    Message: "Producto guardado",
                     MessageType: 0,
                 };
             }
@@ -614,7 +629,6 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                     .widgetModel({
                         modelItems: crudWidget.options.formModel,
                         errorsCleared: function () {
-                            console.log(crudWidget);
                             crudWidget.errorHide();
                         }
                     })
@@ -627,6 +641,10 @@ jQuery.widget("ui.product", jQuery.ui.crud,
             return defaultButtons;
         },
         formBind: function (self, dataItem) {
+
+            console.log(dataItem);
+
+            jQuery(self.element).data('lastBoundItem', dataItem);
 
             jQuery(self.element)
                 .find('div.ui-productCrud-form-searchOutput')
@@ -655,15 +673,17 @@ jQuery.widget("ui.product", jQuery.ui.crud,
 
             dfd.notify("Guardando informacion del producto...");
 
-            var viewModel = jQuery(self.element).find('div.ui-crudForm-modelBinding:first').widgetModel('valAsObject');
+            var viewModel = self.options.formValueGet(self);
+
+            console.log(viewModel);
 
             jQuery.when(productAjax.ajax.productSave(viewModel))
                 .then(
                     function (result, statusText, jqXHR) {
                         if (result.IsValid) {
-                            self._trigger('messagedisplayAutoHide', null, 'Producto guardado', 50);
+                            self._trigger('messagedisplayAutoHide', null, result.Message, 50);
                             self._trigger('change', null, result.Data);
-                            self.bind(result.Data.Model);
+                            self.bind(result.Data);
                             dfd.resolve();
                         }
                         else {
@@ -687,25 +707,30 @@ jQuery.widget("ui.product", jQuery.ui.crud,
 
 
         },
+        formValueGet: function (self) {
+            var result = jQuery(self.element).data('lastBoundItem');
+            result.FormData = jQuery(self.element).find('div.ui-crudForm-modelBinding:first').widgetModel('valAsObject');
+            return result;
+        },
         formModel: [{
             id: "SomeString",
-            displayName: "Some String value",
+            displayName: "Some String",
             input: { value: "some characaters" },
         }, {
             id: "SomeDate",
-            displayName: "Some Date value",
+            displayName: "Some Date",
             input: { type: "date", value: "09/02/2015" },
         }, {
             id: "SomeFloat",
-            displayName: "Some Float Value",
+            displayName: "Some Float",
             input: { type: "float", value: 24.67 },
         }, {
             id: "SomeBoolean",
-            displayName: "Some Boolean Value",
+            displayName: "Some Boolean",
             input: { type: "bool", value: false },
         }, {
             id: "SomeBooleanNullable",
-            displayName: "Some Boolean Nullable Value",
+            displayName: "Some Boolean Nullable",
             input: { type: "bool", value: null, nullable: true },
         }, {
             id: "SomeStringFromList",

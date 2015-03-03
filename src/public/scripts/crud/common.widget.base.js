@@ -1,7 +1,7 @@
 ﻿
 var progressBoxSelector = "#progressFeedBack";
 
-jQuery.widget("ui.commonBaseWidget", /*jQuery.ui.widgetBase,*/
+jQuery.widget("ui.commonBaseWidget", jQuery.ui.widgetBase,
 {
     options: {
 
@@ -12,16 +12,6 @@ jQuery.widget("ui.commonBaseWidget", /*jQuery.ui.widgetBase,*/
     _init: function () {
 
         this._super();
-
-        var widgetName = this.namespace + '.' + this.widgetName;
-        var dataWidgetInitialized = widgetName + ".IsInitialized";
-
-        if (jQuery(this.element).data(dataWidgetInitialized) === undefined) {
-            jQuery(this.element).data(dataWidgetInitialized, true);
-        }
-        else {
-            throw new Error("Se ha intentado crear una instancia de widget que ya estaba creada. Podrian duplicarse eventos." + widgetName);
-        }
     },
     destroy: function () {
 

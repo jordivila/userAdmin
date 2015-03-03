@@ -64,30 +64,56 @@ jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
             this.messageHide();
         }
     },
-    errorDisplay: function (msg) {
+    errorDisplay: function (msg, cb) {
+
         console.log("Error->" + msg);
-        jQuery(this.options.errorDOMId).html(msg).fadeTo('slow', 1);
+
+        jQuery(this.options.errorDOMId)
+            .parents('div:first')
+                .addClass('ui-state-error')
+            .end()
+            .html(msg)
+            .fadeTo('slow', 1, cb);
     },
-    errorHide: function () {
-        jQuery(this.options.errorDOMId).html('').fadeTo('slow', 0);
+    errorHide: function (cb) {
+
+        jQuery(this.options.errorDOMId)
+            .parents('div:first')
+                .removeClass('ui-state-error')
+            .end()
+            .html('')
+            .fadeTo('slow', 0, cb);
     },
-    messageDisplay: function (msg) {
-        jQuery(this.options.messagesDOMId).html(msg).fadeTo('slow', 1);
+    messageDisplay: function (msg, cb) {
+        jQuery(this.options.messagesDOMId)
+            .parents('div:first')
+                .addClass('ui-state-highlight')
+            .end()
+            .html(msg)
+            .fadeTo('slow', 1, cb);
     },
-    messageHide: function () {
-        jQuery(this.options.messagesDOMId).html('').fadeTo('slow', 0);
+    messageHide: function (cb) {
+        jQuery(this.options.messagesDOMId)
+            .parents('div:first')
+                .removeClass('ui-state-highlight')
+            .end()
+            .html('')
+            .fadeTo('slow', 0, cb);
     },
     messagedisplayAutoHide: function (msg, miliseconds) {
 
         var time = 3000;
+        var self = this;
 
         if (miliseconds) {
             time = miliseconds;
         }
 
-        jQuery(this.options.messagesDOMId).html(msg)
-            .fadeTo(500, 1, function () {
-                jQuery(this).delay(time).fadeTo(time, 0);
+        this.messageDisplay(msg,
+            function () {
+                jQuery(self.options.messagesDOMId)
+                    .delay(time)
+                    .fadeTo(time, 0, function () { self.messageHide(); });
             });
     },
 });
@@ -96,7 +122,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 {
     options: {
         title: null,
-        
+
         crudHeaderDomId: null,
         gridButtonsDOMId: null,
         gridDOMId: null,
@@ -165,8 +191,6 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                     self.errorInit(jQuery(this));
                 });
 
-        
-
         this.options.gridFilterDOMId = jQuery(this.element).find('div.{0}:first'.format(gridFilterClass));
         this.options.gridDOMId = jQuery(this.element).find('div.{0}:first'.format(gridControlClass));
         this.options.gridButtonsDOMId = jQuery(this.element).find('div.{0}:first'.format(gridButtonsClass));
@@ -230,6 +254,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                 self._actionSet(self._actions.list);
             },
             done: function () {
+
                 self.options.formInit(self, {
                     messagedisplayAutoHide: function (e, msg) {
                         self.messagedisplayAutoHide(msg);
@@ -266,30 +291,6 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         });
     },
     destroy: function () {
-        this._super();
-    },
-    errorDisplay: function (msg) {
-
-        jQuery(this.options.crudHeaderDomId).addClass('ui-state-error');
-
-        this._super(msg);
-    },
-    errorHide: function () {
-
-        jQuery(this.options.crudHeaderDomId).removeClass('ui-state-error');
-
-        this._super();
-    },
-    messageDisplay: function (msg) {
-
-        jQuery(this.options.crudHeaderDomId).addClass('ui-state-error');
-
-        this._super(msg);
-    },
-    messageHide: function () {
-
-        jQuery(this.options.crudHeaderDomId).removeClass('ui-state-error');
-
         this._super();
     },
     _actions: {
