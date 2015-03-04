@@ -136,9 +136,12 @@ var productAjax = {
 
             productAjax.ajax._fakeDataGrid = [];
 
-            for (var i = 0; i < 1000; i++) {
+            var i = 0;
+            var d = new Date();
 
-                var d = new Date();
+            for (i = 0; i < 1000; i++) {
+
+                d = new Date();
 
                 productAjax.ajax._fakeDataGrid.push({
                     fechaDesde: new Date(Math.abs(d - (i * 1000 * 60 * 60 * 24))),
@@ -149,6 +152,24 @@ var productAjax = {
                     productTypeDesc: "Prestamo garantia personal-1",
                 });
             }
+
+
+            
+            i++;
+            d = new Date();
+
+            
+
+            productAjax.ajax._fakeDataGrid.push({
+                fechaDesde: new Date(Math.abs(d - (i * 1000 * 60 * 60 * 24))),
+                fechaHasta: new Date(Math.abs(d - (i * 1000 * 60 * 60 * 24))),
+                nombre: "person {0}".format(i),
+                productId: i,
+                productType: "PRSP1",
+                productTypeDesc: "Prestamo garantia personal-1",
+            });
+
+
         },
         _fakeDataEdit: null,
         _fakeDataEditInit: function () {
@@ -188,8 +209,8 @@ var productAjax = {
                 "MessageType": 0,
                 "Data":
                     {
-                        "TotalPages": null,
-                        "TotalRows": productAjax.ajax._fakeDataGrid.length - 10,
+                        //"TotalPages": null,
+                        "TotalRows": productAjax.ajax._fakeDataGrid.length,
                         "Page": filter.Page,
                         "PageSize": filter.PageSize,
                         "SortBy": "",
@@ -202,8 +223,9 @@ var productAjax = {
             };
 
             for (var i = (filter.Page * filter.PageSize) ; i < ((filter.Page * filter.PageSize) + filter.PageSize) ; i++) {
-
-                dataResult.Data.Data.push(productAjax.ajax._fakeDataGrid[i]);
+                if (i < productAjax.ajax._fakeDataGrid.length) {
+                    dataResult.Data.Data.push(productAjax.ajax._fakeDataGrid[i]);
+                }
             }
 
             setTimeout(function () { dfd.resolve(dataResult); }, productAjax.ajax._fakeDelay);
@@ -431,27 +453,18 @@ var productAjax = {
                 };
             }
             else {
-
-
-                console.log("ssssssssssss");
-                console.log(dataItem.FormData);
-
-
                 // Simulate saving data
                 dataItem.EditData.SomeBoolean = dataItem.FormData.SomeBoolean;
                 dataItem.EditData.SomeBooleanNullable = dataItem.FormData.SomeBooleanNullable;
                 dataItem.EditData.SomeCustomValue = dataItem.FormData.SomeCustomValue;
-                dataItem.EditData.SomeDate = new Date();
+                dataItem.EditData.SomeDate = dataItem.FormData.SomeDate !== "" ? Globalize.parseDate(dataItem.FormData.SomeDate) : null;
                 dataItem.EditData.SomeFloat = parseFloat(dataItem.FormData.SomeFloat);
                 dataItem.EditData.SomeString = dataItem.FormData.SomeString;
                 dataItem.EditData.SomeStringFromList = dataItem.FormData.SomeStringFromList;
-                // 
-                dataItem.FormData = undefined;
 
-
-                console.log(productAjax.ajax._fakeDataEdit[dataItem.productId]);
                 productAjax.ajax._fakeDataEdit[dataItem.productId] = dataItem.EditData;
-                console.log(productAjax.ajax._fakeDataEdit[dataItem.productId]);
+                // Simulate server response
+                dataItem.FormData = undefined;
 
                 dataResult = {
                     Data: dataItem,
@@ -473,80 +486,136 @@ var productAjax = {
 
 
 
+var productFilterModelGet = function () {
+    return [{
+        id: "productId",
+        displayName: "Num. Producto",
+        input: { value: "" },
+    }, {
+        id: "productType",
+        displayName: "Tipo",
+        input: { type: "list", value: null, listValues: [{ value: "", text: "Select from list" }] },
+    }, {
+        id: "customerId",
+        displayName: "Cliente",
+        input: {
+            type: "custom",
+            value: null,
+            nullable: true,
+            onItemBuild: function (widget, parent) {
+                var selfOption = this;
+
+                var _templateGet = function () {
+                    return '' +
+                        '<input type="hidden" class="ui-productCrud-filter-custId" />' +
+                        '<a href="javascript:void(0);" class="ui-productCrud-filter-custName"></a>' +
+                        '<div class="ui-productCrud-filter-removeCustomerIcon ui-state-error">' +
+                            '<span class="ui-icon ui-icon-trash"></span>' +
+                        '</div>';
+                };
+
+                jQuery(parent).append(_templateGet());
+
+                var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
+                var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeCustomerIcon:first');
+
+                customerTrashDomId
+                    .click(function () {
+                        selfOption.onItemBind(jQuery(parent), { id: "", nombre: "Click para filtrar por cliente" });
+                    });
+
+                customerNameDomId
+                    .click(function () {
+                        jQuery(parent)
+                            .parents('div.ui-crud:first')
+                                .product('filterSearchCustomer');
+                    });
+
+                customerTrashDomId.click();
+            },
+            onItemValue: function (parent) {
+                var customerIdDomId = jQuery(parent).find('input.ui-productCrud-filter-custId:first');
+                return customerIdDomId.val();
+            },
+            onItemBind: function (parent, dataItem) {
+
+                var customerIdDomId = jQuery(parent).find('input.ui-productCrud-filter-custId:first');
+                var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
+                var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeCustomerIcon:first');
+
+                customerIdDomId.val(dataItem.id);
+                customerNameDomId.html(dataItem.nombre);
+
+                if (dataItem.id !== "") {
+                    customerTrashDomId.show();
+                }
+                else {
+                    customerTrashDomId.hide();
+                }
+
+            }
+        },
+    }];
+};
+
+var productFormModelGet = function () {
+    return [{
+        id: "SomeString",
+        displayName: "Some String",
+        input: { value: "" },
+    }, {
+        id: "SomeDate",
+        displayName: "Some Date",
+        input: { type: "date", value: "" },
+    }, {
+        id: "SomeFloat",
+        displayName: "Some Float",
+        input: { type: "float", value: null },
+    }, {
+        id: "SomeBoolean",
+        displayName: "Some Boolean",
+        input: { type: "bool", value: null },
+    }, {
+        id: "SomeBooleanNullable",
+        displayName: "Some Boolean Nullable",
+        input: { type: "bool", value: null, nullable: true },
+    }, {
+        id: "SomeStringFromList",
+        displayName: "Some String From List",
+        input: { type: "list", value: null, listValues: [{ value: "", text: "Select from list" }, { value: "1", text: "First value" }] },
+    }, {
+        id: "SomeCustomValue",
+        displayName: "Some Custom Value",
+        input: {
+            type: "custom",
+            value: null,
+            nullable: true,
+            onItemBuild: function (widget, parent) {
+                jQuery(parent)
+                    .append('<p>some readOnly value-><span class="SomeCustomValue">2</span></p>')
+                    .find('p:first')
+                        .click(function () {
+                            jQuery(widget).widgetModelItem('change');
+                        });
+            },
+            onItemValue: function (parent) {
+                return jQuery(parent).find('span.SomeCustomValue').html();
+            },
+            onItemBind: function (parent, dataItem) {
+                return jQuery(parent).find('span.SomeCustomValue').html(dataItem);
+            }
+        },
+    },
+    ];
+};
+
+
 jQuery.widget("ui.product", jQuery.ui.crud,
 {
     options: {
-        filterModel: [{
-            id: "productId",
-            displayName: "Num. Producto",
-            input: { value: "" },
-        }, {
-            id: "productType",
-            displayName: "Tipo",
-            input: { type: "list", value: null, listValues: [{ value: "", text: "Select from list" }] },
-        }, {
-            id: "customerId",
-            displayName: "Cliente",
-            input: {
-                type: "custom",
-                value: null,
-                nullable: true,
-                onItemBuild: function (widget, parent) {
-                    var selfOption = this;
-
-                    var _templateGet = function () {
-                        return '' +
-                            '<input type="hidden" class="ui-productCrud-filter-custId" />' +
-                            '<a href="javascript:void(0);" class="ui-productCrud-filter-custName"></a>' +
-                            '<div class="ui-productCrud-filter-removeCustomerIcon ui-state-error">' +
-                                '<span class="ui-icon ui-icon-trash"></span>' +
-                            '</div>';
-                    };
-
-                    jQuery(parent).append(_templateGet());
-
-                    var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
-                    var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeCustomerIcon:first');
-
-                    customerTrashDomId
-                        .click(function () {
-                            selfOption.onItemBind(jQuery(parent), { id: "", nombre: "Click para filtrar por cliente" });
-                        });
-
-                    customerNameDomId
-                        .click(function () {
-                            jQuery(parent)
-                                .parents('div.ui-crud:first')
-                                    .product('filterSearchCustomer');
-                        });
-
-                    customerTrashDomId.click();
-                },
-                onItemValue: function (parent) {
-                    var customerIdDomId = jQuery(parent).find('input.ui-productCrud-filter-custId:first');
-                    return customerIdDomId.val();
-                },
-                onItemBind: function (parent, dataItem) {
-
-                    var customerIdDomId = jQuery(parent).find('input.ui-productCrud-filter-custId:first');
-                    var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
-                    var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeCustomerIcon:first');
-
-                    customerIdDomId.val(dataItem.id);
-                    customerNameDomId.html(dataItem.nombre);
-
-                    if (dataItem.id !== "") {
-                        customerTrashDomId.show();
-                    }
-                    else {
-                        customerTrashDomId.hide();
-                    }
-
-                }
-            },
-        }],
+        filterModel: productFilterModelGet(),
         gridSearchMethod: productAjax.ajax.productSearch,
-        gridSearchForEditMethod : productAjax.ajax.productSearchForEdit,
+        gridSearchForEditMethod: productAjax.ajax.productSearchForEdit,
         gridButtonsGet: function (crudWidget, defaultButtons) {
             for (var i = 0; i < defaultButtons.length; i++) {
                 if (defaultButtons[i].id == "search") {
@@ -593,7 +662,6 @@ jQuery.widget("ui.product", jQuery.ui.crud,
         },
 
 
-
         formInit: function (crudWidget, formOptions) {
 
             var tBasicInfo = '' +
@@ -621,7 +689,7 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                         formButtonsGet: crudWidget.options.formButtonsGet,
                         formBind: crudWidget.options.formBind,
                         formValueGet: crudWidget.options.formValueGet,
-                        formSave: crudWidget.options.formSave
+                        formSaveMethod: crudWidget.options.formSaveMethod
                     }));
 
             jQuery(crudWidget.options.formDOMId)
@@ -642,10 +710,6 @@ jQuery.widget("ui.product", jQuery.ui.crud,
         },
         formBind: function (self, dataItem) {
 
-            console.log(dataItem);
-
-            jQuery(self.element).data('lastBoundItem', dataItem);
-
             jQuery(self.element)
                 .find('div.ui-productCrud-form-searchOutput')
                     .find('div[data-fieldItem="productId"]').html(dataItem.productId)
@@ -657,109 +721,13 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                     .find('div[data-fieldItem="fechaDesde"]').html(dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '')
                     .end()
                     .find('div[data-fieldItem="fechaHasta"]').html(dataItem.fechaHasta !== null ? Globalize.format(dataItem.fechaHasta, 'd') : '')
-                    .end()
-                    .find('div.ui-crudForm-modelBinding:first')
-                        .widgetModel('bindValue', dataItem)
                     .end();
-
-            jQuery(self.element)
-                .find('div.ui-crudForm-modelBinding:first')
-                    .widgetModel('bindValue', dataItem.EditData)
-            .end();
         },
-        formSave: function (self) {
-
-            var dfd = jQuery.Deferred();
-
-            dfd.notify("Guardando informacion del producto...");
-
-            var viewModel = self.options.formValueGet(self);
-
-            console.log(viewModel);
-
-            jQuery.when(productAjax.ajax.productSave(viewModel))
-                .then(
-                    function (result, statusText, jqXHR) {
-                        if (result.IsValid) {
-                            self._trigger('messagedisplayAutoHide', null, result.Message, 50);
-                            self._trigger('change', null, result.Data);
-                            self.bind(result.Data);
-                            dfd.resolve();
-                        }
-                        else {
-                            if (result.Data) {
-
-                                jQuery(self.element)
-                                    .find('div.ui-crudForm-modelBinding:first')
-                                    .widgetModel('bindErrors', result.Data.ModelState);
-                            }
-                            dfd.reject(result.Message);
-                        }
-                    },
-                    function (jqXHR, textStatus, errorThrown) {
-                        dfd.reject("Error no controlado guadando el producto");
-                    })
-                .done(function () {
-
-                });
-
-            return dfd.promise();
-
-
+        formSaveMethod: productAjax.ajax.productSave,
+        formValueGet: function (self, currentValue) {
+            return currentValue;
         },
-        formValueGet: function (self) {
-            var result = jQuery(self.element).data('lastBoundItem');
-            result.FormData = jQuery(self.element).find('div.ui-crudForm-modelBinding:first').widgetModel('valAsObject');
-            return result;
-        },
-        formModel: [{
-            id: "SomeString",
-            displayName: "Some String",
-            input: { value: "some characaters" },
-        }, {
-            id: "SomeDate",
-            displayName: "Some Date",
-            input: { type: "date", value: "09/02/2015" },
-        }, {
-            id: "SomeFloat",
-            displayName: "Some Float",
-            input: { type: "float", value: 24.67 },
-        }, {
-            id: "SomeBoolean",
-            displayName: "Some Boolean",
-            input: { type: "bool", value: false },
-        }, {
-            id: "SomeBooleanNullable",
-            displayName: "Some Boolean Nullable",
-            input: { type: "bool", value: null, nullable: true },
-        }, {
-            id: "SomeStringFromList",
-            displayName: "Some String From List",
-            input: { type: "list", value: null, listValues: [{ value: "", text: "Select from list" }, { value: "1", text: "First value" }] },
-        }, {
-            id: "SomeCustomValue",
-            displayName: "Some Custom Value",
-            input: {
-                type: "custom",
-                value: null,
-                nullable: true,
-                onItemBuild: function (widget, parent) {
-                    jQuery(parent)
-                        .append('<p>some readOnly value-><span class="SomeCustomValue">2</span></p>')
-                        .find('p:first')
-                            .click(function () {
-                                jQuery(widget).widgetModelItem('change');
-                            });
-                },
-                onItemValue: function (parent) {
-                    return jQuery(parent).find('span.SomeCustomValue').html();
-                },
-                onItemBind: function (parent, dataItem) {
-                    return jQuery(parent).find('span.SomeCustomValue').html(dataItem);
-                }
-            },
-        },
-        ],
+        formModel: productFormModelGet(),
 
     },
     _create: function () {

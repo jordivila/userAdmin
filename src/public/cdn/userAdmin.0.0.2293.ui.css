@@ -1902,9 +1902,12 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
 .ui-progress-feedback .ui-widget {top:50%;text-align:center;padding:2em 0 2em 0;position:relative;width:80%;margin:0 auto 0 auto;}
 
 
-.ui-crud .ui-crud-error {padding:0.2em;border:0; margin:0.5em 0 0 0.5em;font-weight:normal;}
-.ui-crud .ui-crud-info {padding:0.2em !important;padding:0.2em;border:0; margin:0.5em 0 0 0.5em;font-weight:normal;}
-.ui-crud .ui-ribbonButtons { border-bottom:  0em;padding:0em;}
+
+.ui-crud .ui-crud-header {}
+.ui-crud .ui-crud-header .ui-crud-title {padding:0.5em 0.5em 0 0.5em;text-align:center;}
+.ui-crud .ui-crud-header .ui-crud-error {padding:0.2em;border:0; margin:0.5em 0 0 0.5em;font-weight:normal;text-align:center;}
+.ui-crud .ui-crud-header .ui-crud-info {padding:0.2em !important;padding:0.2em;border:0; margin:0.5em 0 0 0.5em;font-weight:normal;text-align:center;}
+.ui-crud .ui-ribbonButtons { border-bottom:0em;border-top:0em;padding:0em;}
 .ui-crud .ui-ribbonButtons button {margin-bottom: 0.1em !important;font-weight:normal;border:none;}
 .ui-crud .ui-ribbonButtons span.ui-button-text {/*font-size:1.1em !important;*/}
 .ui-crud .ui-fieldItem {}
@@ -1923,8 +1926,6 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
 .ui-crud .ui-crudGrid-dataRow.ui-widget-content {border-left:none;border-top:none;}
 .ui-crud .ui-crudGrid .ui-crudGrid-dataRow{}
 .ui-crud .ui-crudGrid .ui-crudGrid-dataRowAlt {background-color:#ffe199;}
-.ui-crud .ui-crudGrid .ui-crudGrid-dataRow:hover, 
-.ui-crud .ui-crudGrid .ui-crudGrid-dataRowAlt:hover {background-color:#ff9900;}
 .ui-crud .ui-crudGrid .ui-crudGrid-header {padding:0.5em 2em 0.5em 0; overflow:hidden;border-bottom:none;}
 .ui-crud .ui-crudGrid .ui-crudGrid-header table th {font-weight:bold;}
 .ui-crud .ui-crudGrid .ui-crudGrid-header table ,
@@ -1939,10 +1940,21 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
 .ui-crud .ui-crudGrid .ui-crudGrid-body-tableBox tr.ui-crudGrid-rowStyle,
 .ui-crud .ui-crudGrid .ui-crudGrid-body-tableBox tr.ui-crudGrid-rowStyleAlternated {height: 2em;}
 .ui-crud .ui-crudGrid .ui-crudGrid-action {font-size:1em;width:1em;margin:0 auto 0 auto;cursor:pointer;}
-.ui-crud .ui-crudGrid .ui-crudGrid-pager {font-weight:bold;	text-align:left;}
-.ui-crud .ui-crudGrid .ui-crudGrid-pager a {text-decoration:none;}
-.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totalRows {float:right;margin:0.5em 0 0 0;}
-.ui-crud .ui-crudGrid .ui-crudGrid-pager td {cursor:pointer; padding:0.3em;margin:0 0.3em 0 0.3em;}
+
+.ui-crud .ui-crudGrid .ui-crudGrid-pager {font-weight:normal;	text-align:left;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar {text-align:center;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar table {margin:0 auto 0 auto;width:100%;border-collapse:collapse;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar a {text-decoration:none;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar td {cursor:pointer; padding:0.3em;margin:0 0.3em 0 0.3em;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals {padding:0.5em 0.5em 0.5em 0em;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals div {}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-totalRows {float:left;margin:0 0 0 2em;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-pageSizePicker {float:right;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-pageSizePicker select {padding:0 0 0 0;}
+
+
+
+
 .ui-crud .ui-crudForm { padding:0em !important; }
 .ui-crud .ui-crudForm h3 {padding: 0em 0.5em 0em 0em;margin:0.5em 0 0.5em 0; border:0; background:none;}
 .ui-crud .ui-crudForm .ui-crudForm-form { background:none;padding:1em !important;}

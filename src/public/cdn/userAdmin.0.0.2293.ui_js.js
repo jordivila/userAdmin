@@ -1923,7 +1923,8 @@ jQuery.widget("ui.widgetBase",
 jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
 {
     options: {
-        modelItems: null
+        modelItems: null,
+        markOnChange: false // set a highlight class when item changed. Primarly used in filter objects
     },
     _create: function () {
 
@@ -1991,7 +1992,7 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
 
         if (this.options.modelItems !== null) {
 
-            var onItemChanged = function () {
+            var onItemChanged = function (e, ui) {
 
                 var clearedErrors = true;
 
@@ -2003,8 +2004,7 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
                     }
                 }
 
-                if (clearedErrors)
-                {
+                if (clearedErrors) {
                     self._trigger('errorsCleared', null, null);
                 }
 
@@ -2033,7 +2033,7 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
                 if (this.options.modelItems[j].id == i) {
                     jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(i))
                         .widgetModelItem('setValue', dataItem[i]);
-                        
+
                 }
             }
         }
@@ -2093,9 +2093,6 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
             })
             .blur(function () {
                 jQuery(this).removeClass('ui-state-focus');
-            })
-            .change(function () {
-                jQuery(this).addClass('ui-state-active');
             });
 
 
@@ -2166,7 +2163,9 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 break;
             case "float":
 
-                t = '<input id="{1}" name="{1}" type="text" value="{0}" />'.format(this.options.input.value, this.options.id);
+                t = '<input id="{1}" name="{1}" type="text" value="{0}" />'
+                    .format(isNaN(parseFloat(this.options.input.value)) ? "" : this.options.input.value,
+                            this.options.id);
 
                 jQuery($parent)
                     .append(t)
@@ -3604,7 +3603,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var templateGet = function () {
 
 
-            var template = '<div class="ui-widget-header">{0}</div>' +
+            var template = '<div class="ui-crud-header ui-state-default"><div class="ui-crud-title">{0}</div></div>' +
                             '<div class="{1}"></div>' +
                             '<div class="{2} ui-ribbonButtons ui-widget-content ui-state-default"></div>' +
                             '<div class="{3}"></div>' +
@@ -3621,7 +3620,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         jQuery(this.element)
             .addClass('ui-crud')
             .append(templateGet())
-            .find('div.ui-widget-header:first')
+            .find('div.ui-crud-header:first')
                 .each(function () {
                     self.options.crudHeaderDomId = jQuery(this);
                     self.errorInit(jQuery(this));
@@ -3657,8 +3656,10 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                         self._actionSet(self._actions.list);
                     }
                 },
-                paginated: function (e, pageIndex) {
-                    self.options.gridFilterObject.Page = pageIndex;
+                paginated: function (e, pagination) {
+                    self.options.gridFilterObject.Page = pagination.pageIndex;
+                    self.options.gridFilterObject.PageSize = pagination.pageSize;
+
                     self.errorHide();
                     self._search();
                 },
@@ -3785,6 +3786,9 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
             dfd.reject(self.namespace + '.' + self.widgetName + "options.gridSearchMethod is an abstract method. Child class must implement");
         }
         else {
+
+            console.log(self.options.gridFilterObject);
+
             jQuery.when(self.options.gridSearchMethod(self.options.gridFilterObject))
                 .then(
                     function (result, statusText, jqXHR) {
@@ -3885,7 +3889,7 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
 {
     options: {
         Page: 0,
-        PageSize: 30,
+        PageSize: 10,
         SortBy: "",
         SortAscending: false,
         filterButtonsInit: function (self, defaultButtons) {
@@ -4012,12 +4016,27 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
 
         var self = this;
 
+        var pagerOpts = {
+            change: function (e, pagination) {
+                self._trigger('paginated', null, pagination);
+            }
+        };
+
         jQuery(self.options.gridPagerDOMId)
-                .gridPagination({
-                    change: function (e, pageIndex) {
-                        self._trigger('paginated', null, pageIndex);
-                    }
-                });
+                .first()
+                    .gridPagination(jQuery.extend({}, pagerOpts, {
+                        showPager: false,
+                        showTotalRows: false,
+                        showSizePicker:false,
+                    }))
+                .end()
+                .last()
+                    .gridPagination(jQuery.extend({}, pagerOpts, {
+                        showPager: true,
+                        showTotalRows: true,
+                        showSizePicker:true,
+                    }))
+                .end();
     },
     destroy: function () {
 
@@ -4032,7 +4051,8 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
     },
     _gridTemplate: function () {
 
-        return '<div class="ui-crudGrid">' +
+        return '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
+                '<div class="ui-crudGrid">' +
                     '<div class="ui-crudGrid-header ui-state-default">' +
                         '<table>' +
                             '<tbody>' +
@@ -4050,7 +4070,7 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
                         '</table>' +
                     '</div>' +
                 '</div>' +
-                '<div class="ui-crudGrid-pager ui-state-default"></div>';
+                '<div class="ui-crudGrid-pager ui-crudGrid-pager-bottom ui-state-default"></div>';
     },
     _bindRowAlternatedColor: function () {
 
@@ -4103,11 +4123,6 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
         formBind: function (self, dataItem) {
             throw new Error(self.namespace + '.' + self.widgetName + ".formBind() is an abstract method. Child class method must be implemented");
         },
-        formSave: function (self) {
-            var dfd = jQuery.Deferred();
-            dfd.reject(this.namespace + '.' + this.widgetName + ".formSave is an abstract method. Child class must implemented");
-            return dfd.promise();
-        }
     },
     _create: function () {
 
@@ -4169,6 +4184,12 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
     },
     bind: function (dataItem) {
         try {
+            jQuery(this.element)
+                .data('lastBoundItem', dataItem)
+                .find('div.ui-crudForm-modelBinding:first')
+                    .widgetModel('bindValue', dataItem.EditData)
+                .end();
+
             this.options.formBind(this, dataItem);
             this._trigger('dataBound', null, dataItem);
         } catch (e) {
@@ -4180,7 +4201,7 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
         var self = this;
 
-        self.options.formSave(this)
+        self._formSave(this)
                 .progress(function (status) {
                     self.progressShow(status);
                 })
@@ -4192,6 +4213,54 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
                     self.progressHide();
                 });
     },
+    _formSave: function () {
+
+        var self = this;
+        var dfd = jQuery.Deferred();
+
+        if (self.options.formSaveMethod === null) {
+            dfd.reject(self.namespace + '.' + self.widgetName + ".options.formSaveMethod is an abstract method. Child class must implement");
+        }
+        else {
+            dfd.notify("Guardando informacion...");
+
+            var viewModel = self._formValueGet();
+
+            jQuery.when(self.options.formSaveMethod(viewModel))
+            .then(
+                    function (result, statusText, jqXHR) {
+                        if (result.IsValid) {
+                            self._trigger('messagedisplayAutoHide', null, result.Message, 50);
+                            self._trigger('change', null, result.Data);
+                            self.bind(result.Data);
+                            dfd.resolve();
+                        }
+                        else {
+                            if (result.Data) {
+
+                                jQuery(self.element)
+                                    .find('div.ui-crudForm-modelBinding:first')
+                                    .widgetModel('bindErrors', result.Data.ModelState);
+                            }
+                            dfd.reject(result.Message);
+                        }
+                    },
+                    function (jqXHR, textStatus, errorThrown) {
+                        dfd.reject("Error no controlado guadando la información");
+                    })
+            .done(function () {
+
+            });
+        }
+        return dfd.promise();
+    },
+    _formValueGet: function () {
+        var dataItem = jQuery(this.element).data('lastBoundItem');
+        var formData = jQuery(this.element).find('div.ui-crudForm-modelBinding:first').widgetModel('valAsObject');
+        var result = jQuery.extend({}, dataItem, { FormData: formData });
+        return this.options.formValueGet(this, result);
+    }
+
 });
 ;// Source: src/public/scripts/crud/common.widget.grid.pagination.js
 /// <reference path="inv.ajax.js" />
@@ -4199,7 +4268,9 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
 {
     options: {
-
+        showPager: true,
+        showTotalRows: true,
+        showSizePicker: true,
     },
     _create: function () {
 
@@ -4208,9 +4279,21 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
     _init: function () {
 
         this._super();
+
+
+        this.bind(0, 0, 0);
+
     }, destroy: function () {
 
         this._super();
+    },
+    _onChange: function (pageIndex) {
+
+        this._trigger('change', null,
+            {
+                pageIndex: parseInt(pageIndex),
+                pageSize: parseInt(jQuery(this.element).find('div.ui-gridPagination-pageSizePicker:first').find('select:first').val())
+            });
     },
     bind: function (pageIndex, pageSize, totalRows) {
 
@@ -4220,74 +4303,144 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
 
         try {
 
-            var buildPage = function (page, currentPage, isNavigationItem, text) {
-                var cssClass = ((currentPage == page) && (!isNavigationItem)) ? "ui-state-highlight" : "ui-state-default";
-
-                return "<td class='" + cssClass + "' value='" + page + "'>" + text + "</td>";
-            };
-            var getCurrentPage = function (currentPage) {
-                return currentPage === null ? 0 : currentPage;
-            };
-            var getStartPage = function (nPagesInPaginators, totalPages, currentPage) {
-                var startPage = (currentPage > 0) ?
-                                    (currentPage > (nPagesInPaginators / 2)) ?
-                                        ((currentPage + 1) - Math.ceil((nPagesInPaginators / 2))) : 1 : 1;
-
-                if ((startPage + nPagesInPaginators) > totalPages) {
-                    startPage = totalPages - nPagesInPaginators;
-                }
-
-                if (startPage < 1) {
-                    startPage = 1;
-                }
-
-                return startPage;
-            };
-            var getEndPage = function (nPagesInPaginators, totalPages, startPage) {
-                var endPage = startPage + nPagesInPaginators;
-                endPage = endPage > totalPages ? totalPages : endPage;
-                return endPage;
-            };
-
-            var Page = pageIndex;
-            var PageSize = pageSize;
-            var TotalRows = totalRows;
+            var Page = parseInt(pageIndex);
+            var PageSize = parseInt(pageSize);
+            var TotalRows = parseInt(totalRows);
             var TotalPages = ((totalRows / pageSize) | 0) + (((totalRows % pageSize) === 0) ? 0 : 1);
 
-            
 
+            if (this.options.showPager === true) {
 
-            jQuery(self.element).append("<span class='ui-gridPagination-totalRows'> Total: " + totalRows + "</span>");
+                var buildPage = function (page, currentPage, isNavigationItem, text) {
+                    var cssClass = ((currentPage == page) && (!isNavigationItem)) ? "ui-state-highlight" : "ui-state-default";
+                    return "<td class='" + cssClass + "' value='" + page + "'>" + text + "</td>";
+                };
+                var getCurrentPage = function (currentPage) {
+                    return parseInt(currentPage === null ? 0 : currentPage);
+                };
+                var getStartPage = function (nPagesInPaginators, totalPages, currentPage) {
+                    var startPage = (currentPage > 0) ?
+                                        (currentPage > (nPagesInPaginators / 2)) ?
+                                            ((currentPage + 1) - Math.ceil((nPagesInPaginators / 2))) : 1 : 1;
 
-            if (TotalPages > 1)
-            {
-                var nPagesInPaginator = 10;    // Must be nPagerItems % 2 == 0
-                var start = getStartPage(nPagesInPaginator, TotalPages, getCurrentPage(Page));
-                var end = getEndPage(nPagesInPaginator, TotalPages, start);
-                var tPager = jQuery("<table><tbody></tbody></table>");
+                    if ((startPage + nPagesInPaginators) > totalPages) {
+                        startPage = totalPages - nPagesInPaginators;
+                    }
 
-                tPager.append(buildPage(0, getCurrentPage(Page), true, "&lt;&lt;", null));
-                tPager.append(buildPage(getCurrentPage(Page) - 1 < 0 ? 0 : getCurrentPage(Page) - 1, getCurrentPage(Page), true, "&lt;", null));
-                for (var i = start; i <= end; i++) {
-                    tPager.append(buildPage(i - 1, getCurrentPage(Page), false, i.toString(), null));
+                    if (startPage < 1) {
+                        startPage = 1;
+                    }
+
+                    return parseInt(startPage);
+                };
+                var getEndPage = function (nPagesInPaginators, totalPages, startPage) {
+                    var endPage = startPage + nPagesInPaginators;
+                    endPage = endPage > totalPages ? totalPages : endPage;
+                    return parseInt(endPage);
+                };
+
+                if (TotalPages > 1) {
+                    var nPagesInPaginator = 8;    // Must be nPagerItems % 2 == 0
+                    var start = getStartPage(nPagesInPaginator, TotalPages, getCurrentPage(Page));
+                    var end = getEndPage(nPagesInPaginator, TotalPages, start);
+                    var tPager = jQuery("<table></table>");
+
+                    tPager.append(buildPage(0, getCurrentPage(Page), true, "&lt;&lt;", null));
+                    tPager.append(buildPage(getCurrentPage(Page) - 1 < 0 ? 0 : getCurrentPage(Page) - 1, getCurrentPage(Page), true, "&lt;", null));
+
+                    for (var i = start; i <= end; i++) {
+                        tPager.append(buildPage(i - 1, getCurrentPage(Page), false, i.toString(), null));
+                    }
+
+                    tPager.append(buildPage(getCurrentPage(Page) + 1 >= TotalPages ? getCurrentPage(Page) : getCurrentPage(Page) + 1, getCurrentPage(Page), true, "&gt;", null));
+                    tPager.append(buildPage(TotalPages - 1, getCurrentPage(Page), true, "&gt;&gt;", null));
+
+                    jQuery(self.element)
+                            .append(tPager)
+                            .find('table:first')
+                                .wrapAll("<div class='ui-gridPagination-navBar'/>")
+                                .find('td')
+                                    .click(function () {
+                                        self._onChange(jQuery(this).attr('value'));
+                                    });
                 }
-                tPager.append(buildPage(getCurrentPage(Page) + 1 >= TotalPages ? getCurrentPage(Page) : getCurrentPage(Page) + 1, getCurrentPage(Page), true, "&gt;", null));
-                tPager.append(buildPage(TotalPages - 1, getCurrentPage(Page), true, "&gt;&gt;", null));
-
-
-                jQuery(self.element)
-                        .append(tPager)
-                        .find('td')
-                            .click(function () {
-                                var pageIndex = jQuery(this).attr('value');
-                                self._trigger('change', null, pageIndex);
-                            });
-
-                
-
             }
+
+
+
+
+
+
+
+            // Building totals
+
+            var $totalsBox = null;
+
+            jQuery(self.element)
+                .append("<div class='ui-gridPagination-totals'></div>")
+                .find('div.ui-gridPagination-totals:first')
+                .each(function () {
+                    $totalsBox = jQuery(this);
+                });
+
+
+            //Showing results begin...
+
+            $totalsBox
+                    .append("<div class='ui-gridPagination-totalRows'>Mostrando {0}-{1} resultados de {2}</div>"
+                        .format(Page, ((Page+1) * PageSize), TotalRows));
+
+
+
+            //Showing pagesize begin...
+            $totalsBox
+                    .append("<div class='ui-gridPagination-pageSizePicker'><select></select> por pagina</div>"
+                        .format(PageSize));
+
+            var strOptions = '';
+
+            for (var iPageSize = 10; iPageSize < 60; (iPageSize += 10)) {
+                strOptions += "<option value='{0}'>{0}</option>".format(iPageSize);
+            }
+
+
+            var $select = $totalsBox
+                            .find('div.ui-gridPagination-pageSizePicker')
+                                .find('select');
+
+            $select.append(strOptions);
+
+            if ($select.find('option[value="{0}"]'.format(PageSize)).length === 0) {
+                $select.prepend('<option value="{0}">{0}</option>'.format(PageSize));
+            }
+
+            $select
+                .val(PageSize)
+                .change(function () {
+                    self._onChange(0);
+                });
+
+            $totalsBox.append('<div class="ui-carriageReturn" />');
+
+            if ((this.options.showTotalRows === false) && (this.options.showSizePicker === false)) {
+                jQuery(this.element).find('div.ui-gridPagination-totals:first').hide();
+            }
+            else {
+                if (this.options.showTotalRows === false) {
+                    jQuery(this.element).find('div.ui-gridPagination-totalRows:first').hide();
+                }
+
+                if (this.options.showSizePicker === false) {
+                    jQuery(this.element).find('div.ui-gridPagination-pageSizePicker:first').hide();
+                }
+            }
+
+
+
+
+
         } catch (e) {
-            // just do nothing. Your pagination wont display anytighing
+            console.error(e);
         }
     }
 });;// Source: src/public/scripts/crud/cir.widget.crudCustomer.js
@@ -4637,9 +4790,12 @@ var productAjax = {
 
             productAjax.ajax._fakeDataGrid = [];
 
-            for (var i = 0; i < 1000; i++) {
+            var i = 0;
+            var d = new Date();
 
-                var d = new Date();
+            for (i = 0; i < 1000; i++) {
+
+                d = new Date();
 
                 productAjax.ajax._fakeDataGrid.push({
                     fechaDesde: new Date(Math.abs(d - (i * 1000 * 60 * 60 * 24))),
@@ -4650,6 +4806,24 @@ var productAjax = {
                     productTypeDesc: "Prestamo garantia personal-1",
                 });
             }
+
+
+            
+            i++;
+            d = new Date();
+
+            
+
+            productAjax.ajax._fakeDataGrid.push({
+                fechaDesde: new Date(Math.abs(d - (i * 1000 * 60 * 60 * 24))),
+                fechaHasta: new Date(Math.abs(d - (i * 1000 * 60 * 60 * 24))),
+                nombre: "person {0}".format(i),
+                productId: i,
+                productType: "PRSP1",
+                productTypeDesc: "Prestamo garantia personal-1",
+            });
+
+
         },
         _fakeDataEdit: null,
         _fakeDataEditInit: function () {
@@ -4689,8 +4863,8 @@ var productAjax = {
                 "MessageType": 0,
                 "Data":
                     {
-                        "TotalPages": null,
-                        "TotalRows": productAjax.ajax._fakeDataGrid.length - 10,
+                        //"TotalPages": null,
+                        "TotalRows": productAjax.ajax._fakeDataGrid.length,
                         "Page": filter.Page,
                         "PageSize": filter.PageSize,
                         "SortBy": "",
@@ -4703,8 +4877,9 @@ var productAjax = {
             };
 
             for (var i = (filter.Page * filter.PageSize) ; i < ((filter.Page * filter.PageSize) + filter.PageSize) ; i++) {
-
-                dataResult.Data.Data.push(productAjax.ajax._fakeDataGrid[i]);
+                if (i < productAjax.ajax._fakeDataGrid.length) {
+                    dataResult.Data.Data.push(productAjax.ajax._fakeDataGrid[i]);
+                }
             }
 
             setTimeout(function () { dfd.resolve(dataResult); }, productAjax.ajax._fakeDelay);
@@ -4932,27 +5107,18 @@ var productAjax = {
                 };
             }
             else {
-
-
-                console.log("ssssssssssss");
-                console.log(dataItem.FormData);
-
-
                 // Simulate saving data
                 dataItem.EditData.SomeBoolean = dataItem.FormData.SomeBoolean;
                 dataItem.EditData.SomeBooleanNullable = dataItem.FormData.SomeBooleanNullable;
                 dataItem.EditData.SomeCustomValue = dataItem.FormData.SomeCustomValue;
-                dataItem.EditData.SomeDate = new Date();
+                dataItem.EditData.SomeDate = dataItem.FormData.SomeDate !== "" ? Globalize.parseDate(dataItem.FormData.SomeDate) : null;
                 dataItem.EditData.SomeFloat = parseFloat(dataItem.FormData.SomeFloat);
                 dataItem.EditData.SomeString = dataItem.FormData.SomeString;
                 dataItem.EditData.SomeStringFromList = dataItem.FormData.SomeStringFromList;
-                // 
-                dataItem.FormData = undefined;
 
-
-                console.log(productAjax.ajax._fakeDataEdit[dataItem.productId]);
                 productAjax.ajax._fakeDataEdit[dataItem.productId] = dataItem.EditData;
-                console.log(productAjax.ajax._fakeDataEdit[dataItem.productId]);
+                // Simulate server response
+                dataItem.FormData = undefined;
 
                 dataResult = {
                     Data: dataItem,
@@ -4974,80 +5140,136 @@ var productAjax = {
 
 
 
+var productFilterModelGet = function () {
+    return [{
+        id: "productId",
+        displayName: "Num. Producto",
+        input: { value: "" },
+    }, {
+        id: "productType",
+        displayName: "Tipo",
+        input: { type: "list", value: null, listValues: [{ value: "", text: "Select from list" }] },
+    }, {
+        id: "customerId",
+        displayName: "Cliente",
+        input: {
+            type: "custom",
+            value: null,
+            nullable: true,
+            onItemBuild: function (widget, parent) {
+                var selfOption = this;
+
+                var _templateGet = function () {
+                    return '' +
+                        '<input type="hidden" class="ui-productCrud-filter-custId" />' +
+                        '<a href="javascript:void(0);" class="ui-productCrud-filter-custName"></a>' +
+                        '<div class="ui-productCrud-filter-removeCustomerIcon ui-state-error">' +
+                            '<span class="ui-icon ui-icon-trash"></span>' +
+                        '</div>';
+                };
+
+                jQuery(parent).append(_templateGet());
+
+                var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
+                var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeCustomerIcon:first');
+
+                customerTrashDomId
+                    .click(function () {
+                        selfOption.onItemBind(jQuery(parent), { id: "", nombre: "Click para filtrar por cliente" });
+                    });
+
+                customerNameDomId
+                    .click(function () {
+                        jQuery(parent)
+                            .parents('div.ui-crud:first')
+                                .product('filterSearchCustomer');
+                    });
+
+                customerTrashDomId.click();
+            },
+            onItemValue: function (parent) {
+                var customerIdDomId = jQuery(parent).find('input.ui-productCrud-filter-custId:first');
+                return customerIdDomId.val();
+            },
+            onItemBind: function (parent, dataItem) {
+
+                var customerIdDomId = jQuery(parent).find('input.ui-productCrud-filter-custId:first');
+                var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
+                var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeCustomerIcon:first');
+
+                customerIdDomId.val(dataItem.id);
+                customerNameDomId.html(dataItem.nombre);
+
+                if (dataItem.id !== "") {
+                    customerTrashDomId.show();
+                }
+                else {
+                    customerTrashDomId.hide();
+                }
+
+            }
+        },
+    }];
+};
+
+var productFormModelGet = function () {
+    return [{
+        id: "SomeString",
+        displayName: "Some String",
+        input: { value: "" },
+    }, {
+        id: "SomeDate",
+        displayName: "Some Date",
+        input: { type: "date", value: "" },
+    }, {
+        id: "SomeFloat",
+        displayName: "Some Float",
+        input: { type: "float", value: null },
+    }, {
+        id: "SomeBoolean",
+        displayName: "Some Boolean",
+        input: { type: "bool", value: null },
+    }, {
+        id: "SomeBooleanNullable",
+        displayName: "Some Boolean Nullable",
+        input: { type: "bool", value: null, nullable: true },
+    }, {
+        id: "SomeStringFromList",
+        displayName: "Some String From List",
+        input: { type: "list", value: null, listValues: [{ value: "", text: "Select from list" }, { value: "1", text: "First value" }] },
+    }, {
+        id: "SomeCustomValue",
+        displayName: "Some Custom Value",
+        input: {
+            type: "custom",
+            value: null,
+            nullable: true,
+            onItemBuild: function (widget, parent) {
+                jQuery(parent)
+                    .append('<p>some readOnly value-><span class="SomeCustomValue">2</span></p>')
+                    .find('p:first')
+                        .click(function () {
+                            jQuery(widget).widgetModelItem('change');
+                        });
+            },
+            onItemValue: function (parent) {
+                return jQuery(parent).find('span.SomeCustomValue').html();
+            },
+            onItemBind: function (parent, dataItem) {
+                return jQuery(parent).find('span.SomeCustomValue').html(dataItem);
+            }
+        },
+    },
+    ];
+};
+
+
 jQuery.widget("ui.product", jQuery.ui.crud,
 {
     options: {
-        filterModel: [{
-            id: "productId",
-            displayName: "Num. Producto",
-            input: { value: "" },
-        }, {
-            id: "productType",
-            displayName: "Tipo",
-            input: { type: "list", value: null, listValues: [{ value: "", text: "Select from list" }] },
-        }, {
-            id: "customerId",
-            displayName: "Cliente",
-            input: {
-                type: "custom",
-                value: null,
-                nullable: true,
-                onItemBuild: function (widget, parent) {
-                    var selfOption = this;
-
-                    var _templateGet = function () {
-                        return '' +
-                            '<input type="hidden" class="ui-productCrud-filter-custId" />' +
-                            '<a href="javascript:void(0);" class="ui-productCrud-filter-custName"></a>' +
-                            '<div class="ui-productCrud-filter-removeCustomerIcon ui-state-error">' +
-                                '<span class="ui-icon ui-icon-trash"></span>' +
-                            '</div>';
-                    };
-
-                    jQuery(parent).append(_templateGet());
-
-                    var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
-                    var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeCustomerIcon:first');
-
-                    customerTrashDomId
-                        .click(function () {
-                            selfOption.onItemBind(jQuery(parent), { id: "", nombre: "Click para filtrar por cliente" });
-                        });
-
-                    customerNameDomId
-                        .click(function () {
-                            jQuery(parent)
-                                .parents('div.ui-crud:first')
-                                    .product('filterSearchCustomer');
-                        });
-
-                    customerTrashDomId.click();
-                },
-                onItemValue: function (parent) {
-                    var customerIdDomId = jQuery(parent).find('input.ui-productCrud-filter-custId:first');
-                    return customerIdDomId.val();
-                },
-                onItemBind: function (parent, dataItem) {
-
-                    var customerIdDomId = jQuery(parent).find('input.ui-productCrud-filter-custId:first');
-                    var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
-                    var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeCustomerIcon:first');
-
-                    customerIdDomId.val(dataItem.id);
-                    customerNameDomId.html(dataItem.nombre);
-
-                    if (dataItem.id !== "") {
-                        customerTrashDomId.show();
-                    }
-                    else {
-                        customerTrashDomId.hide();
-                    }
-
-                }
-            },
-        }],
+        filterModel: productFilterModelGet(),
         gridSearchMethod: productAjax.ajax.productSearch,
-        gridSearchForEditMethod : productAjax.ajax.productSearchForEdit,
+        gridSearchForEditMethod: productAjax.ajax.productSearchForEdit,
         gridButtonsGet: function (crudWidget, defaultButtons) {
             for (var i = 0; i < defaultButtons.length; i++) {
                 if (defaultButtons[i].id == "search") {
@@ -5094,7 +5316,6 @@ jQuery.widget("ui.product", jQuery.ui.crud,
         },
 
 
-
         formInit: function (crudWidget, formOptions) {
 
             var tBasicInfo = '' +
@@ -5122,7 +5343,7 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                         formButtonsGet: crudWidget.options.formButtonsGet,
                         formBind: crudWidget.options.formBind,
                         formValueGet: crudWidget.options.formValueGet,
-                        formSave: crudWidget.options.formSave
+                        formSaveMethod: crudWidget.options.formSaveMethod
                     }));
 
             jQuery(crudWidget.options.formDOMId)
@@ -5143,10 +5364,6 @@ jQuery.widget("ui.product", jQuery.ui.crud,
         },
         formBind: function (self, dataItem) {
 
-            console.log(dataItem);
-
-            jQuery(self.element).data('lastBoundItem', dataItem);
-
             jQuery(self.element)
                 .find('div.ui-productCrud-form-searchOutput')
                     .find('div[data-fieldItem="productId"]').html(dataItem.productId)
@@ -5158,109 +5375,13 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                     .find('div[data-fieldItem="fechaDesde"]').html(dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '')
                     .end()
                     .find('div[data-fieldItem="fechaHasta"]').html(dataItem.fechaHasta !== null ? Globalize.format(dataItem.fechaHasta, 'd') : '')
-                    .end()
-                    .find('div.ui-crudForm-modelBinding:first')
-                        .widgetModel('bindValue', dataItem)
                     .end();
-
-            jQuery(self.element)
-                .find('div.ui-crudForm-modelBinding:first')
-                    .widgetModel('bindValue', dataItem.EditData)
-            .end();
         },
-        formSave: function (self) {
-
-            var dfd = jQuery.Deferred();
-
-            dfd.notify("Guardando informacion del producto...");
-
-            var viewModel = self.options.formValueGet(self);
-
-            console.log(viewModel);
-
-            jQuery.when(productAjax.ajax.productSave(viewModel))
-                .then(
-                    function (result, statusText, jqXHR) {
-                        if (result.IsValid) {
-                            self._trigger('messagedisplayAutoHide', null, result.Message, 50);
-                            self._trigger('change', null, result.Data);
-                            self.bind(result.Data);
-                            dfd.resolve();
-                        }
-                        else {
-                            if (result.Data) {
-
-                                jQuery(self.element)
-                                    .find('div.ui-crudForm-modelBinding:first')
-                                    .widgetModel('bindErrors', result.Data.ModelState);
-                            }
-                            dfd.reject(result.Message);
-                        }
-                    },
-                    function (jqXHR, textStatus, errorThrown) {
-                        dfd.reject("Error no controlado guadando el producto");
-                    })
-                .done(function () {
-
-                });
-
-            return dfd.promise();
-
-
+        formSaveMethod: productAjax.ajax.productSave,
+        formValueGet: function (self, currentValue) {
+            return currentValue;
         },
-        formValueGet: function (self) {
-            var result = jQuery(self.element).data('lastBoundItem');
-            result.FormData = jQuery(self.element).find('div.ui-crudForm-modelBinding:first').widgetModel('valAsObject');
-            return result;
-        },
-        formModel: [{
-            id: "SomeString",
-            displayName: "Some String",
-            input: { value: "some characaters" },
-        }, {
-            id: "SomeDate",
-            displayName: "Some Date",
-            input: { type: "date", value: "09/02/2015" },
-        }, {
-            id: "SomeFloat",
-            displayName: "Some Float",
-            input: { type: "float", value: 24.67 },
-        }, {
-            id: "SomeBoolean",
-            displayName: "Some Boolean",
-            input: { type: "bool", value: false },
-        }, {
-            id: "SomeBooleanNullable",
-            displayName: "Some Boolean Nullable",
-            input: { type: "bool", value: null, nullable: true },
-        }, {
-            id: "SomeStringFromList",
-            displayName: "Some String From List",
-            input: { type: "list", value: null, listValues: [{ value: "", text: "Select from list" }, { value: "1", text: "First value" }] },
-        }, {
-            id: "SomeCustomValue",
-            displayName: "Some Custom Value",
-            input: {
-                type: "custom",
-                value: null,
-                nullable: true,
-                onItemBuild: function (widget, parent) {
-                    jQuery(parent)
-                        .append('<p>some readOnly value-><span class="SomeCustomValue">2</span></p>')
-                        .find('p:first')
-                            .click(function () {
-                                jQuery(widget).widgetModelItem('change');
-                            });
-                },
-                onItemValue: function (parent) {
-                    return jQuery(parent).find('span.SomeCustomValue').html();
-                },
-                onItemBind: function (parent, dataItem) {
-                    return jQuery(parent).find('span.SomeCustomValue').html(dataItem);
-                }
-            },
-        },
-        ],
+        formModel: productFormModelGet(),
 
     },
     _create: function () {

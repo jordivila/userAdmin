@@ -155,7 +155,6 @@ module.exports = function (grunt) {
 
                     '!src/public/cdn/**/*.*',
                     '!src/public/test/qunit/libs/**/*.js',
-
             ],
             options: {
                 globals: {

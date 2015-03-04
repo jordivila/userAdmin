@@ -168,7 +168,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var templateGet = function () {
 
 
-            var template = '<div class="ui-widget-header">{0}</div>' +
+            var template = '<div class="ui-crud-header ui-state-default"><div class="ui-crud-title">{0}</div></div>' +
                             '<div class="{1}"></div>' +
                             '<div class="{2} ui-ribbonButtons ui-widget-content ui-state-default"></div>' +
                             '<div class="{3}"></div>' +
@@ -185,7 +185,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         jQuery(this.element)
             .addClass('ui-crud')
             .append(templateGet())
-            .find('div.ui-widget-header:first')
+            .find('div.ui-crud-header:first')
                 .each(function () {
                     self.options.crudHeaderDomId = jQuery(this);
                     self.errorInit(jQuery(this));
@@ -221,8 +221,10 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                         self._actionSet(self._actions.list);
                     }
                 },
-                paginated: function (e, pageIndex) {
-                    self.options.gridFilterObject.Page = pageIndex;
+                paginated: function (e, pagination) {
+                    self.options.gridFilterObject.Page = pagination.pageIndex;
+                    self.options.gridFilterObject.PageSize = pagination.pageSize;
+
                     self.errorHide();
                     self._search();
                 },
@@ -349,6 +351,9 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
             dfd.reject(self.namespace + '.' + self.widgetName + "options.gridSearchMethod is an abstract method. Child class must implement");
         }
         else {
+
+            console.log(self.options.gridFilterObject);
+
             jQuery.when(self.options.gridSearchMethod(self.options.gridFilterObject))
                 .then(
                     function (result, statusText, jqXHR) {
@@ -449,7 +454,7 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
 {
     options: {
         Page: 0,
-        PageSize: 30,
+        PageSize: 10,
         SortBy: "",
         SortAscending: false,
         filterButtonsInit: function (self, defaultButtons) {
@@ -576,12 +581,27 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
 
         var self = this;
 
+        var pagerOpts = {
+            change: function (e, pagination) {
+                self._trigger('paginated', null, pagination);
+            }
+        };
+
         jQuery(self.options.gridPagerDOMId)
-                .gridPagination({
-                    change: function (e, pageIndex) {
-                        self._trigger('paginated', null, pageIndex);
-                    }
-                });
+                .first()
+                    .gridPagination(jQuery.extend({}, pagerOpts, {
+                        showPager: false,
+                        showTotalRows: false,
+                        showSizePicker:false,
+                    }))
+                .end()
+                .last()
+                    .gridPagination(jQuery.extend({}, pagerOpts, {
+                        showPager: true,
+                        showTotalRows: true,
+                        showSizePicker:true,
+                    }))
+                .end();
     },
     destroy: function () {
 
@@ -596,7 +616,8 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
     },
     _gridTemplate: function () {
 
-        return '<div class="ui-crudGrid">' +
+        return '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
+                '<div class="ui-crudGrid">' +
                     '<div class="ui-crudGrid-header ui-state-default">' +
                         '<table>' +
                             '<tbody>' +
@@ -614,7 +635,7 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
                         '</table>' +
                     '</div>' +
                 '</div>' +
-                '<div class="ui-crudGrid-pager ui-state-default"></div>';
+                '<div class="ui-crudGrid-pager ui-crudGrid-pager-bottom ui-state-default"></div>';
     },
     _bindRowAlternatedColor: function () {
 
@@ -667,11 +688,6 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
         formBind: function (self, dataItem) {
             throw new Error(self.namespace + '.' + self.widgetName + ".formBind() is an abstract method. Child class method must be implemented");
         },
-        formSave: function (self) {
-            var dfd = jQuery.Deferred();
-            dfd.reject(this.namespace + '.' + this.widgetName + ".formSave is an abstract method. Child class must implemented");
-            return dfd.promise();
-        }
     },
     _create: function () {
 
@@ -733,6 +749,12 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
     },
     bind: function (dataItem) {
         try {
+            jQuery(this.element)
+                .data('lastBoundItem', dataItem)
+                .find('div.ui-crudForm-modelBinding:first')
+                    .widgetModel('bindValue', dataItem.EditData)
+                .end();
+
             this.options.formBind(this, dataItem);
             this._trigger('dataBound', null, dataItem);
         } catch (e) {
@@ -744,7 +766,7 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
         var self = this;
 
-        self.options.formSave(this)
+        self._formSave(this)
                 .progress(function (status) {
                     self.progressShow(status);
                 })
@@ -756,4 +778,52 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
                     self.progressHide();
                 });
     },
+    _formSave: function () {
+
+        var self = this;
+        var dfd = jQuery.Deferred();
+
+        if (self.options.formSaveMethod === null) {
+            dfd.reject(self.namespace + '.' + self.widgetName + ".options.formSaveMethod is an abstract method. Child class must implement");
+        }
+        else {
+            dfd.notify("Guardando informacion...");
+
+            var viewModel = self._formValueGet();
+
+            jQuery.when(self.options.formSaveMethod(viewModel))
+            .then(
+                    function (result, statusText, jqXHR) {
+                        if (result.IsValid) {
+                            self._trigger('messagedisplayAutoHide', null, result.Message, 50);
+                            self._trigger('change', null, result.Data);
+                            self.bind(result.Data);
+                            dfd.resolve();
+                        }
+                        else {
+                            if (result.Data) {
+
+                                jQuery(self.element)
+                                    .find('div.ui-crudForm-modelBinding:first')
+                                    .widgetModel('bindErrors', result.Data.ModelState);
+                            }
+                            dfd.reject(result.Message);
+                        }
+                    },
+                    function (jqXHR, textStatus, errorThrown) {
+                        dfd.reject("Error no controlado guadando la información");
+                    })
+            .done(function () {
+
+            });
+        }
+        return dfd.promise();
+    },
+    _formValueGet: function () {
+        var dataItem = jQuery(this.element).data('lastBoundItem');
+        var formData = jQuery(this.element).find('div.ui-crudForm-modelBinding:first').widgetModel('valAsObject');
+        var result = jQuery.extend({}, dataItem, { FormData: formData });
+        return this.options.formValueGet(this, result);
+    }
+
 });

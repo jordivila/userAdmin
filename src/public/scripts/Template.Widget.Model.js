@@ -1,7 +1,8 @@
 ﻿jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
 {
     options: {
-        modelItems: null
+        modelItems: null,
+        markOnChange: false // set a highlight class when item changed. Primarly used in filter objects
     },
     _create: function () {
 
@@ -69,7 +70,7 @@
 
         if (this.options.modelItems !== null) {
 
-            var onItemChanged = function () {
+            var onItemChanged = function (e, ui) {
 
                 var clearedErrors = true;
 
@@ -81,8 +82,7 @@
                     }
                 }
 
-                if (clearedErrors)
-                {
+                if (clearedErrors) {
                     self._trigger('errorsCleared', null, null);
                 }
 
@@ -111,7 +111,7 @@
                 if (this.options.modelItems[j].id == i) {
                     jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(i))
                         .widgetModelItem('setValue', dataItem[i]);
-                        
+
                 }
             }
         }
@@ -171,9 +171,6 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
             })
             .blur(function () {
                 jQuery(this).removeClass('ui-state-focus');
-            })
-            .change(function () {
-                jQuery(this).addClass('ui-state-active');
             });
 
 
@@ -244,7 +241,9 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 break;
             case "float":
 
-                t = '<input id="{1}" name="{1}" type="text" value="{0}" />'.format(this.options.input.value, this.options.id);
+                t = '<input id="{1}" name="{1}" type="text" value="{0}" />'
+                    .format(isNaN(parseFloat(this.options.input.value)) ? "" : this.options.input.value,
+                            this.options.id);
 
                 jQuery($parent)
                     .append(t)
