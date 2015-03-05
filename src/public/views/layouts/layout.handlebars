@@ -8,29 +8,26 @@
     <!--<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">-->
     <link href="/public/cdn/{{Package.name}}.{{Package.version}}.ui.css" rel="Stylesheet" type="text/css" />
     <!--Common styles end-->
-
     <!--View specific styles begin-->
     {{#each CssFiles}}
-        <link href="{{this}}" rel="Stylesheet" type="text/css" />
+    <link href="{{this}}" rel="Stylesheet" type="text/css" />
     {{/each}}
     <!--View specific styles end-->
 </head>
 <body class="ui-widget ui-widget-content ui-helper-hidden">
 
-    <div id="panelMenu" class="ui-menuNav ui-state-default ui-front">
-        <div class="ui-menuNav-content">
-            <div class="ui-menuToggle">
-                <div class="ui-menuToggle-icon fa fa-bars fa-2x"></div>
-                <div class="ui-menuToggle-text">Menu</div>
-            </div>
-            <div class="ui-helper-clearfix"></div>
-            <ul></ul>
-            <div class="ui-helper-clearfix"></div>
-            <div class="ui-site-version">
-                <div>Copyright © 2012 Company Co.</div>
-                <div>All rights reserved</div>
-                <div>v. - {{Package.version}}</div>
-            </div>
+    <div id="panelMenu" class="ui-mainMenu ui-state-default ui-front">
+        <div class="ui-mainMenuToggle">
+            <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
+            <div class="ui-mainMenuToggle-text">Menu</div>
+        </div>
+        <div class="ui-helper-clearfix"></div>
+        <ul></ul>
+        <div class="ui-helper-clearfix"></div>
+        <div class="ui-site-version">
+            <div>Copyright © 2012 Company Co.</div>
+            <div>All rights reserved</div>
+            <div>v. - {{Package.version}}</div>
         </div>
     </div>
 
@@ -38,9 +35,9 @@
 
         <div data-widget="userActivity">
             <div class="ui-site-header ui-widget-header ui-widget-content ui-corner-all">
-                <div class="ui-menuToggle">
-                    <div class="ui-menuToggle-icon fa fa-bars fa-2x"></div>
-                    <div class="ui-menuToggle-text">Menu</div>
+                <div class="ui-mainMenuToggle">
+                    <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
+                    <div class="ui-mainMenuToggle-text">Menu</div>
                     <div class="ui-helper-clearfix"></div>
                 </div>
                 <div class="ui-site-nameBox">
@@ -81,7 +78,7 @@
         </div>
         <br />
     </div>
-    
+
 
 
     <script type="text/javascript" src="/public/cdn/{{Package.name}}.{{Package.version}}.ui_js.js"></script>

@@ -2794,7 +2794,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                 $navMenu.navMenu('bind', data);
 
 
-                jQuery('div.ui-menuToggle')
+                jQuery('div.ui-mainMenuToggle')
                     .click(function () {
 
                         console.log($panelMenu.is(':visible'));
