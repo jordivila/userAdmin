@@ -1,21 +1,31 @@
 ﻿html{
-  font-size: 0.7em;
+  font-size: 0.7em !important;
 }
 @media screen and (min-width: 600px){
   html{
-    font-size: 0.8em;
+    font-size: 0.8em !important;
   }
 }
 @media screen and (min-width: 800px){
   html{
-    font-size: 0.9em;
+    font-size: 0.9em !important;
   }
 }
-@media screen and (min-width: 1180px){
+@media screen and (min-width: 1024px){
   html{
-    font-size: 1em;
+    font-size: 0.9em !important;
   }
+  h1{ font-size:1.2em !important; }
 }
+@media screen and (min-width: 1300px){
+  html{
+    font-size: 1em !important;
+  }
+  h1{ font-size:1.4em !important; }
+}
+
+
+
 /*
 @media screen and (min-width: 1300px){
   html{

@@ -15,15 +15,22 @@
     {{/each}}
     <!--View specific styles end-->
 </head>
-<body class="ui-widget ui-widget-content ui-hidden">
+<body class="ui-widget ui-widget-content ui-helper-hidden">
 
-    <div id="panelMenu" class="ui-menuNav ui-menuNav-Expand ui-state-default">
-        <ul></ul>
-        <div class="ui-carriageReturn"></div>
-        <div class="ui-site-version">
-            <div>Copyright © 2012 Company Co.</div>
-            <div>All rights reserved</div>
-            <div>v. - {{Package.version}}</div>
+    <div id="panelMenu" class="ui-menuNav ui-state-default ui-front">
+        <div class="ui-menuNav-content">
+            <div class="ui-menuToggle">
+                <div class="ui-menuToggle-icon fa fa-bars fa-2x"></div>
+                <div class="ui-menuToggle-text">Menu</div>
+            </div>
+            <div class="ui-helper-clearfix"></div>
+            <ul></ul>
+            <div class="ui-helper-clearfix"></div>
+            <div class="ui-site-version">
+                <div>Copyright © 2012 Company Co.</div>
+                <div>All rights reserved</div>
+                <div>v. - {{Package.version}}</div>
+            </div>
         </div>
     </div>
 
@@ -31,22 +38,21 @@
 
         <div data-widget="userActivity">
             <div class="ui-site-header ui-widget-header ui-widget-content ui-corner-all">
-                <div id="menuToggle" class="ui-menuToggle">
+                <div class="ui-menuToggle">
                     <div class="ui-menuToggle-icon fa fa-bars fa-2x"></div>
                     <div class="ui-menuToggle-text">Menu</div>
-                    <div class="ui-carriageReturn"></div>
+                    <div class="ui-helper-clearfix"></div>
                 </div>
                 <div class="ui-site-nameBox">
                     <a href="/">{{DomainName}}</a>
                 </div>
             </div>
-            <div class="ui-carriageReturn"></div>
+            <div class="ui-helper-clearfix"></div>
         </div>
-        <div class="ui-carriageReturn"></div>
+        <div class="ui-helper-clearfix"></div>
 
-        <div class="ui-site-title">
+        <div class="ui-site-title ui-state-default">
             <h1>{{Title}}</h1>
-            <hr class="ui-state-default" />
         </div>
 
         <!--Breadcrumb begin-->
@@ -63,7 +69,7 @@
                     </li>
                     {{/each}}                </li>
                 </ul>
-                <div class="ui-carriageReturn"></div>
+                <div class="ui-helper-clearfix"></div>
             </div>
         </div>
         <br />
@@ -94,7 +100,7 @@
                 VsixMvcAppResult.Widgets.PageOptions.cultureGlobalization = "{{Globalization.cultureGlobalization}}";
                 VsixMvcAppResult.Widgets.PageOptions.cultureDatePicker = "{{Globalization.cultureDatePicker}}";
                 VsixMvcAppResult.Widgets.PageOptions.defaultTheme = "Redmond";
-                VsixMvcAppResult.Widgets.PageOptions.onInit(function () { jQuery('body').removeClass('ui-hidden'); });
+                VsixMvcAppResult.Widgets.PageOptions.onInit(function () { jQuery('body').removeClass('ui-helper-hidden'); });
                 VsixMvcAppResult.Widgets.PageOptions.Init();
             });
         })(jQuery);

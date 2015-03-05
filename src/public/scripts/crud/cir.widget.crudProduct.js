@@ -445,6 +445,10 @@ var productAjax = {
                 modelErrors.push({ key: "SomeStringFromList", value: ["este es un campo requerido"] });
             }
 
+            if (isNaN(dataItem.FormData.SomeFloat)) {
+                modelErrors.push({ key: "SomeFloat", value: ["Se esperaba un número"] });
+            }
+
             if (modelErrors.length > 0) {
                 dataResult = {
                     Data: { ModelState: modelErrors },
@@ -728,7 +732,6 @@ jQuery.widget("ui.product", jQuery.ui.crud,
             return currentValue;
         },
         formModel: productFormModelGet(),
-
     },
     _create: function () {
 

@@ -155,10 +155,15 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
                     self._onChange(0);
                 });
 
-            $totalsBox.append('<div class="ui-carriageReturn" />');
+            $totalsBox.append('<div class="ui-helper-clearfix" />');
 
             if ((this.options.showTotalRows === false) && (this.options.showSizePicker === false)) {
-                jQuery(this.element).find('div.ui-gridPagination-totals:first').hide();
+                jQuery(this.element)
+                    .find('div.ui-gridPagination-totals:first')
+                        .hide()
+                    .parents('div.{0}-{1}:first'.format(this.namespace, this.widgetName))
+                        .addClass('ui-helper-hidden');
+                    
             }
             else {
                 if (this.options.showTotalRows === false) {

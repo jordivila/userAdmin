@@ -29,18 +29,19 @@ jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
                     }
                 });
 
-            
+
 
             if (jQuery(this.element).attr('data-isWrapped') === undefined) {
-                jQuery(this.element).wrap('<div class="ui-widgetModelItemDate"></div>')
+                jQuery(this.element).wrap('<div class="ui-widgetModelItemDate ui-helper-clearfix"></div>')
                                     .parents('div.ui-widgetModelItemDate:first')
-                                    .append('<a href="javascript:void(0);">' + self.options.text + '</a>')
-                                    //.append('<div class="ui-state-error"><span class="ui-icon ui-icon-circle-close"></span></div>')
                                     .append('<div class="ui-state-error ui-widget-close ui-corner-all ui-icon ui-icon-close" style="display: block;"></div>')
                                     .find('div.ui-state-error')
-                                        .css('float', 'left')
-                                        .css('cursor', 'pointer')
-                                        .hide();
+                                        .hide()
+                                    .end()
+                                    .append('<div class="ui-widgetModelItemDate-text"><a href="javascript:void(0);">' + self.options.text + '</a></div>')
+                                    
+                //.append('<div class="ui-state-error"><span class="ui-icon ui-icon-circle-close"></span></div>')
+                ;
             }
 
             jQuery(this.element)
@@ -81,10 +82,13 @@ jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
     },
     _setDateLabel: function () {
         var self = this;
+
+        var d = jQuery(self.element).datepicker('getDate');
+
         jQuery(self.element)
             .parents('div:first')
             .find('a')
-                .html(Globalize.format(jQuery(self.element).datepicker('getDate'), "D"))
+                .html(d === null ? self.options.text : Globalize.format(d, "D"))
             .end()
             .find('div')
                 .show();

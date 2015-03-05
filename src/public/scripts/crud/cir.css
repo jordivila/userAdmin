@@ -1,17 +1,17 @@
 ﻿.ui-productCrud {}
-
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-searchCustomerIcon,
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeCustomerIcon { width: 1em; height: 1em;float:left;cursor:pointer; margin: 0 0.5em 0 0;padding:0.2em; }
-
 .ui-productCrud .ui-productCrud-gridControl .ui-productGrid-productId {width:3em !important;text-align:right;}
 .ui-productCrud .ui-productCrud-gridControl .ui-productGrid-productTypeDesc {padding:0 0 0 0.5em !important;}
 .ui-productCrud .ui-productCrud-gridControl .ui-productGrid-fechaDesde {width:5em !important;text-align:right;}
 .ui-productCrud .ui-productCrud-gridControl .ui-productGrid-gridCommand {width:10% !important;}
 .ui-productCrud .ui-productCrud-gridControl .ui-productGrid-gridCommand .ui-crudGrid-action-edit {width:1em;margin:0 auto 0 auto;}
-
+.ui-productCrud .ui-productCrud-gridControl th.ui-productGrid-productId ,
+.ui-productCrud .ui-productCrud-gridControl th.ui-productGrid-productTypeDesc,
+.ui-productCrud .ui-productCrud-gridControl th.ui-productGrid-fechaDesde {text-align:center;}
 .ui-productCrud .ui-crudForm .ui-productCrud-form-searchOutput,
 .ui-productCrud .ui-crudForm .ui-productCrud-form-type {padding: 0em 0em 0em 1em;}
-
+/*CUSTOMER*/
 .ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-nombre {width:50% !important;}
 .ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-NumDocumento {width:35% !important;text-align:right;}
 .ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-gridCommand {width:15% !important;}

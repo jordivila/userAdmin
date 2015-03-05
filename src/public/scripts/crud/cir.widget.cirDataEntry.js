@@ -36,7 +36,7 @@ jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
             done: function () {
 
                 jQuery(self.options.productDOMId).product({
-                    title: 'Productos - Entrada de información adicional',
+                    title: '',
                     onSearchCustomer: function () {
                         self._pageSet(self._pageViews.customers);
                     },
@@ -61,8 +61,8 @@ jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
 
         var self = this;
 
-        jQuery(self.options.customerDOMId).hide().removeClass('ui-hidden');
-        jQuery(self.options.productDOMId).hide().removeClass('ui-hidden');
+        jQuery(self.options.customerDOMId).hide().removeClass('ui-helper-hidden');
+        jQuery(self.options.productDOMId).hide().removeClass('ui-helper-hidden');
 
         switch (pageView) {
             case self._pageViews.customers:

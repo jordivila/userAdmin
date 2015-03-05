@@ -2026,7 +2026,9 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
         }
     },
     bindValue: function (dataItem) {
+
         this._clearErrors();
+        this.resetForm();
 
         for (var i in dataItem) {
             for (var j = 0; j < this.options.modelItems.length; j++) {
@@ -2044,9 +2046,16 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
                 .removeClass('ui-state-error')
                 .find('div.ui-widgetModel-inputError')
                     .empty()
-                    .addClass('ui-hidden')
+                    .addClass('ui-helper-hidden')
                 .end()
             .end();
+    },
+    resetForm: function () {
+        for (var j = 0; j < this.options.modelItems.length; j++) {
+            jQuery('div[data-widgetModelItem-id="{0}"]:first'
+                    .format(this.options.modelItems[j].id))
+                    .widgetModelItem('setValue', null);
+        }
     }
 });
 
@@ -2120,10 +2129,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
     _template: function () {
         return "<div class='ui-widgetModel-inputLabel'>{0}</div>" +
                 "<div class='ui-widgetModel-inputValue'></div>" +
-                "<div class='ui-widgetModel-inputError ui-hidden'>" +
+                "<div class='ui-widgetModel-inputError ui-helper-hidden'>" +
                     "{1}" +
                 "</div>" +
-                "<div class='ui-carriageReturn'></div>";
+                "<div class='ui-helper-clearfix'></div>";
     },
     _templateFormat: function () {
 
@@ -2141,6 +2150,9 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
             case "date":
 
                 t = '<input id="{1}" name="{1}" type="text" />'.format(this.options.input.value, this.options.id);
+
+
+                
 
                 jQuery($parent)
                     .append(t)
@@ -2277,14 +2289,14 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 .find('div.ui-widgetModel-inputError:first')
                 .addClass('ui-state-error')
                 .html(errors.join('<br/>'))
-                .removeClass('ui-hidden');
+                .removeClass('ui-helper-hidden');
         }
         else {
             jQuery(this.element)
                 .find('div.ui-widgetModel-inputError:first')
                 .removeClass('ui-state-error')
                 .empty()
-                .addClass('ui-hidden');
+                .addClass('ui-helper-hidden');
         }
 
         return this;
@@ -2327,18 +2339,19 @@ jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
                     }
                 });
 
-            
+
 
             if (jQuery(this.element).attr('data-isWrapped') === undefined) {
-                jQuery(this.element).wrap('<div class="ui-widgetModelItemDate"></div>')
+                jQuery(this.element).wrap('<div class="ui-widgetModelItemDate ui-helper-clearfix"></div>')
                                     .parents('div.ui-widgetModelItemDate:first')
-                                    .append('<a href="javascript:void(0);">' + self.options.text + '</a>')
-                                    //.append('<div class="ui-state-error"><span class="ui-icon ui-icon-circle-close"></span></div>')
                                     .append('<div class="ui-state-error ui-widget-close ui-corner-all ui-icon ui-icon-close" style="display: block;"></div>')
                                     .find('div.ui-state-error')
-                                        .css('float', 'left')
-                                        .css('cursor', 'pointer')
-                                        .hide();
+                                        .hide()
+                                    .end()
+                                    .append('<div class="ui-widgetModelItemDate-text"><a href="javascript:void(0);">' + self.options.text + '</a></div>')
+                                    
+                //.append('<div class="ui-state-error"><span class="ui-icon ui-icon-circle-close"></span></div>')
+                ;
             }
 
             jQuery(this.element)
@@ -2379,10 +2392,13 @@ jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
     },
     _setDateLabel: function () {
         var self = this;
+
+        var d = jQuery(self.element).datepicker('getDate');
+
         jQuery(self.element)
             .parents('div:first')
             .find('a')
-                .html(Globalize.format(jQuery(self.element).datepicker('getDate'), "D"))
+                .html(d === null ? self.options.text : Globalize.format(d, "D"))
             .end()
             .find('div')
                 .show();
@@ -2726,36 +2742,36 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
     options: {
 
     },
-    _create: function() {
+    _create: function () {
         this._super();
     },
-    _init: function() {
+    _init: function () {
 
         this._super();
 
         //this.initMenuNav();
         this._updateUserLastActivity();
     },
-    destroy: function() {
+    destroy: function () {
         this._super();
     },
-    _errMsgSet: function(selector, msg) {
+    _errMsgSet: function (selector, msg) {
         jQuery(selector)
-            .append("<div></div><div class='ui-carriageReturn'></div>")
+            .append("<div></div><div class='ui-helper-clearfix'></div>")
             .find("div:first")
             .html(msg);
 
         VsixMvcAppResult.Widgets.DialogInline.Create(jQuery(selector).find("div:first"), VsixMvcAppResult.Widgets.DialogInline.MsgTypes.Error);
     },
-    _updateUserLastActivity: function() {
+    _updateUserLastActivity: function () {
         var self = this;
 
         VsixMvcAppResult.Ajax.UserUpdateLastActivity(
-            function(data, textStatus, jqXHR) {
+            function (data, textStatus, jqXHR) {
                 jQuery(self.element).append(data);
                 //VsixMvcAppResult.Widgets.jQueryzer(self.element);
             },
-            function(jqXHR, textStatus, errorThrown) {
+            function (jqXHR, textStatus, errorThrown) {
                 self._errMsgSet(jQuery(self.element), VsixMvcAppResult.Resources.unExpectedError);
             },
             function () {
@@ -2763,7 +2779,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                 self._initMenuNav();
             });
     },
-    _initMenuNav: function() {
+    _initMenuNav: function () {
 
         //TODO: load async Menu based on user identity
         var self = this;
@@ -2771,38 +2787,32 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         var $navMenu = jQuery($panelMenu).find('ul:first');
 
         VsixMvcAppResult.Ajax.UserMenu(
-            function(data, textStatus, jqXHR) {
+            function (data, textStatus, jqXHR) {
 
-                
+
                 var menu = $navMenu.navMenu();
                 $navMenu.navMenu('bind', data);
 
-                jQuery('#menuToggle').click(function() {
 
-                    $panelMenu.show('slide', function() {
-                        if (jQuery(this).is(':visible')) {
+                jQuery('div.ui-menuToggle')
+                    .click(function () {
 
-                            jQuery(document).bind("click", function(e) {
+                        console.log($panelMenu.is(':visible'));
 
-                                var menuClicked = jQuery(e.target).parents($panelMenu.selector).length > 0;
-
-                                if (!menuClicked) {
-
-                                    $panelMenu.hide('slide', function() {
-                                        $navMenu.navMenu('collapseAll');
-                                    });
-
-                                    jQuery(document).unbind("click");
-                                }
+                        if ($panelMenu.is(':visible')) {
+                            $panelMenu.hide('slide', function () {
+                                $navMenu.navMenu('collapseAll');
                             });
                         }
+                        else {
+                            $panelMenu.show('drop');
+                        }
                     });
-                });
             },
-            function(jqXHR, textStatus, errorThrown) {
+            function (jqXHR, textStatus, errorThrown) {
                 self._errMsgSet($panelMenu, VsixMvcAppResult.Resources.unExpectedError);
             },
-            function() {
+            function () {
                 self._trigger('complete', null, null);
             });
 
@@ -3403,7 +3413,7 @@ jQuery.widget("ui.fieldItem", jQuery.ui.commonBaseWidget,
         this.options.wrapElement = '<div class="ui-field-box">' +
                                         '<div class="ui-fieldName"></div>' +
                                         '<div class="ui-fieldValue"></div>' +
-                                        '<div class="ui-carriageReturn"></div>' +
+                                        '<div class="ui-helper-clearfix"></div>' +
                                     '</div>';
     },
     _init: function () {
@@ -3485,8 +3495,8 @@ jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
             var highlightCustomDOMClassName = this.namespace + '-' + this.widgetName + '-highlightDisplayBox';
 
 
-            var template = '<div class="ui-crud-error {0} ui-state-error ui-hidden"></div>' +
-                           '<div class="ui-crud-info {1} ui-state-highlight ui-hidden"></div>';
+            var template = '<div class="ui-crud-error {0} ui-state-error ui-helper-hidden"></div>' +
+                           '<div class="ui-crud-info {1} ui-state-highlight ui-helper-hidden"></div>';
 
             template = template.format(errorCustomDOMClassName, highlightCustomDOMClassName);
 
@@ -3556,8 +3566,6 @@ jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
 jQuery.widget("ui.crud", jQuery.ui.crudBase,
 {
     options: {
-        title: null,
-
         crudHeaderDomId: null,
         gridButtonsDOMId: null,
         gridDOMId: null,
@@ -3586,6 +3594,22 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         gridButtonsGet: function (crudWidget, defaultButtons) {
             return defaultButtons;
         },
+        gridPagerInit: function () {
+            return {
+                pagerTop: {
+                    showPager: false,
+                    showTotalRows: false,
+                    showSizePicker: false,
+                },
+                pagerBottom: {
+                    showPager: true,
+                    showTotalRows: true,
+                    showSizePicker: true,
+                }
+            };
+        },
+
+
         formInit: function (crudWidget, formOptions) {
             throw new Error(crudWidget.namespace + '.' + crudWidget.widgetName + ".formInit is an abstract method. Child class method must be implemented");
         },
@@ -3603,15 +3627,14 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var templateGet = function () {
 
 
-            var template = '<div class="ui-crud-header ui-state-default"><div class="ui-crud-title">{0}</div></div>' +
-                            '<div class="{1}"></div>' +
-                            '<div class="{2} ui-ribbonButtons ui-widget-content ui-state-default"></div>' +
-                            '<div class="{3}"></div>' +
-                            '<div class="{4}"></div>';
+            var template = '<div class="ui-crud-header ui-state-default"></div>' +
+                            '<div class="{0}"></div>' +
+                            '<div class="{1} ui-ribbonButtons ui-widget-content ui-state-default"></div>' +
+                            '<div class="{2}"></div>' +
+                            '<div class="{3}"></div>';
 
             return template
-                .format(self.options.title,
-                        gridFilterClass,
+                .format(gridFilterClass,
                         gridButtonsClass,
                         gridControlClass,
                         formControlClass);
@@ -3647,6 +3670,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                 gridRowTemplate: self.options.gridRowTemplate,
                 gridBindRowColumns: self.options.gridBindRowColumns,
                 gridBindRowEvents: self.options.gridBindRowEvents,
+                gridPagerInit: self.options.gridPagerInit,
 
                 errorDisplay: function (e, msg) {
                     self.errorDisplay(msg);
@@ -3746,14 +3770,14 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
         switch (actionSelected) {
             case self._actions.filter:
-                jQuery(self.options.gridFilterDOMId).removeClass('ui-hidden').show('blind');
+                jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').show('blind');
                 break;
             case self._actions.list:
-                jQuery(self.options.gridDOMId).removeClass('ui-hidden').show('blind');
+                jQuery(self.options.gridDOMId).removeClass('ui-helper-hidden').show('blind');
                 jQuery(self.options.gridButtonsDOMId).show();
                 break;
             case self._actions.form:
-                jQuery(self.options.formDOMId).removeClass('ui-hidden').show('blind');
+                jQuery(self.options.formDOMId).removeClass('ui-helper-hidden').show('blind');
                 break;
             default:
                 break;
@@ -3906,7 +3930,7 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
         });
 
         jQuery(this.element)
-            .addClass('ui-crudFilter ui-hidden')
+            .addClass('ui-crudFilter ui-helper-hidden')
                 .children()
                 .wrapAll('<div class="ui-crudFilter-form ui-widget-content" />')
                 .end()
@@ -3952,7 +3976,7 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
             this._initButton(this, defaultButtons[i], $buttonsBox);
         }
 
-        jQuery($buttonsBox).append('<div class="ui-carriageReturn"></div>');
+        jQuery($buttonsBox).append('<div class="ui-helper-clearfix"></div>');
     },
     destroy: function () {
 
@@ -3996,6 +4020,20 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
             throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowEvents is an abstract method. Child class method must be implemented");
         },
+        gridPagerInit: function () {
+            return {
+                pagerTop: {
+                    showPager: false,
+                    showTotalRows: false,
+                    showSizePicker: false,
+                },
+                pagerBottom: {
+                    showPager: true,
+                    showTotalRows: true,
+                    showSizePicker: true,
+                }
+            };
+        },
 
     },
     _create: function () {
@@ -4022,20 +4060,15 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
             }
         };
 
+
+        var pagerConfig = this.options.gridPagerInit();
+
         jQuery(self.options.gridPagerDOMId)
                 .first()
-                    .gridPagination(jQuery.extend({}, pagerOpts, {
-                        showPager: false,
-                        showTotalRows: false,
-                        showSizePicker:false,
-                    }))
+                    .gridPagination(jQuery.extend({}, pagerOpts, pagerConfig.pagerTop))
                 .end()
                 .last()
-                    .gridPagination(jQuery.extend({}, pagerOpts, {
-                        showPager: true,
-                        showTotalRows: true,
-                        showSizePicker:true,
-                    }))
+                    .gridPagination(jQuery.extend({}, pagerOpts, pagerConfig.pagerBottom))
                 .end();
     },
     destroy: function () {
@@ -4130,7 +4163,7 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
 
         jQuery(this.element)
-            .addClass('ui-crudForm ui-hidden')
+            .addClass('ui-crudForm ui-helper-hidden')
             .append('<div class="ui-crudForm-modelBinding"></div>')
             .children()
                 .wrapAll('<div class="ui-crudForm-formContent ui-widget-content" />')
@@ -4171,7 +4204,7 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
             this._initButton(this, defaultButtons[i], jQuery(this.options.formButtonsDOMId));
         }
 
-        jQuery(this.options.formButtonsDOMId).append('<div class="ui-carriageReturn"></div>');
+        jQuery(this.options.formButtonsDOMId).append('<div class="ui-helper-clearfix"></div>');
 
     },
     _done: function () {
@@ -4420,10 +4453,15 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
                     self._onChange(0);
                 });
 
-            $totalsBox.append('<div class="ui-carriageReturn" />');
+            $totalsBox.append('<div class="ui-helper-clearfix" />');
 
             if ((this.options.showTotalRows === false) && (this.options.showSizePicker === false)) {
-                jQuery(this.element).find('div.ui-gridPagination-totals:first').hide();
+                jQuery(this.element)
+                    .find('div.ui-gridPagination-totals:first')
+                        .hide()
+                    .parents('div.{0}-{1}:first'.format(this.namespace, this.widgetName))
+                        .addClass('ui-helper-hidden');
+                    
             }
             else {
                 if (this.options.showTotalRows === false) {
@@ -5099,6 +5137,10 @@ var productAjax = {
                 modelErrors.push({ key: "SomeStringFromList", value: ["este es un campo requerido"] });
             }
 
+            if (isNaN(dataItem.FormData.SomeFloat)) {
+                modelErrors.push({ key: "SomeFloat", value: ["Se esperaba un número"] });
+            }
+
             if (modelErrors.length > 0) {
                 dataResult = {
                     Data: { ModelState: modelErrors },
@@ -5382,7 +5424,6 @@ jQuery.widget("ui.product", jQuery.ui.crud,
             return currentValue;
         },
         formModel: productFormModelGet(),
-
     },
     _create: function () {
 
@@ -5445,7 +5486,7 @@ jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
             done: function () {
 
                 jQuery(self.options.productDOMId).product({
-                    title: 'Productos - Entrada de información adicional',
+                    title: '',
                     onSearchCustomer: function () {
                         self._pageSet(self._pageViews.customers);
                     },
@@ -5470,8 +5511,8 @@ jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
 
         var self = this;
 
-        jQuery(self.options.customerDOMId).hide().removeClass('ui-hidden');
-        jQuery(self.options.productDOMId).hide().removeClass('ui-hidden');
+        jQuery(self.options.customerDOMId).hide().removeClass('ui-helper-hidden');
+        jQuery(self.options.productDOMId).hide().removeClass('ui-helper-hidden');
 
         switch (pageView) {
             case self._pageViews.customers:

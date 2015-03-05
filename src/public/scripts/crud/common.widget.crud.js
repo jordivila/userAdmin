@@ -50,8 +50,8 @@ jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
             var highlightCustomDOMClassName = this.namespace + '-' + this.widgetName + '-highlightDisplayBox';
 
 
-            var template = '<div class="ui-crud-error {0} ui-state-error ui-hidden"></div>' +
-                           '<div class="ui-crud-info {1} ui-state-highlight ui-hidden"></div>';
+            var template = '<div class="ui-crud-error {0} ui-state-error ui-helper-hidden"></div>' +
+                           '<div class="ui-crud-info {1} ui-state-highlight ui-helper-hidden"></div>';
 
             template = template.format(errorCustomDOMClassName, highlightCustomDOMClassName);
 
@@ -121,8 +121,6 @@ jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
 jQuery.widget("ui.crud", jQuery.ui.crudBase,
 {
     options: {
-        title: null,
-
         crudHeaderDomId: null,
         gridButtonsDOMId: null,
         gridDOMId: null,
@@ -151,6 +149,22 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         gridButtonsGet: function (crudWidget, defaultButtons) {
             return defaultButtons;
         },
+        gridPagerInit: function () {
+            return {
+                pagerTop: {
+                    showPager: false,
+                    showTotalRows: false,
+                    showSizePicker: false,
+                },
+                pagerBottom: {
+                    showPager: true,
+                    showTotalRows: true,
+                    showSizePicker: true,
+                }
+            };
+        },
+
+
         formInit: function (crudWidget, formOptions) {
             throw new Error(crudWidget.namespace + '.' + crudWidget.widgetName + ".formInit is an abstract method. Child class method must be implemented");
         },
@@ -168,15 +182,14 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var templateGet = function () {
 
 
-            var template = '<div class="ui-crud-header ui-state-default"><div class="ui-crud-title">{0}</div></div>' +
-                            '<div class="{1}"></div>' +
-                            '<div class="{2} ui-ribbonButtons ui-widget-content ui-state-default"></div>' +
-                            '<div class="{3}"></div>' +
-                            '<div class="{4}"></div>';
+            var template = '<div class="ui-crud-header ui-state-default"></div>' +
+                            '<div class="{0}"></div>' +
+                            '<div class="{1} ui-ribbonButtons ui-widget-content ui-state-default"></div>' +
+                            '<div class="{2}"></div>' +
+                            '<div class="{3}"></div>';
 
             return template
-                .format(self.options.title,
-                        gridFilterClass,
+                .format(gridFilterClass,
                         gridButtonsClass,
                         gridControlClass,
                         formControlClass);
@@ -212,6 +225,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                 gridRowTemplate: self.options.gridRowTemplate,
                 gridBindRowColumns: self.options.gridBindRowColumns,
                 gridBindRowEvents: self.options.gridBindRowEvents,
+                gridPagerInit: self.options.gridPagerInit,
 
                 errorDisplay: function (e, msg) {
                     self.errorDisplay(msg);
@@ -311,14 +325,14 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
         switch (actionSelected) {
             case self._actions.filter:
-                jQuery(self.options.gridFilterDOMId).removeClass('ui-hidden').show('blind');
+                jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').show('blind');
                 break;
             case self._actions.list:
-                jQuery(self.options.gridDOMId).removeClass('ui-hidden').show('blind');
+                jQuery(self.options.gridDOMId).removeClass('ui-helper-hidden').show('blind');
                 jQuery(self.options.gridButtonsDOMId).show();
                 break;
             case self._actions.form:
-                jQuery(self.options.formDOMId).removeClass('ui-hidden').show('blind');
+                jQuery(self.options.formDOMId).removeClass('ui-helper-hidden').show('blind');
                 break;
             default:
                 break;
@@ -471,7 +485,7 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
         });
 
         jQuery(this.element)
-            .addClass('ui-crudFilter ui-hidden')
+            .addClass('ui-crudFilter ui-helper-hidden')
                 .children()
                 .wrapAll('<div class="ui-crudFilter-form ui-widget-content" />')
                 .end()
@@ -517,7 +531,7 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
             this._initButton(this, defaultButtons[i], $buttonsBox);
         }
 
-        jQuery($buttonsBox).append('<div class="ui-carriageReturn"></div>');
+        jQuery($buttonsBox).append('<div class="ui-helper-clearfix"></div>');
     },
     destroy: function () {
 
@@ -561,6 +575,20 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
             throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowEvents is an abstract method. Child class method must be implemented");
         },
+        gridPagerInit: function () {
+            return {
+                pagerTop: {
+                    showPager: false,
+                    showTotalRows: false,
+                    showSizePicker: false,
+                },
+                pagerBottom: {
+                    showPager: true,
+                    showTotalRows: true,
+                    showSizePicker: true,
+                }
+            };
+        },
 
     },
     _create: function () {
@@ -587,20 +615,15 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
             }
         };
 
+
+        var pagerConfig = this.options.gridPagerInit();
+
         jQuery(self.options.gridPagerDOMId)
                 .first()
-                    .gridPagination(jQuery.extend({}, pagerOpts, {
-                        showPager: false,
-                        showTotalRows: false,
-                        showSizePicker:false,
-                    }))
+                    .gridPagination(jQuery.extend({}, pagerOpts, pagerConfig.pagerTop))
                 .end()
                 .last()
-                    .gridPagination(jQuery.extend({}, pagerOpts, {
-                        showPager: true,
-                        showTotalRows: true,
-                        showSizePicker:true,
-                    }))
+                    .gridPagination(jQuery.extend({}, pagerOpts, pagerConfig.pagerBottom))
                 .end();
     },
     destroy: function () {
@@ -695,7 +718,7 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
 
         jQuery(this.element)
-            .addClass('ui-crudForm ui-hidden')
+            .addClass('ui-crudForm ui-helper-hidden')
             .append('<div class="ui-crudForm-modelBinding"></div>')
             .children()
                 .wrapAll('<div class="ui-crudForm-formContent ui-widget-content" />')
@@ -736,7 +759,7 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
             this._initButton(this, defaultButtons[i], jQuery(this.options.formButtonsDOMId));
         }
 
-        jQuery(this.options.formButtonsDOMId).append('<div class="ui-carriageReturn"></div>');
+        jQuery(this.options.formButtonsDOMId).append('<div class="ui-helper-clearfix"></div>');
 
     },
     _done: function () {

@@ -104,7 +104,9 @@
         }
     },
     bindValue: function (dataItem) {
+
         this._clearErrors();
+        this.resetForm();
 
         for (var i in dataItem) {
             for (var j = 0; j < this.options.modelItems.length; j++) {
@@ -122,9 +124,16 @@
                 .removeClass('ui-state-error')
                 .find('div.ui-widgetModel-inputError')
                     .empty()
-                    .addClass('ui-hidden')
+                    .addClass('ui-helper-hidden')
                 .end()
             .end();
+    },
+    resetForm: function () {
+        for (var j = 0; j < this.options.modelItems.length; j++) {
+            jQuery('div[data-widgetModelItem-id="{0}"]:first'
+                    .format(this.options.modelItems[j].id))
+                    .widgetModelItem('setValue', null);
+        }
     }
 });
 
@@ -198,10 +207,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
     _template: function () {
         return "<div class='ui-widgetModel-inputLabel'>{0}</div>" +
                 "<div class='ui-widgetModel-inputValue'></div>" +
-                "<div class='ui-widgetModel-inputError ui-hidden'>" +
+                "<div class='ui-widgetModel-inputError ui-helper-hidden'>" +
                     "{1}" +
                 "</div>" +
-                "<div class='ui-carriageReturn'></div>";
+                "<div class='ui-helper-clearfix'></div>";
     },
     _templateFormat: function () {
 
@@ -219,6 +228,9 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
             case "date":
 
                 t = '<input id="{1}" name="{1}" type="text" />'.format(this.options.input.value, this.options.id);
+
+
+                
 
                 jQuery($parent)
                     .append(t)
@@ -355,14 +367,14 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 .find('div.ui-widgetModel-inputError:first')
                 .addClass('ui-state-error')
                 .html(errors.join('<br/>'))
-                .removeClass('ui-hidden');
+                .removeClass('ui-helper-hidden');
         }
         else {
             jQuery(this.element)
                 .find('div.ui-widgetModel-inputError:first')
                 .removeClass('ui-state-error')
                 .empty()
-                .addClass('ui-hidden');
+                .addClass('ui-helper-hidden');
         }
 
         return this;

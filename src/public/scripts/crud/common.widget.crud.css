@@ -3,11 +3,12 @@
 
 
 
-.ui-crud .ui-crud-header {}
+.ui-crud .ui-crud-header {background-image:none;border-top:none;border-bottom:none;}
 .ui-crud .ui-crud-header .ui-crud-title {padding:0.5em 0.5em 0 0.5em;text-align:center;}
-.ui-crud .ui-crud-header .ui-crud-error {padding:0.2em;border:0; margin:0.5em 0 0 0.5em;font-weight:normal;text-align:center;}
-.ui-crud .ui-crud-header .ui-crud-info {padding:0.2em !important;padding:0.2em;border:0; margin:0.5em 0 0 0.5em;font-weight:normal;text-align:center;}
-.ui-crud .ui-ribbonButtons { border-bottom:0em;border-top:0em;padding:0em;}
+.ui-crud .ui-crud-header .ui-crud-error {padding:0.2em;border:0; font-weight:normal;text-align:center;}
+.ui-crud .ui-crud-header .ui-crud-info {padding:0.2em;border:0; font-weight:normal;text-align:center;}
+.ui-crud .ui-ribbonButtons { border-bottom:0em;border-top:0em;padding:0em;background-image:none;}
+.ui-crud .ui-ribbonButtons * {background-image:none;}
 .ui-crud .ui-ribbonButtons button {margin-bottom: 0.1em !important;font-weight:normal;border:none;}
 .ui-crud .ui-ribbonButtons span.ui-button-text {/*font-size:1.1em !important;*/}
 .ui-crud .ui-fieldItem {}
@@ -48,7 +49,7 @@
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar td {cursor:pointer; padding:0.3em;margin:0 0.3em 0 0.3em;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals {padding:0.5em 0.5em 0.5em 0em;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals div {}
-.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-totalRows {float:left;margin:0 0 0 2em;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-totalRows {float:left;margin:0 0 0 0.5em;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-pageSizePicker {float:right;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-pageSizePicker select {padding:0 0 0 0;}
 
@@ -64,11 +65,11 @@
 
 
 /* GENERIC FORM */
-.ui-crud .ui-crudForm .ui-widgetModelItem {padding:.5em .5em .5em .5em;clear:both;margin:0em 0 0 0; border-width:0 !important;}
-.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputLabel {padding:0 0 0 0;width:44%;float:left;}
-.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputValue {width:55%;float:left;}
-.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputValue input {width:95%;}
-.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputValue select {width:95%;}
+.ui-crud .ui-crudForm .ui-widgetModelItem {padding:.5em .5em .5em .5em;clear:both;margin:0.1em 0.1em 0.1em 0.1em ; border-width:0 !important;}
+.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputLabel {padding:0 0 0 0;width:35%;float:left;}
+.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputValue {width:60%;float:left;}
+.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputValue input {width:99%;}
+.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputValue select {width:99%;}
 .ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputError {clear:both;margin: 2em 0 0em 0 !important; width:100%;border:0;padding:0.2em;}
 .ui-crud .ui-crudForm .ui-widgetModelItem.ui-state-error {background-image:none;}
 .ui-crud .ui-crudForm .ui-widgetModelItem.ui-state-error div.ui-widgetModel-inputLabel {color:initial;}

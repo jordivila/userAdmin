@@ -12,7 +12,7 @@ jQuery.widget("ui.fieldItem", jQuery.ui.commonBaseWidget,
         this.options.wrapElement = '<div class="ui-field-box">' +
                                         '<div class="ui-fieldName"></div>' +
                                         '<div class="ui-fieldValue"></div>' +
-                                        '<div class="ui-carriageReturn"></div>' +
+                                        '<div class="ui-helper-clearfix"></div>' +
                                     '</div>';
     },
     _init: function () {

@@ -4,36 +4,36 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
     options: {
 
     },
-    _create: function() {
+    _create: function () {
         this._super();
     },
-    _init: function() {
+    _init: function () {
 
         this._super();
 
         //this.initMenuNav();
         this._updateUserLastActivity();
     },
-    destroy: function() {
+    destroy: function () {
         this._super();
     },
-    _errMsgSet: function(selector, msg) {
+    _errMsgSet: function (selector, msg) {
         jQuery(selector)
-            .append("<div></div><div class='ui-carriageReturn'></div>")
+            .append("<div></div><div class='ui-helper-clearfix'></div>")
             .find("div:first")
             .html(msg);
 
         VsixMvcAppResult.Widgets.DialogInline.Create(jQuery(selector).find("div:first"), VsixMvcAppResult.Widgets.DialogInline.MsgTypes.Error);
     },
-    _updateUserLastActivity: function() {
+    _updateUserLastActivity: function () {
         var self = this;
 
         VsixMvcAppResult.Ajax.UserUpdateLastActivity(
-            function(data, textStatus, jqXHR) {
+            function (data, textStatus, jqXHR) {
                 jQuery(self.element).append(data);
                 //VsixMvcAppResult.Widgets.jQueryzer(self.element);
             },
-            function(jqXHR, textStatus, errorThrown) {
+            function (jqXHR, textStatus, errorThrown) {
                 self._errMsgSet(jQuery(self.element), VsixMvcAppResult.Resources.unExpectedError);
             },
             function () {
@@ -41,7 +41,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                 self._initMenuNav();
             });
     },
-    _initMenuNav: function() {
+    _initMenuNav: function () {
 
         //TODO: load async Menu based on user identity
         var self = this;
@@ -49,38 +49,32 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         var $navMenu = jQuery($panelMenu).find('ul:first');
 
         VsixMvcAppResult.Ajax.UserMenu(
-            function(data, textStatus, jqXHR) {
+            function (data, textStatus, jqXHR) {
 
-                
+
                 var menu = $navMenu.navMenu();
                 $navMenu.navMenu('bind', data);
 
-                jQuery('#menuToggle').click(function() {
 
-                    $panelMenu.show('slide', function() {
-                        if (jQuery(this).is(':visible')) {
+                jQuery('div.ui-menuToggle')
+                    .click(function () {
 
-                            jQuery(document).bind("click", function(e) {
+                        console.log($panelMenu.is(':visible'));
 
-                                var menuClicked = jQuery(e.target).parents($panelMenu.selector).length > 0;
-
-                                if (!menuClicked) {
-
-                                    $panelMenu.hide('slide', function() {
-                                        $navMenu.navMenu('collapseAll');
-                                    });
-
-                                    jQuery(document).unbind("click");
-                                }
+                        if ($panelMenu.is(':visible')) {
+                            $panelMenu.hide('slide', function () {
+                                $navMenu.navMenu('collapseAll');
                             });
                         }
+                        else {
+                            $panelMenu.show('drop');
+                        }
                     });
-                });
             },
-            function(jqXHR, textStatus, errorThrown) {
+            function (jqXHR, textStatus, errorThrown) {
                 self._errMsgSet($panelMenu, VsixMvcAppResult.Resources.unExpectedError);
             },
-            function() {
+            function () {
                 self._trigger('complete', null, null);
             });
 

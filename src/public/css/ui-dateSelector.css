@@ -1,5 +1,4 @@
-﻿.ui-widgetModelItemDate{}.ui-widgetModelItemDate a{}
-.ui-widgetModelItemDate-clear{width:1.7em;height:1.7em;float:left;cursor:pointer;position:relative; margin:0 1em 0 0;}
-.ui-widgetModelItemDate-clear span{margin:20% 0 0 20%;}
+﻿.ui-widgetModelItemDate{}
+.ui-widgetModelItemDate a{}
 .ui-widgetModelItemDate .ui-widgetModelItemDate-hidden{display:none;}
-.ui-widgetModelItemDate .ui-widget-close {padding:0;}
+.ui-widgetModelItemDate .ui-widget-close {padding:0.2em;}
