@@ -102,7 +102,7 @@ jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
     },
     messagedisplayAutoHide: function (msg, miliseconds) {
 
-        var time = 3000;
+        var time = 1500;
         var self = this;
 
         if (miliseconds) {
