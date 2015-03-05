@@ -1,0 +1,6 @@
+﻿.ui-field-box {padding:0 0 0 0;clear:both;margin:0.1em 0.1em 0.1em 0.1em ; border-width:0 !important;}
+.ui-field-box .ui-fieldName {padding:0 0 0 0;width:50%;float:left;}
+.ui-field-box .ui-fieldValue {width:50%;float:left;}
+.ui-field-box.ui-state-error {background-image:none;}
+.ui-field-box.ui-state-error .ui-fieldName {color:initial;}
+.ui-field-box.ui-state-error div.ui-widgetModel-inputValue {color:initial;}

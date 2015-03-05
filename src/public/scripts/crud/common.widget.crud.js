@@ -70,39 +70,72 @@ jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
 
         jQuery(this.options.errorDOMId)
             .parents('div:first')
+                .removeClass('ui-helper-hidden')
                 .addClass('ui-state-error')
             .end()
             .html(msg)
-            .fadeTo('slow', 1, cb);
+            .fadeTo('slow', 1, function () {
+                if (jQuery.isFunction(cb)) {
+                    cb();
+                }
+            });
     },
     errorHide: function (cb) {
+
+        var self = this;
 
         jQuery(this.options.errorDOMId)
             .parents('div:first')
                 .removeClass('ui-state-error')
             .end()
             .html('')
-            .fadeTo('slow', 0, cb);
+            .fadeTo('slow', 0, function () {
+
+                jQuery(self.options.errorDOMId)
+                    .parents('div:first')
+                        .addClass('ui-helper-hidden');
+
+                if (jQuery.isFunction(cb)) {
+                    cb();
+                }
+            });
     },
     messageDisplay: function (msg, cb) {
         jQuery(this.options.messagesDOMId)
             .parents('div:first')
                 .addClass('ui-state-highlight')
+                .removeClass('ui-helper-hidden')
             .end()
             .html(msg)
-            .fadeTo('slow', 1, cb);
+            .fadeTo('slow', 1, function () {
+                if (jQuery.isFunction(cb)) {
+                    cb();
+                }
+            });
     },
     messageHide: function (cb) {
+
+        var self = this;
+
         jQuery(this.options.messagesDOMId)
             .parents('div:first')
                 .removeClass('ui-state-highlight')
             .end()
             .html('')
-            .fadeTo('slow', 0, cb);
+            .fadeTo('slow', 0, function () {
+                jQuery(self.options.messagesDOMId)
+                    .parents('div:first')
+                //.addClass('ui-helper-hidden');
+                ;
+
+                if (jQuery.isFunction(cb)) {
+                    cb();
+                }
+            });
     },
     messagedisplayAutoHide: function (msg, miliseconds) {
 
-        var time = 1500;
+        var time = 3000;
         var self = this;
 
         if (miliseconds) {
@@ -181,8 +214,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var formControlClass = 'ui-{0}Crud-form'.format(this.widgetName);
         var templateGet = function () {
 
-
-            var template = '<div class="ui-crud-header ui-state-default"></div>' +
+            var template = '<div class="ui-crud-messages ui-state-default ui-helper-hidden"></div>' +
                             '<div class="{0}"></div>' +
                             '<div class="{1} ui-ribbonButtons ui-widget-content ui-state-default"></div>' +
                             '<div class="{2}"></div>' +
@@ -198,7 +230,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         jQuery(this.element)
             .addClass('ui-crud')
             .append(templateGet())
-            .find('div.ui-crud-header:first')
+            .find('div.ui-crud-messages:first')
                 .each(function () {
                     self.options.crudHeaderDomId = jQuery(this);
                     self.errorInit(jQuery(this));
@@ -736,6 +768,8 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
         this._done();
     },
     _formButtonsInit: function () {
+
+        var self = this;
 
         var defaultButtons = this.options.formButtonsGet(this, [{
             id: "cancel",

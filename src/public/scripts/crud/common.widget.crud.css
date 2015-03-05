@@ -1,27 +1,22 @@
-﻿.ui-progress-feedback {display:none; z-index:99999;background: none;opacity: 1;filter: Alpha(Opacity=100);}
+﻿.ui-progress-feedback {display:none; background: none;opacity: 1;filter: Alpha(Opacity=100);}
 .ui-progress-feedback .ui-widget {top:50%;text-align:center;padding:2em 0 2em 0;position:relative;width:80%;margin:0 auto 0 auto;}
 
-
-
-.ui-crud .ui-crud-header {background-image:none;border-top:none;border-bottom:none;}
-.ui-crud .ui-crud-header .ui-crud-title {padding:0.5em 0.5em 0 0.5em;text-align:center;}
-.ui-crud .ui-crud-header .ui-crud-error {padding:0.2em;border:0; font-weight:normal;text-align:center;}
-.ui-crud .ui-crud-header .ui-crud-info {padding:0.2em;border:0; font-weight:normal;text-align:center;}
+/*override ribbon buttons*/
 .ui-crud .ui-ribbonButtons { border-bottom:0em;border-top:0em;padding:0em;background-image:none;}
 .ui-crud .ui-ribbonButtons * {background-image:none;}
 .ui-crud .ui-ribbonButtons button {margin-bottom: 0.1em !important;font-weight:normal;border:none;}
 .ui-crud .ui-ribbonButtons span.ui-button-text {/*font-size:1.1em !important;*/}
-.ui-crud .ui-fieldItem {}
-.ui-crud .ui-fieldItem .ui-field-box {}
-.ui-crud .ui-fieldItem .ui-field-box button {border:0 solid !important;background:none !important;}
-.ui-crud .ui-fieldItem .ui-field-box button .ui-button-text {padding:0 0 0 2em !important;}
-.ui-crud .ui-fieldItem .ui-field-box .ui-fieldName {}
-.ui-crud .ui-fieldItem .ui-field-box .ui-fieldValue {}
+/*override widgetModel*/
+.ui-crud .ui-widgetModel div.ui-widgetModel-content {padding:0 0 0 0;}
+.ui-crud .ui-widgetModel .ui-widgetModelItem {padding:.5em .5em .5em 0em;}
+
+.ui-crud .ui-crud-messages {background-image:none;border-top:none;border-bottom:none;}
+.ui-crud .ui-crud-messages .ui-crud-title {padding:0.5em 0.5em 0 0.5em;text-align:center;}
+.ui-crud .ui-crud-messages .ui-crud-error {padding:0.2em;border:0; font-weight:normal;text-align:center;}
+.ui-crud .ui-crud-messages .ui-crud-info {padding:0.2em;border:0; font-weight:normal;text-align:center;}
 .ui-crud .ui-crudFilter { padding:0em !important; border:none;}
 .ui-crud .ui-crudFilter h3 {padding:0.5em 0.5em 0.5em 0em;border:0; background:none;}
-.ui-crud .ui-crudFilter .ui-crudFilter-form { background:none;padding:1em !important; }
-.ui-crud .ui-crudFilter .ui-field-box {margin:0.5em 0 0 0;}
-.ui-crud .ui-crudFilter .ui-fieldName {float:left;width:15em;}
+.ui-crud .ui-crudFilter .ui-crudFilter-form {padding:0.5em 0.5em 0.5em 0.5em;}
 .ui-crud .ui-crudGrid-pager.ui-widget-header {border:none;}
 .ui-crud .ui-crudGrid-header.ui-widget-header {border:none;}
 .ui-crud .ui-crudGrid-dataRow.ui-widget-content {border-left:none;border-top:none;}
@@ -41,7 +36,6 @@
 .ui-crud .ui-crudGrid .ui-crudGrid-body-tableBox tr.ui-crudGrid-rowStyle,
 .ui-crud .ui-crudGrid .ui-crudGrid-body-tableBox tr.ui-crudGrid-rowStyleAlternated {height: 2em;}
 .ui-crud .ui-crudGrid .ui-crudGrid-action {font-size:1em;width:1em;margin:0 auto 0 auto;cursor:pointer;}
-
 .ui-crud .ui-crudGrid .ui-crudGrid-pager {font-weight:normal;	text-align:left;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar {text-align:center;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar table {margin:0 auto 0 auto;width:100%;border-collapse:collapse;}
@@ -52,25 +46,7 @@
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-totalRows {float:left;margin:0 0 0 0.5em;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-pageSizePicker {float:right;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-pageSizePicker select {padding:0 0 0 0;}
-
-
-
-
 .ui-crud .ui-crudForm { padding:0em !important; }
 .ui-crud .ui-crudForm h3 {padding: 0em 0.5em 0em 0em;margin:0.5em 0 0.5em 0; border:0; background:none;}
 .ui-crud .ui-crudForm .ui-crudForm-form { background:none;padding:1em !important;}
-.ui-crud .ui-crudForm .ui-field-box {margin:0.5em 0 0 0;}
-.ui-crud .ui-crudForm .ui-fieldName {float:left;width:15em;}
-
-
-
-/* GENERIC FORM */
-.ui-crud .ui-crudForm .ui-widgetModelItem {padding:.5em .5em .5em .5em;clear:both;margin:0.1em 0.1em 0.1em 0.1em ; border-width:0 !important;}
-.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputLabel {padding:0 0 0 0;width:35%;float:left;}
-.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputValue {width:60%;float:left;}
-.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputValue input {width:99%;}
-.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputValue select {width:99%;}
-.ui-crud .ui-crudForm .ui-widgetModelItem div.ui-widgetModel-inputError {clear:both;margin: 2em 0 0em 0 !important; width:100%;border:0;padding:0.2em;}
-.ui-crud .ui-crudForm .ui-widgetModelItem.ui-state-error {background-image:none;}
-.ui-crud .ui-crudForm .ui-widgetModelItem.ui-state-error div.ui-widgetModel-inputLabel {color:initial;}
-.ui-crud .ui-crudForm .ui-widgetModelItem.ui-state-error div.ui-widgetModel-inputValue {color:initial;}
+.ui-crud .ui-crudForm .ui-crudForm-formContent {padding:0.5em;}

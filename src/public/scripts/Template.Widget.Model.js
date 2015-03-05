@@ -44,7 +44,7 @@
         var o = this.cloneObject(this.options.modelItems);
         for (var i = 0; i < o.length; i++) {
             var propName = o[i].id;
-            var propValue = jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(propName)).widgetModelItem('val');
+            var propValue = jQuery(this.element).find('div[data-widgetModelItem-id="{0}"]:first'.format(propName)).widgetModelItem('val');
             o[i].currentValue = propValue;
         }
         return o;
@@ -75,7 +75,7 @@
                 var clearedErrors = true;
 
                 for (var i = 0; i < self.options.modelItems.length; i++) {
-                    if (jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(self.options.modelItems[i].id))
+                    if (jQuery(self.element).find('div[data-widgetModelItem-id="{0}"]:first'.format(self.options.modelItems[i].id))
                         .hasClass('ui-state-error')) {
                         clearedErrors = false;
                         break;
@@ -97,13 +97,16 @@
         }
     },
     bindErrors: function (keyValueArray) {
+        var self = this;
         for (var i = 0; i < keyValueArray.length; i++) {
-            jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(keyValueArray[i].key))
+            jQuery(self.element).find('div[data-widgetModelItem-id="{0}"]:first'.format(keyValueArray[i].key))
                 .widgetModelItem('setErrors', keyValueArray[i].value)
                 .addClass('ui-state-error');
         }
     },
     bindValue: function (dataItem) {
+
+        var self = this;
 
         this._clearErrors();
         this.resetForm();
@@ -111,7 +114,7 @@
         for (var i in dataItem) {
             for (var j = 0; j < this.options.modelItems.length; j++) {
                 if (this.options.modelItems[j].id == i) {
-                    jQuery('div[data-widgetModelItem-id="{0}"]:first'.format(i))
+                    jQuery(self.element).find('div[data-widgetModelItem-id="{0}"]:first'.format(i))
                         .widgetModelItem('setValue', dataItem[i]);
 
                 }
@@ -130,7 +133,7 @@
     },
     resetForm: function () {
         for (var j = 0; j < this.options.modelItems.length; j++) {
-            jQuery('div[data-widgetModelItem-id="{0}"]:first'
+            jQuery(this.element).find('div[data-widgetModelItem-id="{0}"]:first'
                     .format(this.options.modelItems[j].id))
                     .widgetModelItem('setValue', null);
         }
@@ -244,10 +247,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
 
                 this.val = function () {
                     //return jQuery(jqSelector).widgetModelItemDate('getDate');
-                    return jQuery(jqSelector).val();
+                    return jQuery($parent).find(jqSelector).val();
                 };
                 this.setValue = function (value) {
-                    return jQuery(jqSelector).widgetModelItemDate('setDate', value);
+                    return jQuery($parent).find(jqSelector).widgetModelItemDate('setDate', value);
                 };
 
                 break;
@@ -265,10 +268,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                     });
 
                 this.val = function () {
-                    return jQuery(jqSelector).val();
+                    return jQuery($parent).find(jqSelector).val();
                 };
                 this.setValue = function (value) {
-                    return jQuery(jqSelector).val(value);
+                    return jQuery($parent).find(jqSelector).val(value);
                 };
 
                 break;
@@ -289,10 +292,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                     });
 
                 this.val = function () {
-                    return jQuery(jqSelector).widgetModelItemBool('val');
+                    return jQuery($parent).find(jqSelector).widgetModelItemBool('val');
                 };
                 this.setValue = function (value) {
-                    return jQuery(jqSelector).widgetModelItemBool('setValue', value);
+                    return jQuery($parent).find(jqSelector).widgetModelItemBool('setValue', value);
                 };
 
 
@@ -319,10 +322,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                         });
 
                 this.val = function () {
-                    return jQuery(jqSelector).val();
+                    return jQuery($parent).find(jqSelector).val();
                 };
                 this.setValue = function (value) {
-                    return jQuery(jqSelector).val(value);
+                    return jQuery($parent).find(jqSelector).val(value);
                 };
                 break;
 
@@ -347,10 +350,10 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                     });
 
                 this.val = function () {
-                    return jQuery(jqSelector).val();
+                    return jQuery($parent).find(jqSelector).val();
                 };
                 this.setValue = function (value) {
-                    return jQuery(jqSelector).val(value);
+                    return jQuery($parent).find(jqSelector).val(value);
                 };
 
                 break;

@@ -23,7 +23,7 @@ jQuery.widget("ui.commonBaseWidget", jQuery.ui.widgetBase,
         var self = this;
 
         if (jQuery(progressBoxSelector).length === 0) {
-            jQuery('body').prepend('<div id="progressFeedBack" class="ui-progress-feedback ui-widget-overlay"><div class="ui-widget ui-widget-content ui-state-active">Please wait while loading</div></div>');
+            jQuery('body').prepend('<div id="progressFeedBack" class="ui-progress-feedback ui-widget-overlay ui-front"><div class="ui-widget ui-widget-content ui-state-active ">Please wait while loading</div></div>');
 
             /*
             // these lines do not work on mobile

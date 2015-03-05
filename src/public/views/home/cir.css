@@ -9,8 +9,8 @@
 .ui-productCrud .ui-productCrud-gridControl th.ui-productGrid-productId ,
 .ui-productCrud .ui-productCrud-gridControl th.ui-productGrid-productTypeDesc,
 .ui-productCrud .ui-productCrud-gridControl th.ui-productGrid-fechaDesde {text-align:center;}
-.ui-productCrud .ui-crudForm .ui-productCrud-form-searchOutput,
-.ui-productCrud .ui-crudForm .ui-productCrud-form-type {padding: 0em 0em 0em 1em;}
+
+
 /*CUSTOMER*/
 .ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-nombre {width:50% !important;}
 .ui-customerCrud .ui-customerCrud-gridControl .ui-customerGrid-NumDocumento {width:35% !important;text-align:right;}

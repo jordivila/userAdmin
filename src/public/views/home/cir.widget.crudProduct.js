@@ -565,31 +565,31 @@ var productFilterModelGet = function () {
 var productFormModelGet = function () {
     return [{
         id: "SomeString",
-        displayName: "Some String",
+        displayName: "String",
         input: { value: "" },
     }, {
         id: "SomeDate",
-        displayName: "Some Date",
+        displayName: "Date",
         input: { type: "date", value: "" },
     }, {
         id: "SomeFloat",
-        displayName: "Some Float",
+        displayName: "Float",
         input: { type: "float", value: null },
     }, {
         id: "SomeBoolean",
-        displayName: "Some Boolean",
+        displayName: "Bool",
         input: { type: "bool", value: null },
     }, {
         id: "SomeBooleanNullable",
-        displayName: "Some Boolean Nullable",
+        displayName: "Null of Bool",
         input: { type: "bool", value: null, nullable: true },
     }, {
         id: "SomeStringFromList",
-        displayName: "Some String From List",
+        displayName: "List of string",
         input: { type: "list", value: null, listValues: [{ value: "", text: "Select from list" }, { value: "1", text: "First value" }] },
     }, {
         id: "SomeCustomValue",
-        displayName: "Some Custom Value",
+        displayName: "Custom Value",
         input: {
             type: "custom",
             value: null,
@@ -671,9 +671,9 @@ jQuery.widget("ui.product", jQuery.ui.crud,
             var tBasicInfo = '' +
                 '<div class="ui-productCrud-form-searchOutput">' +
                     '<h3 class="ui-state-default">Información básica</h3>' +
-                    '<div data-fielditem="nombre" data-fielditem-name="Nombre/Razón Social"></div>' +
                     '<div data-fielditem="productId" data-fielditem-name="Num. Producto"></div>' +
                     '<div data-fielditem="productTypeDesc" data-fielditem-name="Producto"></div>' +
+                    '<div data-fielditem="nombre" data-fielditem-name="Nombre/Razón Social"></div>' +
                     '<div data-fielditem="fechaDesde" data-fielditem-name="Fecha desde"></div>' +
                     '<div data-fielditem="fechaHasta" data-fielditem-name="Fecha hasta"></div>' +
                 '</div>' +

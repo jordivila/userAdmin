@@ -40,8 +40,16 @@
                     //{ title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
                     //{ title: i18n.__("GeneralTexts.Home"), url: "/" }
                 //],
-                CssFiles: ["/public/views/home/home.css"],
-                JsFiles: ["/public/views/home/home.js"],
+                CssFiles: [
+                    "/public/views/home/home.css",
+                    "/public/views/home/cir.css",
+                ],
+                JsFiles: [
+                    "/public/views/home/home.js",
+                    "/public/views/home/cir.widget.cirDataEntry.js",
+                    "/public/views/home/cir.widget.crudCustomer.js",
+                    "/public/views/home/cir.widget.crudProduct.js",
+                ],
 
             });
         });
