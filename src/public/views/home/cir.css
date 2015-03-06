@@ -23,3 +23,10 @@
 .ui-customerCrud .ui-crudGrid .ui-crudGrid-body .ui-customerGrid-NumDocumento {width:35% !important;text-align:right;}
 .ui-customerCrud .ui-crudGrid .ui-crudGrid-body .ui-customerGrid-gridCommand {width:15% !important;}
 .ui-customerCrud .ui-crudGrid .ui-crudGrid-body .ui-customerGrid-gridCommand .ui-crudGrid-action-select {width:1em;margin:0 auto 0 auto;}
+
+
+
+
+
+
+.ui-themeCrud .ui-crudGrid .ui-crudGrid-body {height:auto}

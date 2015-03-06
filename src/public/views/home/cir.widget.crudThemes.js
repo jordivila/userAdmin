@@ -194,7 +194,7 @@ var crudThemeOptions = function () {
         },
         gridRowTemplate: function (crudGridWidget) {
             return '<td class="ui-themeGrid-nombre"><a href="javascript:void(0);"></a></td>' +
-                   '<td class="ui-themeGrid-thumbnail"></td>';
+                   '<td class="ui-themeGrid-thumbnail"><img src="" /></td>';
         },
         gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
 
@@ -203,7 +203,8 @@ var crudThemeOptions = function () {
             };
 
             templateRowSetValue($row.find('td.ui-themeGrid-nombre:first').find('a'), dataItem.title);
-            templateRowSetValue($row.find('td.ui-themeGrid-thumbnail:first'), dataItem.icon);
+            
+            $row.find('td.ui-themeGrid-thumbnail:first').find('img').attr('src', 'public/scripts/jQueryUIThemes/images/{0}'.format(dataItem.icon));
         },
         gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
             $row.data("dataItem", dataItem)
