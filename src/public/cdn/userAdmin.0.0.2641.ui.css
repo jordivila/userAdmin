@@ -20,7 +20,7 @@ select {padding:0.5em 0.5em 0.5em 0.5em;}
 input[type=text], input[type=password], input[type=email], select {padding:0.5em 0em 0.5em 0.5em;margin:0 0 0 0;font-weight:normal !important;}
 input[type=checkbox].ui-widget-content { border:0px solid transparent !important; }
 input[type='radio'] {height:1em;width:1em;}
-body{padding:0em;}
+body{padding:0em;background-image:none !important;}
 html, body {height:100%;}
 
 /*.ui-state-default {background-image:none !important;}*/
@@ -1918,12 +1918,14 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
 .ui-crud .ui-crud-messages .ui-crud-info {padding:0.2em;border:0; font-weight:normal;text-align:center;}
 .ui-crud .ui-crudFilter { padding:0em !important; border:none;}
 .ui-crud .ui-crudFilter h3 {padding:0.5em 0.5em 0.5em 0em;border:0; background:none;}
-.ui-crud .ui-crudFilter .ui-crudFilter-form {padding:0.5em 0.5em 0.5em 0.5em;}
+.ui-crud .ui-crudFilter .ui-crudFilter-form {padding:0.5em 0.5em 0.5em 0.5em;background-image:none;}
+.ui-crud .ui-crudFilter .ui-widgetModel-content {background-image:none;}
+
+
 .ui-crud .ui-crudGrid-pager.ui-widget-header {border:none;}
 .ui-crud .ui-crudGrid-header.ui-widget-header {border:none;}
 .ui-crud .ui-crudGrid-dataRow.ui-widget-content {border-left:none;border-top:none;}
-.ui-crud .ui-crudGrid .ui-crudGrid-dataRow{}
-.ui-crud .ui-crudGrid .ui-crudGrid-dataRowAlt {background-color:#ffe199;}
+.ui-crud .ui-crudGrid .ui-crudGrid-dataRow{background-image:none;}
 .ui-crud .ui-crudGrid .ui-crudGrid-header {padding:0.5em 2em 0.5em 0; overflow:hidden;border-bottom:none;}
 .ui-crud .ui-crudGrid .ui-crudGrid-header table th {font-weight:bold;}
 .ui-crud .ui-crudGrid .ui-crudGrid-header table ,

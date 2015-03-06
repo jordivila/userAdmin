@@ -16,12 +16,14 @@
 .ui-crud .ui-crud-messages .ui-crud-info {padding:0.2em;border:0; font-weight:normal;text-align:center;}
 .ui-crud .ui-crudFilter { padding:0em !important; border:none;}
 .ui-crud .ui-crudFilter h3 {padding:0.5em 0.5em 0.5em 0em;border:0; background:none;}
-.ui-crud .ui-crudFilter .ui-crudFilter-form {padding:0.5em 0.5em 0.5em 0.5em;}
+.ui-crud .ui-crudFilter .ui-crudFilter-form {padding:0.5em 0.5em 0.5em 0.5em;background-image:none;}
+.ui-crud .ui-crudFilter .ui-widgetModel-content {background-image:none;}
+
+
 .ui-crud .ui-crudGrid-pager.ui-widget-header {border:none;}
 .ui-crud .ui-crudGrid-header.ui-widget-header {border:none;}
 .ui-crud .ui-crudGrid-dataRow.ui-widget-content {border-left:none;border-top:none;}
-.ui-crud .ui-crudGrid .ui-crudGrid-dataRow{}
-.ui-crud .ui-crudGrid .ui-crudGrid-dataRowAlt {background-color:#ffe199;}
+.ui-crud .ui-crudGrid .ui-crudGrid-dataRow{background-image:none;}
 .ui-crud .ui-crudGrid .ui-crudGrid-header {padding:0.5em 2em 0.5em 0; overflow:hidden;border-bottom:none;}
 .ui-crud .ui-crudGrid .ui-crudGrid-header table th {font-weight:bold;}
 .ui-crud .ui-crudGrid .ui-crudGrid-header table ,

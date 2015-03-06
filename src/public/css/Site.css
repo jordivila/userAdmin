@@ -11,7 +11,7 @@ select {padding:0.5em 0.5em 0.5em 0.5em;}
 input[type=text], input[type=password], input[type=email], select {padding:0.5em 0em 0.5em 0.5em;margin:0 0 0 0;font-weight:normal !important;}
 input[type=checkbox].ui-widget-content { border:0px solid transparent !important; }
 input[type='radio'] {height:1em;width:1em;}
-body{padding:0em;}
+body{padding:0em;background-image:none !important;}
 html, body {height:100%;}
 
 /*.ui-state-default {background-image:none !important;}*/
