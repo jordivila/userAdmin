@@ -29,5 +29,13 @@
 
 
 
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-body {height:auto}
+.ui-themeCrud .ui-crudGrid .ui-crudGrid-body {height:auto;background-image:none;}
 .ui-themeCrud .ui-crudGrid .ui-crudGrid-body td {text-align:center;}
+.ui-themeCrud .ui-crud-messages,
+.ui-themeCrud .ui-ribbonButtons {display:none;}
+.ui-themeCrud .ui-crudGrid .ui-state-default {background-color:initial !important;background-image:none !important;}
+.ui-themeCrud .ui-crudGrid {}
+.ui-themeCrud .ui-crudGrid td {background-color:none !important;border:none !important;}
+.ui-themeCrud .ui-crudGrid tr {background-color:none !important;border:none !important;}
+.ui-themeCrud .ui-crudGrid-header {display:none;}
+.ui-themeCrud .ui-crudGrid-pager {display:none;}

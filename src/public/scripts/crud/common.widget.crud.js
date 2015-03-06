@@ -695,8 +695,7 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
             .children('tr')
                 .each(function (i, ui) {
                     if (((i % 2) == 1)) {
-                        jQuery(this).addClass('ui-crudGrid-dataRowAlt ui-widget-content');
-                        //.removeClass('ui-crudGrid-rowStyle');
+                        jQuery(this).addClass('ui-widget-content');
                     }
                     else {
                         jQuery(this).addClass('ui-crudGrid-dataRowAlt ui-widget-content ui-state-default');

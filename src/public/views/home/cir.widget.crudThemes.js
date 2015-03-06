@@ -179,14 +179,6 @@ var crudThemeOptions = function () {
             input: { value: "" },
         },
         ],
-
-        //gridCustomOptions: {
-        //    //example: see code below
-        //    //onSelect: function (e, dataItem) {
-        //    //    var $crudParent = jQuery(e.target).parents('div.ui-crud:first');
-        //    //    $crudParent.theme('fireCustomEvent', dataItem);
-        //    //}
-        //},
         gridSearchMethod: themeAjax.ajax.themeSearch,
         gridHeaderTemplate: function (crudGridWidget) {
             return '<th class="ui-themeGrid-thumbnail">Thumbnail</th>';
@@ -211,9 +203,6 @@ var crudThemeOptions = function () {
                         });
 
         },
-        //gridButtonsGet: function (self, defaultButtons) {
-        //    return defaultButtons;
-        //},
         formInit: function (self, formOptions) {
 
         },
