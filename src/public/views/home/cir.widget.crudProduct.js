@@ -147,18 +147,18 @@ var productAjax = {
                     fechaDesde: new Date(Math.abs(d - (i * 1000 * 60 * 60 * 24))),
                     fechaHasta: new Date(Math.abs(d - (i * 1000 * 60 * 60 * 24))),
                     nombre: "person {0}".format(i),
-                    productId: i,
+                    productId: (i.toString() + "").padIndex(4, '0'),
                     productType: "PRSP1",
                     productTypeDesc: "Prestamo garantia personal-1",
                 });
             }
 
 
-            
+
             i++;
             d = new Date();
 
-            
+
 
             productAjax.ajax._fakeDataGrid.push({
                 fechaDesde: new Date(Math.abs(d - (i * 1000 * 60 * 60 * 24))),
@@ -490,7 +490,8 @@ var productAjax = {
 
 
 
-var productFilterModelGet = function () {
+var productFilterModelGet = function (context) {
+
     return [{
         id: "productId",
         displayName: "Num. Producto",
@@ -617,7 +618,7 @@ var productFormModelGet = function () {
 jQuery.widget("ui.product", jQuery.ui.crud,
 {
     options: {
-        filterModel: productFilterModelGet(),
+        filterModel: productFilterModelGet(this),
         gridSearchMethod: productAjax.ajax.productSearch,
         gridSearchForEditMethod: productAjax.ajax.productSearchForEdit,
         gridButtonsGet: function (crudWidget, defaultButtons) {
@@ -636,14 +637,15 @@ jQuery.widget("ui.product", jQuery.ui.crud,
         },
         gridRowTemplate: function (crudGridWidget) {
 
-            return '<td class="ui-productGrid-productId"></td>' +
+            return '<td class="ui-productGrid-productId"><a href="javascript:void(0);"></a></td>' +
                     '<td class="ui-productGrid-productTypeDesc"></td>' +
                     '<td class="ui-productGrid-fechaDesde"></td>' +
-                    '<td class="ui-productGrid-gridCommand">' +
-                        '<div class="ui-crudGrid-action ui-crudGrid-actionEdit ui-widget-content" title="Editar">' +
-                            '<span class="ui-icon ui-state-default ui-icon-pencil"></span>' +
-                        '</div>' +
-                    '</td>';
+                    '';
+            //'<td class="ui-productGrid-gridCommand">' +
+            //    '<div class="ui-crudGrid-action ui-crudGrid-actionEdit ui-widget-content" title="Editar">' +
+            //        '<span class="ui-icon ui-state-default ui-icon-pencil"></span>' +
+            //    '</div>' +
+            //'</td>';
         },
         gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
 
@@ -653,20 +655,22 @@ jQuery.widget("ui.product", jQuery.ui.crud,
 
             $row.data("dataItem", dataItem);
 
-            templateRowSetValue($row.find('td.ui-productGrid-productId:first'), dataItem.productId);
+            templateRowSetValue($row.find('td.ui-productGrid-productId:first').find('a'), dataItem.productId);
             templateRowSetValue($row.find('td.ui-productGrid-productTypeDesc:first'), dataItem.productTypeDesc);
             templateRowSetValue($row.find('td.ui-productGrid-fechaDesde:first'), dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '');
         },
         gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
-            $row.find('div.ui-crudGrid-actionEdit')
-                    .click(function () {
-                        crudGridWidget._trigger('onEdit', null, jQuery(this).parents('tr.ui-crudGrid-dataRow:first').data("dataItem"));
-                    })
-                    .end();
+            $row.find('td.ui-productGrid-productId:first')
+                    .find('a')
+                        .click(function () {
+                            crudGridWidget._trigger('onEdit', null, jQuery(this).parents('tr.ui-crudGrid-dataRow:first').data("dataItem"));
+                        })
+                    .end()
+                .end();
         },
 
 
-        formInit: function (crudWidget, formOptions) {
+        formInit: function (crudWidget, $parent) {
 
             var tBasicInfo = '' +
                 '<div class="ui-productCrud-form-searchOutput">' +
@@ -681,30 +685,33 @@ jQuery.widget("ui.product", jQuery.ui.crud,
                     '<h3 class="ui-state-default">Información detallada del préstamo</h3>' +
                 '</div>';
 
-            jQuery(crudWidget.options.formDOMId)
-                .append(tBasicInfo)
-                .fieldItem();
+            jQuery($parent).prepend(tBasicInfo);
 
 
-            jQuery(crudWidget.options.formDOMId)
-                .crudForm(jQuery.extend({}, formOptions,
-                    {
-                        formModel: crudWidget.options.formModel,
-                        formButtonsGet: crudWidget.options.formButtonsGet,
-                        formBind: crudWidget.options.formBind,
-                        formValueGet: crudWidget.options.formValueGet,
-                        formSaveMethod: crudWidget.options.formSaveMethod
-                    }));
+            //jQuery(crudWidget.options.formDOMId)
+            //    .append(tBasicInfo)
+            //    .fieldItem();
 
-            jQuery(crudWidget.options.formDOMId)
-                .find('div.ui-crudForm-modelBinding:first')
-                    .widgetModel({
-                        modelItems: crudWidget.options.formModel,
-                        errorsCleared: function () {
-                            crudWidget.errorHide();
-                        }
-                    })
-                .end();
+
+            //jQuery(crudWidget.options.formDOMId)
+            //    .crudForm(jQuery.extend({}, formOptions,
+            //        {
+            //            formModel: crudWidget.options.formModel,
+            //            formButtonsGet: crudWidget.options.formButtonsGet,
+            //            formBind: crudWidget.options.formBind,
+            //            formValueGet: crudWidget.options.formValueGet,
+            //            formSaveMethod: crudWidget.options.formSaveMethod
+            //        }));
+
+            //jQuery(crudWidget.options.formDOMId)
+            //    .find('div.ui-crudForm-modelBinding:first')
+            //        .widgetModel({
+            //            modelItems: crudWidget.options.formModel,
+            //            errorsCleared: function () {
+            //                crudWidget.errorHide();
+            //            }
+            //        })
+            //    .end();
 
 
 

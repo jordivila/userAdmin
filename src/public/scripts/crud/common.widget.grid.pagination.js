@@ -3,9 +3,10 @@
 jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
 {
     options: {
-        showPager: true,
-        showTotalRows: true,
-        showSizePicker: true,
+        paginationShow: true,
+        totalRowsShow: true,
+        pageSizeShow: true,
+        nPagesInPaginator: 3,
     },
     _create: function () {
 
@@ -44,7 +45,7 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
             var TotalPages = ((totalRows / pageSize) | 0) + (((totalRows % pageSize) === 0) ? 0 : 1);
 
 
-            if (this.options.showPager === true) {
+            if (this.options.paginationShow === true) {
 
                 var buildPage = function (page, currentPage, isNavigationItem, text) {
                     var cssClass = ((currentPage == page) && (!isNavigationItem)) ? "ui-state-highlight" : "ui-state-default";
@@ -73,9 +74,25 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
                     endPage = endPage > totalPages ? totalPages : endPage;
                     return parseInt(endPage);
                 };
+                var getNPagesInPaginator = function (nPagesInPaginators) {
+
+                    var defaultNPages = 6;
+
+                    if (isNaN(nPagesInPaginator)) {
+                        return defaultNPages;
+                    }
+                    else {
+                        if (nPagesInPaginator < defaultNPages) {
+                            return defaultNPages;
+                        }
+                        else {
+                            return parseInt(nPagesInPaginator) -1;
+                        }
+                    }
+                };
 
                 if (TotalPages > 1) {
-                    var nPagesInPaginator = 8;    // Must be nPagerItems % 2 == 0
+                    var nPagesInPaginator = getNPagesInPaginator(this.options.nPagesInPaginator);
                     var start = getStartPage(nPagesInPaginator, TotalPages, getCurrentPage(Page));
                     var end = getEndPage(nPagesInPaginator, TotalPages, start);
                     var tPager = jQuery("<table></table>");
@@ -123,7 +140,7 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
 
             $totalsBox
                     .append("<div class='ui-gridPagination-totalRows'>Mostrando {0}-{1} resultados de {2}</div>"
-                        .format(Page, ((Page+1) * PageSize), TotalRows));
+                        .format(Page, ((Page + 1) * PageSize), TotalRows));
 
 
 
@@ -157,20 +174,20 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
 
             $totalsBox.append('<div class="ui-helper-clearfix" />');
 
-            if ((this.options.showTotalRows === false) && (this.options.showSizePicker === false)) {
+            if ((this.options.totalRowsShow === false) && (this.options.pageSizeShow === false)) {
                 jQuery(this.element)
                     .find('div.ui-gridPagination-totals:first')
                         .hide()
                     .parents('div.{0}-{1}:first'.format(this.namespace, this.widgetName))
                         .addClass('ui-helper-hidden');
-                    
+
             }
             else {
-                if (this.options.showTotalRows === false) {
+                if (this.options.totalRowsShow === false) {
                     jQuery(this.element).find('div.ui-gridPagination-totalRows:first').hide();
                 }
 
-                if (this.options.showSizePicker === false) {
+                if (this.options.pageSizeShow === false) {
                     jQuery(this.element).find('div.ui-gridPagination-pageSizePicker:first').hide();
                 }
             }

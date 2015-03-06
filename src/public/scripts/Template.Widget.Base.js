@@ -15,7 +15,7 @@ jQuery.widget("ui.widgetBase",
         jQuery(this.element).addClass(this.namespace + '-' + this.widgetName);
 
         //this.log(this.element);
-        this.log(this.namespace + "." + this.widgetName + " -> create");
+        //this.log(this.namespace + "." + this.widgetName + " -> create");
     },
     _init: function () {
 
@@ -26,7 +26,8 @@ jQuery.widget("ui.widgetBase",
 
 
         //this.log(this.element);
-        this.log(this.namespace + "." + this.widgetName + " -> init");
+        this.log("{0}.{1}->Init->{2}".format(this.namespace, this.widgetName, jQuery(this.element)[0].className));
+        
 
 
 

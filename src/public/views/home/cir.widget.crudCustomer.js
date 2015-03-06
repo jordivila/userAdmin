@@ -83,22 +83,19 @@ var customerAjax = {
                 "MessageType": 0,
                 "Data":
                     {
-                        "TotalPages": null,
                         "TotalRows": customerAjax.ajax._fakeDataGrid.length - 10,
                         "Page": filter.Page,
                         "PageSize": filter.PageSize,
                         "SortBy": "",
                         "SortAscending": false,
                         "Data": [],
-                        "IsValid": true,
-                        "Message": null,
-                        "MessageType": 0
                     }
             };
 
             for (var i = (filter.Page * filter.PageSize) ; i < ((filter.Page * filter.PageSize) + filter.PageSize) ; i++) {
-
-                dataResult.Data.Data.push(customerAjax.ajax._fakeDataGrid[i]);
+                if (i < customerAjax.ajax._fakeDataGrid.length) {
+                    dataResult.Data.Data.push(customerAjax.ajax._fakeDataGrid[i]);
+                }
             }
 
             setTimeout(function () { dfd.resolve(dataResult); }, customerAjax.ajax._fakeDelay);
@@ -113,9 +110,9 @@ var customerAjax = {
 
 
 
-jQuery.widget("ui.customer", jQuery.ui.crud,
-{
-    options: {
+var crudCustomerOptions = function () {
+
+    return {
         filterModel: [{
             id: "nombre",
             displayName: "Nombre / Razón Social",
@@ -127,26 +124,20 @@ jQuery.widget("ui.customer", jQuery.ui.crud,
         }],
 
         gridCustomOptions: {
+            //example: see code below
             //onSelect: function (e, dataItem) {
             //    var $crudParent = jQuery(e.target).parents('div.ui-crud:first');
-            //    $crudParent.customer('fireOnSelect', dataItem);
+            //    $crudParent.customer('fireCustomEvent', dataItem);
             //}
         },
         gridSearchMethod: customerAjax.ajax.customerSearch,
         gridHeaderTemplate: function (crudGridWidget) {
             return '<th class="ui-customerGrid-nombre">Nombre/Razón Social</th>' +
-                    '<th class="ui-customerGrid-NumDocumento">NIF</th>' +
-                    '<th class="ui-customerGrid-gridCommand"></th>';
+                   '<th class="ui-customerGrid-NumDocumento">NIF</th>';
         },
         gridRowTemplate: function (crudGridWidget) {
-
-            return '<td class="ui-customerGrid-nombre"></td>' +
-                    '<td class="ui-customerGrid-NumDocumento"></td>' +
-                    '<td class="ui-customerGrid-gridCommand">' +
-                        '<div class="ui-crudGrid-action ui-crudGrid-actionSelect ui-widget-content" title="Seleccionar">' +
-                            '<span class="ui-icon ui-icon-circle-arrow-e ui-state-default"></span>' +
-                        '</div>' +
-                    '</td>';
+            return '<td class="ui-customerGrid-nombre"><a href="javascript:void(0);"></a></td>' +
+                    '<td class="ui-customerGrid-NumDocumento"></td>';
         },
         gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
 
@@ -154,16 +145,17 @@ jQuery.widget("ui.customer", jQuery.ui.crud,
                 jQuery(node).attr('title', valueString).html(valueString);
             };
 
-            templateRowSetValue($row.find('td.ui-customerGrid-nombre:first'), dataItem.nombre);
+            templateRowSetValue($row.find('td.ui-customerGrid-nombre:first').find('a'), dataItem.nombre);
             templateRowSetValue($row.find('td.ui-customerGrid-NumDocumento:first'), dataItem.NumDocumento);
         },
         gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
             $row.data("dataItem", dataItem)
-                .find('div.ui-crudGrid-actionSelect')
-                    .click(function () {
-                        crudGridWidget._trigger('onSelect', null, jQuery(this).parents('tr.ui-crudGrid-dataRow:first').data("dataItem"));
-                    })
-                    .end();
+                .find('td.ui-customerGrid-nombre:first')
+                    .find('a')
+                        .click(function () {
+                            crudGridWidget._trigger('onSelect', null, jQuery(this).parents('tr.ui-crudGrid-dataRow:first').data("dataItem"));
+                        });
+
         },
         gridButtonsGet: function (self, defaultButtons) {
 
@@ -186,22 +178,7 @@ jQuery.widget("ui.customer", jQuery.ui.crud,
             return defaultButtons;
         },
         formInit: function (self, formOptions) {
-            self._done();
+
         },
-    },
-    _create: function () {
-
-        this._super();
-    },
-    _init: function () {
-
-        this._super();
-    },
-    destroy: function () {
-        this._super();
-    },
-
-    
-});
-
-
+    };
+};

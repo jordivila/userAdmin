@@ -17,6 +17,29 @@ if (!String.prototype.format) {
     };
 }
 
+
+
+if (!String.prototype.padIndex)
+{
+    String.prototype.padIndex = function (maxLength, repeatChar) {
+
+        if (!repeatChar) {
+            repeatChar = '0';
+        }
+
+        function pad(str, max) {
+            str = str.toString();
+            return str.length < max ? pad(repeatChar + str, max) : str;
+        }
+
+        return pad(this.toString(), maxLength);
+    };
+}
+
+
+
+
+
 /*jslint evil: true */
 String.prototype.toDateFromAspNet = function () {
     var dte = eval("new " + this.replace(/\//g, '') + ";");

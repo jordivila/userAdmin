@@ -1624,6 +1624,29 @@ if (!String.prototype.format) {
     };
 }
 
+
+
+if (!String.prototype.padIndex)
+{
+    String.prototype.padIndex = function (maxLength, repeatChar) {
+
+        if (!repeatChar) {
+            repeatChar = '0';
+        }
+
+        function pad(str, max) {
+            str = str.toString();
+            return str.length < max ? pad(repeatChar + str, max) : str;
+        }
+
+        return pad(this.toString(), maxLength);
+    };
+}
+
+
+
+
+
 /*jslint evil: true */
 String.prototype.toDateFromAspNet = function () {
     var dte = eval("new " + this.replace(/\//g, '') + ";");
@@ -1769,7 +1792,7 @@ jQuery.widget("ui.widgetBase",
         jQuery(this.element).addClass(this.namespace + '-' + this.widgetName);
 
         //this.log(this.element);
-        this.log(this.namespace + "." + this.widgetName + " -> create");
+        //this.log(this.namespace + "." + this.widgetName + " -> create");
     },
     _init: function () {
 
@@ -1780,7 +1803,8 @@ jQuery.widget("ui.widgetBase",
 
 
         //this.log(this.element);
-        this.log(this.namespace + "." + this.widgetName + " -> init");
+        this.log("{0}.{1}->Init->{2}".format(this.namespace, this.widgetName, jQuery(this.element)[0].className));
+        
 
 
 
@@ -3517,32 +3541,22 @@ jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
         console.log("Error->" + msg);
 
         jQuery(this.options.errorDOMId)
-            .parents('div:first')
-                .removeClass('ui-helper-hidden')
                 .addClass('ui-state-error')
-            .end()
-            .html(msg)
-            .fadeTo('slow', 1, function () {
-                if (jQuery.isFunction(cb)) {
-                    cb();
-                }
-            });
+                .html(msg)
+                .fadeTo('slow', 1, function () {
+                    if (jQuery.isFunction(cb)) {
+                        cb();
+                    }
+                });
     },
     errorHide: function (cb) {
 
         var self = this;
 
         jQuery(this.options.errorDOMId)
-            .parents('div:first')
-                .removeClass('ui-state-error')
-            .end()
+            .removeClass('ui-state-error')
             .html('')
             .fadeTo('slow', 0, function () {
-
-                jQuery(self.options.errorDOMId)
-                    .parents('div:first')
-                        .addClass('ui-helper-hidden');
-
                 if (jQuery.isFunction(cb)) {
                     cb();
                 }
@@ -3550,10 +3564,7 @@ jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
     },
     messageDisplay: function (msg, cb) {
         jQuery(this.options.messagesDOMId)
-            .parents('div:first')
-                .addClass('ui-state-highlight')
-                .removeClass('ui-helper-hidden')
-            .end()
+            .addClass('ui-state-highlight')
             .html(msg)
             .fadeTo('slow', 1, function () {
                 if (jQuery.isFunction(cb)) {
@@ -3566,16 +3577,9 @@ jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
         var self = this;
 
         jQuery(this.options.messagesDOMId)
-            .parents('div:first')
-                .removeClass('ui-state-highlight')
-            .end()
+            .removeClass('ui-state-highlight')
             .html('')
             .fadeTo('slow', 0, function () {
-                jQuery(self.options.messagesDOMId)
-                    .parents('div:first')
-                //.addClass('ui-helper-hidden');
-                ;
-
                 if (jQuery.isFunction(cb)) {
                     cb();
                 }
@@ -3633,18 +3637,17 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         gridPagerInit: function () {
             return {
                 pagerTop: {
-                    showPager: false,
-                    showTotalRows: false,
-                    showSizePicker: false,
+                    paginationShow: false,
+                    totalRowsShow: false,
+                    pageSizeShow: false,
                 },
                 pagerBottom: {
-                    showPager: true,
-                    showTotalRows: true,
-                    showSizePicker: true,
+                    paginationShow: true,
+                    totalRowsShow: true,
+                    pageSizeShow: true,
                 }
             };
         },
-
 
         formInit: function (crudWidget, formOptions) {
             throw new Error(crudWidget.namespace + '.' + crudWidget.widgetName + ".formInit is an abstract method. Child class method must be implemented");
@@ -3751,38 +3754,57 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
             },
             done: function () {
 
-                self.options.formInit(self, {
-                    messagedisplayAutoHide: function (e, msg) {
-                        self.messagedisplayAutoHide(msg);
-                    },
-                    messageDisplay: function (e, msg) {
-                        self.messageDisplay(msg);
-                    },
-                    errorDisplay: function (e, msg) {
-                        self.errorDisplay(msg);
-                    },
-                    errorHide: function () {
-                        self.errorHide();
-                    },
-                    change: function (e, formValue) {
-                        self.errorHide();
-                        self._search();
-                    },
-                    dataBound: function () {
-                        self.errorHide();
-                        self._actionSet(self._actions.form);
-                    },
-                    cancel: function () {
-                        self.errorHide();
-                        self._actionSet(self._actions.list);
-                    },
-                    done: function () {
-                        self._done();
-                    },
-                    fail: function () {
-                        self.errorDisplay(self.namespace + '.' + self.widgetName + " Error iniciando el control de formulario");
-                    }
-                });
+                var crudWidget = self;
+
+                jQuery(crudWidget.options.formDOMId)
+                    .crudForm(jQuery.extend({},  {
+                            messagedisplayAutoHide: function (e, msg) {
+                                self.messagedisplayAutoHide(msg);
+                            },
+                            messageDisplay: function (e, msg) {
+                                self.messageDisplay(msg);
+                            },
+                            errorDisplay: function (e, msg) {
+                                self.errorDisplay(msg);
+                            },
+                            errorHide: function () {
+                                self.errorHide();
+                            },
+                            change: function (e, formValue) {
+                                self.errorHide();
+                                self._search();
+                            },
+                            dataBound: function () {
+                                self.errorHide();
+                                self._actionSet(self._actions.form);
+                            },
+                            cancel: function () {
+                                self.errorHide();
+                                self._actionSet(self._actions.list);
+                            },
+                        },
+                        {
+                            formModel: crudWidget.options.formModel,
+                            formButtonsGet: crudWidget.options.formButtonsGet,
+                            formBind: crudWidget.options.formBind,
+                            formValueGet: crudWidget.options.formValueGet,
+                            formSaveMethod: crudWidget.options.formSaveMethod
+                        }));
+
+                jQuery(crudWidget.options.formDOMId)
+                    .find('div.ui-crudForm-modelBinding:first')
+                        .widgetModel({
+                            modelItems: crudWidget.options.formModel,
+                            errorsCleared: function () {
+                                crudWidget.errorHide();
+                            }
+                        })
+                    .end();
+
+                self.options.formInit(self, jQuery(crudWidget.options.formDOMId).find('div.ui-crudForm-formContent:first'));
+
+                jQuery(crudWidget.options.formDOMId).fieldItem();
+
             }
         });
     },
@@ -3805,14 +3827,14 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
         switch (actionSelected) {
             case self._actions.filter:
-                jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').show('blind');
+                jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
                 break;
             case self._actions.list:
-                jQuery(self.options.gridDOMId).removeClass('ui-helper-hidden').show('blind');
+                jQuery(self.options.gridDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
                 jQuery(self.options.gridButtonsDOMId).show();
                 break;
             case self._actions.form:
-                jQuery(self.options.formDOMId).removeClass('ui-helper-hidden').show('blind');
+                jQuery(self.options.formDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
                 break;
             default:
                 break;
@@ -3939,9 +3961,6 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         }
 
     },
-    _done: function () {
-        this._trigger('done', null, null);
-    }
 });
 
 jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
@@ -4058,14 +4077,14 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         gridPagerInit: function () {
             return {
                 pagerTop: {
-                    showPager: false,
-                    showTotalRows: false,
-                    showSizePicker: false,
+                    paginationShow: false,
+                    totalRowsShow: false,
+                    pageSizeShow: false,
                 },
                 pagerBottom: {
-                    showPager: true,
-                    showTotalRows: true,
-                    showSizePicker: true,
+                    paginationShow: true,
+                    totalRowsShow: true,
+                    pageSizeShow: true,
                 }
             };
         },
@@ -4196,7 +4215,6 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
         this._super();
 
-
         jQuery(this.element)
             .addClass('ui-crudForm ui-helper-hidden')
             .append('<div class="ui-crudForm-modelBinding"></div>')
@@ -4213,7 +4231,7 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 
         this._super();
 
-        this._done();
+        //this._done();
     },
     _formButtonsInit: function () {
 
@@ -4242,10 +4260,6 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
         }
 
         jQuery(this.options.formButtonsDOMId).append('<div class="ui-helper-clearfix"></div>');
-
-    },
-    _done: function () {
-        this._trigger('done', null, null);
 
     },
     destroy: function () {
@@ -4338,9 +4352,10 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
 jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
 {
     options: {
-        showPager: true,
-        showTotalRows: true,
-        showSizePicker: true,
+        paginationShow: true,
+        totalRowsShow: true,
+        pageSizeShow: true,
+        nPagesInPaginator: 3,
     },
     _create: function () {
 
@@ -4379,7 +4394,7 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
             var TotalPages = ((totalRows / pageSize) | 0) + (((totalRows % pageSize) === 0) ? 0 : 1);
 
 
-            if (this.options.showPager === true) {
+            if (this.options.paginationShow === true) {
 
                 var buildPage = function (page, currentPage, isNavigationItem, text) {
                     var cssClass = ((currentPage == page) && (!isNavigationItem)) ? "ui-state-highlight" : "ui-state-default";
@@ -4408,9 +4423,25 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
                     endPage = endPage > totalPages ? totalPages : endPage;
                     return parseInt(endPage);
                 };
+                var getNPagesInPaginator = function (nPagesInPaginators) {
+
+                    var defaultNPages = 6;
+
+                    if (isNaN(nPagesInPaginator)) {
+                        return defaultNPages;
+                    }
+                    else {
+                        if (nPagesInPaginator < defaultNPages) {
+                            return defaultNPages;
+                        }
+                        else {
+                            return parseInt(nPagesInPaginator) -1;
+                        }
+                    }
+                };
 
                 if (TotalPages > 1) {
-                    var nPagesInPaginator = 8;    // Must be nPagerItems % 2 == 0
+                    var nPagesInPaginator = getNPagesInPaginator(this.options.nPagesInPaginator);
                     var start = getStartPage(nPagesInPaginator, TotalPages, getCurrentPage(Page));
                     var end = getEndPage(nPagesInPaginator, TotalPages, start);
                     var tPager = jQuery("<table></table>");
@@ -4458,7 +4489,7 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
 
             $totalsBox
                     .append("<div class='ui-gridPagination-totalRows'>Mostrando {0}-{1} resultados de {2}</div>"
-                        .format(Page, ((Page+1) * PageSize), TotalRows));
+                        .format(Page, ((Page + 1) * PageSize), TotalRows));
 
 
 
@@ -4492,20 +4523,20 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
 
             $totalsBox.append('<div class="ui-helper-clearfix" />');
 
-            if ((this.options.showTotalRows === false) && (this.options.showSizePicker === false)) {
+            if ((this.options.totalRowsShow === false) && (this.options.pageSizeShow === false)) {
                 jQuery(this.element)
                     .find('div.ui-gridPagination-totals:first')
                         .hide()
                     .parents('div.{0}-{1}:first'.format(this.namespace, this.widgetName))
                         .addClass('ui-helper-hidden');
-                    
+
             }
             else {
-                if (this.options.showTotalRows === false) {
+                if (this.options.totalRowsShow === false) {
                     jQuery(this.element).find('div.ui-gridPagination-totalRows:first').hide();
                 }
 
-                if (this.options.showSizePicker === false) {
+                if (this.options.pageSizeShow === false) {
                     jQuery(this.element).find('div.ui-gridPagination-pageSizePicker:first').hide();
                 }
             }

@@ -24,8 +24,7 @@ jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
 
 
 
-        jQuery(self.options.customerDOMId).customer({
-            title: 'Búsqueda de clientes',
+        var customerOptions = jQuery.extend({}, crudCustomerOptions(), {
             onCancel: function (e) {
                 self._pageSet(self._pageViews.products);
             },
@@ -33,20 +32,29 @@ jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
                 jQuery(self.options.productDOMId).product('filterSetCustomer', dataItem);
                 self._pageSet(self._pageViews.products);
             },
-            done: function () {
-
-                jQuery(self.options.productDOMId).product({
-                    title: '',
-                    onSearchCustomer: function () {
-                        self._pageSet(self._pageViews.customers);
-                    },
-                    done: function () {
-                        self._pageSet(self._pageViews.products);
-                    }
-                });
-
-            }
         });
+
+        jQuery(self.options.customerDOMId).crud(customerOptions);
+
+
+        //jQuery(self.options.customerDOMId).customer({
+        //    onCancel: function (e) {
+        //        self._pageSet(self._pageViews.products);
+        //    },
+        //    onSelect: function (e, dataItem) {
+        //        jQuery(self.options.productDOMId).product('filterSetCustomer', dataItem);
+        //        self._pageSet(self._pageViews.products);
+        //    },
+        //});
+
+        jQuery(self.options.productDOMId).product({
+            onSearchCustomer: function () {
+                self._pageSet(self._pageViews.customers);
+            },
+        });
+
+        self._pageSet(self._pageViews.products);
+
 
     },
     destroy: function () {

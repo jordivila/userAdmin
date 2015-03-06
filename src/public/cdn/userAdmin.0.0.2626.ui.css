@@ -1912,7 +1912,7 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
 .ui-crud .ui-widgetModel div.ui-widgetModel-content {padding:0 0 0 0;}
 .ui-crud .ui-widgetModel .ui-widgetModelItem {padding:.5em .5em .5em 0em;}
 
-.ui-crud .ui-crud-messages {background-image:none;border-top:none;border-bottom:none;}
+.ui-crud .ui-crud-messages {background-image:none;border-top:none;border-bottom:none;display:block;min-height:2em;}
 .ui-crud .ui-crud-messages .ui-crud-title {padding:0.5em 0.5em 0 0.5em;text-align:center;}
 .ui-crud .ui-crud-messages .ui-crud-error {padding:0.2em;border:0; font-weight:normal;text-align:center;}
 .ui-crud .ui-crud-messages .ui-crud-info {padding:0.2em;border:0; font-weight:normal;text-align:center;}

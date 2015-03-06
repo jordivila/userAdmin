@@ -49,6 +49,7 @@
                     "/public/views/home/cir.widget.cirDataEntry.js",
                     "/public/views/home/cir.widget.crudCustomer.js",
                     "/public/views/home/cir.widget.crudProduct.js",
+                    "/public/views/home/cir.widget.crudThemes.js",
                 ],
 
             });
