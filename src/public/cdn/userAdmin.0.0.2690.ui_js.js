@@ -1969,7 +1969,7 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
         this._super();
     },
     _template: function () {
-        return "<div class='ui-corner-bottom ui-widget-content ui-widgetModel-content'></div>";
+        return "<div class='ui-corner-bottom ui-widget-content ui-widgetModel-content '></div>";
 
 
         //var valSummary = '' +
@@ -2510,7 +2510,7 @@ jQuery.widget("ui.widgetModelItemBool", jQuery.ui.widgetBase,
             icon = getNonNullableIcon();
         }
 
-        var b = ('<button class="ui-button-icon-only ui-button ui-state-default ui-corner-all" ' +
+        var b = ('<button class="ui-button-icon-only ui-button ui-corner-all" ' +
                         'data-textOnly="true" ' +
                         'type="button">' +
                             '<span class="ui-button-text">&nbsp;</span>' +
@@ -2810,6 +2810,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
 
         //TODO: load async Menu based on user identity
         var self = this;
+        var $sitePage = jQuery('div.ui-sitePage:first');
         var $panelMenu = jQuery('#panelMenu');
         var $navMenu = jQuery($panelMenu).find('ul:first');
 
@@ -2823,15 +2824,15 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
 
                 jQuery('div.ui-mainMenuToggle')
                     .click(function () {
-
-                        console.log($panelMenu.is(':visible'));
-
                         if ($panelMenu.is(':visible')) {
+                            $sitePage.show();
                             $panelMenu.hide('slide', function () {
                                 $navMenu.navMenu('collapseAll');
+
                             });
                         }
                         else {
+                            $sitePage.hide();
                             $panelMenu.show('drop');
                         }
                     });

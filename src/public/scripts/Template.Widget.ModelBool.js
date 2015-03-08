@@ -65,7 +65,7 @@ jQuery.widget("ui.widgetModelItemBool", jQuery.ui.widgetBase,
             icon = getNonNullableIcon();
         }
 
-        var b = ('<button class="ui-button-icon-only ui-button ui-state-default ui-corner-all" ' +
+        var b = ('<button class="ui-button-icon-only ui-button ui-corner-all" ' +
                         'data-textOnly="true" ' +
                         'type="button">' +
                             '<span class="ui-button-text">&nbsp;</span>' +

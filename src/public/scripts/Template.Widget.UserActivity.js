@@ -45,6 +45,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
 
         //TODO: load async Menu based on user identity
         var self = this;
+        var $sitePage = jQuery('div.ui-sitePage:first');
         var $panelMenu = jQuery('#panelMenu');
         var $navMenu = jQuery($panelMenu).find('ul:first');
 
@@ -58,15 +59,15 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
 
                 jQuery('div.ui-mainMenuToggle')
                     .click(function () {
-
-                        console.log($panelMenu.is(':visible'));
-
                         if ($panelMenu.is(':visible')) {
+                            $sitePage.show();
                             $panelMenu.hide('slide', function () {
                                 $navMenu.navMenu('collapseAll');
+
                             });
                         }
                         else {
+                            $sitePage.hide();
                             $panelMenu.show('drop');
                         }
                     });

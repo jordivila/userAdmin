@@ -10,7 +10,8 @@
 .ui-state-active .ui-icon
 {
     /* Remove the jQuery UI Icon */
-    background: none repeat scroll 0 0 transparent;
+    /*background: none repeat scroll 0 0 transparent;*/
+    background-image:none !important;
     /* Remove the jQuery UI Text Indent */
     text-indent: 0 !important;
     /* Bump it up - jQuery UI is -8px */
