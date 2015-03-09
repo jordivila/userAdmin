@@ -1,5 +1,5 @@
 ﻿/* Data lists Common */
-.ui-widgetGrid {width:100%;display:table;}
+.ui-widgetGrid {width:100%;display:table;background-image:none !important;}
 .ui-widgetGrid a {text-decoration:underline !important;}
 .ui-widgetGrid .ui-widgetGrid-row {font-weight:normal !important;}
 .ui-widgetGrid .ui-widgetGrid-header { border:0;}

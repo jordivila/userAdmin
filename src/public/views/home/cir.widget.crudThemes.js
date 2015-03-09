@@ -135,6 +135,10 @@
             var dfd = jQuery.Deferred();
 
 
+
+            filter.PageSize = 100; //-> ensure all themes are loaded
+
+
             if (themeAjax.ajax._fakeDataGrid === null) {
                 themeAjax.ajax._fakeDataGridInit();
             }
@@ -181,10 +185,10 @@ var crudThemeOptions = function () {
         ],
         gridSearchMethod: themeAjax.ajax.themeSearch,
         gridHeaderTemplate: function (crudGridWidget) {
-            return '<th class="ui-themeGrid-thumbnail">Thumbnail</th>';
+            return '<div class="ui-themeGrid-thumbnail ui-widgetGrid-column">Thumbnail</div>';
         },
         gridRowTemplate: function (crudGridWidget) {
-            return '<td class="ui-themeGrid-thumbnail"><img src="" /></td>';
+            return '<div class="ui-themeGrid-thumbnail ui-widgetGrid-column"><img src="" /></div>';
         },
         gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
 
@@ -192,14 +196,14 @@ var crudThemeOptions = function () {
                 jQuery(node).attr('title', valueString).html(valueString);
             };
 
-            $row.find('td.ui-themeGrid-thumbnail:first').find('img').attr('src', 'public/scripts/jQueryUIThemes/images/{0}'.format(dataItem.icon));
+            $row.find('div.ui-themeGrid-thumbnail:first').find('img').attr('src', 'public/scripts/jQueryUIThemes/images/{0}'.format(dataItem.icon));
         },
         gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
             $row.data("dataItem", dataItem)
-                .find('td.ui-themeGrid-thumbnail:first')
+                .find('div.ui-themeGrid-thumbnail:first')
                     .find('img')
                         .click(function () {
-                            crudGridWidget._trigger('onSelect', null, jQuery(this).parents('tr.ui-crudGrid-dataRow:first').data("dataItem"));
+                            crudGridWidget._trigger('onSelect', null, jQuery(this).parents('div.ui-crudGrid-dataRow:first').data("dataItem"));
                         });
 
         },

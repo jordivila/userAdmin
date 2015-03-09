@@ -140,7 +140,7 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
 
             $totalsBox
                     .append("<div class='ui-gridPagination-totalRows'>Mostrando {0}-{1} resultados de {2}</div>"
-                        .format(Page, ((Page + 1) * PageSize), TotalRows));
+                        .format(((Page * PageSize) + 1), (((Page + 1) * PageSize)), TotalRows));
 
 
 

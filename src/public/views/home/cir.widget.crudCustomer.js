@@ -132,12 +132,12 @@ var crudCustomerOptions = function () {
         },
         gridSearchMethod: customerAjax.ajax.customerSearch,
         gridHeaderTemplate: function (crudGridWidget) {
-            return '<th class="ui-customerGrid-nombre">Nombre/Razón Social</th>' +
-                   '<th class="ui-customerGrid-NumDocumento">NIF</th>';
+            return '<div class="ui-customerGrid-nombre ui-widgetGrid-column">Nombre/Razón Social</div>' +
+                   '<div class="ui-customerGrid-NumDocumento ui-widgetGrid-column">NIF</div>';
         },
         gridRowTemplate: function (crudGridWidget) {
-            return '<td class="ui-customerGrid-nombre"><a href="javascript:void(0);"></a></td>' +
-                    '<td class="ui-customerGrid-NumDocumento"></td>';
+            return '<div class="ui-customerGrid-nombre ui-widgetGrid-column"><a href="javascript:void(0);"></a></div>' +
+                    '<div class="ui-customerGrid-NumDocumento ui-widgetGrid-column"></div>';
         },
         gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
 
@@ -145,15 +145,15 @@ var crudCustomerOptions = function () {
                 jQuery(node).attr('title', valueString).html(valueString);
             };
 
-            templateRowSetValue($row.find('td.ui-customerGrid-nombre:first').find('a'), dataItem.nombre);
-            templateRowSetValue($row.find('td.ui-customerGrid-NumDocumento:first'), dataItem.NumDocumento);
+            templateRowSetValue($row.find('div.ui-customerGrid-nombre:first').find('a'), dataItem.nombre);
+            templateRowSetValue($row.find('div.ui-customerGrid-NumDocumento:first'), dataItem.NumDocumento);
         },
         gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
             $row.data("dataItem", dataItem)
-                .find('td.ui-customerGrid-nombre:first')
+                .find('div.ui-customerGrid-nombre:first')
                     .find('a')
                         .click(function () {
-                            crudGridWidget._trigger('onSelect', null, jQuery(this).parents('tr.ui-crudGrid-dataRow:first').data("dataItem"));
+                            crudGridWidget._trigger('onSelect', null, jQuery(this).parents('div.ui-crudGrid-dataRow:first').data("dataItem"));
                         });
 
         },

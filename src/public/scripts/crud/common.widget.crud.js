@@ -602,6 +602,7 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
             throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowEvents is an abstract method. Child class method must be implemented");
         },
+        gridRowAlternateClass: '',
         gridPagerInit: function () {
             return {
                 pagerTop: {
@@ -623,10 +624,10 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         this._super();
 
         jQuery(this.element)
-            .addClass('ui-crudGrid')
+            .addClass('ui-crudGrid ui-widgetGrid ui-widgetGrid-tableLess ')
             .append(this._gridTemplate());
 
-        this.options.gridBodyDOMId = jQuery(this.element).find('table.ui-crudGrid-body-tableBox:first').find('tbody:first');
+        this.options.gridBodyDOMId = jQuery(this.element).find('div.ui-crudGrid-body:first');
         this.options.gridPagerDOMId = jQuery(this.element).find('div.ui-crudGrid-pager');
 
     },
@@ -667,22 +668,14 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
     _gridTemplate: function () {
 
         return '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
-                '<div class="ui-crudGrid">' +
-                    '<div class="ui-crudGrid-header ui-state-default">' +
-                        '<table>' +
-                            '<tbody>' +
-                                '<tr class="ui-crudGrid-header">' +
-                                    this.options.gridHeaderTemplate(this) +
-                                '</tr>' +
-                            '</tbody>' +
-                        '</table>' +
+                '<div class="ui-crudGrid ui-widget-content">' +
+                    '<div class="ui-crudGrid-header ui-widgetGrid-header ui-state-default">' +
+                        '<div class="ui-widgetGrid-row" >' + 
+                            this.options.gridHeaderTemplate(this) +
+                        '</div>' + 
                     '</div>' +
-                    '<div class="ui-crudGrid-body ui-widget-content" >' +
-                        '<table class="ui-crudGrid-body-tableBox">' +
-                            '<tbody>' +
+                    '<div class="ui-crudGrid-body ui-widgetGrid-body" >' +
 
-                            '</tbody>' +
-                        '</table>' +
                     '</div>' +
                 '</div>' +
                 '<div class="ui-crudGrid-pager ui-crudGrid-pager-bottom ui-state-default"></div>';
@@ -692,13 +685,13 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         var self = this;
 
         jQuery(self.options.gridBodyDOMId)
-            .children('tr')
+            .children('div')
                 .each(function (i, ui) {
                     if (((i % 2) == 1)) {
-                        jQuery(this).addClass('ui-widget-content');
+                        //jQuery(this).addClass('');
                     }
                     else {
-                        jQuery(this).addClass('ui-crudGrid-dataRowAlt ui-widget-content ui-state-default');
+                        jQuery(this).addClass(self.options.gridRowAlternateClass);
                     }
                 });
     },
@@ -711,7 +704,7 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         for (var i = 0; i < data.Data.length; i++) {
 
             var dataItem = data.Data[i];
-            var $row = jQuery('<tr class="ui-crudGrid-dataRow">' + self.options.gridRowTemplate(this) + "</tr>");
+            var $row = jQuery('<div class="ui-crudGrid-dataRow ui-widgetGrid-row ui-widget-content">' + self.options.gridRowTemplate(this) + "</div>");
             self.options.gridBindRowColumns(this, $row, dataItem);
             self._bindRowAlternatedColor();
             self.options.gridBindRowEvents(this, $row, dataItem);

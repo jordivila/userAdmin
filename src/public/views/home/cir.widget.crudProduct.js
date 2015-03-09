@@ -630,16 +630,15 @@ jQuery.widget("ui.product", jQuery.ui.crud,
             return defaultButtons;
         },
         gridHeaderTemplate: function (crudGridWidget) {
-            return '<th class="ui-productGrid-productId">Nº</th>' +
-                    '<th class="ui-productGrid-productTypeDesc">Producto</th>' +
-                    '<th class="ui-productGrid-fechaDesde">Fecha alta</th>' +
-                    '<th class="ui-productGrid-gridCommand"></th>';
+            return '<div class="ui-productGrid-productId ui-widgetGrid-column">Nº</div>' +
+                    '<div class="ui-productGrid-productTypeDesc ui-widgetGrid-column">Producto</div>' +
+                    '<div class="ui-productGrid-fechaDesde ui-widgetGrid-column">Fecha alta</div>';
         },
         gridRowTemplate: function (crudGridWidget) {
 
-            return '<td class="ui-productGrid-productId"><a href="javascript:void(0);"></a></td>' +
-                    '<td class="ui-productGrid-productTypeDesc"></td>' +
-                    '<td class="ui-productGrid-fechaDesde"></td>' +
+            return '<div class="ui-productGrid-productId ui-widgetGrid-column"><div class="ui-widgetGrid-column-content"><a href="javascript:void(0);"></a></div></div>' +
+                    '<div class="ui-productGrid-productTypeDesc ui-widgetGrid-column"><div class="ui-widgetGrid-column-content"></div></div>' +
+                    '<div class="ui-productGrid-fechaDesde ui-widgetGrid-column"><div class="ui-widgetGrid-column-content"></div></div>' +
                     '';
             //'<td class="ui-productGrid-gridCommand">' +
             //    '<div class="ui-crudGrid-action ui-crudGrid-actionEdit ui-widget-content" title="Editar">' +
@@ -655,18 +654,20 @@ jQuery.widget("ui.product", jQuery.ui.crud,
 
             $row.data("dataItem", dataItem);
 
-            templateRowSetValue($row.find('td.ui-productGrid-productId:first').find('a'), dataItem.productId);
-            templateRowSetValue($row.find('td.ui-productGrid-productTypeDesc:first'), dataItem.productTypeDesc);
-            templateRowSetValue($row.find('td.ui-productGrid-fechaDesde:first'), dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '');
+            templateRowSetValue($row.find('div.ui-productGrid-productId:first').find('div.ui-widgetGrid-column-content').find('a'), dataItem.productId);
+            templateRowSetValue($row.find('div.ui-productGrid-productTypeDesc:first').find('div.ui-widgetGrid-column-content'), dataItem.productTypeDesc);
+            templateRowSetValue($row.find('div.ui-productGrid-fechaDesde:first').find('div.ui-widgetGrid-column-content'), dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '');
         },
         gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
-            $row.find('td.ui-productGrid-productId:first')
-                    .find('a')
-                        .click(function () {
-                            crudGridWidget._trigger('onEdit', null, jQuery(this).parents('tr.ui-crudGrid-dataRow:first').data("dataItem"));
-                        })
+            $row.find('div.ui-productGrid-productId:first')
+                    .find('div.ui-widgetGrid-column-content')
+                        .find('a')
+                            .click(function () {
+                                crudGridWidget._trigger('onEdit', null, jQuery(this).parents('div.ui-crudGrid-dataRow:first').data("dataItem"));
+                            })
+                        .end()
                     .end()
-                .end();
+                .end(); 
         },
 
 

@@ -1850,7 +1850,7 @@ html, body {height:100%;}
 /* Widget Boolean */
 .ui-widgetModelItemBool {}
 .ui-widgetModelItemBool input {display:none !important;} /* Data lists Common */
-.ui-widgetGrid {width:100%;display:table;}
+.ui-widgetGrid {width:100%;display:table;background-image:none !important;}
 .ui-widgetGrid a {text-decoration:underline !important;}
 .ui-widgetGrid .ui-widgetGrid-row {font-weight:normal !important;}
 .ui-widgetGrid .ui-widgetGrid-header { border:0;}
@@ -1922,25 +1922,6 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
 .ui-crud .ui-crudFilter .ui-crudFilter-form {padding:0.5em 0.5em 0.5em 0.5em;background-image:none;}
 .ui-crud .ui-crudFilter .ui-widgetModel-content {background-image:none;}
 
-
-.ui-crud .ui-crudGrid-pager.ui-widget-header {border:none;}
-.ui-crud .ui-crudGrid-header.ui-widget-header {border:none;}
-.ui-crud .ui-crudGrid-dataRow.ui-widget-content {border-left:none;border-top:none;}
-.ui-crud .ui-crudGrid .ui-crudGrid-dataRow{background-image:none;}
-.ui-crud .ui-crudGrid .ui-crudGrid-header {padding:0.5em 2em 0.5em 0; overflow:hidden;border-bottom:none;}
-.ui-crud .ui-crudGrid .ui-crudGrid-header table th {font-weight:bold;}
-.ui-crud .ui-crudGrid .ui-crudGrid-header table ,
-.ui-crud .ui-crudGrid .ui-crudGrid-header table th,
-.ui-crud .ui-crudGrid .ui-crudGrid-body table ,
-.ui-crud .ui-crudGrid .ui-crudGrid-body table td {table-layout:fixed;overflow:hidden; white-space: nowrap;width:100%;vertical-align:middle;}
-.ui-crud .ui-crudGrid .ui-crudGrid-body {overflow:auto;overflow-y:scroll;padding-bottom:0.5em;}
-.ui-crud .ui-crudGrid .ui-crudGrid-body {height: 5em;}
-.ui-crud .ui-crudGrid .ui-crudGrid-body .ui-crudGrid_SelectedRow {background-color:#FF9900;}
-.ui-crud .ui-crudGrid .ui-crudGrid-body td {/*border:1px solid #CCC;*/padding:0em 0.2em 0em 0.2em ;font-weight:normal;}
-.ui-crud .ui-crudGrid .ui-crudGrid-body-tableBox {width: 100%; border-collapse: collapse;}
-.ui-crud .ui-crudGrid .ui-crudGrid-body-tableBox tr.ui-crudGrid-rowStyle,
-.ui-crud .ui-crudGrid .ui-crudGrid-body-tableBox tr.ui-crudGrid-rowStyleAlternated {height: 2em;}
-.ui-crud .ui-crudGrid .ui-crudGrid-action {font-size:1em;width:1em;margin:0 auto 0 auto;cursor:pointer;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager {font-weight:normal;	text-align:left;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar {text-align:center;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar table {margin:0 auto 0 auto;width:100%;border-collapse:collapse;}
@@ -1951,6 +1932,9 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-totalRows {float:left;margin:0 0 0 0.5em;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-pageSizePicker {float:right;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-pageSizePicker select {padding:0 0 0 0;}
+
+
+
 .ui-crud .ui-crudForm { padding:0em !important; }
 .ui-crud .ui-crudForm .ui-crudForm-form { padding:1em !important;}
 .ui-crud .ui-crudForm .ui-widget-content{ background-image:none !important;}
