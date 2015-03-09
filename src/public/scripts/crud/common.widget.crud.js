@@ -141,22 +141,24 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         gridFilterObject: null,
         formDOMId: null,
 
+
         gridCustomOptions: {},
         gridSearchMethod: null,
         gridFilterInit: function (crudWidget, filterOptions) {
             jQuery(crudWidget.options.gridFilterDOMId).crudFilter(jQuery.extend({}, filterOptions, { Model: crudWidget.options.filterModel }));
         },
-        gridHeaderTemplate: function (crudGridWidget) {
-            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridHeaderTemplate is an abstract method. Child class method must be implemented");
-        },
-        gridRowTemplate: function (crudGridWidget) {
-            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridRowTemplate is an abstract method. Child class method must be implemented");
-        },
-        gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
-            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowColumns is an abstract method. Child class method must be implemented");
-        },
-        gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
-            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowEvents is an abstract method. Child class method must be implemented");
+        //gridHeaderTemplate: function (crudGridWidget) {
+        //    throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridHeaderTemplate is an abstract method. Child class method must be implemented");
+        //},
+        //gridRowTemplate: function (crudGridWidget) {
+        //    throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridRowTemplate is an abstract method. Child class method must be implemented");
+        //},
+        //gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
+        //    throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowColumns is an abstract method. Child class method must be implemented");
+        //},
+        gridModel: [],
+        gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
+            
         },
         gridSearchForEditMethod: null,
         gridButtonsGet: function (crudWidget, defaultButtons) {
@@ -232,10 +234,11 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
             {},
             {
                 //this.options.gridInit(self, {
-                gridHeaderTemplate: self.options.gridHeaderTemplate,
-                gridRowTemplate: self.options.gridRowTemplate,
-                gridBindRowColumns: self.options.gridBindRowColumns,
-                gridBindRowEvents: self.options.gridBindRowEvents,
+                //gridHeaderTemplate: self.options.gridHeaderTemplate,
+                //gridRowTemplate: self.options.gridRowTemplate,
+                //gridBindRowColumns: self.options.gridBindRowColumns,
+                gridModel: self.options.gridModel,
+                gridViewCellBound: self.options.gridViewCellBound,
                 gridPagerInit: self.options.gridPagerInit,
 
                 errorDisplay: function (e, msg) {
@@ -285,32 +288,32 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                 var crudWidget = self;
 
                 jQuery(crudWidget.options.formDOMId)
-                    .crudForm(jQuery.extend({},  {
-                            messagedisplayAutoHide: function (e, msg) {
-                                self.messagedisplayAutoHide(msg);
-                            },
-                            messageDisplay: function (e, msg) {
-                                self.messageDisplay(msg);
-                            },
-                            errorDisplay: function (e, msg) {
-                                self.errorDisplay(msg);
-                            },
-                            errorHide: function () {
-                                self.errorHide();
-                            },
-                            change: function (e, formValue) {
-                                self.errorHide();
-                                self._search();
-                            },
-                            dataBound: function () {
-                                self.errorHide();
-                                self._actionSet(self._actions.form);
-                            },
-                            cancel: function () {
-                                self.errorHide();
-                                self._actionSet(self._actions.list);
-                            },
+                    .crudForm(jQuery.extend({}, {
+                        messagedisplayAutoHide: function (e, msg) {
+                            self.messagedisplayAutoHide(msg);
                         },
+                        messageDisplay: function (e, msg) {
+                            self.messageDisplay(msg);
+                        },
+                        errorDisplay: function (e, msg) {
+                            self.errorDisplay(msg);
+                        },
+                        errorHide: function () {
+                            self.errorHide();
+                        },
+                        change: function (e, formValue) {
+                            self.errorHide();
+                            self._search();
+                        },
+                        dataBound: function () {
+                            self.errorHide();
+                            self._actionSet(self._actions.form);
+                        },
+                        cancel: function () {
+                            self.errorHide();
+                            self._actionSet(self._actions.list);
+                        },
+                    },
                         {
                             formModel: crudWidget.options.formModel,
                             formButtonsGet: crudWidget.options.formButtonsGet,
@@ -589,18 +592,20 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         gridBodyDOMId: null,
         gridPagerDOMId: null,
 
+        gridModel: [], //[{ key: "", displayName: "" }],
+        //gridHeaderTemplate: function (crudGridWidget) {
+        //    throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridHeaderTemplate is an abstract method. Child class method must be implemented");
+        //},
+        //gridRowTemplate: function (crudGridWidget) {
+        //    throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridRowTemplate is an abstract method. Child class method must be implemented");
+        //},
+        //gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
+        //    throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowColumns is an abstract method. Child class method must be implemented");
+        //},
+        gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
+            // use this option to customize row's display items, events, etc
 
-        gridHeaderTemplate: function (crudGridWidget) {
-            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridHeaderTemplate is an abstract method. Child class method must be implemented");
-        },
-        gridRowTemplate: function (crudGridWidget) {
-            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridRowTemplate is an abstract method. Child class method must be implemented");
-        },
-        gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
-            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowColumns is an abstract method. Child class method must be implemented");
-        },
-        gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
-            throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowEvents is an abstract method. Child class method must be implemented");
+            //throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridViewCellBound is an abstract method. Child class method must be implemented");
         },
         gridRowAlternateClass: '',
         gridPagerInit: function () {
@@ -617,14 +622,13 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
                 }
             };
         },
-
     },
     _create: function () {
 
         this._super();
 
         jQuery(this.element)
-            .addClass('ui-crudGrid ui-widgetGrid ui-widgetGrid-tableLess ')
+            .addClass('ui-crudGrid ui-widgetGrid')
             .append(this._gridTemplate());
 
         this.options.gridBodyDOMId = jQuery(this.element).find('div.ui-crudGrid-body:first');
@@ -667,12 +671,12 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
     },
     _gridTemplate: function () {
 
-        return  '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
+        return '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
                 '<div class="ui-helper-clearfix" ></div>' +
                 '<div class="ui-crudGrid">' +
                     '<div class="ui-crudGrid-header ui-widgetGrid-header ui-state-default">' +
-                        '<div class="ui-widgetGrid-row" >' + 
-                            this.options.gridHeaderTemplate(this) +
+                        '<div class="ui-widgetGrid-row" >' +
+                            this._gridHeaderTemplate() +
                         '</div>' +
                     '</div>' +
                     '<div class="ui-helper-clearfix" ></div>' +
@@ -682,6 +686,29 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
                     '<div class="ui-helper-clearfix" ></div>' +
                 '</div>' +
                 '<div class="ui-crudGrid-pager ui-crudGrid-pager-bottom ui-state-default"></div>';
+    },
+    _gridHeaderTemplate: function () {
+
+        var str = '';
+
+        for (var i = 0; i < this.options.gridModel.length; i++) {
+            str += '<div class="ui-crudGrid-{0} ui-widgetGrid-column">{1}</div>'.format(this.options.gridModel[i].key, this.options.gridModel[i].displayName);
+        }
+
+        return str;
+    },
+    _gridRowTemplate: function (dataItem) {
+
+        var str = '';
+
+        for (var i = 0; i < this.options.gridModel.length; i++) {
+            str += '<div class="ui-crudGrid-{0} ui-widgetGrid-column ui-widget-content ui-state-default"><div class="ui-widgetGrid-column-content">{1}</div></div>'
+                .format(
+                        this.options.gridModel[i].key,
+                        dataItem[this.options.gridModel[i].key]);
+        }
+
+        return str;
     },
     _bindRowAlternatedColor: function () {
 
@@ -707,10 +734,20 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         for (var i = 0; i < data.Data.length; i++) {
 
             var dataItem = data.Data[i];
-            var $row = jQuery('<div class="ui-crudGrid-dataRow ui-widgetGrid-row">' + self.options.gridRowTemplate(this) + "</div>");
-            self.options.gridBindRowColumns(this, $row, dataItem);
+            var $row = jQuery('<div class="ui-crudGrid-dataRow ui-widgetGrid-row">{0}</div>'.format(self._gridRowTemplate(dataItem)));
+
+            for (var j = 0; j < this.options.gridModel.length; j++) {
+
+                var $cell = $row.find('div.ui-crudGrid-{0}:first'.format(this.options.gridModel[j].key))
+                                .find('div.ui-widgetGrid-column-content');
+
+
+                self.options.gridViewCellBound(this, $row, $cell, dataItem, this.options.gridModel[j].key);
+            }
+
+            //self.options.gridBindRowColumns(this, $row, dataItem);
             self._bindRowAlternatedColor();
-            self.options.gridBindRowEvents(this, $row, dataItem);
+            
 
             jQuery(self.options.gridBodyDOMId).append($row);
         }

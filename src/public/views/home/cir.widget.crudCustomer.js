@@ -131,31 +131,45 @@ var crudCustomerOptions = function () {
             //}
         },
         gridSearchMethod: customerAjax.ajax.customerSearch,
-        gridHeaderTemplate: function (crudGridWidget) {
-            return '<div class="ui-customerGrid-nombre ui-widgetGrid-column">Nombre/Razón Social</div>' +
-                   '<div class="ui-customerGrid-NumDocumento ui-widgetGrid-column">NIF</div>';
-        },
-        gridRowTemplate: function (crudGridWidget) {
-            return '<div class="ui-customerGrid-nombre ui-widgetGrid-column ui-widget-content ui-state-default"><div class="ui-widgetGrid-column-content"><a href="javascript:void(0);"></a></div></div>' +
-                    '<div class="ui-customerGrid-NumDocumento ui-widgetGrid-column ui-widget-content ui-state-default"><div class="ui-widgetGrid-column-content"></div></div>';
-        },
-        gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
+        //gridHeaderTemplate: function (crudGridWidget) {
+        //    return '<div class="ui-customerGrid-nombre ui-widgetGrid-column">Nombre/Razón Social</div>' +
+        //           '<div class="ui-customerGrid-NumDocumento ui-widgetGrid-column">NIF</div>';
+        //},
+        //gridRowTemplate: function (crudGridWidget) {
+        //    return '<div class="ui-customerGrid-nombre ui-widgetGrid-column ui-widget-content ui-state-default"><div class="ui-widgetGrid-column-content"><a href="javascript:void(0);"></a></div></div>' +
+        //            '<div class="ui-customerGrid-NumDocumento ui-widgetGrid-column ui-widget-content ui-state-default"><div class="ui-widgetGrid-column-content"></div></div>';
+        //},
+        //gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
 
-            var templateRowSetValue = function (node, valueString) {
-                jQuery(node).attr('title', valueString).html(valueString);
-            };
+        //    var templateRowSetValue = function (node, valueString) {
+        //        jQuery(node).attr('title', valueString).html(valueString);
+        //    };
 
-            templateRowSetValue($row.find('div.ui-customerGrid-nombre:first').find('div.ui-widgetGrid-column-content').find('a'), dataItem.nombre);
-            templateRowSetValue($row.find('div.ui-customerGrid-NumDocumento:first').find('div.ui-widgetGrid-column-content'), dataItem.NumDocumento);
-        },
-        gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
-            $row.data("dataItem", dataItem)
-                .find('div.ui-customerGrid-nombre:first')
-                    .find('a')
+        //    templateRowSetValue($row.find('div.ui-customerGrid-nombre:first').find('div.ui-widgetGrid-column-content').find('a'), dataItem.nombre);
+        //    templateRowSetValue($row.find('div.ui-customerGrid-NumDocumento:first').find('div.ui-widgetGrid-column-content'), dataItem.NumDocumento);
+        //},
+        gridModel: [
+            {
+                key: "nombre",
+                displayName: "Nomber/Razón Social"
+            },
+            {
+                key: "NumDocumento",
+                displayName: "NIF"
+            },
+        ],
+        gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
+
+            switch (columnName) {
+                case "nombre":
+                    $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
+                    $cell.find('a')
                         .click(function () {
-                            crudGridWidget._trigger('onSelect', null, jQuery(this).parents('div.ui-crudGrid-dataRow:first').data("dataItem"));
+                            crudGridWidget._trigger('onSelect', null, dataItem);
                         });
-
+                    break;
+                default: break;
+            }
         },
         gridButtonsGet: function (self, defaultButtons) {
 

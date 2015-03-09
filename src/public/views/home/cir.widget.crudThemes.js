@@ -184,27 +184,42 @@ var crudThemeOptions = function () {
         },
         ],
         gridSearchMethod: themeAjax.ajax.themeSearch,
-        gridHeaderTemplate: function (crudGridWidget) {
-            return '<div class="ui-themeGrid-thumbnail ui-widgetGrid-column">Thumbnail</div>';
-        },
-        gridRowTemplate: function (crudGridWidget) {
-            return '<div class="ui-themeGrid-thumbnail ui-widgetGrid-column"><img src="" /></div>';
-        },
-        gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
+        //gridHeaderTemplate: function (crudGridWidget) {
+        //    return '<div class="ui-themeGrid-thumbnail ui-widgetGrid-column">Thumbnail</div>';
+        //},
+        //gridRowTemplate: function (crudGridWidget) {
+        //    return '<div class="ui-themeGrid-thumbnail ui-widgetGrid-column"><img src="" /></div>';
+        //},
+        //gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
 
-            var templateRowSetValue = function (node, valueString) {
-                jQuery(node).attr('title', valueString).html(valueString);
-            };
+        //    var templateRowSetValue = function (node, valueString) {
+        //        jQuery(node).attr('title', valueString).html(valueString);
+        //    };
 
-            $row.find('div.ui-themeGrid-thumbnail:first').find('img').attr('src', 'public/scripts/jQueryUIThemes/images/{0}'.format(dataItem.icon));
-        },
-        gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
-            $row.data("dataItem", dataItem)
-                .find('div.ui-themeGrid-thumbnail:first')
-                    .find('img')
+        //    $row.find('div.ui-themeGrid-thumbnail:first').find('img').attr('src', 'public/scripts/jQueryUIThemes/images/{0}'.format(dataItem.icon));
+        //},
+        gridModel: [
+            {
+                key: "icon",
+                displayName: "thumbnail"
+            },
+        ],
+
+        gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
+
+            switch (columnName) {
+                case "icon":
+
+                    $cell.html('<img src="public/scripts/jQueryUIThemes/images/{0}" alt="{1}" />'.format(dataItem.icon, dataItem.title));
+                    $cell.find('img')
                         .click(function () {
-                            crudGridWidget._trigger('onSelect', null, jQuery(this).parents('div.ui-crudGrid-dataRow:first').data("dataItem"));
+                            crudGridWidget._trigger('onSelect', null, dataItem);
                         });
+                    break;
+                default:
+                    break;
+            }
+
 
         },
         formInit: function (self, formOptions) {
