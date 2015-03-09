@@ -667,16 +667,19 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
     },
     _gridTemplate: function () {
 
-        return '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
-                '<div class="ui-crudGrid ui-widget-content">' +
+        return  '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
+                '<div class="ui-helper-clearfix" ></div>' +
+                '<div class="ui-crudGrid">' +
                     '<div class="ui-crudGrid-header ui-widgetGrid-header ui-state-default">' +
                         '<div class="ui-widgetGrid-row" >' + 
                             this.options.gridHeaderTemplate(this) +
-                        '</div>' + 
+                        '</div>' +
                     '</div>' +
-                    '<div class="ui-crudGrid-body ui-widgetGrid-body" >' +
+                    '<div class="ui-helper-clearfix" ></div>' +
+                    '<div class="ui-crudGrid-body ui-widgetGrid-body ui-helper-clearfix" >' +
 
                     '</div>' +
+                    '<div class="ui-helper-clearfix" ></div>' +
                 '</div>' +
                 '<div class="ui-crudGrid-pager ui-crudGrid-pager-bottom ui-state-default"></div>';
     },
@@ -704,7 +707,7 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         for (var i = 0; i < data.Data.length; i++) {
 
             var dataItem = data.Data[i];
-            var $row = jQuery('<div class="ui-crudGrid-dataRow ui-widgetGrid-row ui-widget-content">' + self.options.gridRowTemplate(this) + "</div>");
+            var $row = jQuery('<div class="ui-crudGrid-dataRow ui-widgetGrid-row">' + self.options.gridRowTemplate(this) + "</div>");
             self.options.gridBindRowColumns(this, $row, dataItem);
             self._bindRowAlternatedColor();
             self.options.gridBindRowEvents(this, $row, dataItem);

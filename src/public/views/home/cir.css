@@ -3,7 +3,7 @@
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeCustomerIcon { width: 1em; height: 1em;float:left;cursor:pointer; margin: 0 0.5em 0 0;padding:0.2em; }
 .ui-productGrid-productId ,
 .ui-productGrid-productTypeDesc,
-.ui-productGrid-fechaDesde {width:33%;}
+.ui-productGrid-fechaDesde {width:33.3%;}
 
 
 
@@ -13,9 +13,9 @@
 
 
 
+.ui-themeCrud .ui-crudGrid {background-image:none !important;background:none !important;}
 .ui-themeCrud .ui-crud-messages,
 .ui-themeCrud .ui-ribbonButtons,
 .ui-themeCrud .ui-crudGrid .ui-crudGrid-header,
 .ui-themeCrud .ui-crudGrid .ui-crudGrid-pager {display:none;}
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-body {}
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-body  .ui-widgetGrid-row {border:none;float:left !important;width:auto;height:auto;margin:0.5em 0.5em 0.5em 0.5em;cursor:pointer;}
+.ui-themeCrud .ui-crudGrid .ui-crudGrid-body  .ui-widgetGrid-row {border:none;float:left !important;width:auto;height:auto;margin:0.5em 0.5em 0.5em 0.5em;cursor:pointer;background-image:none !important;background:none !important;}

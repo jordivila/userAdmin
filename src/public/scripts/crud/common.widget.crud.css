@@ -19,11 +19,11 @@
 .ui-crud .ui-crudFilter .ui-crudFilter-form {padding:0.5em 0.5em 0.5em 0.5em;background-image:none;}
 .ui-crud .ui-crudFilter .ui-widgetModel-content {background-image:none;}
 
-.ui-crud .ui-crudGrid .ui-crudGrid-pager {font-weight:normal;	text-align:left;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager {font-weight:normal;	text-align:left;border:0;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar {text-align:center;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar table {margin:0 auto 0 auto;width:100%;border-collapse:collapse;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar a {text-decoration:none;}
-.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar td {cursor:pointer; padding:0.3em;margin:0 0.3em 0 0.3em;}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar td {cursor:pointer; padding:0.3em;margin:0 0.3em 0 0.3em;border-bottom:0;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals {padding:0.5em 0.5em 0.5em 0em;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals div {}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-totalRows {float:left;margin:0 0 0 0.5em;}

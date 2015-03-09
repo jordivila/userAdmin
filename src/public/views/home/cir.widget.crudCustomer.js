@@ -136,8 +136,8 @@ var crudCustomerOptions = function () {
                    '<div class="ui-customerGrid-NumDocumento ui-widgetGrid-column">NIF</div>';
         },
         gridRowTemplate: function (crudGridWidget) {
-            return '<div class="ui-customerGrid-nombre ui-widgetGrid-column"><a href="javascript:void(0);"></a></div>' +
-                    '<div class="ui-customerGrid-NumDocumento ui-widgetGrid-column"></div>';
+            return '<div class="ui-customerGrid-nombre ui-widgetGrid-column ui-widget-content ui-state-default"><div class="ui-widgetGrid-column-content"><a href="javascript:void(0);"></a></div></div>' +
+                    '<div class="ui-customerGrid-NumDocumento ui-widgetGrid-column ui-widget-content ui-state-default"><div class="ui-widgetGrid-column-content"></div></div>';
         },
         gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
 
@@ -145,8 +145,8 @@ var crudCustomerOptions = function () {
                 jQuery(node).attr('title', valueString).html(valueString);
             };
 
-            templateRowSetValue($row.find('div.ui-customerGrid-nombre:first').find('a'), dataItem.nombre);
-            templateRowSetValue($row.find('div.ui-customerGrid-NumDocumento:first'), dataItem.NumDocumento);
+            templateRowSetValue($row.find('div.ui-customerGrid-nombre:first').find('div.ui-widgetGrid-column-content').find('a'), dataItem.nombre);
+            templateRowSetValue($row.find('div.ui-customerGrid-NumDocumento:first').find('div.ui-widgetGrid-column-content'), dataItem.NumDocumento);
         },
         gridBindRowEvents: function (crudGridWidget, $row, dataItem) {
             $row.data("dataItem", dataItem)

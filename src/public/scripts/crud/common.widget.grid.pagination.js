@@ -129,7 +129,7 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
             var $totalsBox = null;
 
             jQuery(self.element)
-                .append("<div class='ui-gridPagination-totals'></div>")
+                .append("<div class='ui-gridPagination-totals ui-widget-content ui-state-default'></div>")
                 .find('div.ui-gridPagination-totals:first')
                 .each(function () {
                     $totalsBox = jQuery(this);

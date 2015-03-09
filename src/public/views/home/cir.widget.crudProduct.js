@@ -636,9 +636,9 @@ jQuery.widget("ui.product", jQuery.ui.crud,
         },
         gridRowTemplate: function (crudGridWidget) {
 
-            return '<div class="ui-productGrid-productId ui-widgetGrid-column"><div class="ui-widgetGrid-column-content"><a href="javascript:void(0);"></a></div></div>' +
-                    '<div class="ui-productGrid-productTypeDesc ui-widgetGrid-column"><div class="ui-widgetGrid-column-content"></div></div>' +
-                    '<div class="ui-productGrid-fechaDesde ui-widgetGrid-column"><div class="ui-widgetGrid-column-content"></div></div>' +
+            return '<div class="ui-productGrid-productId ui-widgetGrid-column ui-widget-content ui-state-default"><div class="ui-widgetGrid-column-content"><a href="javascript:void(0);"></a></div></div>' +
+                    '<div class="ui-productGrid-productTypeDesc ui-widgetGrid-column ui-widget-content ui-state-default"><div class="ui-widgetGrid-column-content"></div></div>' +
+                    '<div class="ui-productGrid-fechaDesde ui-widgetGrid-column ui-widget-content ui-state-default"><div class="ui-widgetGrid-column-content"></div></div>' +
                     '';
             //'<td class="ui-productGrid-gridCommand">' +
             //    '<div class="ui-crudGrid-action ui-crudGrid-actionEdit ui-widget-content" title="Editar">' +
