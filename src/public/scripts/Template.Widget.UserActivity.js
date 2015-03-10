@@ -48,31 +48,78 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         var $sitePage = jQuery('div.ui-sitePage:first');
         var $panelMenu = jQuery('#panelMenu');
         var $navMenu = jQuery($panelMenu).find('ul:first');
+        var $navMenuToggle = jQuery('div.ui-mainMenuToggle');
+        var $panelContent = jQuery('div.ui-siteContent:first');
+
+        var panelMenuHide = function (cb) {
+            $sitePage.show();
+            $panelMenu.removeClass('ui-front').hide('slide', function () {
+                $navMenu.navMenu('collapseAll');
+                if (jQuery.isFunction(cb)) {
+                    cb();
+                }
+            });
+        };
+        var panelMenuShow = function () {
+            $panelMenu.addClass('ui-front').show('drop', function () {
+                $sitePage.hide();
+            });
+        };
+
+
+        $navMenu.navMenu({
+            loadTemplate: function (e, templ) {
+                panelMenuHide(function () {
+
+                    var templUrl = templ.url;
+
+                    self.progressShow('Loading template');
+
+                    jQuery.ajax({
+                        url: templUrl,
+                        type: "GET",
+                        dataType: "html",
+                        data: {}
+                    })
+                    .done(function (data, textStatus, jqXHR) {
+                        $panelContent.empty().html(data);
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+
+                        console.error("Error lading template '{0}' ->".format(templUrl), {
+                            jqXHR: jqXHR,
+                            textStatus: textStatus,
+                            errorThrown: errorThrown
+                        });
+
+                        $panelContent.html('<div class="ui-state-error ui-site-templateInfo">Error loading template: {0} - {1} - {2} </div>'.format(jqXHR.status, textStatus, errorThrown));
+
+                    })
+                    .always(function () {
+                        self.progressHide();
+                    });
+
+
+
+
+                });
+            }
+        });
+
+        $navMenuToggle
+            .click(function () {
+                if ($panelMenu.is(':visible')) {
+                    panelMenuHide();
+                }
+                else {
+                    panelMenuShow();
+                }
+            });
+
 
         VsixMvcAppResult.Ajax.UserMenu(
             function (data, textStatus, jqXHR) {
-
-
-                var menu = $navMenu.navMenu();
                 $navMenu.navMenu('bind', data);
-
-
-                jQuery('div.ui-mainMenuToggle')
-                    .click(function () {
-                        if ($panelMenu.is(':visible')) {
-                            $sitePage.show();
-                            $panelMenu.removeClass('ui-front').hide('slide', function () {
-                                $navMenu.navMenu('collapseAll');
-
-                            });
-                        }
-                        else {
-                            
-                            $panelMenu.addClass('ui-front').show('drop', function () {
-                                $sitePage.hide();
-                            });
-                        }
-                    });
             },
             function (jqXHR, textStatus, errorThrown) {
                 self._errMsgSet($panelMenu, VsixMvcAppResult.Resources.unExpectedError);

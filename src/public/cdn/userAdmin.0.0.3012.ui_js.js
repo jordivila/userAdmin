@@ -2878,31 +2878,78 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         var $sitePage = jQuery('div.ui-sitePage:first');
         var $panelMenu = jQuery('#panelMenu');
         var $navMenu = jQuery($panelMenu).find('ul:first');
+        var $navMenuToggle = jQuery('div.ui-mainMenuToggle');
+        var $panelContent = jQuery('div.ui-siteContent:first');
+
+        var panelMenuHide = function (cb) {
+            $sitePage.show();
+            $panelMenu.removeClass('ui-front').hide('slide', function () {
+                $navMenu.navMenu('collapseAll');
+                if (jQuery.isFunction(cb)) {
+                    cb();
+                }
+            });
+        };
+        var panelMenuShow = function () {
+            $panelMenu.addClass('ui-front').show('drop', function () {
+                $sitePage.hide();
+            });
+        };
+
+
+        $navMenu.navMenu({
+            loadTemplate: function (e, templ) {
+                panelMenuHide(function () {
+
+                    var templUrl = templ.url;
+
+                    self.progressShow('Loading template');
+
+                    jQuery.ajax({
+                        url: templUrl,
+                        type: "GET",
+                        dataType: "html",
+                        data: {}
+                    })
+                    .done(function (data, textStatus, jqXHR) {
+                        $panelContent.empty().html(data);
+                    })
+                    .fail(function (jqXHR, textStatus, errorThrown) {
+
+                        console.error("Error lading template '{0}' ->".format(templUrl), {
+                            jqXHR: jqXHR,
+                            textStatus: textStatus,
+                            errorThrown: errorThrown
+                        });
+
+                        $panelContent.html('<div class="ui-state-error ui-site-templateInfo">Error loading template: {0} - {1} - {2} </div>'.format(jqXHR.status, textStatus, errorThrown));
+
+                    })
+                    .always(function () {
+                        self.progressHide();
+                    });
+
+
+
+
+                });
+            }
+        });
+
+        $navMenuToggle
+            .click(function () {
+                if ($panelMenu.is(':visible')) {
+                    panelMenuHide();
+                }
+                else {
+                    panelMenuShow();
+                }
+            });
+
 
         VsixMvcAppResult.Ajax.UserMenu(
             function (data, textStatus, jqXHR) {
-
-
-                var menu = $navMenu.navMenu();
                 $navMenu.navMenu('bind', data);
-
-
-                jQuery('div.ui-mainMenuToggle')
-                    .click(function () {
-                        if ($panelMenu.is(':visible')) {
-                            $sitePage.show();
-                            $panelMenu.removeClass('ui-front').hide('slide', function () {
-                                $navMenu.navMenu('collapseAll');
-
-                            });
-                        }
-                        else {
-                            
-                            $panelMenu.addClass('ui-front').show('drop', function () {
-                                $sitePage.hide();
-                            });
-                        }
-                    });
             },
             function (jqXHR, textStatus, errorThrown) {
                 self._errMsgSet($panelMenu, VsixMvcAppResult.Resources.unExpectedError);
@@ -3264,14 +3311,14 @@ VsixMvcAppResult.Widgets.DialogInline =
                 .unbind('click')
                 .removeClass('ui-treeList ui-widget-content ui-corner-all')
                 .find('li')
-                .unbind('mouseenter mouseleave')
-                .removeClass('ui-treeList-item ui-widget-content ui-corner-all ui-state-default ui-state-active ui-state-hover')
-                .children('div.ui-treeList-toggle')
-                .remove()
-                .end()
-                .find('ul')
-                .unbind('mouseenter mouseleave')
-                .removeClass('ui-treeList-childs');
+                    .unbind('mouseenter mouseleave')
+                    .removeClass('ui-treeList-item ui-widget-content ui-corner-all ui-state-default ui-state-active ui-state-hover')
+                    .children('div.ui-treeList-toggle')
+                        .remove()
+                    .end()
+                    .find('ul')
+                        .unbind('mouseenter mouseleave')
+                        .removeClass('ui-treeList-childs');
 
             this._super();
         },
@@ -3313,7 +3360,8 @@ VsixMvcAppResult.Widgets.DialogInline =
                             else w.openNode($node);
                         } else {
                             if ($node.find('a:first').length > 0) {
-                                window.location.href = $node.find('a:first').attr('href');
+                                //window.location.href = $node.find('a:first').attr('href');
+                                w._trigger('loadTemplate', null, $node.data('dataItem'));
                             }
                         }
                     }
@@ -3394,11 +3442,14 @@ VsixMvcAppResult.Widgets.DialogInline =
                 var $li = jQuery('<li></li>');
                 var $a = jQuery('<a>' + IMenuItem.text + '</a>');
                 if (IMenuItem.url) {
-                    $li.attr('data-action', IMenuItem.url);
-                    $a.attr('href', IMenuItem.url);
+                    $li.data('dataItem', IMenuItem);
+                    //$a.attr('href', IMenuItem.url);
+                    $a.attr('href', '#');
                 } else {
                     //$a.attr('href', 'javascript:void(0);');
-                    $a.attr('href', '#').click(function () { });
+                    //$a.attr('href', '#').click(function () {
+                        //console.log();
+                    //});
                 }
                 $li.append($a);
 

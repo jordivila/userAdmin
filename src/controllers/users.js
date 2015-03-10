@@ -1,4 +1,4 @@
-(function(module) {
+(function (module) {
 
     "use strict";
 
@@ -28,7 +28,7 @@
         var newPassword = params.newPassword;
         var confirmNewPassword = params.confirmNewPassword;
 
-        UserValidator.validatePasswordStrength(req, newPassword, function(err, resultValidation) {
+        UserValidator.validatePasswordStrength(req, newPassword, function (err, resultValidation) {
             if (err) return cb(err);
 
             if (newPassword != confirmNewPassword)
@@ -36,13 +36,13 @@
 
 
 
-            tokenTempController.getByGuid(token, function(err, token) {
+            tokenTempController.getByGuid(token, function (err, token) {
                 if (err) return cb(err);
                 if (!token) return cb(new ErrorHandledModel(i18n.__("AccountResources.CantAccessYourAccount_TokenExpired")));
 
                 var userId = JSON.parse(token.jsonObject).userId;
 
-                getById(userId, function(err, user) {
+                getById(userId, function (err, user) {
                     if (err) return cb(err);
                     if (!user) return cb(new ErrorHandledModel(i18n.__("UserAdminTexts.UserNotFound")));
 
@@ -50,17 +50,17 @@
                     user.password = newPassword;
                     user.passwordLastChanged = new Date();
 
-                    user.save(function(err) {
+                    user.save(function (err) {
                         if (err) return cb(err);
 
-                        tokenTempController.deleteByGuid(token, function(err, tokenDeleteResult) {
+                        tokenTempController.deleteByGuid(token, function (err, tokenDeleteResult) {
                             if (err) return cb(err);
 
                             mailingController.resetPassword(
                                 req,
                                 user,
                                 token,
-                                function(err, mailingResult) {
+                                function (err, mailingResult) {
                                     if (err) return cb(err);
 
                                     var resultData = {};
@@ -98,9 +98,9 @@
         var email = params.email;
 
         UserModel.findOne({
-                email: email
-            },
-            function(err, user) {
+            email: email
+        },
+            function (err, user) {
                 if (err) return cb(err);
                 if (!user) return cb(new ErrorHandledModel(i18n.__("UserAdminTexts.UserNotFound")));
 
@@ -110,7 +110,7 @@
                         userId: user.userId
                     }),
                     i18n,
-                    function(err, token) {
+                    function (err, token) {
                         if (err) return cb(err);
 
                         mailingController.cantAccessYourAccount(
@@ -118,7 +118,7 @@
                             activateFormVirtualPath,
                             user,
                             token,
-                            function(err, mailingResult) {
+                            function (err, mailingResult) {
                                 if (err) return cb(err);
 
                                 var resultData = {};
@@ -144,21 +144,21 @@
 
         var i18n = req.i18n;
 
-        UserValidator.validate(req, params, function(err, resultValidation) {
+        UserValidator.validate(req, params, function (err, resultValidation) {
             if (err) return cb(err);
 
             var userReqModel = new UserModel(params);
 
             UserModel.findOne({
-                    email: userReqModel.email
-                },
-                function(err, user) {
+                email: userReqModel.email
+            },
+                function (err, user) {
 
                     if (err) return cb(err);
                     if (user) return cb(new ErrorHandledModel(i18n.__("UserAdminTexts.DuplicateEmail")));
 
 
-                    userReqModel.save(function(err, userCreated) {
+                    userReqModel.save(function (err, userCreated) {
 
                         if (err) return cb(err);
 
@@ -166,7 +166,7 @@
                             userCreated.userId,
                             "Guest",
                             i18n,
-                            function(err, userInRoleAdded) {
+                            function (err, userInRoleAdded) {
                                 if (err) return cb(err);
 
                                 tokenTempController.create(
@@ -175,7 +175,7 @@
                                         userId: userCreated.userId
                                     }),
                                     i18n,
-                                    function(err, token) {
+                                    function (err, token) {
                                         if (err) return cb(err);
 
                                         var resultData = {};
@@ -210,22 +210,22 @@
 
         var i18n = req.i18n;
 
-        tokenTempController.getByGuid(tokenGuid, function(err, token) {
+        tokenTempController.getByGuid(tokenGuid, function (err, token) {
             if (err) return cb(err);
             if (!token) return cb(new ErrorHandledModel(i18n.__("AccountResourcesTexts.CantAccessYourAccount_TokenExpired")));
 
             var userId = JSON.parse(token.jsonObject).userId;
 
-            getById(userId, function(err, user) {
+            getById(userId, function (err, user) {
                 if (err) return cb(err);
                 if (!user) return cb(new ErrorHandledModel(i18n.__("UserAdminTexts.UserNotFound")));
 
 
                 user.isEmailConfirmed = true;
-                user.save(function(err) {
+                user.save(function (err) {
                     if (err) return cb(err);
 
-                    tokenTempController.deleteByGuid(tokenGuid, function(err, tokenDeleteResult) {
+                    tokenTempController.deleteByGuid(tokenGuid, function (err, tokenDeleteResult) {
                         if (err) return cb(err);
 
                         return cb(null, new DataResultModel(true, i18n.__("AccountResourcesTexts.AccountActivated"), {}));
@@ -239,8 +239,8 @@
 
         app.get('/api/user', [
             authController.isAuthenticated,
-            function(req, res, next) {
-                getById(req.user.userId, function(err, userInfo) {
+            function (req, res, next) {
+                getById(req.user.userId, function (err, userInfo) {
                     if (err) return next(err);
 
                     res.json({
@@ -252,8 +252,8 @@
             }
         ]);
 
-        app.post('/api/user', function(req, res, next) {
-            var result = create(req, req.body, function(err, user) {
+        app.post('/api/user', function (req, res, next) {
+            var result = create(req, req.body, function (err, user) {
                 if (err) return next(err);
 
                 res.json(user);
@@ -261,11 +261,11 @@
         });
 
         app.get('/api/users/confirmation/:tokenId', [
-            function(req, res, next) {
+            function (req, res, next) {
                 confirmEmail(
                     req,
                     req.params.tokenId,
-                    function(err, confirmResult) {
+                    function (err, confirmResult) {
                         if (err) return next(err);
 
                         res.json(confirmResult);
@@ -275,7 +275,7 @@
 
         app.put('/api/user/lastActivity', [
             //authController.isAuthenticated,
-            function(req, res, next) {
+            function (req, res, next) {
 
                 // If user is authenticated -> update user last activity 
 
@@ -290,25 +290,45 @@
 
 
         app.get('/api/user/menu', [
-            //authController.isAuthenticated,
-            function(req, res, next) {
+            //authController.isAuthenticated, ????
+            function (req, res, next) {
 
-                res.json([{
-                    url: "/user/logon",
-                    text: "Log on",
-                }, {
-                    url: "/",
-                    text: "Inicio"
-                }, {
-                    url: "/blog",
-                    text: "Blog"
-                }, {
-                    url: "/about",
-                    text: "Acerca de"
-                }, {
-                    url: "/user/languages",
-                    text: "Idiomas"
-                }]);
+                res.json([
+                    {
+                        url: "/user/logon",
+                        text: "Log on",
+                    },
+                    {
+                        url: "/",
+                        text: "Inicio"
+                    },
+                    {
+                        url: "/blog",
+                        text: "Blog"
+                    },
+                    {
+                        url: "/about",
+                        text: "Acerca de"
+                    },
+                    {
+                        url: "/user/languages",
+                        text: "Idiomas"
+                    },
+                    {
+                        text: "UI Controls",
+                        //url : 
+                        childs: [
+                            {
+                                url: "/public/views/themes/themepicker.html",
+                                text: "Themepicker"
+                            },
+                            {
+                                url: "/public/views/crud/crudExtended/crudExtended.html",
+                                text: "Crud extended"
+                            },
+                        ]
+                    }
+                ]);
 
                 res.end();
             }

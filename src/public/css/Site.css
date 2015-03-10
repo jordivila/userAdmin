@@ -23,6 +23,8 @@ html, body {height:100%;}
 .ui-site-title h1{font-size: 1em;margin:0em;font-weight:normal;}
 .ui-site-version {font-weight:normal;font-size:0.8em;margin:1em 0 0 0;text-align:center;position:absolute;bottom:0;width:99%;}
 .ui-sitePage{display:table; width:100%; margin:0 auto 0 auto;}
+.ui-site-templateInfo {padding:2em;}
+
 .ui-widget {font-size:1em !important;}
 /*.ui-widget-header {font-weight:bold;padding:0.2em 0.2em 0.5em 0.5em;}*/
 .ui-dialog-content { padding:3em 0em 3em 1em !important; }

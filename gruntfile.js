@@ -82,10 +82,9 @@ module.exports = function (grunt) {
                     "src/public/scripts/crud/common.widget.fieldItem.js",
                     "src/public/scripts/crud/common.widget.crud.js",
                     "src/public/scripts/crud/common.widget.grid.pagination.js",
-                    "src/public/scripts/crud/cir.widget.crudCustomer.js",
-                    "src/public/scripts/crud/cir.widget.crudProduct.js",
-                    "src/public/scripts/crud/cir.widget.cirDataEntry.js",
                     //CRUD end
+                    "src/public/scripts/Template.Widget.Themepicker.js",
+                    
 
 
                     

@@ -1,27 +1,10 @@
-﻿.ui-productCrud {}
-.ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-searchCustomerIcon,
-.ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeCustomerIcon { width: 1em; height: 1em;float:left;cursor:pointer; margin: 0 0.5em 0 0;padding:0.2em; }
-
-.ui-productCrud .ui-crudGrid .ui-crudGrid-productId ,
-.ui-productCrud .ui-crudGrid .ui-crudGrid-productTypeDesc,
-.ui-productCrud .ui-crudGrid .ui-crudGrid-fechaDesde {width:33.3%;}
-
-
-
-
-
-.ui-customerCrud .ui-crudGrid .ui-crudGrid-nombre {width:50% !important;}
-.ui-customerCrud .ui-crudGrid .ui-crudGrid-nombre a {text-decoration:underline !important;}
-.ui-customerCrud .ui-crudGrid .ui-crudGrid-NumDocumento {width:50% !important;text-align:right;}
-
-
-
-.ui-themeCrud {width:90%;margin:0 auto 0 auto;}
+﻿.ui-themeCrud {margin:0 auto 0 auto;}
 .ui-themeCrud .ui-crudGrid {background-image:none !important;background:none !important;}
 .ui-themeCrud .ui-crud-messages,
 .ui-themeCrud .ui-ribbonButtons,
 .ui-themeCrud .ui-crudGrid .ui-crudGrid-header,
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-pager {display:none;}
+.ui-themeCrud .ui-crudGrid .ui-crudGrid-pager {display:none !important;}
+.ui-themeCrud .ui-crudGrid .ui-crudGrid-body { padding:0 0 0 2em;background-image:none; }
 .ui-themeCrud .ui-crudGrid .ui-crudGrid-body  .ui-widgetGrid-row {border:none;float:left !important;width:auto;height:auto;margin:0.5em 0.5em 0.5em 0.5em;cursor:pointer;background-image:none !important;background:none !important;}
 .ui-themeCrud .ui-widgetGrid .ui-widgetGrid-row {height:auto !important;padding:0 0 0 0 !important;}
 .ui-themeCrud .ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column {height:auto !important;padding:0 0 0 0 !important;margin:0 0 0 0;}

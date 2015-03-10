@@ -216,9 +216,6 @@ var productAjax = {
                         "SortBy": "",
                         "SortAscending": false,
                         "Data": [],
-                        "IsValid": true,
-                        "Message": null,
-                        "MessageType": 0
                     }
             };
 

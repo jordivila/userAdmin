@@ -23,14 +23,14 @@
                 .unbind('click')
                 .removeClass('ui-treeList ui-widget-content ui-corner-all')
                 .find('li')
-                .unbind('mouseenter mouseleave')
-                .removeClass('ui-treeList-item ui-widget-content ui-corner-all ui-state-default ui-state-active ui-state-hover')
-                .children('div.ui-treeList-toggle')
-                .remove()
-                .end()
-                .find('ul')
-                .unbind('mouseenter mouseleave')
-                .removeClass('ui-treeList-childs');
+                    .unbind('mouseenter mouseleave')
+                    .removeClass('ui-treeList-item ui-widget-content ui-corner-all ui-state-default ui-state-active ui-state-hover')
+                    .children('div.ui-treeList-toggle')
+                        .remove()
+                    .end()
+                    .find('ul')
+                        .unbind('mouseenter mouseleave')
+                        .removeClass('ui-treeList-childs');
 
             this._super();
         },
@@ -72,7 +72,8 @@
                             else w.openNode($node);
                         } else {
                             if ($node.find('a:first').length > 0) {
-                                window.location.href = $node.find('a:first').attr('href');
+                                //window.location.href = $node.find('a:first').attr('href');
+                                w._trigger('loadTemplate', null, $node.data('dataItem'));
                             }
                         }
                     }
@@ -153,11 +154,14 @@
                 var $li = jQuery('<li></li>');
                 var $a = jQuery('<a>' + IMenuItem.text + '</a>');
                 if (IMenuItem.url) {
-                    $li.attr('data-action', IMenuItem.url);
-                    $a.attr('href', IMenuItem.url);
+                    $li.data('dataItem', IMenuItem);
+                    //$a.attr('href', IMenuItem.url);
+                    $a.attr('href', '#');
                 } else {
                     //$a.attr('href', 'javascript:void(0);');
-                    $a.attr('href', '#').click(function () { });
+                    //$a.attr('href', '#').click(function () {
+                        //console.log();
+                    //});
                 }
                 $li.append($a);
 
