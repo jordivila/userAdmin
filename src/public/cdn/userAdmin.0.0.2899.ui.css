@@ -49,7 +49,7 @@ html, body {height:100%;}
 
 /* menu */
 
-.ui-mainMenu { width:100%; padding:0em 0em 0em 0em !important; position:absolute !important;height:99%;border-top:0;background-image:none !important;}
+.ui-mainMenu { width:100%; padding:0em 0em 0em 0em !important; position:absolute !important;height:100%;border:0 !important;background-image:none !important;}
 .ui-mainMenu .ui-treeList {border:0 !important;padding:0 !important;margin:1em 0 0 0;}
 .ui-mainMenu .ui-treeList-toggle{margin:-0.45em 0.5em 0 0 !important;padding: 0.5em;border:0;}
 .ui-mainMenu li { margin:0em !important;padding:1em 0.1em 1em 0.3em !important;background-image:none !important;border-left:none !important;border-right:none !important; border-bottom:none !important;}
@@ -1853,6 +1853,7 @@ html, body {height:100%;}
 .ui-widgetGrid {width:100%;display:table;background-image:none !important;}
 .ui-widgetGrid a {text-decoration:underline !important;}
 .ui-widgetGrid .ui-widgetGrid-row {font-weight:normal !important;}
+.ui-widgetGrid .ui-widgetGrid-emptyRow {padding:5em;text-align:center;background-image:none;}
 .ui-widgetGrid .ui-widgetGrid-header { }
 .ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content {cursor:pointer;text-decoration:underline;font-weight:bold;}
 .ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content div {width:auto;display: inline-block;}
@@ -1875,6 +1876,7 @@ html, body {height:100%;}
 /* Data lists TableLess*/
 div.ui-widgetGrid {display:block;}
 div.ui-widgetGrid .ui-widgetGrid-row{display:flex;height:auto;overflow:hidden;padding:0 0 0 0;margin:.1em 0 .1em 0;}
+
 div.ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column {text-align:center;display:block;white-space:nowrap;float:left;font-weight:normal;background-image:none;}
 div.ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column .ui-widgetGrid-column-content {overflow:hidden;padding:0 .5em 0 .5em;width:95% !important;}
 div.ui-widgetGrid .ui-widgetGrid-header {padding:.8em .5em 0.3em .5em !important;}
@@ -1903,7 +1905,7 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
 .ui-field-box.ui-state-error div.ui-widgetModel-inputValue {color:initial;}
  .ui-progress-feedback {display:none; background: none;opacity: 1;filter: Alpha(Opacity=100);}
 .ui-progress-feedback .ui-widget {top:50%;text-align:center;padding:2em 0 2em 0;position:relative;width:80%;margin:0 auto 0 auto;}
-
+ 
 .ui-crud h3 {padding: 0.5em;margin:0.5em 0 0.5em 0;}
 /*override ribbon buttons*/
 .ui-crud .ui-ribbonButtons { border-bottom:0em;border-top:0em;padding:0em;background-image:none;}
@@ -1928,7 +1930,7 @@ table.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar a {text-decoration:none;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar td {cursor:pointer; padding:0.3em;margin:0 0.3em 0 0.3em;border-bottom:0;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals {padding:0.5em 0.5em 0.5em 0em;}
-.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals div {}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals div {font-weight:normal;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-totalRows {float:left;margin:0 0 0 0.5em;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-pageSizePicker {float:right;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-pageSizePicker select {padding:0 0 0 0;}

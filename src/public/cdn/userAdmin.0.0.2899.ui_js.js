@@ -1777,6 +1777,9 @@ VsixMvcAppResult.Resources = {
 ;// Source: src/public/scripts/Template.Widget.Base.js
 /// <reference path="VsixMvcAppResult.A.Intellisense.js" />
 
+
+var progressBoxSelector = "#progressFeedBack";
+
 jQuery.widget("ui.widgetBase",
 {
     options: {
@@ -1790,6 +1793,9 @@ jQuery.widget("ui.widgetBase",
         this._super();
 
         jQuery(this.element).addClass(this.namespace + '-' + this.widgetName);
+
+
+        this.progressInit();
 
         //this.log(this.element);
         //this.log(this.namespace + "." + this.widgetName + " -> create");
@@ -1942,7 +1948,66 @@ jQuery.widget("ui.widgetBase",
                 collapseFunc();
             }
         }
+    },
+
+
+    progressInit: function () {
+
+        // only one progressFeedback per page
+        var self = this;
+
+        if (jQuery(progressBoxSelector).length === 0) {
+            jQuery('body').prepend('<div id="progressFeedBack" class="ui-progress-feedback ui-widget-overlay"><div class="ui-widget ui-widget-content ui-state-active ">Please wait while loading</div></div>');
+
+            /*
+            // these lines do not work on mobile
+            jQuery(document)
+                .click(function (e) {
+                    jQuery(progressBoxSelector).find('div:first').css('top', (e.clientY + 20));
+                });
+            */
+        }
+    },
+    progressShow: function (msg) {
+
+        console.log("Info->" + msg);
+
+        var $p = jQuery(progressBoxSelector);
+
+        $p
+        .addClass('ui-front')
+        .find('div:first')
+            .html(msg)
+        .end()
+        .show();
+    },
+    progressHide: function () {
+        jQuery(progressBoxSelector).removeClass('ui-front').hide();
+    },
+
+
+    dfdFillCombo: function (selector, KeyValuePairArray) {
+        var dfd = jQuery.Deferred();
+        try {
+            var $domObj = jQuery(selector);
+
+            $domObj.find('option').remove();
+
+            for (var i = 0; i < KeyValuePairArray.length; i++) {
+                $domObj.append(jQuery("<option />").val(KeyValuePairArray[i].value).text(KeyValuePairArray[i].name));
+            }
+
+            dfd.resolve();
+        }
+        catch (e) {
+            dfd.reject("Error inicializando el formulario: " + e.message);
+        }
+        return dfd.promise();
     }
+
+
+
+
 });;// Source: src/public/scripts/Template.Widget.Model.js
 jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
 {
@@ -2826,14 +2891,16 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                     .click(function () {
                         if ($panelMenu.is(':visible')) {
                             $sitePage.show();
-                            $panelMenu.hide('slide', function () {
+                            $panelMenu.removeClass('ui-front').hide('slide', function () {
                                 $navMenu.navMenu('collapseAll');
 
                             });
                         }
                         else {
-                            $sitePage.hide();
-                            $panelMenu.show('drop');
+                            
+                            $panelMenu.addClass('ui-front').show('drop', function () {
+                                $sitePage.hide();
+                            });
                         }
                     });
             },
@@ -3359,7 +3426,7 @@ VsixMvcAppResult.Widgets.DialogInline =
 
 })(jQuery);;// Source: src/public/scripts/crud/common.widget.base.js
 
-var progressBoxSelector = "#progressFeedBack";
+//var progressBoxSelector = "#progressFeedBack";
 
 jQuery.widget("ui.commonBaseWidget", jQuery.ui.widgetBase,
 {
@@ -3377,55 +3444,57 @@ jQuery.widget("ui.commonBaseWidget", jQuery.ui.widgetBase,
 
         this._super();
     },
-    progressInit: function () {
+    //progressInit: function () {
 
-        // only one progressFeedback per page
-        var self = this;
+    //    // only one progressFeedback per page
+    //    var self = this;
 
-        if (jQuery(progressBoxSelector).length === 0) {
-            jQuery('body').prepend('<div id="progressFeedBack" class="ui-progress-feedback ui-widget-overlay ui-front"><div class="ui-widget ui-widget-content ui-state-active ">Please wait while loading</div></div>');
+    //    if (jQuery(progressBoxSelector).length === 0) {
+    //        jQuery('body').prepend('<div id="progressFeedBack" class="ui-progress-feedback ui-widget-overlay"><div class="ui-widget ui-widget-content ui-state-active ">Please wait while loading</div></div>');
 
-            /*
-            // these lines do not work on mobile
-            jQuery(document)
-                .click(function (e) {
-                    jQuery(progressBoxSelector).find('div:first').css('top', (e.clientY + 20));
-                });
-            */
-        }
-    },
-    progressShow: function (msg) {
+    //        /*
+    //        // these lines do not work on mobile
+    //        jQuery(document)
+    //            .click(function (e) {
+    //                jQuery(progressBoxSelector).find('div:first').css('top', (e.clientY + 20));
+    //            });
+    //        */
+    //    }
+    //},
+    //progressShow: function (msg) {
 
-        console.log("Info->" + msg);
+    //    console.log("Info->" + msg);
 
-        var $p = jQuery(progressBoxSelector);
+    //    var $p = jQuery(progressBoxSelector);
 
-        $p.find('div:first')
-            .html(msg)
-          .end()
-          .show();
-    },
-    progressHide: function () {
-        jQuery(progressBoxSelector).hide();
-    },
-    dfdFillCombo: function (selector, KeyValuePairArray) {
-        var dfd = jQuery.Deferred();
-        try {
-            var $domObj = jQuery(selector);
+    //    $p
+    //    .addClass('ui-front')
+    //    .find('div:first')
+    //        .html(msg)
+    //    .end()
+    //    .show();
+    //},
+    //progressHide: function () {
+    //    jQuery(progressBoxSelector).removeClass('ui-front').hide();
+    //},
+    //dfdFillCombo: function (selector, KeyValuePairArray) {
+    //    var dfd = jQuery.Deferred();
+    //    try {
+    //        var $domObj = jQuery(selector);
 
-            $domObj.find('option').remove();
+    //        $domObj.find('option').remove();
 
-            for (var i = 0; i < KeyValuePairArray.length; i++) {
-                $domObj.append(jQuery("<option />").val(KeyValuePairArray[i].value).text(KeyValuePairArray[i].name));
-            }
+    //        for (var i = 0; i < KeyValuePairArray.length; i++) {
+    //            $domObj.append(jQuery("<option />").val(KeyValuePairArray[i].value).text(KeyValuePairArray[i].name));
+    //        }
 
-            dfd.resolve();
-        }
-        catch (e) {
-            dfd.reject("Error inicializando el formulario: " + e.message);
-        }
-        return dfd.promise();
-    }
+    //        dfd.resolve();
+    //    }
+    //    catch (e) {
+    //        dfd.reject("Error inicializando el formulario: " + e.message);
+    //    }
+    //    return dfd.promise();
+    //}
 });;// Source: src/public/scripts/crud/common.widget.fieldItem.js
 /// <reference path="inv.ajax.js" />
 
@@ -3472,6 +3541,18 @@ jQuery.widget("ui.fieldItem", jQuery.ui.commonBaseWidget,
  
 });;// Source: src/public/scripts/crud/common.widget.crud.js
 
+
+var crudEmptyDataResult = {
+    Data: [],
+    IsValid: true,
+    Message: null,
+    Page: 0,
+    PageSize: 10,
+    SortAscending: false,
+    SortBy: "",
+    TotalRows: 0
+};
+
 jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
 {
     options: {
@@ -3481,9 +3562,6 @@ jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
     _create: function () {
 
         this._super();
-
-        this.progressInit();
-
     },
     _init: function () {
         this._super();
@@ -3620,15 +3698,6 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         gridFilterInit: function (crudWidget, filterOptions) {
             jQuery(crudWidget.options.gridFilterDOMId).crudFilter(jQuery.extend({}, filterOptions, { Model: crudWidget.options.filterModel }));
         },
-        //gridHeaderTemplate: function (crudGridWidget) {
-        //    throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridHeaderTemplate is an abstract method. Child class method must be implemented");
-        //},
-        //gridRowTemplate: function (crudGridWidget) {
-        //    throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridRowTemplate is an abstract method. Child class method must be implemented");
-        //},
-        //gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
-        //    throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowColumns is an abstract method. Child class method must be implemented");
-        //},
         gridModel: [],
         gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
             
@@ -3706,10 +3775,6 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var gridOptions = jQuery.extend(
             {},
             {
-                //this.options.gridInit(self, {
-                //gridHeaderTemplate: self.options.gridHeaderTemplate,
-                //gridRowTemplate: self.options.gridRowTemplate,
-                //gridBindRowColumns: self.options.gridBindRowColumns,
                 gridModel: self.options.gridModel,
                 gridViewCellBound: self.options.gridViewCellBound,
                 gridPagerInit: self.options.gridPagerInit,
@@ -3741,6 +3806,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
             self.options.gridCustomOptions);
 
         jQuery(this.options.gridDOMId).crudGrid(gridOptions);
+        jQuery(this.options.gridDOMId).crudGrid('bind', crudEmptyDataResult);
 
         this.options.gridFilterInit(self, {
             Model: self.options.filterModel,
@@ -4065,16 +4131,7 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         gridBodyDOMId: null,
         gridPagerDOMId: null,
 
-        gridModel: [], //[{ key: "", displayName: "" }],
-        //gridHeaderTemplate: function (crudGridWidget) {
-        //    throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridHeaderTemplate is an abstract method. Child class method must be implemented");
-        //},
-        //gridRowTemplate: function (crudGridWidget) {
-        //    throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridRowTemplate is an abstract method. Child class method must be implemented");
-        //},
-        //gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
-        //    throw new Error(crudGridWidget.namespace + '.' + crudGridWidget.widgetName + ".options.gridBindRowColumns is an abstract method. Child class method must be implemented");
-        //},
+        gridModel: [],
         gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
             // use this option to customize row's display items, events, etc
 
@@ -4204,25 +4261,31 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
 
         jQuery(self.options.gridBodyDOMId).empty();
 
-        for (var i = 0; i < data.Data.length; i++) {
+        if (data.Data.length > 0) {
 
-            var dataItem = data.Data[i];
-            var $row = jQuery('<div class="ui-crudGrid-dataRow ui-widgetGrid-row">{0}</div>'.format(self._gridRowTemplate(dataItem)));
+            for (var i = 0; i < data.Data.length; i++) {
+                var dataItem = data.Data[i];
+                var $row = jQuery('<div class="ui-crudGrid-dataRow ui-widgetGrid-row">{0}</div>'.format(self._gridRowTemplate(dataItem)));
 
-            for (var j = 0; j < this.options.gridModel.length; j++) {
+                for (var j = 0; j < this.options.gridModel.length; j++) {
 
-                var $cell = $row.find('div.ui-crudGrid-{0}:first'.format(this.options.gridModel[j].key))
-                                .find('div.ui-widgetGrid-column-content');
+                    var $cell = $row.find('div.ui-crudGrid-{0}:first'.format(this.options.gridModel[j].key))
+                                    .find('div.ui-widgetGrid-column-content');
 
 
-                self.options.gridViewCellBound(this, $row, $cell, dataItem, this.options.gridModel[j].key);
+                    self.options.gridViewCellBound(this, $row, $cell, dataItem, this.options.gridModel[j].key);
+                }
+
+                jQuery(self.options.gridBodyDOMId).append($row);
+
+                self._bindRowAlternatedColor();
             }
+        }
+        else {
+            var $emtpyRow = '<div class="ui-widgetGrid-emptyRow ui-widgetGrid-column ui-widget-content ui-state-active"><div class="ui-widgetGrid-column-content">{0}</div></div>'
+                                .format('No data here. Try searching something different');
 
-            //self.options.gridBindRowColumns(this, $row, dataItem);
-            self._bindRowAlternatedColor();
-            
-
-            jQuery(self.options.gridBodyDOMId).append($row);
+            jQuery(self.options.gridBodyDOMId).append($emtpyRow);
         }
     },
     _bindPagination: function (data) {

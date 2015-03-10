@@ -61,14 +61,16 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                     .click(function () {
                         if ($panelMenu.is(':visible')) {
                             $sitePage.show();
-                            $panelMenu.hide('slide', function () {
+                            $panelMenu.removeClass('ui-front').hide('slide', function () {
                                 $navMenu.navMenu('collapseAll');
 
                             });
                         }
                         else {
-                            $sitePage.hide();
-                            $panelMenu.show('drop');
+                            
+                            $panelMenu.addClass('ui-front').show('drop', function () {
+                                $sitePage.hide();
+                            });
                         }
                     });
             },

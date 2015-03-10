@@ -2,6 +2,7 @@
 .ui-widgetGrid {width:100%;display:table;background-image:none !important;}
 .ui-widgetGrid a {text-decoration:underline !important;}
 .ui-widgetGrid .ui-widgetGrid-row {font-weight:normal !important;}
+.ui-widgetGrid .ui-widgetGrid-emptyRow {padding:5em;text-align:center;background-image:none;}
 .ui-widgetGrid .ui-widgetGrid-header { }
 .ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content {cursor:pointer;text-decoration:underline;font-weight:bold;}
 .ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content div {width:auto;display: inline-block;}
@@ -24,6 +25,7 @@
 /* Data lists TableLess*/
 div.ui-widgetGrid {display:block;}
 div.ui-widgetGrid .ui-widgetGrid-row{display:flex;height:auto;overflow:hidden;padding:0 0 0 0;margin:.1em 0 .1em 0;}
+
 div.ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column {text-align:center;display:block;white-space:nowrap;float:left;font-weight:normal;background-image:none;}
 div.ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column .ui-widgetGrid-column-content {overflow:hidden;padding:0 .5em 0 .5em;width:95% !important;}
 div.ui-widgetGrid .ui-widgetGrid-header {padding:.8em .5em 0.3em .5em !important;}

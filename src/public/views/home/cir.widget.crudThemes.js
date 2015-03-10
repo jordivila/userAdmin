@@ -184,27 +184,12 @@ var crudThemeOptions = function () {
         },
         ],
         gridSearchMethod: themeAjax.ajax.themeSearch,
-        //gridHeaderTemplate: function (crudGridWidget) {
-        //    return '<div class="ui-themeGrid-thumbnail ui-widgetGrid-column">Thumbnail</div>';
-        //},
-        //gridRowTemplate: function (crudGridWidget) {
-        //    return '<div class="ui-themeGrid-thumbnail ui-widgetGrid-column"><img src="" /></div>';
-        //},
-        //gridBindRowColumns: function (crudGridWidget, $row, dataItem) {
-
-        //    var templateRowSetValue = function (node, valueString) {
-        //        jQuery(node).attr('title', valueString).html(valueString);
-        //    };
-
-        //    $row.find('div.ui-themeGrid-thumbnail:first').find('img').attr('src', 'public/scripts/jQueryUIThemes/images/{0}'.format(dataItem.icon));
-        //},
         gridModel: [
             {
                 key: "icon",
                 displayName: "thumbnail"
             },
         ],
-
         gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
 
             switch (columnName) {
@@ -219,8 +204,6 @@ var crudThemeOptions = function () {
                 default:
                     break;
             }
-
-
         },
         formInit: function (self, formOptions) {
 

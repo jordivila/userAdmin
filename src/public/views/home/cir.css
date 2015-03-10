@@ -16,9 +16,13 @@
 
 
 
+.ui-themeCrud {width:90%;margin:0 auto 0 auto;}
 .ui-themeCrud .ui-crudGrid {background-image:none !important;background:none !important;}
 .ui-themeCrud .ui-crud-messages,
 .ui-themeCrud .ui-ribbonButtons,
 .ui-themeCrud .ui-crudGrid .ui-crudGrid-header,
 .ui-themeCrud .ui-crudGrid .ui-crudGrid-pager {display:none;}
 .ui-themeCrud .ui-crudGrid .ui-crudGrid-body  .ui-widgetGrid-row {border:none;float:left !important;width:auto;height:auto;margin:0.5em 0.5em 0.5em 0.5em;cursor:pointer;background-image:none !important;background:none !important;}
+.ui-themeCrud .ui-widgetGrid .ui-widgetGrid-row {height:auto !important;padding:0 0 0 0 !important;}
+.ui-themeCrud .ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column {height:auto !important;padding:0 0 0 0 !important;margin:0 0 0 0;}
+.ui-themeCrud .ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column .ui-widgetGrid-column-content {padding:0 0 0 0;margin:0 0 0 0 0;height:auto !important;width:100% !important;}

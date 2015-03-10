@@ -1,6 +1,4 @@
-﻿.ui-progress-feedback {display:none; background: none;opacity: 1;filter: Alpha(Opacity=100);}
-.ui-progress-feedback .ui-widget {top:50%;text-align:center;padding:2em 0 2em 0;position:relative;width:80%;margin:0 auto 0 auto;}
-
+﻿
 .ui-crud h3 {padding: 0.5em;margin:0.5em 0 0.5em 0;}
 /*override ribbon buttons*/
 .ui-crud .ui-ribbonButtons { border-bottom:0em;border-top:0em;padding:0em;background-image:none;}
@@ -25,7 +23,7 @@
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar a {text-decoration:none;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar td {cursor:pointer; padding:0.3em;margin:0 0.3em 0 0.3em;border-bottom:0;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals {padding:0.5em 0.5em 0.5em 0em;}
-.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals div {}
+.ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals div {font-weight:normal;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-totalRows {float:left;margin:0 0 0 0.5em;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-pageSizePicker {float:right;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-pageSizePicker select {padding:0 0 0 0;}

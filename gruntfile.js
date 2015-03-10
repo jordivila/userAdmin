@@ -28,6 +28,7 @@ module.exports = function (grunt) {
                       "src/public/css/ui-widgetModel.css",
                       "src/public/css/ui-widgetGrid.css",
                       "src/public/css/ui-fieldItem.css",
+                      "src/public/css/ui-progress.css",
 
                       "src/public/scripts/crud/common.widget.crud.css",
                       "src/public/scripts/crud/cir.css",
