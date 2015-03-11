@@ -34,12 +34,14 @@ html, body {height:100%;}
 .ui-sitePage{display:table; width:100%; margin:0 auto 0 auto;}
 .ui-site-templateInfo {padding:2em;}
 
+/*
 .ui-widget {font-size:1em !important;}
 div.ui-widget-content , 
 div.ui-state-default, h3, li, ul, 
 div.ui-widget-header, 
 div.ui-state-focus, 
 div.ui-state-highlight {border:0 !important;background-image:none !important;}
+*/
 
 /*.ui-widget-header {font-weight:bold;padding:0.2em 0.2em 0.5em 0.5em;}*/
 .ui-dialog-content { padding:3em 0em 3em 1em !important; }
@@ -59,7 +61,7 @@ div.ui-state-highlight {border:0 !important;background-image:none !important;}
 /* menu toggle */
 .ui-mainMenuToggle {display:block !important;cursor:pointer;}
 /* menu panel  */
-.ui-mainMenu { width:100%; position:absolute !important;height:100%;}
+.ui-mainMenu { width:100%; position:absolute !important;height:100%;border:0 !important;}
 .ui-mainMenu .ui-mainMenuToggle{float:right;margin: 1em 3em 0 0;}
 .ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-icon {float:left;}
 .ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
@@ -67,8 +69,13 @@ div.ui-state-highlight {border:0 !important;background-image:none !important;}
 .ui-mainMenu .ui-treeList .ui-treeList-toggle{float:left !important;margin:0 0 0 1em !important;}
 .ui-mainMenu .ui-treeList li { margin: 0em !important; padding: 0em 0 0 0; background-image:none; border:0;}
 .ui-mainMenu .ui-treeList li a {float:left;}
-.ui-mainMenu .ui-treeList li ul {background-image:none;padding: 0em 0em 0em 0em;margin:0 0 0 0.5em;}
+.ui-mainMenu .ui-treeList li ul {background-image:none;padding: 0em 0em 0em 0em;margin:0 0 0 0em;}
 .ui-mainMenu .ui-treeList div.ui-treeList-itemLink {padding:1em;}
+.ui-mainMenu div.ui-widget-content , 
+.ui-mainMenu div.ui-state-default, 
+.ui-mainMenu li,
+.ui-mainMenu ul, 
+.ui-mainMenu div.ui-state-highlight {border:0 !important;background-image:none !important;}
 
 
 
