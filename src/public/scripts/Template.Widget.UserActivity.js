@@ -1,5 +1,4 @@
-﻿/// <reference path="VsixMvcAppResult.A.Intellisense.js" />
-
+﻿
 jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
     options: {
 
@@ -55,7 +54,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         var panelMenuHide = function (cb) {
             $sitePage.show();
             $panelMenu.removeClass('ui-front').hide('slide', function () {
-                $panelMenuList.navMenu('collapseAll');
+                //$panelMenuList.navMenu('collapseAll');
                 if (jQuery.isFunction(cb)) {
                     cb();
                 }
@@ -71,7 +70,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         $panelMenuList.navMenu({
             loadTemplate: function (e, templ) {
 
-                var cbLoadTemplate = function () {
+                var templGetFunc = function () {
 
                     var templUrl = templ.url;
 
@@ -104,13 +103,11 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                 };
 
                 if ($panelMenuToggle.is(':visible')) {
-                    panelMenuHide(cbLoadTemplate());
+                    panelMenuHide(templGetFunc());
                 }
                 else {
-                    cbLoadTemplate();
+                    templGetFunc();
                 }
-
-
             }
         });
 
@@ -135,8 +132,5 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
             function () {
                 self._trigger('complete', null, null);
             });
-
-
-
     }
 });

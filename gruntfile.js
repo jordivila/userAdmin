@@ -69,7 +69,6 @@ module.exports = function (grunt) {
                     "src/public/scripts/Template.Widget.ModelDate.js",
                     "src/public/scripts/Template.Widget.ModelBool.js",
                     "src/public/scripts/Template.Widget.Grid.js",
-                    "src/public/scripts/Template.Widget.AjaxProgress.js",
                     "src/public/scripts/Template.Widget.ButtonWrapper.js",
                     "src/public/scripts/Template.Widget.UserActivity.js",
                     "src/public/scripts/Template.Widget.Message.js",
@@ -117,8 +116,8 @@ module.exports = function (grunt) {
             },
             dist: {
                 files: {
-                    '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_libs.js': ['<%= concat.ui_js_libs.dest %>'],
-                    '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_appCommon.js': ['<%= concat.ui_js_appCommon.dest %>'],
+                    '<%= concat.ui_js.dest %>': ['<%= concat.ui_js.dest %>'],
+                    '<%= concat.ui_regional_es.dest %>': ['<%= concat.ui_regional_es.dest %>'],
                 }
             }
         },
@@ -212,7 +211,7 @@ module.exports = function (grunt) {
         watch: {
             testLiveReload: {
                 files: ['<%= jshint.files %>', '<%= concat.ui_css.src %>'],
-                tasks: ['jshint:files', 'bump', 'clean', 'concat', /*'uglify', */'express:testLiveReload'],
+                tasks: ['jshint:files', 'bump', 'clean', 'concat', 'uglify', 'express:testLiveReload'],
                 options: {
                     spawn: false, //Must have for reload
                     livereload: true //Enable LiveReload

@@ -1,10 +1,9 @@
-﻿(function($) {
+﻿(function ($) {
     jQuery.widget("ui.navMenu", jQuery.ui.widgetBase, {
         options: {
-            selectable: true,
             IMenuModel: null
         },
-        _create: function() {
+        _create: function () {
 
             this._super();
 
@@ -14,23 +13,10 @@
             this._super();
 
             jQuery(this.element).addClass('ui-state-default');
-
-
         },
-        destroy: function() {
+        destroy: function () {
 
-            jQuery(this.element)
-                .unbind('click')
-                .removeClass('ui-treeList ui-widget-content ui-corner-all')
-                .find('li')
-                    .unbind('mouseenter mouseleave')
-                    .removeClass('ui-treeList-item ui-widget-content ui-corner-all ui-state-default ui-state-active ui-state-hover')
-                    .children('div.ui-treeList-toggle')
-                        .remove()
-                    .end()
-                    .find('ul')
-                        .unbind('mouseenter mouseleave')
-                        .removeClass('ui-treeList-childs');
+            jQuery(this.element).empty();
 
             this._super();
         },
@@ -38,105 +24,67 @@
 
             var w = this;
 
-            w._initItem(jQuery(this.element).find("li"));
-            w._initChildList(jQuery(this.element).find("ul"));
-
-            var $lisOpen = jQuery(this.element).find("li[class*='ui-treeList-open']");
-            w.openNode($lisOpen);
-            w.openNode($lisOpen.parents('li'));
-
             jQuery(this.element)
                 .addClass('ui-treeList ui-widget-content ui-corner-all')
-                .bind('click', function (e) {
-                    var $t = jQuery(e.target);
+                .find('div.ui-treeList-itemLink')
+                    .bind('click', function (e) {
 
-                    var $node = null;
+                        var $node = jQuery(this).parents('li:first');
+                        var liData = $node.data('dataItem');
 
-                    if ($t.hasClass('ui-treeList-toggle')) {
-                        $node = $t.parents('li.ui-treeList-item:first');
-                    } else {
-                        if ($t.hasClass('ui-treeList-item')) {
-                            $node = $t;
-                        } else {
-                            if ($t.hasClass('ui-treeList-link')) {
-                                $node = $t.parents('li.ui-treeList-item:first');
-                            }
+                        if (liData !== undefined) {
+                            w._trigger('loadTemplate', null, liData);
                         }
-                    }
-
-
-                    if ($node !== null) {
-                        if ($node.find('ul:first').length > 0) {
+                        else {
                             var b = $node.find('ul:first').is(':visible');
                             if (b) w.closeNode($node);
                             else w.openNode($node);
-                        } else {
-                            if ($node.find('a:first').length > 0) {
-                                //window.location.href = $node.find('a:first').attr('href');
-                                w._trigger('loadTemplate', null, $node.data('dataItem'));
-                            }
                         }
-                    }
-
-                })
-                //.css('min-height', jQuery(document).height() - 20)
-                .disableSelection();
-
-
+                    });
         },
-        _initItem: function($lis) {
-            $lis.addClass('ui-treeList-item ui-widget-content ui-corner-all ui-state-default')
-                .find('a:first')
-                .addClass('ui-treeList-link');
-
-            return;
-        },
-        _initChildList: function($uls) {
-            $uls.addClass('ui-treeList-childs')
-                .hide()
-                .siblings('div.ui-helper-clearfix:first')
-                .before('<div class="ui-treeList-toggle ui-state-default ui-icon ui-icon-triangle-1-s"></div>');
-        },
-        openNode: function($lisOpen) {
+        openNode: function ($lisOpen) {
             if ($lisOpen) {
                 $lisOpen
-                    .removeClass('ui-state-default')
-                    //.addClass('ui-state-focus')
+                    //.removeClass('ui-state-default')
                     .children('ul')
-                    .show()
-                    .siblings('div.ui-treeList-toggle')
-                    .removeClass('ui-icon ui-icon-triangle-1-s')
-                    .addClass('ui-icon ui-icon-triangle-1-n')
+                        .show()
                     .end()
-                    .end()
-                    .find('ul:has(li)')
-                    .parents('li')
-                    .removeClass('ui-state-default');
+                    .find('div.ui-treeList-itemLink:first')
+                        .addClass('ui-state-active')
+                        .find('div.ui-treeList-toggle')
+                            .addClass('ui-state-active')
+                            .removeClass('ui-icon-triangle-1-s')
+                            .addClass('ui-icon ui-icon-triangle-1-n')
+                        .end()
+                    .end();
             }
         },
-        closeNode: function($lisClose) {
+        closeNode: function ($lisClose) {
+
             if ($lisClose) {
                 $lisClose
-                    .addClass('ui-state-default')
-                    //.removeClass('ui-state-focus')
+                    //.addClass('ui-state-default')
                     .children('ul')
-                    .hide()
-                    .siblings('div.ui-treeList-toggle').removeClass('ui-icon-triangle-1-n').addClass('ui-icon ui-icon-triangle-1-s');
+                        .hide()
+                    .end()
+                    .find('div.ui-treeList-itemLink:first')
+                        .removeClass('ui-state-active')
+                        .find('div.ui-treeList-toggle')
+                            .removeClass('ui-state-active')
+                            .addClass('ui-icon ui-icon-triangle-1-s')
+                            .removeClass('ui-icon-triangle-1-n')
+                        .end()
+                    .end();
+
+                if ($lisClose.find('li').length > 0) {
+                    this.closeNode($lisClose.find('li'));
+                }
             }
         },
-        selected: function($lis) {
-            if ($lis) {
-                jQuery(this.element).find('li').removeClass('ui-state-active');
-                $lis.addClass('ui-state-active');
-                this._trigger('onSelect');
-            } else {
-                return jQuery(this.element).find('li.ui-state-active');
-            }
-        },
-        collapseAll: function() {
+        collapseAll: function () {
             this.closeNode(jQuery(this.element).find('li'));
         },
-        bind: function(IMenuModel) {
+        bind: function (IMenuModel) {
 
             /* // IMenuModel sample
             var k = [{
@@ -155,24 +103,33 @@
 
             this.options.IMenuModel = IMenuModel;
 
-            var menuItemRender = function(IMenuItem) {
-                var $li = jQuery('<li></li>');
-                var $a = jQuery('<a>' + IMenuItem.text + '</a>');
+            var menuItemRender = function (IMenuItem) {
+                var $li = jQuery('<li class="ui-treeList-item ui-widget-content ui-corner-all ui-state-default"></li>');
+
+
+                $li.html('<div class="ui-treeList-itemLink ui-state-default"><a href="#" class="ui-treeList-link">{0}</a><div class="ui-helper-clearfix" /></div>'.format(IMenuItem.text));
+
+                //var $a = jQuery('<a>' + IMenuItem.text + '</a>');
                 if (IMenuItem.url) {
                     $li.data('dataItem', IMenuItem);
                     //$a.attr('href', IMenuItem.url);
-                    $a.attr('href', '#');
+                    //$a.attr('href', '#');
                 } else {
                     //$a.attr('href', 'javascript:void(0);');
                     //$a.attr('href', '#').click(function () {
-                        //console.log();
+                    //console.log();
                     //});
                 }
-                $li.append($a);
-                $li.append('<div class="ui-helper-clearfix" />');
 
                 if (IMenuItem.childs) {
-                    var $ul = jQuery('<ul></ul>');
+                    var $ul = jQuery('<ul class="ui-treeList-childs ui-state-focus"></ul>');
+
+                    $li.find('div.ui-treeList-itemLink')
+                            .find('div.ui-helper-clearfix:first')
+                                .before('<div class="ui-treeList-toggle ui-state-default ui-icon ui-icon-triangle-1-s"></div>')
+                            .end()
+                       .end();
+
                     for (var i = 0; i < IMenuItem.childs.length; i++) {
                         $ul.append(menuItemRender(IMenuItem.childs[i]));
                     }
@@ -185,12 +142,11 @@
                 jQuery(this.element).append(menuItemRender(IMenuModel[i]));
             }
 
+
+            this.collapseAll();
             this._dataBound();
 
 
         }
-
-
     });
-
 })(jQuery);
