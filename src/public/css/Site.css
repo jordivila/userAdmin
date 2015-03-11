@@ -12,7 +12,7 @@ input[type=text], input[type=password], input[type=email], select {padding:0.5em
 input[type=checkbox].ui-widget-content { border:0px solid transparent !important; }
 input[type='radio'] {height:1em;width:1em;}
 body{padding:0em;background-image:none !important;}
-html, body {height:100%;}
+html, body {height:100%;display:table;width:100%;}
 
 /*.ui-state-default {background-image:none !important;}*/
 
@@ -21,7 +21,7 @@ html, body {height:100%;}
 .ui-site-title {margin:0em 0em 0em 0em;padding:0.5em; text-align:center;}
 .ui-site-title * {}
 .ui-site-title h1{font-size: 1em;margin:0em;font-weight:normal;}
-.ui-site-version {font-weight:normal;font-size:0.8em;margin:25em 0 0 0;text-align:center;/*position:absolute;bottom:0;width:99%;*/}
+.ui-site-version {font-weight:normal;font-size:0.8em;margin: 25em 0 0 0;text-align:center;/*position:absolute;bottom:0;width:99%;*/}
 .ui-sitePage{display:table; width:100%; margin:0 auto 0 auto;}
 .ui-site-templateInfo {padding:2em;}
 
@@ -52,7 +52,7 @@ div.ui-state-highlight {border:0 !important;background-image:none !important;}
 /* menu toggle */
 .ui-mainMenuToggle {display:block !important;cursor:pointer;}
 /* menu panel  */
-.ui-mainMenu { width:100%; position:absolute !important;height:100%;border:0 !important; overflow:scroll !important;}
+.ui-mainMenu { width:100%; position:absolute !important;min-height:100%;border:0 !important; overflow:auto !important;}
 .ui-mainMenu .ui-mainMenuToggle{float:right;margin: 1em 3em 0 0;}
 .ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-icon {float:left;}
 .ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
@@ -60,7 +60,7 @@ div.ui-state-highlight {border:0 !important;background-image:none !important;}
 .ui-mainMenu .ui-treeList .ui-treeList-toggle{float:left !important;margin:0 0 0 1em !important;}
 .ui-mainMenu .ui-treeList li { margin: 0em !important; padding: 0em 0 0 0; background-image:none; border:0;}
 .ui-mainMenu .ui-treeList li a {float:left;}
-.ui-mainMenu .ui-treeList li ul {background-image:none;padding: 0em 0em 0em 0em;margin:0 0 0 0em;}
+.ui-mainMenu .ui-treeList ul {background-image:none;padding: 0em 0em 0em 1em;margin:0 0 0 0em;}
 .ui-mainMenu .ui-treeList div.ui-treeList-itemLink {padding:1em;}
 
 .ui-mainMenu ,

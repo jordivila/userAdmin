@@ -122,7 +122,7 @@
                 }
 
                 if (IMenuItem.childs) {
-                    var $ul = jQuery('<ul class="ui-treeList-childs ui-state-focus"></ul>');
+                    var $ul = jQuery('<ul class="ui-treeList-childs"></ul>');
 
                     $li.find('div.ui-treeList-itemLink')
                             .find('div.ui-helper-clearfix:first')
