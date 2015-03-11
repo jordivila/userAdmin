@@ -67,6 +67,8 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         };
 
 
+        $panelMenu.hide();
+
         $panelMenuList.navMenu({
             loadTemplate: function (e, templ) {
 
