@@ -94,11 +94,14 @@
         _initChildList: function($uls) {
             $uls.addClass('ui-treeList-childs')
                 .hide()
-                .before('<div class="ui-treeList-toggle ui-icon ui-icon-triangle-1-s"></div>');
+                .siblings('div.ui-helper-clearfix:first')
+                .before('<div class="ui-treeList-toggle ui-state-default ui-icon ui-icon-triangle-1-s"></div>');
         },
         openNode: function($lisOpen) {
             if ($lisOpen) {
-                $lisOpen.removeClass('ui-state-default')
+                $lisOpen
+                    .removeClass('ui-state-default')
+                    //.addClass('ui-state-focus')
                     .children('ul')
                     .show()
                     .siblings('div.ui-treeList-toggle')
@@ -113,7 +116,9 @@
         },
         closeNode: function($lisClose) {
             if ($lisClose) {
-                $lisClose.addClass('ui-state-default')
+                $lisClose
+                    .addClass('ui-state-default')
+                    //.removeClass('ui-state-focus')
                     .children('ul')
                     .hide()
                     .siblings('div.ui-treeList-toggle').removeClass('ui-icon-triangle-1-n').addClass('ui-icon ui-icon-triangle-1-s');
@@ -164,6 +169,7 @@
                     //});
                 }
                 $li.append($a);
+                $li.append('<div class="ui-helper-clearfix" />');
 
                 if (IMenuItem.childs) {
                     var $ul = jQuery('<ul></ul>');

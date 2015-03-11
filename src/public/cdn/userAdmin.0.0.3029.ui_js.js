@@ -2876,15 +2876,16 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         //TODO: load async Menu based on user identity
         var self = this;
         var $sitePage = jQuery('div.ui-sitePage:first');
+        var $siteContent = jQuery('div.ui-siteContent:first');
         var $panelMenu = jQuery('#panelMenu');
-        var $navMenu = jQuery($panelMenu).find('ul:first');
-        var $navMenuToggle = jQuery('div.ui-mainMenuToggle');
-        var $panelContent = jQuery('div.ui-siteContent:first');
+        var $panelMenuList = jQuery($panelMenu).find('ul:first');
+        var $panelMenuToggle = jQuery('div.ui-mainMenuToggle');
+        
 
         var panelMenuHide = function (cb) {
             $sitePage.show();
             $panelMenu.removeClass('ui-front').hide('slide', function () {
-                $navMenu.navMenu('collapseAll');
+                $panelMenuList.navMenu('collapseAll');
                 if (jQuery.isFunction(cb)) {
                     cb();
                 }
@@ -2897,9 +2898,10 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         };
 
 
-        $navMenu.navMenu({
+        $panelMenuList.navMenu({
             loadTemplate: function (e, templ) {
-                panelMenuHide(function () {
+
+                var cbLoadTemplate = function () {
 
                     var templUrl = templ.url;
 
@@ -2912,7 +2914,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                         data: {}
                     })
                     .done(function (data, textStatus, jqXHR) {
-                        $panelContent.empty().html(data);
+                        $siteContent.empty().html(data);
                     })
                     .fail(function (jqXHR, textStatus, errorThrown) {
 
@@ -2922,21 +2924,27 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                             errorThrown: errorThrown
                         });
 
-                        $panelContent.html('<div class="ui-state-error ui-site-templateInfo">Error loading template: {0} - {1} - {2} </div>'.format(jqXHR.status, textStatus, errorThrown));
+                        $siteContent.html('<div class="ui-state-error ui-site-templateInfo">Error loading template: {0} - {1} - {2} </div>'.format(jqXHR.status, textStatus, errorThrown));
 
                     })
                     .always(function () {
                         self.progressHide();
                     });
 
+                };
+
+                if ($panelMenuToggle.is(':visible')) {
+                    panelMenuHide(cbLoadTemplate());
+                }
+                else {
+                    cbLoadTemplate();
+                }
 
 
-
-                });
             }
         });
 
-        $navMenuToggle
+        $panelMenuToggle
             .click(function () {
                 if ($panelMenu.is(':visible')) {
                     panelMenuHide();
@@ -2949,7 +2957,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
 
         VsixMvcAppResult.Ajax.UserMenu(
             function (data, textStatus, jqXHR) {
-                $navMenu.navMenu('bind', data);
+                $panelMenuList.navMenu('bind', data);
             },
             function (jqXHR, textStatus, errorThrown) {
                 self._errMsgSet($panelMenu, VsixMvcAppResult.Resources.unExpectedError);
@@ -3382,11 +3390,14 @@ VsixMvcAppResult.Widgets.DialogInline =
         _initChildList: function($uls) {
             $uls.addClass('ui-treeList-childs')
                 .hide()
-                .before('<div class="ui-treeList-toggle ui-icon ui-icon-triangle-1-s"></div>');
+                .siblings('div.ui-helper-clearfix:first')
+                .before('<div class="ui-treeList-toggle ui-state-default ui-icon ui-icon-triangle-1-s"></div>');
         },
         openNode: function($lisOpen) {
             if ($lisOpen) {
-                $lisOpen.removeClass('ui-state-default')
+                $lisOpen
+                    .removeClass('ui-state-default')
+                    //.addClass('ui-state-focus')
                     .children('ul')
                     .show()
                     .siblings('div.ui-treeList-toggle')
@@ -3401,7 +3412,9 @@ VsixMvcAppResult.Widgets.DialogInline =
         },
         closeNode: function($lisClose) {
             if ($lisClose) {
-                $lisClose.addClass('ui-state-default')
+                $lisClose
+                    .addClass('ui-state-default')
+                    //.removeClass('ui-state-focus')
                     .children('ul')
                     .hide()
                     .siblings('div.ui-treeList-toggle').removeClass('ui-icon-triangle-1-n').addClass('ui-icon ui-icon-triangle-1-s');
@@ -3452,6 +3465,7 @@ VsixMvcAppResult.Widgets.DialogInline =
                     //});
                 }
                 $li.append($a);
+                $li.append('<div class="ui-helper-clearfix" />');
 
                 if (IMenuItem.childs) {
                     var $ul = jQuery('<ul></ul>');
