@@ -83,6 +83,8 @@ module.exports = function (grunt) {
                     "src/public/scripts/crud/common.widget.grid.pagination.js",
                     //CRUD end
                     "src/public/scripts/Template.Widget.Themepicker.js",
+
+                    "src/public/scripts/url/urlHelper.js",
                     
 
 

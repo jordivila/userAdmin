@@ -36,10 +36,6 @@ if (!String.prototype.padIndex)
     };
 }
 
-
-
-
-
 /*jslint evil: true */
 String.prototype.toDateFromAspNet = function () {
     var dte = eval("new " + this.replace(/\//g, '') + ";");
