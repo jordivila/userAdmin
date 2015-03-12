@@ -105,7 +105,10 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                 };
 
                 if ($panelMenuToggle.is(':visible')) {
-                    panelMenuHide(templGetFunc());
+                    panelMenuHide(setTimeout(function () {
+                        templGetFunc();
+                    },
+                    500));
                 }
                 else {
                     templGetFunc();
