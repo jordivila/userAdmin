@@ -76,7 +76,7 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
                 };
                 var getNPagesInPaginator = function (nPagesInPaginators) {
 
-                    var defaultNPages = 6;
+                    var defaultNPages = 4;
 
                     if (isNaN(nPagesInPaginator)) {
                         return defaultNPages;
