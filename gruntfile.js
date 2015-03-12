@@ -1,7 +1,7 @@
 ﻿
 module.exports = function (grunt) {
     
-    grunt.initConfig({
+    var gruntOptions = {
         pkg: grunt.file.readJSON('package.json'),
         cdnFolder: 'src/public/cdn',
         clean: {
@@ -40,7 +40,7 @@ module.exports = function (grunt) {
                 options: {
                     separator: ';',
                     // Replace all 'use strict' statements in the code with a single one at the top
-                    banner: "'use strict';\n",
+                    banner: '"use strict";\n var appVersion = "<%= grunt.file.readJSON("package.json").version %>";',
                     process: function (src, filepath) {
                         return '// Source: ' + filepath + '\n' +
                           src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
@@ -233,8 +233,10 @@ module.exports = function (grunt) {
             }
         }
 
-    });
-    
+    };
+
+    grunt.initConfig(gruntOptions);
+
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-qunit');
