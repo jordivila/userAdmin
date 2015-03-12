@@ -91,11 +91,6 @@ div.ui-state-highlight {border:0 !important;background-image:none !important;}
 }
 
 
-/* FOOTER */
-.ui-siteFooter {}
-.ui-siteFooter .ui-widget-header {padding: 1em 0em 1em 0em;text-align: center;line-height: normal;margin: 1em 0 0 0; }
-.ui-siteFooter div.ui-widget-header div.ui-siteFooter-html5Logo {	margin:.5em 0 0 0; }
-
 /* DIALOGS */
 .ui-template-dialog {}
 .ui-template-dialog .ui-template-dialogIcon {float:left;margin:0 1em 0 0;}
