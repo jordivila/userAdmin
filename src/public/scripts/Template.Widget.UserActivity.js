@@ -53,7 +53,8 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
 
         var panelMenuHide = function (cb) {
             $sitePage.show();
-            $panelMenu.removeClass('ui-front').hide('slide', function () {
+            $panelMenu.hide('slide', function () {
+                $panelMenu.removeClass('ui-front');
                 //$panelMenuList.navMenu('collapseAll');
                 if (jQuery.isFunction(cb)) {
                     cb();
