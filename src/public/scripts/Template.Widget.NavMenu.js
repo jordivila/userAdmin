@@ -33,6 +33,14 @@
                         var liData = $node.data('dataItem');
 
                         if (liData !== undefined) {
+
+                            jQuery(w.element)
+                                .find('div.ui-treeList-itemLink')
+                                    .removeClass('ui-state-highlight')
+                                .end();
+                                
+                            $node.find('div.ui-treeList-itemLink:first').addClass('ui-state-highlight');
+
                             w._trigger('loadTemplate', null, liData);
                         }
                         else {

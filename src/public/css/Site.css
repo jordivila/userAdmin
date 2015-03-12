@@ -52,15 +52,15 @@ div.ui-state-highlight {border:0 !important;background-image:none !important;}
 /* menu toggle */
 .ui-mainMenuToggle {display:block !important;cursor:pointer;}
 /* menu panel  */
-.ui-mainMenu { width:100%; position:absolute !important;min-height:100%;border:0 !important; overflow:auto !important;}
+.ui-mainMenu { width:99%; position:absolute !important;min-height:100%;overflow:auto !important;}
 .ui-mainMenu ,
-.ui-mainMenu div.ui-widget-content , 
+.ui-mainMenu div.ui-widget-content, 
 .ui-mainMenu div.ui-state-default, 
 .ui-mainMenu li,
 .ui-mainMenu ul, 
 .ui-mainMenu div.ui-state-highlight {border-width:0;background-image:none !important;}
 .ui-mainMenu ul {border-top-width:0.1em !important;}
-.ui-mainMenu div.ui-treeList-itemLink {border-width:0.1em;border-top-width:0em;padding:2em 0.5em 2em 0.5em;}
+.ui-mainMenu div.ui-treeList-itemLink {border-width:0.1em;border-top-width:0em;border-right-width:0em;padding:2em 0.5em 2em 0.5em;}
 .ui-mainMenu .ui-mainMenuToggle{float:right;margin: 1em 3em 0 0;}
 .ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-icon {float:left;}
 .ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
