@@ -53,8 +53,8 @@
                         .addClass('ui-state-active')
                         .find('div.ui-treeList-toggle')
                             .addClass('ui-state-active')
-                            .removeClass('ui-icon-triangle-1-s')
-                            .addClass('ui-icon ui-icon-triangle-1-n')
+                            .removeClass('ui-icon-triangle-1-e')
+                            .addClass('ui-icon ui-icon-triangle-1-s')
                         .end()
                     .end();
             }
@@ -71,8 +71,8 @@
                         .removeClass('ui-state-active')
                         .find('div.ui-treeList-toggle')
                             .removeClass('ui-state-active')
-                            .addClass('ui-icon ui-icon-triangle-1-s')
-                            .removeClass('ui-icon-triangle-1-n')
+                            .addClass('ui-icon ui-icon-triangle-1-e')
+                            .removeClass('ui-icon-triangle-1-s')
                         .end()
                     .end();
 
@@ -126,7 +126,7 @@
 
                     $li.find('div.ui-treeList-itemLink')
                             .find('div.ui-helper-clearfix:first')
-                                .before('<div class="ui-treeList-toggle ui-state-default ui-icon ui-icon-triangle-1-s"></div>')
+                                .before('<div class="ui-treeList-toggle ui-state-default ui-icon ui-icon-triangle-1-e"></div>')
                             .end()
                        .end();
 

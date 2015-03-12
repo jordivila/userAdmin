@@ -21,7 +21,7 @@ html, body {height:100%;display:table;width:100%;}
 .ui-site-title {margin:0em 0em 0em 0em;padding:0.5em; text-align:center;}
 .ui-site-title * {}
 .ui-site-title h1{font-size: 1em;margin:0em;font-weight:normal;}
-.ui-site-version {font-weight:normal;font-size:0.8em;margin: 25em 0 0 0;text-align:center;/*position:absolute;bottom:0;width:99%;*/}
+
 .ui-sitePage{display:table; width:100%; margin:0 auto 0 auto;}
 .ui-site-templateInfo {padding:2em;}
 
@@ -53,24 +53,23 @@ div.ui-state-highlight {border:0 !important;background-image:none !important;}
 .ui-mainMenuToggle {display:block !important;cursor:pointer;}
 /* menu panel  */
 .ui-mainMenu { width:100%; position:absolute !important;min-height:100%;border:0 !important; overflow:auto !important;}
-.ui-mainMenu .ui-mainMenuToggle{float:right;margin: 1em 3em 0 0;}
-.ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-icon {float:left;}
-.ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
-.ui-mainMenu .ui-treeList {border:0;padding:0;margin:3em 0 0 0;}
-.ui-mainMenu .ui-treeList .ui-treeList-toggle{float:left !important;margin:0 0 0 1em !important;}
-.ui-mainMenu .ui-treeList li { margin: 0em !important; padding: 0em 0 0 0; background-image:none; border:0;}
-.ui-mainMenu .ui-treeList li a {float:left;}
-.ui-mainMenu .ui-treeList ul {background-image:none;padding: 0em 0em 0em 1em;margin:0 0 0 0em;}
-.ui-mainMenu .ui-treeList div.ui-treeList-itemLink {padding:1em;}
-
 .ui-mainMenu ,
 .ui-mainMenu div.ui-widget-content , 
 .ui-mainMenu div.ui-state-default, 
 .ui-mainMenu li,
 .ui-mainMenu ul, 
-.ui-mainMenu div.ui-state-highlight {border:0 !important;background-image:none !important;}
-
-
+.ui-mainMenu div.ui-state-highlight {border-width:0;background-image:none !important;}
+.ui-mainMenu ul {border-top-width:0.1em !important;}
+.ui-mainMenu div.ui-treeList-itemLink {border-width:0.1em;border-top-width:0em;padding:2em 0.5em 2em 0.5em;}
+.ui-mainMenu .ui-mainMenuToggle{float:right;margin: 1em 3em 0 0;}
+.ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-icon {float:left;}
+.ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
+.ui-mainMenu .ui-treeList {border-width:0;padding:0;margin:3em 0 0 0;}
+.ui-mainMenu .ui-treeList .ui-treeList-toggle{float:right;margin:0 0 0 1em !important;border-width:0;}
+.ui-mainMenu .ui-treeList li { margin: 0em !important; padding: 0em 0 0 0; background-image:none; border:0;}
+.ui-mainMenu .ui-treeList li a {float:left;}
+.ui-mainMenu .ui-treeList ul {background-image:none;padding: 0em 0em 0em 1em;margin:0 0 0 0em;}
+.ui-mainMenu .ui-site-version {font-weight:normal;font-size:0.8em;margin: 17em 0 0 0;text-align:center;/*position:absolute;bottom:0;width:99%;*/}
 
 
 @media all and (orientation: portrait)
