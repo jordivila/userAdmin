@@ -55,7 +55,7 @@
                 $lisOpen
                     //.removeClass('ui-state-default')
                     .children('ul')
-                        .show()
+                        .show('blind')
                     .end()
                     .find('div.ui-treeList-itemLink:first')
                         .addClass('ui-state-active')
@@ -73,7 +73,7 @@
                 $lisClose
                     //.addClass('ui-state-default')
                     .children('ul')
-                        .hide()
+                        .hide('blind')
                     .end()
                     .find('div.ui-treeList-itemLink:first')
                         .removeClass('ui-state-active')
