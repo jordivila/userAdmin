@@ -312,14 +312,25 @@
                     },
                     {
                         text: "UI Controls",
-                        //url : 
                         childs: [
                             {
                                 url: "/public/views/themes/themepicker.html",
                                 text: "Themepicker"
                             },
                             {
-                                //url: "/public/views/crud/crudExtended/crudExtended.html",
+                                text: "Menu",
+                                childs: [
+                                    {
+                                        url: "/public/views/menu/menuTree/menuTree.html",
+                                        text: "Menu Tree"
+                                    },
+                                    {
+                                        url: "/public/views/menu/menuSlides/menuSlides.html",
+                                        text: "Menu Slides"
+                                    },
+                                ]
+                            },
+                            {
                                 text: "Crud widget",
                                 childs: [
                                     {
@@ -334,37 +345,6 @@
                                         url: "/public/views/crud/crudExtended/crudExtended.html",
                                         text: "Crud extended"
                                     },
-                                    /*DELETEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE*/
-                                    {
-                                        text: "UI Controls",
-                                        //url : 
-                                        childs: [
-                                            {
-                                                url: "/public/views/themes/themepicker.html",
-                                                text: "Themepicker"
-                                            },
-                                            {
-                                                //url: "/public/views/crud/crudExtended/crudExtended.html",
-                                                text: "Crud widget",
-                                                childs: [
-                                                    {
-                                                        url: "/public/views/crud/crudExtended/crudExtended.html",
-                                                        text: "Crud Grid - No form"
-                                                    },
-                                                    {
-                                                        url: "/public/views/crud/crudExtended/crudExtended.html",
-                                                        text: "Crud"
-                                                    },
-                                                    {
-                                                        url: "/public/views/crud/crudExtended/crudExtended.html",
-                                                        text: "Crud extended"
-                                                    },
-                                                ],
-                                            },
-                                        ]
-                                    },
-
-                                    /*END DELETEEEEEEEEEEEEEEEEEEEEEEEEEE*/
                                 ],
                             },
                         ]

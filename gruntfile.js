@@ -74,7 +74,7 @@ module.exports = function (grunt) {
                     "src/public/scripts/Template.Widget.Message.js",
                     "src/public/scripts/Template.Widget.Dialogs.js",
                     "src/public/scripts/Template.Widget.DialogInline.js",
-                    "src/public/scripts/Template.Widget.NavMenuTree.js",
+                    "src/public/scripts/Template.Widget.TreeList.js",
                     "src/public/scripts/Template.Widget.NavMenuSlides.js",
                     //"src/public/scripts/ui-widgetTreeList/ui-widgetTreeList.js"
                     //CRUD begin

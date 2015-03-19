@@ -1,5 +1,5 @@
 ﻿(function ($) {
-    jQuery.widget("ui.navMenuTree", jQuery.ui.widgetBase, {
+    jQuery.widget("ui.treeList", jQuery.ui.widgetBase, {
         options: {
             IMenuModel: null
         },
@@ -41,7 +41,7 @@
                                 
                             $node.find('div.ui-treeList-itemLink:first').addClass('ui-state-highlight');
 
-                            w._trigger('loadTemplate', null, liData);
+                            w._trigger('selected', null, liData);
                         }
                         else {
                             var b = $node.find('ul:first').is(':visible');
@@ -49,13 +49,16 @@
                             else w.openNode($node);
                         }
                     });
+
+            w._trigger('dataBound', null, null);
+
         },
         openNode: function ($lisOpen) {
             if ($lisOpen) {
                 $lisOpen
                     //.removeClass('ui-state-default')
                     .children('ul')
-                        .addClass('ui-state-focus')
+                        .addClass('ui-state-active')
                         .show('blind')
                     .end()
                     .find('div.ui-treeList-itemLink:first')
@@ -75,7 +78,7 @@
                     //.addClass('ui-state-default')
                     .children('ul')
                         .hide('blind')
-                        .removeClass('ui-state-focus')
+                        .removeClass('ui-state-active')
                     .end()
                     .find('div.ui-treeList-itemLink:first')
                         .removeClass('ui-state-active')
