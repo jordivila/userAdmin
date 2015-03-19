@@ -32,13 +32,13 @@
                         var $node = jQuery(this).parents('li:first');
                         var liData = $node.data('dataItem');
 
-                        if (liData !== undefined) {
+                        if (liData.childs === undefined) {
 
                             jQuery(w.element)
                                 .find('div.ui-treeList-itemLink')
                                     .removeClass('ui-state-highlight')
                                 .end();
-                                
+
                             $node.find('div.ui-treeList-itemLink:first').addClass('ui-state-highlight');
 
                             w._trigger('selected', null, liData);
@@ -121,18 +121,7 @@
 
 
                 $li.html('<div class="ui-treeList-itemLink ui-state-default"><span class="ui-treeList-link">{0}</span><div class="ui-helper-clearfix" /></div>'.format(IMenuItem.text));
-
-                //var $a = jQuery('<a>' + IMenuItem.text + '</a>');
-                if (IMenuItem.url) {
-                    $li.data('dataItem', IMenuItem);
-                    //$a.attr('href', IMenuItem.url);
-                    //$a.attr('href', '#');
-                } else {
-                    //$a.attr('href', 'javascript:void(0);');
-                    //$a.attr('href', '#').click(function () {
-                    //console.log();
-                    //});
-                }
+                $li.data('dataItem', IMenuItem);
 
                 if (IMenuItem.childs) {
                     var $ul = jQuery('<ul class="ui-treeList-childs"></ul>');

@@ -75,7 +75,7 @@ module.exports = function (grunt) {
                     "src/public/scripts/Template.Widget.Dialogs.js",
                     "src/public/scripts/Template.Widget.DialogInline.js",
                     "src/public/scripts/Template.Widget.TreeList.js",
-                    "src/public/scripts/Template.Widget.NavMenuSlides.js",
+                    "src/public/scripts/Template.Widget.SlidesList.js",
                     //"src/public/scripts/ui-widgetTreeList/ui-widgetTreeList.js"
                     //CRUD begin
                     "src/public/scripts/crud/common.widget.base.js",
@@ -214,7 +214,7 @@ module.exports = function (grunt) {
         watch: {
             testLiveReload: {
                 files: ['<%= jshint.files %>', '<%= concat.ui_css.src %>'],
-                tasks: ['jshint:files', 'bump', 'clean', 'concat', 'uglify', 'express:testLiveReload'],
+                tasks: ['jshint:files', 'bump', 'clean', 'concat', /*'uglify',*/ 'express:testLiveReload'],
                 options: {
                     spawn: false, //Must have for reload
                     livereload: true //Enable LiveReload

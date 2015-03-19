@@ -1,16 +1,40 @@
-﻿
-Menu Slides
+﻿<script type="text/javascript">
 
-<!--<div class="ui-cirDataEntry">
-    <div class="ui-productCrud ui-helper-hidden"></div>
-    <div class="ui-customerCrud ui-helper-hidden"></div>
+    VsixMvcAppResult.Ajax.UserMenu(
+        function (data, textStatus, jqXHR) {
+
+            jQuery('div.ui-menuSlidesSample:first')
+                .slidesList({
+                    dataBound: function (e) {
+                        jQuery(this).hide().removeClass('ui-helper-hidden').show('blind');
+                    },
+                    selected: function (e, liData)
+                    {
+                        console.log(liData);
+                    }
+                })
+                .slidesList('bind', data);
+        },
+        function (jqXHR, textStatus, errorThrown) {
+
+        },
+        function (jqXHR, textStatus, errorThrown) {
+
+        });
+
+</script>
+
+<style type="text/css">
+    .ui-menuSlides-contentPage { padding: 1em;background-image:none !important; }
+    .ui-menuSlides-contentPage div.ui-menuSlidesSample { border-width: 0; }
+
+
+    .ui-slidesList .ui-treeList-childs {padding:0; margin:0;}
+</style>
+
+<div class="ui-menuSlides-contentPage ui-state-default">
+
+    <h3>Menu slides mode</h3>
+    <div class="ui-menuSlidesSample ui-helper-hidden"></div>
+
 </div>
-<br />-->
-
-
-<!--<link href="/public/views/crud/crudExtended/crudExtended.css" rel="stylesheet" />
-
-<script src="/public/views/crud/crudExtended/cir.widget.crudProduct.js"></script>
-<script src="/public/views/crud/crudExtended/cir.widget.crudCustomer.js"></script>
-<script src="/public/views/crud/crudExtended/cir.widget.cirDataEntry.js"></script>
-<script src="/public/views/crud/crudExtended/crudExtended.js"></script>-->
