@@ -1,5 +1,5 @@
 ﻿(function ($) {
-    jQuery.widget("ui.navMenu", jQuery.ui.widgetBase, {
+    jQuery.widget("ui.navMenuTree", jQuery.ui.widgetBase, {
         options: {
             IMenuModel: null
         },
@@ -55,6 +55,7 @@
                 $lisOpen
                     //.removeClass('ui-state-default')
                     .children('ul')
+                        .addClass('ui-state-focus')
                         .show('blind')
                     .end()
                     .find('div.ui-treeList-itemLink:first')
@@ -74,6 +75,7 @@
                     //.addClass('ui-state-default')
                     .children('ul')
                         .hide('blind')
+                        .removeClass('ui-state-focus')
                     .end()
                     .find('div.ui-treeList-itemLink:first')
                         .removeClass('ui-state-active')
@@ -115,7 +117,7 @@
                 var $li = jQuery('<li class="ui-treeList-item ui-widget-content ui-corner-all ui-state-default"></li>');
 
 
-                $li.html('<div class="ui-treeList-itemLink ui-state-default"><a href="#" class="ui-treeList-link">{0}</a><div class="ui-helper-clearfix" /></div>'.format(IMenuItem.text));
+                $li.html('<div class="ui-treeList-itemLink ui-state-default"><span class="ui-treeList-link">{0}</span><div class="ui-helper-clearfix" /></div>'.format(IMenuItem.text));
 
                 //var $a = jQuery('<a>' + IMenuItem.text + '</a>');
                 if (IMenuItem.url) {
