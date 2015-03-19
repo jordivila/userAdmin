@@ -6,9 +6,9 @@
 .ui-treeList .ui-treeList-toggle{ height:1em;width:1em;margin:-0.1em 0 0 0 !important;background:none;}
 .ui-treeList .ui-treeList-toggle span {top:0.5em; left:0.5em;}
 .ui-treeList li .ui-treeList-toggle {margin:0em;cursor:pointer;float:right;border-width:0em;padding: 0.2em;}
-.ui-treeList .ui-treeList-childs {border-width:0;}
+.ui-treeList .ui-treeList-childs {border-width:0;background-image:none;}
 .ui-treeList .ui-treeList-open { }
 .ui-treeList .ui-treeList-item { }
 .ui-treeList .ui-treeList-itemEmpty {height:1em;}
 .ui-treeList .ui-sortable-placeholder {border-style:dashed; border-width:thin; min-height:4em;}
-.ui-treeList .ui-sortable-helper {border-style:dashed !important; border-width:thin !important;} /* GENERIC FORM */
+.ui-treeList .ui-sortable-helper {border-style:dashed !important; border-width:thin !important;} /* GENERIC FORM */ /* GENERIC FORM */
