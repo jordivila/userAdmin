@@ -169,8 +169,6 @@ jQuery.widget("ui.menuTree", jQuery.ui.menuBase, {
     },
 });
 
-
-
 jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
     options: {
         //slidesOpened: [], //http://bugs.jqueryui.com/ticket/8645

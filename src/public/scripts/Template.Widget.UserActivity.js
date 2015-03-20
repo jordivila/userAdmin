@@ -61,12 +61,26 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                 }
             });
         };
-        var panelMenuShow = function () {
-            $panelMenu.addClass('ui-front').show('drop', function () {
-                $sitePage.hide();
-            });
-        };
+        var panelMenuShow = function (cb) {
+            $panelMenu
+                .addClass('ui-front')
+                .show('drop', function () {
+                    $sitePage.hide();
 
+                    if (jQuery.isFunction(cb)) {
+                        cb();
+                    }
+                });
+        };
+        var panelMenuToggleOnClick = function (cb) {
+            if ($panelMenu.is(':visible')) {
+                panelMenuHide(cb);
+            }
+            else {
+                panelMenuShow(cb);
+            }
+        };
+        
 
         $panelMenu.hide();
 
@@ -117,15 +131,25 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
             }
         });
 
-        $panelMenuToggle
-            .click(function () {
-                if ($panelMenu.is(':visible')) {
-                    panelMenuHide();
-                }
-                else {
-                    panelMenuShow();
-                }
-            });
+
+        /* Begin Ensure panel animations:
+            1.- prevent clicking twice the same toggle button before panel animations are done
+            2.- prevent adding click events twice
+        */
+        var panelMenuToggleClickBind = null;
+
+        panelMenuToggleClickBind = function () {
+            $panelMenuToggle
+                .one('click', function () {
+                    $panelMenuToggle.unbind('click');
+                    panelMenuToggleOnClick(function () {
+                        panelMenuToggleClickBind();
+                    });
+                });
+        };
+
+        panelMenuToggleClickBind();
+        /* End Ensure panel animations */
 
 
         VsixMvcAppResult.Ajax.UserMenu(
