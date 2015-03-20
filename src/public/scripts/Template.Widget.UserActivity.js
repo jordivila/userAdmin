@@ -55,7 +55,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
             $sitePage.show();
             $panelMenu.hide('slide', function () {
                 $panelMenu.removeClass('ui-front');
-                //$panelMenuList.treeList('collapseAll');
+
                 if (jQuery.isFunction(cb)) {
                     cb();
                 }
@@ -70,7 +70,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
 
         $panelMenu.hide();
 
-        $panelMenuList.treeList({
+        $panelMenuList.menuSlides({
             selected: function (e, templ) {
 
                 var templGetFunc = function () {
@@ -130,7 +130,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
 
         VsixMvcAppResult.Ajax.UserMenu(
             function (data, textStatus, jqXHR) {
-                $panelMenuList.treeList('bind', data);
+                $panelMenuList.menuSlides('bind', data);
             },
             function (jqXHR, textStatus, errorThrown) {
                 self._errMsgSet($panelMenu, VsixMvcAppResult.Resources.unExpectedError);

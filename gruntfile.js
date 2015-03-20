@@ -24,7 +24,7 @@ module.exports = function (grunt) {
                       "src/public/css/ui-widgetMsg.css",
                       "src/public/css/ui-breadcrumb.css",
                       "src/public/css/ui-dateSelector.css",
-                      "src/public/css/ui-widgetTreeList.css",
+                      "src/public/css/ui-menuList.css",
                       "src/public/css/ui-widgetModel.css",
                       "src/public/css/ui-widgetGrid.css",
                       "src/public/css/ui-fieldItem.css",
@@ -74,8 +74,7 @@ module.exports = function (grunt) {
                     "src/public/scripts/Template.Widget.Message.js",
                     "src/public/scripts/Template.Widget.Dialogs.js",
                     "src/public/scripts/Template.Widget.DialogInline.js",
-                    "src/public/scripts/Template.Widget.TreeList.js",
-                    "src/public/scripts/Template.Widget.SlidesList.js",
+                    "src/public/scripts/Template.Widget.Menu.js",
                     //"src/public/scripts/ui-widgetTreeList/ui-widgetTreeList.js"
                     //CRUD begin
                     "src/public/scripts/crud/common.widget.base.js",
@@ -148,12 +147,6 @@ module.exports = function (grunt) {
                     'src/public/test/mocha/**/*.js',
 
                     '!src/public/scripts/libs/**/*.*',
-                    '!src/public/scripts/ui-dateSelector/**/*.*',
-                    '!src/public/scripts/ui-gmap/**/*.*',
-                    '!src/public/scripts/ui-widgetMsg/**/*.*',
-                    '!src/public/scripts/ui-widgetTreeList/**/*.*',
-                    '!src/public/scripts/ui-widgetTreeListNest/**/*.*',
-                    '!src/public/scripts/ui-widgetTreeListSort/**/*.*',
 
                     '!src/public/cdn/**/*.*',
                     '!src/public/test/qunit/libs/**/*.js',
@@ -214,7 +207,7 @@ module.exports = function (grunt) {
         watch: {
             testLiveReload: {
                 files: ['<%= jshint.files %>', '<%= concat.ui_css.src %>'],
-                tasks: ['jshint:files', 'bump', 'clean', 'concat', /*'uglify',*/ 'express:testLiveReload'],
+                tasks: ['jshint:files', 'bump', 'clean', 'concat', /*'uglify', */'express:testLiveReload'],
                 options: {
                     spawn: false, //Must have for reload
                     livereload: true //Enable LiveReload

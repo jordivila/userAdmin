@@ -4,7 +4,7 @@
         function (data, textStatus, jqXHR) {
 
             jQuery('ul.ui-menuTreeSample:first')
-                .treeList({
+                .menuTree({
                     dataBound: function (e) {
                         jQuery(this).hide().removeClass('ui-helper-hidden').show('blind');
                     },
@@ -13,7 +13,7 @@
                         console.log(liData);
                     }
                 })
-                .treeList('bind', data);
+                .menuTree('bind', data);
         },
         function (jqXHR, textStatus, errorThrown) {
 

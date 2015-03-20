@@ -4,7 +4,7 @@
         function (data, textStatus, jqXHR) {
 
             jQuery('div.ui-menuSlidesSample:first')
-                .slidesList({
+                .menuSlides({
                     dataBound: function (e) {
                         jQuery(this).hide().removeClass('ui-helper-hidden').show('blind');
                     },
@@ -13,7 +13,7 @@
                         console.log(liData);
                     }
                 })
-                .slidesList('bind', data);
+                .menuSlides('bind', data);
         },
         function (jqXHR, textStatus, errorThrown) {
 
@@ -29,7 +29,7 @@
     .ui-menuSlides-contentPage div.ui-menuSlidesSample { border-width: 0; }
 
 
-    .ui-slidesList .ui-treeList-childs {padding:0; margin:0;}
+    .ui-menuSlides .ui-treeList-childs {padding:0; margin:0;}
 </style>
 
 <div class="ui-menuSlides-contentPage ui-state-default">
