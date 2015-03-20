@@ -45,7 +45,7 @@ html, body {height:100%;display:table;width:100%;}
 /* menu toggle */
 .ui-mainMenuToggle {display:block !important;cursor:pointer;}
 /* menu panel  */
-.ui-mainMenu { width:99%; position:absolute !important;min-height:100%;overflow:auto !important;background-image:none;}
+.ui-mainMenu { width:99%; position:absolute !important;min-height:100%;overflow:auto !important;background-image:none !important;}
 .ui-mainMenu .ui-mainMenuToggle{float:right;margin: 0.5em 2em 0 0;}
 .ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-icon {float:left;}
 .ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
