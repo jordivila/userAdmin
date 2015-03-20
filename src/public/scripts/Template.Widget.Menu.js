@@ -78,7 +78,7 @@
 
 jQuery.widget("ui.menuTree", jQuery.ui.menuBase, {
     options: {
-        
+
     },
     _create: function () {
 
@@ -180,14 +180,55 @@ jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
 
         this.options.slidesOpened = [];
 
+        jQuery(this.element).prepend('<div class="ui-menuSlide-backButton ui-helper-hidden ui-state-default"><span class="ui-icon ui-icon-triangle-1-w"></span><span>Back</span><div class="ui-helper-clearfix"></div></div>');
+
     },
     _init: function () {
-
         this._super();
+        this._initBackButton();
+    },
+    _initBackButton: function () {
 
+        var self = this;
+        var $backButton = jQuery(this.element).find('div.ui-menuSlide-backButton:first');
+
+        $backButton
+            .click(function () {
+                jQuery(self.element)
+                    .find('ul.ui-menuList-childs:visible:first')
+                    .each(function () {
+
+                        var theListToHide = jQuery(this);
+                        var theListToShow = self.options.slidesOpened[self.options.slidesOpened.length - 1];
+                        self._animatePanel(theListToHide, theListToShow, false, function () {
+                            self.options.slidesOpened.splice(self.options.slidesOpened.length - 1, 1);
+                            if (self.options.slidesOpened.length === 0) {
+                                $backButton.addClass('ui-helper-hidden');
+                            }
+                        });
+                    });
+            });
     },
     destroy: function () {
         this._super();
+    },
+    _animatePanel: function ($hidingList, $showingList, forward, cb) {
+
+        if (forward) {
+            $hidingList.hide(function () {
+                $showingList.show('slide', function () {
+                    cb();
+                });
+            });
+        }
+        else {
+            $hidingList.hide(function () {
+                $showingList.show('drop', function () {
+                    cb();
+                });
+            });
+        }
+
     },
     openNode: function ($lisOpen) {
 
@@ -202,50 +243,28 @@ jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
             return false;
         };
 
-        var $backButton = jQuery(this.element).find('div.ui-menuSlide-backButton:first');
 
-        if ($backButton.length === 0) {
-            $backButton = jQuery('<div class="ui-menuSlide-backButton ui-state-default"><span class="ui-icon ui-icon-triangle-1-w"></span><span>Back</span><div class="ui-helper-clearfix"></div></div>');
-            jQuery(this.element).prepend($backButton);
-
-
-            $backButton.click(function () {
-
-                jQuery(self.element)
-                    .find('ul.ui-menuList-childs:visible')
-                    .each(function () {
-                        jQuery(this).hide('slide');
-                    });
-
-                jQuery(self.options.slidesOpened[self.options.slidesOpened.length - 1]).show('slide');
-                self.options.slidesOpened.splice(self.options.slidesOpened.length - 1, 1);
-
-                if (self.options.slidesOpened.length === 0) {
-                    $backButton.addClass('ui-helper-hidden');
-                }
-
-            });
-        }
-
-
-
-        jQuery(this.element)
+        jQuery(self.element)
             .find('ul.ui-menuList-childs')
             .each(function () {
 
-                if (jQuery(this).is(':visible')) {
-                    jQuery(this).hide('slide');
-
-                    self.options.slidesOpened.push(jQuery(this));
-                    console.log(self.options.slidesOpened);
-
-                    $backButton.removeClass('ui-helper-hidden');
-                }
-
                 if (matches(jQuery(this))) {
-                    jQuery(this).show('slide');
 
-                    //self.options.slidesOpened.push(jQuery(this));
+                    var theListToShow = jQuery(this);
+
+                    jQuery(self.element)
+                        .find('ul.ui-menuList-childs:visible:first')
+                            .each(function () {
+                                var theListToHide = jQuery(this);
+                                self.options.slidesOpened.push(theListToHide);
+                                self._animatePanel(theListToHide, theListToShow, true, function () {
+
+                                    jQuery(self.element)
+                                        .find('div.ui-menuSlide-backButton:first')
+                                        .removeClass('ui-helper-hidden');
+
+                                });
+                            });
                 }
             });
     },
