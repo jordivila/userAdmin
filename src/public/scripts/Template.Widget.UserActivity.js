@@ -47,7 +47,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         var $sitePage = jQuery('div.ui-sitePage:first');
         var $siteContent = jQuery('div.ui-siteContent:first');
         var $panelMenu = jQuery('#panelMenu');
-        var $panelMenuList = jQuery($panelMenu).find('ul:first');
+        var $panelMenuList = jQuery($panelMenu).find('div.ui-menuBase:first');
         var $panelMenuToggle = jQuery('div.ui-mainMenuToggle');
         
 

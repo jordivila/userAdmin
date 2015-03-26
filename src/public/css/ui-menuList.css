@@ -12,5 +12,13 @@
 .ui-menuList .ui-menuList-itemEmpty {height:1em;}
 .ui-menuList .ui-sortable-placeholder {border-style:dashed; border-width:thin; min-height:4em;}
 .ui-menuList .ui-sortable-helper {border-style:dashed !important; border-width:thin !important;} /* GENERIC FORM */ /* GENERIC FORM */
-.ui-menuSlide-backButton {padding:1em;}
-.ui-menuSlide-backButton span {float:left;margin:0 0 0 0.5em;}
+
+.ui-menuList .ui-menuSlide-backButton {padding:1em;}
+.ui-menuList .ui-menuSlide-backButton.ui-helper-hidden {display:block;visibility:hidden;}
+.ui-menuList .ui-menuSlide-backButton span {float:left;margin:0 0 0 0.5em;}
+
+
+.ui-menuList .ui-menuList-slidesBox {position:relative;}
+.ui-menuList .ui-menuList-slidesBox .ui-menuList-childs {}
+.ui-menuList .ui-menuList-slidesBox .ui-menuList-childs.ui-menuList-childs-moving {position:absolute;top:0 !important;left:0% !important; min-height:100%;width:95%;overflow:visible !important;}
+

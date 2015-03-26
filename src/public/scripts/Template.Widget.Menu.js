@@ -52,7 +52,17 @@
         w._trigger('dataBound', null, null);
 
     },
+    _build: function () {
+        var self = this;
+        var dfd = jQuery.Deferred();
+        //dfd.notify("message...");
+        //dfd.resolve();
+        dfd.reject("{0}.{1}._build is an abstract method and should be imlpemented in child class".format(this.namespace, this.widgetName));
+        return dfd.promise();
+    },
     bind: function (IMenuModel) {
+
+        var self = this;
 
         /* // IMenuModel sample
         var k = [{
@@ -70,9 +80,20 @@
         */
 
         this.options.IMenuModel = IMenuModel;
-        this._build();
-        this.collapseAll();
-        this._dataBound();
+        this._build()
+            .progress(function (status) {
+
+            })
+            .fail(function (args) {
+                throw new Error(args);
+            })
+            .always(function () {
+
+            })
+            .done(function () {
+                self._dataBound();
+                self.collapseAll();
+            });
     },
 });
 
@@ -139,6 +160,10 @@ jQuery.widget("ui.menuTree", jQuery.ui.menuBase, {
         this.closeNode(jQuery(this.element).find('li'));
     },
     _build: function () {
+
+        var self = this;
+        var dfd = jQuery.Deferred();
+
         var menuItemRender = function (IMenuItem) {
             var $li = jQuery('<li class="ui-menuList-item ui-widget-content ui-corner-all ui-state-default"></li>');
 
@@ -160,12 +185,22 @@ jQuery.widget("ui.menuTree", jQuery.ui.menuBase, {
                 }
                 $li.append($ul);
             }
+
             return $li;
         };
 
-        for (var i = 0; i < this.options.IMenuModel.length; i++) {
-            jQuery(this.element).append(menuItemRender(this.options.IMenuModel[i]));
-        }
+        var menuRender = function () {
+            for (var i = 0; i < self.options.IMenuModel.length; i++) {
+                jQuery(self.element).append(menuItemRender(self.options.IMenuModel[i]));
+            }
+
+            dfd.resolve();
+        };
+
+        menuRender();
+
+
+        return dfd.promise();
     },
 });
 
@@ -215,15 +250,15 @@ jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
     _animatePanel: function ($hidingList, $showingList, forward, cb) {
 
         if (forward) {
-            $hidingList.hide(function () {
+            $hidingList.hide('drop', function () {
                 $showingList.show('slide', function () {
                     cb();
                 });
             });
         }
         else {
-            $hidingList.hide(function () {
-                $showingList.show('drop', function () {
+            $hidingList.hide('drop', function () {
+                $showingList.show('slide', function () {
                     cb();
                 });
             });
@@ -284,6 +319,7 @@ jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
     _build: function () {
 
         var self = this;
+        var dfd = jQuery.Deferred();
 
         var menuItemRender = function (IMenuItem) {
             var $li = jQuery('<li class="ui-menuList-item ui-widget-content ui-corner-all ui-state-default"></li>');
@@ -319,6 +355,16 @@ jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
 
         };
 
-        menuLevelRender(this.options.IMenuModel);
+        var menuRender = function () {
+
+            menuLevelRender(self.options.IMenuModel);
+
+            dfd.resolve();
+        };
+
+        menuRender();
+        
+
+        return dfd.promise();
     },
 });

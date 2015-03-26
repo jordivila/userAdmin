@@ -1,4 +1,5 @@
 ﻿
+
 module.exports = function (grunt) {
     
     var gruntOptions = {
@@ -48,12 +49,12 @@ module.exports = function (grunt) {
                 },
                 src: [
                     "src/public/scripts/libs/jQuery/jquery-1.9.1.min.js",
-                    //"src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery-ui.min.js",
+                    "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery-ui.min.js",
                     // jQuery UI components Begin 
-                    "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.core.min.js",
-                    "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.widget.min.js",
-                    "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.datepicker.min.js",
-                    "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.button.min.js",
+                    //"src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.core.min.js",
+                    //"src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.widget.min.js",
+                    //"src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.datepicker.min.js",
+                    //"src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.button.min.js",
                     // jQuery UI components End
                     "src/public/scripts/libs/jquery-validation-1.11.0/dist/jquery.validate.min.js",
                     "src/public/scripts/libs/jQuery-globalize/lib/globalize.js",
