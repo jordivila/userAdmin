@@ -287,8 +287,6 @@
             }
         ]);
 
-
-
         app.get('/api/user/menu', [
             //authController.isAuthenticated, ????
             function (req, res, next) {
@@ -334,16 +332,20 @@
                                 text: "Crud widget",
                                 childs: [
                                     {
-                                        url: "/public/views/crud/crudExtended/crudExtended.html",
-                                        text: "Crud Grid - No form"
+                                        url: "/public/views/crud/crudGridSimple/crudGridSimple.html",
+                                        text: "Crud read only - Simple Grid"
+                                    },
+                                    {
+                                        url: "/public/views/crud/crudGridSearch/crudGridSearch.html",
+                                        text: "Crud read only - Search & paginate"
                                     },
                                     {
                                         url: "/public/views/crud/crudExtended/crudExtended.html",
-                                        text: "Crud"
+                                        text: "Crud - Simple form"
                                     },
                                     {
                                         url: "/public/views/crud/crudExtended/crudExtended.html",
-                                        text: "Crud extended"
+                                        text: "Crud - Extended"
                                     },
                                 ],
                             },

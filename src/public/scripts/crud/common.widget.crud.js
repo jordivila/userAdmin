@@ -1,5 +1,4 @@
 ﻿
-
 var crudEmptyDataResult = {
     Data: [],
     IsValid: true,
@@ -158,7 +157,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         },
         gridModel: [],
         gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
-            
+
         },
         gridSearchForEditMethod: null,
         gridButtonsGet: function (crudWidget, defaultButtons) {
@@ -489,6 +488,44 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         }
 
     },
+    //public methods
+    gridSearch: function () {
+
+        jQuery(this.element)
+            .find('div.ui-crudFilter-buttons')
+                .find('button.ui-search-button')
+                    .click()
+                .end()
+            .end();
+
+        return this;
+    },
+    gridButtonsVisible: function (trueOrFalse) {
+
+        var $dom = jQuery(this.element).find('div.ui-crudCrud-gridButtons');
+
+        if (trueOrFalse) {
+            $dom.show();
+        }
+        else {
+            $dom.hide();
+        }
+
+        return this;
+    },
+    gridPagerVisible: function (trueOrFalse) {
+
+        var $dom = jQuery(this.element).find('div.ui-crudGrid-pager');
+
+        if (trueOrFalse) {
+            $dom.show();
+        }
+        else {
+            $dom.hide();
+        }
+
+        return this;
+    }
 });
 
 jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
