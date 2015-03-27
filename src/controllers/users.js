@@ -340,6 +340,10 @@
                                         text: "Crud read only - Search & paginate"
                                     },
                                     {
+                                        url: "/public/views/crud/crudGridSearchDirect/crudGridSearchDirect.html",
+                                        text: "Crud read only - Search Filter visible"
+                                    },
+                                    {
                                         url: "/public/views/crud/crudFormSimple/crudFormSimple.html",
                                         text: "Crud - Simple form"
                                     },

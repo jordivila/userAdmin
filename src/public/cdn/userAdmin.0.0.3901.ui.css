@@ -62,7 +62,7 @@ html, body {height:100%;display:table;width:100%;}
 .ui-mainMenu .ui-site-version {font-weight:normal;font-size:0.8em;margin: 17em 0 0 0;text-align:center;position:absolute;bottom:0;width:99%;}
 /*menu Mode MenuList*/
 .ui-mainMenu {position:relative;}
-.ui-mainMenu .ui-menuList {border-width:0;padding:0;margin:3em 0 0 0;overflow: visible !important;}
+.ui-mainMenu .ui-menuList {border-width:0;padding:0;margin:3em 0 3em 0;overflow: visible !important;}
 .ui-mainMenu .ui-menuList .ui-menuSlide-backButton {width:10em;position:absolute;top:0;margin:-5.5em 0 0 0;border-width:0;background-image:none;}
 .ui-mainMenu .ui-menuList .ui-menuSlide-backButton.ui-helper-hidden {display:block;visibility:hidden;}
 .ui-mainMenu .ui-menuList div.ui-menuList-itemLink {padding:2em 0.5em 2em 0.5em;}

@@ -1,7 +1,4 @@
-﻿/// <reference path="inv.ajax.js" />
-/// <reference path="../../Common/Scripts/ArquiaBackOffice.Widget.Dialogs.js" />
-
-
+﻿
 jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
 {
     options: {
@@ -24,7 +21,34 @@ jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
 
 
 
-        var customerOptions = jQuery.extend({}, crudCustomerOptions(), {
+        var customerOptions = jQuery.extend({}, crudCustomerDefaultOptions(), {
+            gridFilterVisibleAlways: true,
+            gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
+
+                switch (columnName) {
+                    case "nombre":
+                        $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
+                        $cell.find('a')
+                            .click(function () {
+                                crudGridWidget._trigger('onSelect', null, dataItem);
+                            });
+                        break;
+                    default: break;
+                }
+            },
+            gridFilterButtonsInit: function (widgetFilter, defaultButtons) {
+                defaultButtons.unshift({
+                    id: "cancel",
+                    text: "Volver al filtro de productos",
+                    cssClass: "ui-cancel-button",
+                    icon: "ui-icon-circle-arrow-w",
+                    click: function () {
+                        self._pageSet(self._pageViews.products);
+                    }
+                });
+
+                return defaultButtons;
+            },
             onCancel: function (e) {
                 self._pageSet(self._pageViews.products);
             },
@@ -35,17 +59,6 @@ jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
         });
 
         jQuery(self.options.customerDOMId).crud(customerOptions);
-
-
-        //jQuery(self.options.customerDOMId).customer({
-        //    onCancel: function (e) {
-        //        self._pageSet(self._pageViews.products);
-        //    },
-        //    onSelect: function (e, dataItem) {
-        //        jQuery(self.options.productDOMId).product('filterSetCustomer', dataItem);
-        //        self._pageSet(self._pageViews.products);
-        //    },
-        //});
 
         jQuery(self.options.productDOMId).product({
             onSearchCustomer: function () {

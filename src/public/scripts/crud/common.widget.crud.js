@@ -147,6 +147,10 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         gridDOMId: null,
         gridFilterDOMId: null,
         gridFilterObject: null,
+        gridFilterVisibleAlways: false,
+        gridFilterButtonsInit: function (widgetFilter, defaultButtons) {
+            return defaultButtons;
+        },
         formDOMId: null,
 
 
@@ -267,6 +271,8 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
         this.options.gridFilterInit(self, {
             Model: self.options.filterModel,
+            gridFilterVisibleAlways: self.options.gridFilterVisibleAlways,
+            filterButtonsInit: self.options.gridFilterButtonsInit,
             errorDisplay: function (e, msg) {
                 self.errorDisplay(msg);
             },
@@ -334,6 +340,9 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
             }
         });
+
+
+        this._actionSet(this._actions.list);
     },
     destroy: function () {
         this._super();
@@ -357,8 +366,19 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                 jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
                 break;
             case self._actions.list:
+
                 jQuery(self.options.gridDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
-                jQuery(self.options.gridButtonsDOMId).show();
+
+                if (self.options.gridFilterVisibleAlways) {
+                    jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').show();
+                    jQuery(self.options.gridButtonsDOMId).hide();
+                }
+                else {
+                    jQuery(self.options.gridFilterDOMId).addClass('ui-helper-hidden');
+                    jQuery(self.options.gridButtonsDOMId).show();
+                }
+
+
                 break;
             case self._actions.form:
                 jQuery(self.options.formDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
@@ -537,7 +557,8 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
         SortAscending: false,
         filterButtonsInit: function (self, defaultButtons) {
             return defaultButtons;
-        }
+        },
+        gridFilterVisibleAlways: false,
     },
     _create: function () {
 
@@ -570,15 +591,23 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
 
         var self = this;
 
-        var defaultButtons = self.options.filterButtonsInit(this, [{
-            id: "cancel",
-            text: "Cancelar",
-            cssClass: "ui-cancel-button ui-state-default",
-            icon: "ui-icon-circle-arrow-w",
-            click: function (self) {
-                self._trigger('cancel', null, null);
-            }
-        }, {
+        var defaultButtonsArray = [];
+
+        if (!self.options.gridFilterVisibleAlways) {
+            defaultButtonsArray.push(
+            {
+                id: "cancel",
+                text: "Cancelar",
+                cssClass: "ui-cancel-button ui-state-default",
+                icon: "ui-icon-circle-arrow-w",
+                click: function (self) {
+                    self._trigger('cancel', null, null);
+                }
+            });
+        }
+
+        defaultButtonsArray.push(
+        {
             id: "filter",
             text: "Aplicar filtro",
             cssClass: "ui-search-button ui-state-default",
@@ -587,7 +616,9 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
                 var filter = self.val();
                 self._trigger('change', null, filter);
             }
-        }]);
+        });
+
+        var defaultButtons = self.options.filterButtonsInit(this, defaultButtonsArray);
 
         var $buttonsBox = jQuery(this.element).find('div.ui-crudFilter-buttons:first');
 
@@ -778,7 +809,7 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         }
         else {
             var $emtpyRow = '<div class="ui-widgetGrid-emptyRow ui-widgetGrid-column ui-widget-content ui-state-active"><div class="ui-widgetGrid-column-content">{0}</div></div>'
-                                .format('No data here. Try searching something different');
+                                .format('No data here');
 
             jQuery(self.options.gridBodyDOMId).append($emtpyRow);
         }
