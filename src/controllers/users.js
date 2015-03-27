@@ -340,7 +340,7 @@
                                         text: "Crud read only - Search & paginate"
                                     },
                                     {
-                                        url: "/public/views/crud/crudExtended/crudExtended.html",
+                                        url: "/public/views/crud/crudFormSimple/crudFormSimple.html",
                                         text: "Crud - Simple form"
                                     },
                                     {
