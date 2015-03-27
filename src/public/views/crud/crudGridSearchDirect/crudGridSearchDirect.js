@@ -1,7 +1,7 @@
 ﻿
 
 
-var customerOptions = jQuery.extend({}, crudCustomerDefaultFormOptions(), {
+var customerOptions = jQuery.extend({}, crudCustomerDefaultOptions(), {
     gridFilterVisibleAlways: true,
 });
 
