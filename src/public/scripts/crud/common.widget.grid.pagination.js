@@ -97,7 +97,11 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
                     var end = getEndPage(nPagesInPaginator, TotalPages, start);
                     var tPager = jQuery("<table></table>");
 
-                    tPager.append(buildPage(0, getCurrentPage(Page), true, "&lt;&lt;", null));
+
+                    var $firstColumn = jQuery(buildPage(0, getCurrentPage(Page), true, "&lt;&lt;", null));
+                    $firstColumn.addClass('ui-gridPagination-navBar-firstCol');
+                    tPager.append($firstColumn);
+
                     tPager.append(buildPage(getCurrentPage(Page) - 1 < 0 ? 0 : getCurrentPage(Page) - 1, getCurrentPage(Page), true, "&lt;", null));
 
                     for (var i = start; i <= end; i++) {
@@ -105,7 +109,14 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
                     }
 
                     tPager.append(buildPage(getCurrentPage(Page) + 1 >= TotalPages ? getCurrentPage(Page) : getCurrentPage(Page) + 1, getCurrentPage(Page), true, "&gt;", null));
-                    tPager.append(buildPage(TotalPages - 1, getCurrentPage(Page), true, "&gt;&gt;", null));
+
+
+                    var $lastColumn = jQuery(buildPage(TotalPages - 1, getCurrentPage(Page), true, "&gt;&gt;", null));
+                    $lastColumn.addClass('ui-gridPagination-navBar-lastCol');
+                    tPager.append($lastColumn);
+
+
+                    
 
                     jQuery(self.element)
                             .append(tPager)
@@ -129,7 +140,7 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
             var $totalsBox = null;
 
             jQuery(self.element)
-                .append("<div class='ui-gridPagination-totals ui-widget-content ui-state-default'></div>")
+                .append("<div class='ui-gridPagination-totals ui-state-default'></div>")
                 .find('div.ui-gridPagination-totals:first')
                 .each(function () {
                     $totalsBox = jQuery(this);

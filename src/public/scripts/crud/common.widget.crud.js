@@ -200,7 +200,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
             var template = '<div class="ui-crud-messages ui-state-default ui-helper-hidden"></div>' +
                             '<div class="{0}"></div>' +
-                            '<div class="{1} ui-ribbonButtons ui-widget-content ui-state-default"></div>' +
+                            '<div class="{1} ui-ribbonButtons  ui-state-default"></div>' +
                             '<div class="{2}"></div>' +
                             '<div class="{3}"></div>';
 
@@ -212,7 +212,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         };
 
         jQuery(this.element)
-            .addClass('ui-crud')
+            .addClass('ui-crud ui-widget-content')
             .append(templateGet())
             .find('div.ui-crud-messages:first')
                 .each(function () {
@@ -572,9 +572,9 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
         jQuery(this.element)
             .addClass('ui-crudFilter ui-helper-hidden')
                 .children()
-                .wrapAll('<div class="ui-crudFilter-form ui-widget-content" />')
+                .wrapAll('<div class="ui-crudFilter-form " />')
                 .end()
-        .prepend('<div class="ui-crudFilter-buttons ui-ribbonButtons ui-widget-content ui-state-default"></div>');
+        .prepend('<div class="ui-crudFilter-buttons ui-ribbonButtons  ui-state-default"></div>');
 
         this._filterButtonsInit();
     },
@@ -758,10 +758,11 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         var str = '';
 
         for (var i = 0; i < this.options.gridModel.length; i++) {
-            str += '<div class="ui-crudGrid-{0} ui-widgetGrid-column ui-widget-content ui-state-default"><div class="ui-widgetGrid-column-content">{1}</div></div>'
+            str += '<div class="ui-crudGrid-{0} ui-widgetGrid-column ui-state-default {2}"><div class="ui-widgetGrid-column-content">{1}</div></div>'
                 .format(
                         this.options.gridModel[i].key,
-                        dataItem[this.options.gridModel[i].key]);
+                        dataItem[this.options.gridModel[i].key],
+                        (i == (this.options.gridModel.length - 1) ? 'ui-crudGrid-column-last' : ''));
         }
 
         return str;
@@ -791,7 +792,9 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
 
             for (var i = 0; i < data.Data.length; i++) {
                 var dataItem = data.Data[i];
-                var $row = jQuery('<div class="ui-crudGrid-dataRow ui-widgetGrid-row">{0}</div>'.format(self._gridRowTemplate(dataItem)));
+                var $row = jQuery('<div class="ui-crudGrid-dataRow ui-widgetGrid-row ui-state-default {1}">{0}</div>'
+                            .format(self._gridRowTemplate(dataItem),
+                                    (i == (data.Data.length - 1) ? 'ui-crudGrid-row-last' : '')));
 
                 for (var j = 0; j < this.options.gridModel.length; j++) {
 
@@ -808,7 +811,7 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
             }
         }
         else {
-            var $emtpyRow = '<div class="ui-widgetGrid-emptyRow ui-widgetGrid-column ui-widget-content ui-state-active"><div class="ui-widgetGrid-column-content">{0}</div></div>'
+            var $emtpyRow = '<div class="ui-widgetGrid-emptyRow ui-widgetGrid-column  ui-state-active"><div class="ui-widgetGrid-column-content">{0}</div></div>'
                                 .format('No data here');
 
             jQuery(self.options.gridBodyDOMId).append($emtpyRow);
@@ -841,9 +844,9 @@ jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
             .addClass('ui-crudForm ui-helper-hidden')
             .append('<div class="ui-crudForm-modelBinding"></div>')
             .children()
-                .wrapAll('<div class="ui-crudForm-formContent ui-widget-content" />')
+                .wrapAll('<div class="ui-crudForm-formContent " />')
             .end()
-            .prepend('<div class="ui-crudForm-buttons ui-ribbonButtons ui-widget-content ui-state-default">');
+            .prepend('<div class="ui-crudForm-buttons ui-ribbonButtons  ui-state-default">');
 
         this.options.formButtonsDOMId = jQuery(this.element).find('div.ui-crudForm-buttons:first');
 

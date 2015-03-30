@@ -23,7 +23,7 @@
         this._super();
     },
     _template: function () {
-        return "<div class='ui-corner-bottom ui-widget-content ui-widgetModel-content '></div>";
+        return "<div class='ui-corner-bottom ui-widgetModel-content '></div>";
 
 
         //var valSummary = '' +

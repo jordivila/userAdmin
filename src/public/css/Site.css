@@ -24,6 +24,7 @@ html, body {height:100%;display:table;width:100%;}
 .ui-site-title h1{font-size: 1em;margin:0em;font-weight:normal;}
 
 .ui-sitePage{display:table; width:100%; margin:0 auto 0 auto;}
+.ui-sitePage .ui-siteContent  {background-image:none;}
 .ui-site-templateInfo {padding:2em;}
 
 
