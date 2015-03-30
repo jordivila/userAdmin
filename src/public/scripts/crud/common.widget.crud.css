@@ -1,14 +1,15 @@
 ﻿.ui-crud {background-image:none;}
 .ui-crud h3 {padding: 0.5em;margin:0.5em 0 0.5em 0;}
 /*override ribbon buttons*/
-.ui-crud .ui-ribbonButtons { /*border-bottom:0em;border-top:0em;*/padding:0em;background-image:none;border-width:0;}
+.ui-crud .ui-ribbonButtons { padding:0em;background-image:none;border-width:0;}
 .ui-crud .ui-ribbonButtons * {background-image:none;}
 .ui-crud .ui-ribbonButtons button {margin-bottom: 0.1em !important;font-weight:normal;border:none;}
-.ui-crud .ui-ribbonButtons span.ui-button-text {/*font-size:1.1em !important;*/}
+.ui-crud .ui-ribbonButtons span.ui-button-text {}
+.ui-crud .ui-crudFilter-buttons { border-bottom-width:0.1em !important; }
 /*override widgetModel*/
 .ui-crud .ui-widgetModel div.ui-widgetModel-content {padding:0 0 0 0;}
 .ui-crud .ui-widgetModel .ui-widgetModelItem {padding:.5em .5em .5em 0em;}
-.ui-crud .ui-crud-messages {background-image:none;/*border-top:none;border-bottom:none;*/display:block;min-height:2em;border-width:0;}
+.ui-crud .ui-crud-messages {background-image:none;display:block;min-height:2em;border-width:0;}
 .ui-crud .ui-crud-messages .ui-crud-title {padding:0.5em 0.5em 0 0.5em;text-align:center;}
 .ui-crud .ui-crud-messages .ui-crud-error {padding:0.2em;border:0; font-weight:normal;text-align:center;}
 .ui-crud .ui-crud-messages .ui-crud-info {padding:0.2em;border:0; font-weight:normal;text-align:center;}
@@ -36,9 +37,7 @@
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-totals .ui-gridPagination-pageSizePicker select {padding:0 0 0 0;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager.ui-crudGrid-pager-bottom  .ui-gridPagination-totals{border-bottom-width:0;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager.ui-crudGrid-pager-top     .ui-gridPagination-totals{border-bottom-width:0;}
-
 .ui-crud .ui-crudForm { padding:0em !important; }
 .ui-crud .ui-crudForm .ui-crudForm-buttons {border-bottom-width:0.1em !important;}
 .ui-crud .ui-crudForm .ui-crudForm-form { padding:1em !important;}
-/*.ui-crud .ui-crudForm .ui-widget-content{ background-image:none !important;border-width-0;}*/
 .ui-crud .ui-crudForm .ui-crudForm-formContent {padding:0.5em;border-width:0;}
