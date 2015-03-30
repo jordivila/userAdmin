@@ -1,5 +1,7 @@
 ﻿
-jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
+
+
+jQuery.widget("ui.crudExtendedSample", jQuery.ui.commonBaseWidget,
 {
     options: {
         customerDOMId: null,
@@ -17,9 +19,6 @@ jQuery.widget("ui.cirDataEntry", jQuery.ui.commonBaseWidget,
         this._super();
 
         var self = this;
-
-
-
 
         var customerOptions = jQuery.extend({}, crudCustomerDefaultOptions(), {
             gridFilterVisibleAlways: true,

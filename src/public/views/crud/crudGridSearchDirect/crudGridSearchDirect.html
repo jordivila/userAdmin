@@ -1,8 +1,31 @@
-<div class="ui-crudGridSearchDirect">
-    <div class="ui-customerCrud ui-helper-hidden"></div>
-</div>
+<div class="ui-customerCrud ui-helper-hidden"></div>
 
-<link href="/public/views/crud/crudGridSearchDirect/crudGridSearchDirect.css" rel="stylesheet" />
-<script src="/public/views/crud/crudCustomerData.js"></script>
-<script src="/public/views/crud/crudCustomerDefaultOptions.js"></script>
-<script src="/public/views/crud/crudGridSearchDirect/crudGridSearchDirect.js"></script>
+
+<link href="/public/views/crud/crudSamples.css" rel="stylesheet" />
+<script src="/public/views/crud/crudSamplesCustomerData.js"></script>
+<script src="/public/views/crud/crudSamplesCustomerDefaultOptions.js"></script>
+
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+
+        var customerOptions = jQuery.extend({}, crudCustomerDefaultOptions(), {
+            gridFilterVisibleAlways: true,
+        });
+
+        jQuery('body')
+            .find('h1:first')
+                .html('Crud - Filter always visible')
+            .end()
+            .find('div.ui-customerCrud:first')
+                .crud(customerOptions)
+                .hide()
+                .removeClass('ui-helper-hidden')
+                .fadeIn()
+            .end();
+
+
+    });
+
+</script>

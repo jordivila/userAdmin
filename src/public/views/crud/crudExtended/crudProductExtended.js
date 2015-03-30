@@ -315,6 +315,11 @@ var productAjax = {
                 modelErrors.push({ key: "SomeStringFromList", value: ["este es un campo requerido"] });
             }
 
+            if (dataItem.FormData.SomeDate === "")
+            {
+                modelErrors.push({ key: "SomeDate", value: ["este es un campo requerido"] });
+            }
+
             if (isNaN(dataItem.FormData.SomeFloat)) {
                 modelErrors.push({ key: "SomeFloat", value: ["Se esperaba un número"] });
             }

@@ -177,7 +177,8 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
                 })
             .end()
             .find(':input')
-            .addClass('ui-widget-content')
+            //.addClass('ui-widget-content')
+            .addClass('ui-state-default')
             .focus(function () {
                 jQuery(this).addClass('ui-state-focus');
             })

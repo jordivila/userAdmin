@@ -1,8 +1,26 @@
-<div class="ui-crudGridSearch">
-    <div class="ui-customerCrud ui-helper-hidden"></div>
-</div>
+<div class="ui-customerCrud ui-helper-hidden"></div>
 
-<link href="/public/views/crud/crudGridSearch/crudGridSearch.css" rel="stylesheet" />
-<script src="/public/views/crud/crudCustomerData.js"></script>
-<script src="/public/views/crud/crudCustomerDefaultOptions.js"></script>
-<script src="/public/views/crud/crudGridSearch/crudGridSearch.js"></script>
+
+
+<link href="/public/views/crud/crudSamples.css" rel="stylesheet" />
+<script src="/public/views/crud/crudSamplesCustomerData.js"></script>
+<script src="/public/views/crud/crudSamplesCustomerDefaultOptions.js"></script>
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+
+        jQuery('body')
+            .find('h1:first')
+                .html('Crud - Search & paginate')
+            .end()
+            .find('div.ui-customerCrud:first')
+                .crud(crudCustomerDefaultOptions())
+
+                .hide()
+                .removeClass('ui-helper-hidden')
+                .fadeIn()
+            .end();
+
+    });
+
+</script>

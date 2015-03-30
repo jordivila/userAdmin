@@ -1,12 +1,25 @@
 
-<div class="ui-cirDataEntry">
+<div class="ui-crudExtendedSample">
     <div class="ui-productCrud ui-helper-hidden"></div>
     <div class="ui-customerCrud ui-helper-hidden"></div>
 </div>
 
-<link href="/public/views/crud/crudExtended/crudExtended.css" rel="stylesheet" />
-<script src="/public/views/crud/crudExtended/cir.widget.crudProduct.js"></script>
-<script src="/public/views/crud/crudCustomerData.js"></script>
-<script src="/public/views/crud/crudCustomerDefaultOptions.js"></script>
-<script src="/public/views/crud/crudExtended/cir.widget.cirDataEntry.js"></script>
-<script src="/public/views/crud/crudExtended/crudExtended.js"></script>
+<link href="/public/views/crud/crudSamples.css" rel="stylesheet" />
+
+<script src="/public/views/crud/crudSamplesCustomerData.js"></script>
+<script src="/public/views/crud/crudSamplesCustomerDefaultOptions.js"></script>
+<script src="/public/views/crud/crudExtended/crudProductExtended.js"></script>
+<script src="/public/views/crud/crudExtended/crudPage.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+
+        jQuery('body')
+            .find('h1:first')
+                .html('Crud - Extended widget')
+            .end()
+            .find('div.ui-crudExtendedSample:first')
+                .crudExtendedSample()
+            .end();
+
+    });
+</script>

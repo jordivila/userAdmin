@@ -168,17 +168,18 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
             return defaultButtons;
         },
         gridPagerInit: function () {
+            // overrides default pagination mode
             return {
-                pagerTop: {
-                    paginationShow: false,
-                    totalRowsShow: false,
-                    pageSizeShow: false,
-                },
-                pagerBottom: {
-                    paginationShow: true,
-                    totalRowsShow: true,
-                    pageSizeShow: true,
-                }
+                //pagerTop: {
+                //    paginationShow: true,
+                //    totalRowsShow: true,
+                //    pageSizeShow: true,
+                //},
+                //pagerBottom: {
+                //    paginationShow: true,
+                //    totalRowsShow: true,
+                //    pageSizeShow: true,
+                //}
             };
         },
 
@@ -665,18 +666,19 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         },
         gridRowAlternateClass: '',
         gridPagerInit: function () {
-            return {
-                pagerTop: {
-                    paginationShow: false,
-                    totalRowsShow: false,
-                    pageSizeShow: false,
-                },
-                pagerBottom: {
-                    paginationShow: true,
-                    totalRowsShow: true,
-                    pageSizeShow: true,
-                }
-            };
+            return {};
+            //return {
+            //    pagerTop: {
+            //        paginationShow: false,
+            //        totalRowsShow: false,
+            //        pageSizeShow: false,
+            //    },
+            //    pagerBottom: {
+            //        paginationShow: true,
+            //        totalRowsShow: true,
+            //        pageSizeShow: true,
+            //    }
+            //};
         },
     },
     _create: function () {
@@ -704,7 +706,24 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         };
 
 
-        var pagerConfig = this.options.gridPagerInit();
+
+
+        var pagerConfig = jQuery.extend({},
+            {
+                pagerTop: {
+                    paginationShow: false,
+                    totalRowsShow: false,
+                    pageSizeShow: false,
+                },
+                pagerBottom: {
+                    paginationShow: true,
+                    totalRowsShow: true,
+                    pageSizeShow: true,
+                }
+            },
+            this.options.gridPagerInit());
+
+        console.log(pagerConfig);
 
         jQuery(self.options.gridPagerDOMId)
                 .first()

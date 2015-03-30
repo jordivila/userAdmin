@@ -49,6 +49,12 @@
                     }
                 });
 
+        jQuery(this.element)
+            .find('ul')
+                .each(function () {
+                    jQuery(this).children().last().addClass('ui-menuList-item-last');
+                });
+
         w._trigger('dataBound', null, null);
 
     },

@@ -22,6 +22,7 @@ module.exports = function (grunt) {
                       "src/public/css/Site.FontSizes.css",
                       "src/public/css/Site.jQuery.OverrideRoundCorners.css",
                       "src/public/css/Site.JqueryUI.IconsExtendWithFontAwsome.css",
+                      "src/public/css/ui-widgetBase.css",
                       "src/public/css/ui-widgetMsg.css",
                       "src/public/css/ui-breadcrumb.css",
                       "src/public/css/ui-dateSelector.css",
