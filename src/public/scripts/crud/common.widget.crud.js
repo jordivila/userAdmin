@@ -1,15 +1,4 @@
 ﻿
-var crudEmptyDataResult = {
-    Data: [],
-    IsValid: true,
-    Message: null,
-    Page: 0,
-    PageSize: 10,
-    SortAscending: false,
-    SortBy: "",
-    TotalRows: 0
-};
-
 jQuery.widget("ui.crudBase", jQuery.ui.commonBaseWidget,
 {
     options: {
@@ -170,16 +159,17 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         gridPagerInit: function () {
             // overrides default pagination mode
             return {
-                //pagerTop: {
-                //    paginationShow: true,
-                //    totalRowsShow: true,
-                //    pageSizeShow: true,
-                //},
-                //pagerBottom: {
-                //    paginationShow: true,
-                //    totalRowsShow: true,
-                //    pageSizeShow: true,
-                //}
+                pageSize: 10,
+                pagerTop: {
+                    paginationShow: false,
+                    totalRowsShow: false,
+                    pageSizeShow: false,
+                },
+                pagerBottom: {
+                    paginationShow: true,
+                    totalRowsShow: true,
+                    pageSizeShow: true,
+                }
             };
         },
 
@@ -267,11 +257,25 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
             },
             self.options.gridCustomOptions);
 
+
+
+        var crudEmptyDataResult = {
+            Data: [],
+            IsValid: true,
+            Message: null,
+            Page: 0,
+            PageSize: self.options.gridPagerInit().pageSize,
+            SortAscending: false,
+            SortBy: "",
+            TotalRows: 0
+        };
+
         jQuery(this.options.gridDOMId).crudGrid(gridOptions);
         jQuery(this.options.gridDOMId).crudGrid('bind', crudEmptyDataResult);
 
         this.options.gridFilterInit(self, {
             Model: self.options.filterModel,
+            PageSize: self.options.gridPagerInit().pageSize,
             gridFilterVisibleAlways: self.options.gridFilterVisibleAlways,
             filterButtonsInit: self.options.gridFilterButtonsInit,
             errorDisplay: function (e, msg) {
@@ -702,11 +706,8 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
         var pagerOpts = {
             change: function (e, pagination) {
                 self._trigger('paginated', null, pagination);
-            }
+            },
         };
-
-
-
 
         var pagerConfig = jQuery.extend({},
             {
@@ -723,7 +724,6 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
             },
             this.options.gridPagerInit());
 
-        console.log(pagerConfig);
 
         jQuery(self.options.gridPagerDOMId)
                 .first()

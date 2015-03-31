@@ -348,12 +348,12 @@
                                         text: "Grid pagination config"
                                     },
                                     {
-                                        url: "/public/views/crud/crudGridPaginationMobile/crudGridPaginationMobile.html",
-                                        text: "Grid Fixed"
+                                        url: "/public/views/crud/crudScrollableByJs/crudScrollableByJs.html",
+                                        text: "Grid scrollable by js"
                                     },
                                     {
-                                        url: "/public/views/crud/crudGridPaginationMobileOnly/crudGridPaginationMobileOnly.html",
-                                        text: "Grid fixed mobile only"
+                                        url: "/public/views/crud/crudScrollableByCss/crudScrollableByCss.html",
+                                        text: "Grid scrollable by css (mobile only)"
                                     },
                                     {
                                         url: "/public/views/crud/crudFormSimple/crudFormSimple.html",

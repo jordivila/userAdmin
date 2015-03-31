@@ -7,6 +7,7 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
         totalRowsShow: true,
         pageSizeShow: true,
         nPagesInPaginator: 3,
+        pageSize: 10,
     },
     _create: function () {
 
@@ -16,8 +17,7 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
 
         this._super();
 
-
-        this.bind(0, 0, 0);
+        this.bind(0, this.options.pageSize, 0);
 
     }, destroy: function () {
 
@@ -37,7 +37,11 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
 
         jQuery(self.element).empty();
 
+
+
         try {
+
+            pageSize = pageSize || this.options.pageSize;
 
             var Page = parseInt(pageIndex);
             var PageSize = parseInt(pageSize);
@@ -159,6 +163,8 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
             $totalsBox
                     .append("<div class='ui-gridPagination-pageSizePicker'><select></select> por pagina</div>"
                         .format(PageSize));
+
+            
 
             var strOptions = '';
 
