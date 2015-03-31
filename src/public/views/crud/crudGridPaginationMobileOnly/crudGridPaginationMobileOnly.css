@@ -5,7 +5,7 @@
 
 @media all and (max-width: 60em)
 {
-.ui-mobileResolution-sampleError {display:none;}
+.ui-mobileResolution-sampleError {display:none !important;}
 
 /*the code under this line works great on mobile resolutions but not on desktop*/
 .ui-crudGrid {}
@@ -16,4 +16,8 @@
 .ui-crudGrid-pager-bottom .ui-gridPagination-navBar {}
 .ui-crudGrid-pager-bottom .ui-gridPagination-totals {bottom:0;position:absolute;width:100%;}
 /*END -> the code above works great on mobile phone but not on desktop*/
+}
+@media all and (nmin-width: 60em)
+{
+    .ui-mobileResolution-sampleError {display:block !important;}
 }
