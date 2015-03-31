@@ -1,8 +1,14 @@
+
+<h1 class="ui-mobileResolution-sampleError ui-state-error">
+    This sample is for mobile resolutions only. 
+    <br />Make your screen smaller and see the magic
+</h1>
+
 <div class="ui-customerCrud ui-helper-hidden"></div>
 
 
 <link href="/public/views/crud/crudSamples.css" rel="stylesheet" />
-<link href="/public/views/crud/crudGridPaginationMobile/crudGridPaginationMobile.css" rel="stylesheet" />
+<link href="/public/views/crud/crudGridPaginationMobileOnly/crudGridPaginationMobileOnly.css" rel="stylesheet" />
 
 <script src="/public/views/crud/crudSamplesCustomerData.js"></script>
 <script src="/public/views/crud/crudSamplesCustomerDefaultOptions.js"></script>
@@ -10,10 +16,8 @@
 <script type="text/javascript">
 
     jQuery(document).ready(function () {
-
-
         var customerOptions = jQuery.extend({}, crudCustomerDefaultOptions(), {
-            //gridFilterVisibleAlways: true,
+            
         });
 
         jQuery('body')
@@ -27,26 +31,6 @@
                 .removeClass('ui-helper-hidden')
                 .fadeIn()
             .end();
-
-
-        var $gridControl = jQuery('div.ui-crudCrud-gridControl:first');
-
-        var gridControlResize = function () {
-
-            function convertEmToPixels(value) {
-                return value * (parseFloat(getComputedStyle(document.documentElement).fontSize));
-            }
-
-            $gridControl.height(jQuery(window).height() - convertEmToPixels(9.7));
-        };
-
-        jQuery(window)
-            .resize(function (e, ui) {
-                gridControlResize();
-            });
-
-        gridControlResize();
-
     });
 
 </script>

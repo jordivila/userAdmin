@@ -1,6 +1,8 @@
 ﻿html{
   font-size: 0.7em !important;
 }
+
+
 @media screen and (min-width: 600px){
   html{
     font-size: 0.8em !important;

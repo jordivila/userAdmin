@@ -333,31 +333,35 @@
                                 childs: [
                                     {
                                         url: "/public/views/crud/crudGridSimple/crudGridSimple.html",
-                                        text: "Crud read only - Simple Grid"
+                                        text: "Simple Grid"
                                     },
                                     {
                                         url: "/public/views/crud/crudGridSearch/crudGridSearch.html",
-                                        text: "Crud read only - Search & paginate"
+                                        text: "Search & paginate"
                                     },
                                     {
                                         url: "/public/views/crud/crudGridSearchDirect/crudGridSearchDirect.html",
-                                        text: "Crud read only - Search Filter visible"
+                                        text: "Search Filter visible"
                                     },
                                     {
                                         url: "/public/views/crud/crudGridPagination/crudGridPagination.html",
-                                        text: "Crud read only - Grid pagination"
+                                        text: "Grid pagination config"
                                     },
                                     {
                                         url: "/public/views/crud/crudGridPaginationMobile/crudGridPaginationMobile.html",
-                                        text: "Crud read only - Grid pagination mobile"
+                                        text: "Grid Fixed"
+                                    },
+                                    {
+                                        url: "/public/views/crud/crudGridPaginationMobileOnly/crudGridPaginationMobileOnly.html",
+                                        text: "Grid fixed mobile only"
                                     },
                                     {
                                         url: "/public/views/crud/crudFormSimple/crudFormSimple.html",
-                                        text: "Crud - Simple form"
+                                        text: "CRUD Simple form"
                                     },
                                     {
                                         url: "/public/views/crud/crudExtended/crudExtended.html",
-                                        text: "Crud - Extended"
+                                        text: "CRUD Extended"
                                     },
                                 ],
                             },
