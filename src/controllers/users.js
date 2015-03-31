@@ -348,6 +348,10 @@
                                         text: "Crud read only - Grid pagination"
                                     },
                                     {
+                                        url: "/public/views/crud/crudGridPaginationMobile/crudGridPaginationMobile.html",
+                                        text: "Crud read only - Grid pagination mobile"
+                                    },
+                                    {
                                         url: "/public/views/crud/crudFormSimple/crudFormSimple.html",
                                         text: "Crud - Simple form"
                                     },

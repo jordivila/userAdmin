@@ -1,0 +1,38 @@
+<div class="ui-customerCrud ui-helper-hidden"></div>
+
+
+<link href="/public/views/crud/crudSamples.css" rel="stylesheet" />
+<script src="/public/views/crud/crudSamplesCustomerData.js"></script>
+<script src="/public/views/crud/crudSamplesCustomerDefaultOptions.js"></script>
+
+<style type="text/css">
+.ui-customerCrud {}
+.ui-customerCrud .ui-crudCrud-filter {}
+.ui-customerCrud .ui-crudCrud-gridButtons {}
+.ui-customerCrud .ui-crudCrud-gridControl {}
+.ui-customerCrud .ui-crudGrid-pager-bottom  {position:fixed;width:99.5%;bottom:0; }
+.ui-customerCrud .ui-crudGrid-body {height:100%; overflow:scroll;}
+.ui-customerCrud .ui-crudGrid-body .ui-widgetGrid-emptyRow {height:100%;}</style>
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+
+
+        var customerOptions = jQuery.extend({}, crudCustomerDefaultOptions(), {
+            gridFilterVisibleAlways: true,
+        });
+
+        jQuery('body')
+            .find('h1:first')
+                .html('Crud - Pagination for mobile')
+            .end()
+            .find('div.ui-customerCrud:first')
+                .crud(customerOptions)
+
+                .hide()
+                .removeClass('ui-helper-hidden')
+                .fadeIn()
+            .end();
+    });
+
+</script>
