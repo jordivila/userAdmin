@@ -333,7 +333,7 @@
                                 childs: [
                                     {
                                         url: "/public/views/crud/crudGridSimple/crudGridSimple.html",
-                                        text: "Simple Grid"
+                                        text: "Basic Grid"
                                     },
                                     {
                                         url: "/public/views/crud/crudGridSearch/crudGridSearch.html",
@@ -341,19 +341,19 @@
                                     },
                                     {
                                         url: "/public/views/crud/crudGridSearchDirect/crudGridSearchDirect.html",
-                                        text: "Search Filter visible"
+                                        text: "Search filter on top"
                                     },
                                     {
                                         url: "/public/views/crud/crudGridPagination/crudGridPagination.html",
-                                        text: "Grid pagination config"
+                                        text: "Pagination config"
                                     },
                                     {
                                         url: "/public/views/crud/crudScrollableByJs/crudScrollableByJs.html",
-                                        text: "Grid scrollable by js"
+                                        text: "Scrollable (Javascript)"
                                     },
                                     {
                                         url: "/public/views/crud/crudScrollableByCss/crudScrollableByCss.html",
-                                        text: "Grid scrollable by css (mobile only)"
+                                        text: "Scrollable (Css)"
                                     },
                                     {
                                         url: "/public/views/crud/crudFormSimple/crudFormSimple.html",

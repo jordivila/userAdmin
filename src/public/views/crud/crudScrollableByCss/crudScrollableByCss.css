@@ -1,11 +1,11 @@
-
-.ui-mobileResolution-sampleError {padding:2em;text-align:center;}
+.ui-mobileResolution-sampleError {padding:2em;text-align:center;display:block !important;}
 
 @media all and (max-width: 60em)
 {
 .ui-mobileResolution-sampleError {display:none !important;}
 
 /*the code under this line works great on mobile resolutions but not on desktop*/
+
 .ui-crudGrid {}
 .ui-crudGrid-header {position:absolute; top:8.6em; left:0; height:2em; right:0;overflow:hidden;}
 .ui-crudGrid-body {position:absolute; top:11.9em; bottom:6em; left:0; right:0; overflow:auto;border:1px solid red !important;border-bottom-width:1em !important;}
@@ -14,6 +14,7 @@
 .ui-crudGrid-pager-bottom .ui-gridPagination-navBar {}
 .ui-crudGrid-pager-bottom .ui-gridPagination-totals {bottom:0;position:absolute;width:100%;}
 .ui-widgetGrid-emptyRow {padding:0 0 0 0 !important;height:100%;display:table;width:100%;}
-.ui-widgetGrid-emptyRow div {position:absolute;top:50%;left:45%;right:45%; width:10em;}
+.ui-widgetGrid-emptyRow div {vertical-align:middle;display:table-cell;}
 /*END -> the code above works great on mobile phone but not on desktop*/
 }
+

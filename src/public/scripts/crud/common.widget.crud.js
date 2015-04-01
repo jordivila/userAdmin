@@ -236,7 +236,9 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                 },
                 dataBound: function () {
                     if (jQuery(self.options.gridFilterDOMId).is(':visible')) {
-                        self._actionSet(self._actions.list);
+                        if (self.options.gridFilterVisibleAlways === false) {
+                            self._actionSet(self._actions.list);
+                        }
                     }
                 },
                 paginated: function (e, pagination) {
@@ -361,6 +363,9 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
         var self = this;
 
+
+        console.log(actionSelected);
+
         jQuery(self.options.gridFilterDOMId).hide();
         jQuery(self.options.gridButtonsDOMId).hide();
         jQuery(self.options.gridDOMId).hide();
@@ -419,8 +424,6 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
             dfd.reject(self.namespace + '.' + self.widgetName + "options.gridSearchMethod is an abstract method. Child class must implement");
         }
         else {
-
-            console.log(self.options.gridFilterObject);
 
             jQuery.when(self.options.gridSearchMethod(self.options.gridFilterObject))
                 .then(
@@ -602,7 +605,7 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
             defaultButtonsArray.push(
             {
                 id: "cancel",
-                text: "Cancelar",
+                text: "Volver",
                 cssClass: "ui-cancel-button ui-state-default",
                 icon: "ui-icon-circle-arrow-w",
                 click: function (self) {
@@ -614,7 +617,7 @@ jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
         defaultButtonsArray.push(
         {
             id: "filter",
-            text: "Aplicar filtro",
+            text: "Buscar",
             cssClass: "ui-search-button ui-state-default",
             icon: "ui-icon-search",
             click: function (self) {
@@ -746,9 +749,10 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
     },
     _gridTemplate: function () {
 
-        return '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
-                '<div class="ui-helper-clearfix" ></div>' +
-                '<div class="ui-crudGrid">' +
+        return '<div class="ui-crudGrid-container">' +
+                    '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
+                    '<div class="ui-helper-clearfix" ></div>' +
+
                     '<div class="ui-crudGrid-header ui-widgetGrid-header ui-state-default">' +
                         '<div class="ui-widgetGrid-row" >' +
                             this._gridHeaderTemplate() +
@@ -759,8 +763,28 @@ jQuery.widget("ui.crudGrid", jQuery.ui.crudBase,
 
                     '</div>' +
                     '<div class="ui-helper-clearfix" ></div>' +
-                '</div>' +
-                '<div class="ui-crudGrid-pager ui-crudGrid-pager-bottom ui-state-default"></div>';
+                    '<div class="ui-crudGrid-pager ui-crudGrid-pager-bottom ui-state-default"></div>' +
+                    '<div class="ui-helper-clearfix" ></div>' +
+                '</div>'
+        ;
+
+
+
+        //return '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
+        //        '<div class="ui-helper-clearfix" ></div>' +
+        //        '<div class="ui-crudGrid">' +
+        //            '<div class="ui-crudGrid-header ui-widgetGrid-header ui-state-default">' +
+        //                '<div class="ui-widgetGrid-row" >' +
+        //                    this._gridHeaderTemplate() +
+        //                '</div>' +
+        //            '</div>' +
+        //            '<div class="ui-helper-clearfix" ></div>' +
+        //            '<div class="ui-crudGrid-body ui-widgetGrid-body ui-helper-clearfix" >' +
+
+        //            '</div>' +
+        //            '<div class="ui-helper-clearfix" ></div>' +
+        //        '</div>' +
+        //        '<div class="ui-crudGrid-pager ui-crudGrid-pager-bottom ui-state-default"></div>';
     },
     _gridHeaderTemplate: function () {
 
