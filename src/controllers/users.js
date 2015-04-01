@@ -329,7 +329,7 @@
                                 ]
                             },
                             {
-                                text: "Crud widget",
+                                text: "Crud widget - Readonly Grid",
                                 childs: [
                                     {
                                         url: "/public/views/crud/crudGridSimple/crudGridSimple.html",
@@ -348,13 +348,22 @@
                                         text: "Pagination config"
                                     },
                                     {
-                                        url: "/public/views/crud/crudScrollableByJs/crudScrollableByJs.html",
-                                        text: "Scrollable (Javascript)"
+                                        url: "/public/views/crud/crudScrollable/crudScrollable.html",
+                                        text: "Scrollable"
                                     },
                                     {
-                                        url: "/public/views/crud/crudScrollableByCss/crudScrollableByCss.html",
-                                        text: "Scrollable (Css)"
+                                        url: "/public/views/crud/crudExpand/crudExpand.html",
+                                        text: "Expand grid"
                                     },
+                                    {
+                                        url: "/public/views/crud/crudExpand/crudExpandAndResize.html",
+                                        text: "Expand grid & resize"
+                                    },
+                                ],
+                            },
+                            {
+                                text: "Crud widget",
+                                childs: [
                                     {
                                         url: "/public/views/crud/crudFormSimple/crudFormSimple.html",
                                         text: "CRUD Simple form"

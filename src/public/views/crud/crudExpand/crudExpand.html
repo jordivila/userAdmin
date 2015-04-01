@@ -1,12 +1,7 @@
-<h3 class="ui-mobileResolution-sampleError ui-state-error ui-helper-hidden">
-    This sample is for mobile resolutions only. 
-    <br />Make your screen smaller and see the magic.
-</h3>
 <div class="ui-customerCrud ui-helper-hidden"></div>
 
-
 <link href="/public/views/crud/crudSamples.css" rel="stylesheet" />
-<link href="/public/views/crud/crudScrollableByCss/crudScrollableByCss.css" rel="stylesheet" />
+<link href="/public/views/crud/crudExpand/crudExpand.css" rel="stylesheet" />
 
 <script src="/public/views/crud/crudSamplesCustomerData.js"></script>
 <script src="/public/views/crud/crudSamplesCustomerDefaultOptions.js"></script>
@@ -25,7 +20,7 @@
 
         jQuery('body')
             .find('h1:first')
-                .html('Crud widget - Grid scrollable (css mobile only)')
+                .html('Crud widget - Grid expands to window height')
             .end()
             .find('div.ui-customerCrud:first')
                 .crud(customerOptions)
@@ -34,15 +29,6 @@
                 .removeClass('ui-helper-hidden')
                 .fadeIn()
             .end();
-
-        //setTimeout(function () {
-
-        //    jQuery('h3.ui-mobileResolution-sampleError:first')
-        //            .delay(1000)
-        //            .removeClass('ui-helper-hidden')
-        //        .end();
-
-        //}, 1000);
     });
 
 </script>

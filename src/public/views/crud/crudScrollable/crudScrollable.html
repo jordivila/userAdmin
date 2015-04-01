@@ -1,22 +1,18 @@
 <div class="ui-customerCrud ui-helper-hidden"></div>
 
-
 <link href="/public/views/crud/crudSamples.css" rel="stylesheet" />
-<link href="/public/views/crud/crudScrollableByJs/crudScrollableByJs.css" rel="stylesheet" />
+<style type="text/css">
+    .ui-crudGrid-body {height:10em;overflow:auto;}
+</style>
 
 <script src="/public/views/crud/crudSamplesCustomerData.js"></script>
 <script src="/public/views/crud/crudSamplesCustomerDefaultOptions.js"></script>
-
 <script type="text/javascript">
 
     jQuery(document).ready(function () {
 
         var customerOptions = jQuery.extend({}, crudCustomerDefaultOptions(), {
-            gridPagerInit: function () {
-                return {
-                    pageSize: 30,
-                };
-            },
+            gridFilterVisibleAlways: true,
         });
 
         jQuery('body')
@@ -30,26 +26,6 @@
                 .removeClass('ui-helper-hidden')
                 .fadeIn()
             .end();
-
-
-        var $gridControl = jQuery('div.ui-crudCrud-gridControl:first');
-
-        var gridControlResize = function () {
-
-            function convertEmToPixels(value) {
-                return value * (parseFloat(getComputedStyle(document.documentElement).fontSize));
-            }
-
-            $gridControl.height(jQuery(window).height() - convertEmToPixels(9.7));
-        };
-
-        jQuery(window)
-            .resize(function (e, ui) {
-                gridControlResize();
-            });
-
-        gridControlResize();
-
     });
 
 </script>
