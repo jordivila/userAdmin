@@ -512,6 +512,7 @@ jQuery.widget("ui.product", jQuery.ui.crud,
 {
     options: {
         filterModel: productFilterModelGet(this),
+        gridFilterVisibleAlways: true,
         gridSearchMethod: productAjax.ajax.productSearch,
         gridSearchForEditMethod: productAjax.ajax.productSearchForEdit,
         gridButtonsGet: function (crudWidget, defaultButtons) {

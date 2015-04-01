@@ -329,7 +329,7 @@
                                 ]
                             },
                             {
-                                text: "Crud widget - Readonly Grid",
+                                text: "Grid widget",
                                 childs: [
                                     {
                                         url: "/public/views/crud/crudGridSimple/crudGridSimple.html",
@@ -352,10 +352,6 @@
                                         text: "Scrollable"
                                     },
                                     {
-                                        url: "/public/views/crud/crudExpand/crudExpand.html",
-                                        text: "Expand grid"
-                                    },
-                                    {
                                         url: "/public/views/crud/crudExpand/crudExpandAndResize.html",
                                         text: "Expand grid & resize"
                                     },
@@ -369,7 +365,7 @@
                                         text: "CRUD Simple form"
                                     },
                                     {
-                                        url: "/public/views/crud/crudExtended/crudExtended.html",
+                                        url: "/public/views/crud/crudFormExtended/crudFormExtended.html",
                                         text: "CRUD Extended"
                                     },
                                 ],
