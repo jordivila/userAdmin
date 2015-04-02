@@ -1,7 +1,7 @@
 ﻿
 
 module.exports = function (grunt) {
-    
+
     var gruntOptions = {
         pkg: grunt.file.readJSON('package.json'),
         cdnFolder: 'src/public/cdn',
@@ -35,7 +35,7 @@ module.exports = function (grunt) {
                       "src/public/scripts/crud/common.widget.crud.css",
                       "src/public/scripts/crud/cir.css",
 
-                    ],
+                ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.css'
             },
             ui_js: {
@@ -49,16 +49,28 @@ module.exports = function (grunt) {
                     },
                 },
                 src: [
-                    "src/public/scripts/libs/jQuery/jquery-1.9.1.min.js",
-                    "src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery-ui.min.js",
+                    //"src/public/scripts/libs/jQuery/jquery-1.9.1.min.js",
+                    "src/public/scripts/libs/bowerComponents/jquery/jquery.min.js",
+
+                    //"src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery-ui.min.js",
+                    "src/public/scripts/libs/bowerComponents/jquery-ui/ui/minified/jquery-ui.custom.min.js",
+
                     // jQuery UI components Begin 
                     //"src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.core.min.js",
                     //"src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.widget.min.js",
                     //"src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.datepicker.min.js",
                     //"src/public/scripts/libs/jquery-ui-1.10.0/ui/minified/jquery.ui.button.min.js",
                     // jQuery UI components End
-                    "src/public/scripts/libs/jquery-validation-1.11.0/dist/jquery.validate.min.js",
+
+                    //"src/public/scripts/libs/jquery-validation-1.11.0/dist/jquery.validate.min.js",
+                    "src/public/scripts/libs/bowerComponents/jquery-validation/jquery.validate.js",
+                    
+
                     "src/public/scripts/libs/jQuery-globalize/lib/globalize.js",
+
+
+                    "src/public/scripts/libs/bowerComponents/history.js/scripts/bundled/html4+html5/jquery.history.js",
+
                     // app 
                     "src/public/scripts/Template.ExtendPrototypes.js",
                     "src/public/scripts/Template.App.Init.js",
@@ -87,11 +99,11 @@ module.exports = function (grunt) {
                     "src/public/scripts/Template.Widget.Themepicker.js",
 
                     "src/public/scripts/url/urlHelper.js",
-                    
-                    
-                    "src/public/scripts/libs/history.js/scripts/bundled/html4+html5/jquery.history.js",
+
 
                     
+
+
                     "src/public/scripts/Template.Widget.Page.js",
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_js.js'
@@ -105,15 +117,17 @@ module.exports = function (grunt) {
                         return '// Source: ' + filepath + '\n' +
                           src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
                     },
-                }, 
-                src: ["src/public/scripts/libs/jquery-ui-1.10.0/ui/i18n/jquery.ui.datepicker-es.js",
-                        "src/public/scripts/libs/jquery-validation-1.11.0/localization/messages_es.js",
+                },
+                src: [  //"src/public/scripts/libs/jquery-ui-1.10.0/ui/i18n/jquery.ui.datepicker-es.js",
+                        "src/public/scripts/libs/bowerComponents/jquery-ui/ui/i18n/jquery.ui.datepicker-es.js",
+
+                        //"src/public/scripts/libs/jquery-validation-1.11.0/localization/messages_es.js",
+                        "src/public/scripts/libs/bowerComponents/jquery-validation/localization/messages_es.js",
+
                         "src/public/scripts/libs/jQuery-globalize/lib/cultures/globalize.culture.es.js",
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_regional_es.js'
             }
-
-
         },
         uglify: {
             options: {
@@ -163,7 +177,7 @@ module.exports = function (grunt) {
                 }
             }
         },
-        
+
         bump: {
             options: {
                 files: ['package.json'],
@@ -204,7 +218,7 @@ module.exports = function (grunt) {
                 },
             }
         },
-        
+
         // grunt-watch will monitor the projects files
         // https://github.com/gruntjs/grunt-contrib-watch
         watch: {
@@ -216,7 +230,7 @@ module.exports = function (grunt) {
                     livereload: true //Enable LiveReload
                 }
             },
-            
+
             test: {
                 files: ['<%= jshint.files %>'],
                 //tasks: ['jshint:files', 'mochaTest', 'express:testQunit', 'qunit']
@@ -246,10 +260,10 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-open');
     grunt.loadNpmTasks('grunt-bump');
-    
-    
-    
-    
+
+
+
+
     grunt.registerTask('test', ['watch:test']);
     grunt.registerTask('live', ['express:testLiveReload', 'open', 'watch:testLiveReload']);
 

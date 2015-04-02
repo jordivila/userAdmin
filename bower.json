@@ -1,0 +1,24 @@
+{
+  "name": "userAdmin",
+  "version": "0.0.4198",
+  "homepage": "https://github.com/jordivila/userAdmin",
+  "authors": [
+    "Jordi Vila <jordi.vila@gmail.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "src/public/scripts/libs/bowerComponents",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "history.js": "~1.8.0",
+    "jquery": "1.9.1",
+    "jquery-ui": "1.10.0",
+    "jquery-validation": "1.11.0"
+  }
+}

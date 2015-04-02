@@ -96,23 +96,10 @@
 
 
         app.get('/template*', function (req, res, next) {
-
-            //var virtualPath = request.params.virtualPath;
-
-            //console.log(virtualPath);
             var pathName = req.params[0];
-
-            console.log("sssssssssssssssssssssssssssssssssssssssss");
-            console.log(app.get('root') + pathName);
-
             res.sendFile(pathName, {
                 root: app.get('root')
             });
-
-            //res.sendFile('index.html', {
-            //    root: app.get('views')
-            //});
-
         });
         
     };
