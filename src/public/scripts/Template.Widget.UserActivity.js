@@ -49,7 +49,6 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         var $panelMenu = jQuery('#panelMenu');
         var $panelMenuList = jQuery($panelMenu).find('div.ui-menuBase:first');
         var $panelMenuToggle = jQuery('div.ui-mainMenuToggle');
-        
 
         var panelMenuHide = function (cb) {
             $sitePage.show();
@@ -80,7 +79,52 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                 panelMenuShow(cb);
             }
         };
-        
+
+        var loadTemplate = function (templUrl) {
+
+            jQuery.ajax({
+                url: "/template" + templUrl,
+                type: "GET",
+                dataType: "html",
+                data: {}
+            })
+            .done(function (data, textStatus, jqXHR) {
+                $siteContent.empty().html(data);
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+
+                console.error("Error lading template '{0}' ->".format(templUrl), {
+                    jqXHR: jqXHR,
+                    textStatus: textStatus,
+                    errorThrown: errorThrown
+                });
+
+                $siteContent.html('<div class="ui-state-error ui-site-templateInfo">Error loading template: {0} - {1} - {2} </div>'.format(jqXHR.status, textStatus, errorThrown));
+
+            })
+            .always(function () {
+                self.progressHide();
+            });
+
+        };
+
+
+
+        //var State = History.getState();
+        // Bind to State Change
+        History.Adapter.bind(window, 'statechange', function () { // Note: We are using statechange instead of popstate
+
+            // Log the State
+            var State = History.getState(); // Note: We are using History.getState() instead of event.state
+            History.log('statechange:', State.data, State.title, State.url);
+
+            //if (State.hash!="/") {
+            loadTemplate(State.hash);
+            //}
+        });
+
+
+
 
         $panelMenu.hide();
 
@@ -93,30 +137,9 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
 
                     self.progressShow('Loading template');
 
-                    jQuery.ajax({
-                        url: templUrl,
-                        type: "GET",
-                        dataType: "html",
-                        data: {}
-                    })
-                    .done(function (data, textStatus, jqXHR) {
-                        $siteContent.empty().html(data);
-                    })
-                    .fail(function (jqXHR, textStatus, errorThrown) {
+                    History.pushState(null, null, templUrl);
 
-                        console.error("Error lading template '{0}' ->".format(templUrl), {
-                            jqXHR: jqXHR,
-                            textStatus: textStatus,
-                            errorThrown: errorThrown
-                        });
-
-                        $siteContent.html('<div class="ui-state-error ui-site-templateInfo">Error loading template: {0} - {1} - {2} </div>'.format(jqXHR.status, textStatus, errorThrown));
-
-                    })
-                    .always(function () {
-                        self.progressHide();
-                    });
-
+                    loadTemplate(templUrl);
                 };
 
                 if ($panelMenuToggle.is(':visible')) {

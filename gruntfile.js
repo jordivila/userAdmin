@@ -88,7 +88,8 @@ module.exports = function (grunt) {
 
                     "src/public/scripts/url/urlHelper.js",
                     
-
+                    
+                    "src/public/scripts/libs/history.js/scripts/bundled/html4+html5/jquery.history.js",
 
                     
                     "src/public/scripts/Template.Widget.Page.js",

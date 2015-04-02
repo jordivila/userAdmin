@@ -36,6 +36,8 @@
     app.use(passport.initialize());
     app.use(methodOverride('X-HTTP-Method-Override'));
     app.use(compression());
+
+    app.set('root', __dirname + '/src/');
     app.set('views', __dirname + '/src/public/views');
     app.engine('handlebars', exphbs({
         layoutsDir: 'src/public/views/layouts/',

@@ -206,7 +206,7 @@
                     switch (columnName) {
                         case "icon":
 
-                            $cell.html('<img src="public/images/jQueryUIThemes/{0}" alt="{1}" title="{1}" />'.format(dataItem.icon, dataItem.title));
+                            $cell.html('<img src="/public/images/jQueryUIThemes/{0}" alt="{1}" title="{1}" />'.format(dataItem.icon, dataItem.title));
                             $cell.find('img')
                                 .click(function () {
                                     crudGridWidget._trigger('onSelect', null, dataItem);

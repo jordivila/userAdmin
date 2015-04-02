@@ -14,13 +14,13 @@
 
     module.exports.setRoutes = function (app, log) {
 
-        app.get('/', function (req, res, next) {
+        app.get('/tests', function (req, res, next) {
             res.sendFile('index.html', {
                 root: app.get('views')
             });
         });
 
-        app.get('/home', function (req, res, next) {
+        app.get('/', function (req, res, next) {
 
             var i18n = req.i18n;
 
@@ -94,6 +94,27 @@
         });
 
 
+
+        app.get('/template*', function (req, res, next) {
+
+            //var virtualPath = request.params.virtualPath;
+
+            //console.log(virtualPath);
+            var pathName = req.params[0];
+
+            console.log("sssssssssssssssssssssssssssssssssssssssss");
+            console.log(app.get('root') + pathName);
+
+            res.sendFile(pathName, {
+                root: app.get('root')
+            });
+
+            //res.sendFile('index.html', {
+            //    root: app.get('views')
+            //});
+
+        });
+        
     };
 
 })(module);
