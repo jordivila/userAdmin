@@ -74,8 +74,7 @@
 
     //set the Cache-Control header to one day using milliseconds
     app.use('/public', express.static(__dirname + '/src/public', {
-        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0,
-        ETag: thisPackage.version
+        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
     }));
 
 

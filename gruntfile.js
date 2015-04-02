@@ -120,6 +120,30 @@ module.exports = function (grunt) {
                 }
             }
         },
+        cssmin: {
+            //target: {
+            //    files: [{
+            //        expand: true,
+            //        cwd: '<%= cdnFolder %>',
+            //        src: ['*.css', '!*.min.css'],
+            //        dest: '<%= cdnFolder %>',
+            //        ext: '.min.css'
+            //    }]
+            //}
+            //options: {
+            //    shorthandCompacting: false,
+            //    roundingPrecision: -1
+            //},
+
+
+
+            target: {
+                files: {
+                    '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.min.css': ['<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.css']
+                }
+            }
+
+        },
         qunit: {
             allTests: ['src/public/test/qunit/**/*.html']
         },
@@ -204,7 +228,7 @@ module.exports = function (grunt) {
         watch: {
             testLiveReload: {
                 files: ['<%= jshint.files %>', '<%= concat.ui_css.src %>'],
-                tasks: ['jshint:files', 'bump', 'clean', 'concat', 'uglify', 'express:testLiveReload'],
+                tasks: ['jshint:files', 'bump', 'clean', 'concat', 'uglify', 'cssmin', 'express:testLiveReload'],
                 options: {
                     spawn: false, //Must have for reload
                     livereload: true //Enable LiveReload
@@ -232,6 +256,7 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
