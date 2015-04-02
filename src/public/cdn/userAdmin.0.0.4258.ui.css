@@ -225,6 +225,8 @@ html, body {height:100%;display:table;width:100%;}
   -moz-osx-font-smoothing: grayscale;
 }
 /* makes the font 33% larger relative to the icon container */
+
+/*
 .ui-icon-lg {
   font-size: 1.33333333em;
   line-height: 0.75em;
@@ -385,17 +387,24 @@ html, body {height:100%;display:table;width:100%;}
 .ui-icon-inverse {
   color: #ffffff;
 }
+    */
 /* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
    readers do not read off random characters that represent icons */
+
+
+/*
 .ui-icon-glass:before {
   content: "\f000";
 }
 .ui-icon-music:before {
   content: "\f001";
 }
+    */
 .ui-icon-search:before {
   content: "\f002";
 }
+
+/*
 .ui-icon-envelope-o:before {
   content: "\f003";
 }
@@ -423,6 +432,9 @@ html, body {height:100%;display:table;width:100%;}
 .ui-icon-th-list:before {
   content: "\f00b";
 }
+
+
+*/
 .ui-icon-check:before {
   content: "\f00c";
 }
@@ -430,7 +442,10 @@ html, body {height:100%;display:table;width:100%;}
 .ui-icon-close:before, .ui-icon-closethick:before, .ui-icon-times:before {
   content: "\f00d";
 }
-.ui-icon-search-plus:before {
+.u
+
+/*
+i-icon-search-plus:before {
   content: "\f00e";
 }
 .ui-icon-search-minus:before {
@@ -446,10 +461,15 @@ html, body {height:100%;display:table;width:100%;}
 .ui-icon-cog:before {
   content: "\f013";
 }
+    */
 
 .ui-icon-trash:before {
   content: "\f014";
 }
+
+
+
+/*
 .ui-icon-home:before {
   content: "\f015";
 }
@@ -666,7 +686,7 @@ html, body {height:100%;display:table;width:100%;}
   content: "\f05e";
 }
 
-
+*/
 
 .ui-icon-circle-arrow-w:before, .ui-icon-circle-triangle-w:before, .ui-icon-triangle-1-w:before, .ui-icon-arrow-left:before {
   content: "\f060";
@@ -681,6 +701,9 @@ html, body {height:100%;display:table;width:100%;}
 .ui-icon-circle-triangle-s:before, .ui-icon-triangle-1-s:before, .ui-icon-arrow-down:before {
   content: "\f063";
 }
+
+
+/*
 .ui-icon-mail-forward:before,
 .ui-icon-share:before {
   content: "\f064";
@@ -934,11 +957,14 @@ html, body {height:100%;display:table;width:100%;}
   content: "\f0c6";
 }
 
+*/
 .ui-icon-disk:before,
 .ui-icon-save:before,
 .ui-icon-floppy-o:before {
   content: "\f0c7";
 }
+
+/*
 .ui-icon-square:before {
   content: "\f0c8";
 }
@@ -1219,9 +1245,12 @@ html, body {height:100%;display:table;width:100%;}
 .ui-icon-chain-broken:before {
   content: "\f127";
 }
+
+    */
 .ui-icon-help:before, .ui-icon-question:before {
   content: "\f128";
 }
+/*
 .ui-icon-info:before {
   content: "\f129";
 }
@@ -1778,7 +1807,7 @@ html, body {height:100%;display:table;width:100%;}
 .ui-icon-bomb:before {
   content: "\f1e2";
 }
-
+    */
 
 /**********************************************************************/
  .ui-widget-boxButtons {float:right;margin:-1.7em 0 0 0;}

@@ -390,7 +390,7 @@ var productFilterModelGet = function (context) {
                         '<input type="hidden" class="ui-productCrud-filter-custId" />' +
                         '<a href="javascript:void(0);" class="ui-productCrud-filter-custName"></a>' +
                         '<div class="ui-productCrud-filter-removeCustomerIcon ui-state-error">' +
-                            '<span class="ui-icon ui-icon-trash"></span>' +
+                            '<span class="ui-icon ui-icon-close"></span>' +
                         '</div>';
                 };
 

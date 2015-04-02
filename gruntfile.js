@@ -121,22 +121,6 @@ module.exports = function (grunt) {
             }
         },
         cssmin: {
-            //target: {
-            //    files: [{
-            //        expand: true,
-            //        cwd: '<%= cdnFolder %>',
-            //        src: ['*.css', '!*.min.css'],
-            //        dest: '<%= cdnFolder %>',
-            //        ext: '.min.css'
-            //    }]
-            //}
-            //options: {
-            //    shorthandCompacting: false,
-            //    roundingPrecision: -1
-            //},
-
-
-
             target: {
                 files: {
                     '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.min.css': ['<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.css']
