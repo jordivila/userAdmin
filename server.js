@@ -16,6 +16,9 @@
     var i18n = require('i18n-2');
     var util = require('util');
     var exphbs = require('express-handlebars');
+    var thisPackage = require('./package.json');
+
+    
 
 
     var authController = require('./src/controllers/auth');
@@ -71,7 +74,8 @@
 
     //set the Cache-Control header to one day using milliseconds
     app.use('/public', express.static(__dirname + '/src/public', {
-        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
+        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0,
+        ETag: thisPackage.version
     }));
 
 
