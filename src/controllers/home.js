@@ -54,47 +54,6 @@
             });
         });
 
-        app.post('/home', function (req, res, next) {
-
-            var i18n = req.i18n;
-
-            /*
-            glob.culture("es-CA");
-            console.log(glob.parseFloat("1,234.56"));
-            console.log(glob.parseFloat("12,34"));
-            console.log(glob.parseFloat("12.34"));
-            console.log(parseFloat("12.34"));
-            */
-
-
-            //console.log(glob.format(3899.888, "c"));
-
-            //console.log(isNaN(glob.parseFloat("1.234,56")));
-
-            var cloned = util.extend(req.body, {});
-            var isValid = false;
-
-            for (var i = 0; i < cloned.length; i++) {
-                cloned[i].errors = [
-                    "esto es un error descriptivo ;)",
-                ];
-            }
-
-
-            var result = new DataResult(isValid, "Existen errores en el formulario", cloned);
-
-
-
-            //jQuery('div.sample').append('<span>' + Globalize.format(3899.888, "c") + '</span><br/>');
-            //jQuery('div.sample').append('<span>' + Globalize.format(new Date(2011, 12, 25), "D") + '</span><br/>');
-            //jQuery('div.sample').append('<span>' + Globalize.format(45678, "n0") + '</span><br/>');
-
-            res.send(result);
-            res.end();
-        });
-
-
-
         app.get('/template*', function (req, res, next) {
             var pathName = req.params[0];
             res.sendFile(pathName, {
