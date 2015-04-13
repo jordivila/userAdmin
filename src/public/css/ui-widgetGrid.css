@@ -27,7 +27,7 @@ div.ui-widgetGrid {display:block;}
 div.ui-widgetGrid .ui-widgetGrid-row{display:flex;height:auto;overflow:hidden;padding:0 0 0 0;margin:.1em 0 .1em 0;}
 
 div.ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column {text-align:center;display:block;white-space:nowrap;float:left;font-weight:normal;background-image:none;}
-div.ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column .ui-widgetGrid-column-content {overflow:hidden;/*padding:0 .5em 0 .5em;width:95% !important;*/}
+div.ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column .ui-widgetGrid-column-content {overflow:hidden;padding:0 .5em 0 .5em;width:95% !important;}
 div.ui-widgetGrid .ui-widgetGrid-header {padding:.8em .5em 0.3em .5em !important;}
 div.ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-row .ui-widgetGrid-column {text-align:center !important;}
 div.ui-widgetGrid .ui-widgetGrid-body {}
@@ -35,7 +35,7 @@ div.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row {}
 div.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column {padding-top:.5em;padding-bottom:.5em;}
 
 /* Data lists With Tables */
-table.ui-widgetGrid {table-layout:fixed;} 
+table.ui-widgetGrid {table-layout:fixed;}
 table.ui-widgetGrid .ui-widgetGrid-row{}
 table.ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column {padding:.5em;text-align:center;overflow:hidden;white-space:nowrap;}
 table.ui-widgetGrid .ui-widgetGrid-row .ui-widgetGrid-column div.ui-widgetGrid-column-content {overflow:hidden;white-space:nowrap;}
