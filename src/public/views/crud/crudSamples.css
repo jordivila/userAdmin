@@ -1,8 +1,8 @@
 ﻿.ui-productCrud {}
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-searchCustomerIcon,
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeCustomerIcon { width: 1em; height: 1em;float:left;cursor:pointer; margin: 0 0.5em 0 0;padding:0.2em; }
-.ui-productCrud .ui-crudGrid .ui-crudGrid-productId {width:20%;}
-.ui-productCrud .ui-crudGrid .ui-crudGrid-productTypeDesc {width:60%;}
+.ui-productCrud .ui-crudGrid .ui-crudGrid-productId {width:19.9%;}
+.ui-productCrud .ui-crudGrid .ui-crudGrid-productTypeDesc {width:59.9%;}
 .ui-productCrud .ui-crudGrid .ui-crudGrid-fechaDesde {width:19.9%;}
 
 
