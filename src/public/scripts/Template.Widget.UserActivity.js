@@ -139,7 +139,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
 
                     History.pushState(null, null, templUrl);
 
-                    loadTemplate(templUrl);
+                    //loadTemplate(templUrl);
                 };
 
                 if ($panelMenuToggle.is(':visible')) {
