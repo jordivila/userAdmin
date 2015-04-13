@@ -1,8 +1,0 @@
-﻿.ui-themeCrud {}
-.ui-themeCrud .ui-crud-messages,
-.ui-themeCrud .ui-ribbonButtons,
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-header,
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-pager {display:none !important;}
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-body { padding:0 0 0 2em;background-image:none;}
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-body .ui-widgetGrid-row { float:left;border:none !important;}
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-body .ui-widgetGrid-row * { border:none !important;background:none;}
