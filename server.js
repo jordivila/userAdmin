@@ -72,10 +72,27 @@
 
 
 
+    //begin -> set public static content folders
     //set the Cache-Control header to one day using milliseconds
-    app.use('/public', express.static(__dirname + '/src/public', {
+
+    //old 
+    //app.use('/public', express.static(__dirname + '/src/public', {
+    //    maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
+    //}));
+
+    app.use('/public/cdn', express.static(__dirname + '/src/public/cdn', {
         maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
     }));
+    app.use('/public/fonts', express.static(__dirname + '/src/public/fonts', {
+        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
+    }));
+    app.use('/public/fonts', express.static(__dirname + '/src/public/fonts', {
+        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
+    }));
+    //end -> set public static content folders
+
+
+
 
 
 
