@@ -82,14 +82,54 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
 
         var loadTemplate = function (templUrl) {
 
+
+            $siteContent.empty();
+
+            // ask for the template
             jQuery.ajax({
-                url: "/template" + templUrl,
+                url: templUrl,
                 type: "GET",
                 dataType: "html",
-                data: {}
             })
             .done(function (data, textStatus, jqXHR) {
-                $siteContent.empty().html(data);
+
+                var templatePartialCssFiles = "{{#each CssFiles}}<link href='{{this}}' rel='Stylesheet' type='text/css' />{{/each}}";
+                var templatePartialJsFiles = "{{#each JsFiles}}<script type='text/javascript' src='{{this}}'></script>{{/each}}";
+                var template = Handlebars.compile(data + templatePartialCssFiles + templatePartialJsFiles);
+                var templateContext = {};
+
+
+                // ask for the template context
+                jQuery.ajax({
+                    url: templUrl + 'index.handlebars.json',
+                    type: "GET",
+                    dataType: "json",
+                })
+                .done(function (dataJson, textStatusJson, jqXHRJson) {
+                    var html = template(jQuery.extend({}, dataJson, templateContext));
+                    $siteContent.html(html);
+                })
+                .fail(function (jqXHR, textStatus, errorThrown) {
+
+                    // specific template context fail to load. 
+                    // try transform with basic template context
+                    var html = template(templateContext);
+                    $siteContent.html(html);
+
+
+                    //console.error("Error lading template '{0}' ->".format(templUrl), {
+                    //    jqXHR: jqXHR,
+                    //    textStatus: textStatus,
+                    //    errorThrown: errorThrown
+                    //});
+
+                    //$siteContent.html('<div class="ui-state-error ui-site-templateInfo">Error loading template: {0} - {1} - {2} </div>'.format(jqXHR.status, textStatus, errorThrown));
+
+                })
+                .always(function () {
+                    self.progressHide();
+                });
+
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
 
@@ -114,13 +154,14 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
         // Bind to State Change
         History.Adapter.bind(window, 'statechange', function () { // Note: We are using statechange instead of popstate
 
+            self.progressShow('Loading template');
+
             // Log the State
             var State = History.getState(); // Note: We are using History.getState() instead of event.state
             History.log('statechange:', State.data, State.title, State.url);
 
-            //if (State.hash!="/") {
+
             loadTemplate(State.hash);
-            //}
         });
 
 
@@ -134,8 +175,6 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                 var templGetFunc = function () {
 
                     var templUrl = templ.url;
-
-                    self.progressShow('Loading template');
 
                     History.pushState(null, null, templUrl);
 

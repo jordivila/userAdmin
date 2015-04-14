@@ -15,6 +15,7 @@ jQuery(document).ready(function () {
             if (urlHelper.hostname == window.location.hostname)
             {
                 settings.url = new UrlHelper(settings.url).paramSet("appVersion", appVersion).href;
+                settings.url = new UrlHelper(settings.url).paramSet("firstRequest", false).href;
             }
             
             //xhr.setRequestHeader("appVersion", appVersion);

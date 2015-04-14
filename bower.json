@@ -19,6 +19,7 @@
     "history.js": "~1.8.0",
     "jquery": "1.9.1",
     "jquery-ui": "1.10.0",
-    "jquery-validation": "1.11.0"
+    "jquery-validation": "1.11.0",
+    "handlebars": "~3.0.0"
   }
 }

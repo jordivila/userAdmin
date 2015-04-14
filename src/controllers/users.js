@@ -312,18 +312,18 @@
                         text: "UI Controls",
                         childs: [
                             {
-                                url: "/public/views/themes/themepicker.html",
+                                url: "/uicontrols/themes/",
                                 text: "Themepicker"
                             },
                             {
                                 text: "Menu",
                                 childs: [
                                     {
-                                        url: "/public/views/menu/menuTree/menuTree.html",
+                                        url: "/uicontrols/menu/menuTree/",
                                         text: "Menu Tree"
                                     },
                                     {
-                                        url: "/public/views/menu/menuSlides/menuSlides.html",
+                                        url: "/uicontrols/menu/menuSlides/",
                                         text: "Menu Slides"
                                     },
                                 ]
@@ -332,27 +332,27 @@
                                 text: "Grid widget",
                                 childs: [
                                     {
-                                        url: "/public/views/crud/crudGridSimple/crudGridSimple.html",
+                                        url: "/uicontrols/crud/crudGridSimple/",
                                         text: "Basic Grid"
                                     },
                                     {
-                                        url: "/public/views/crud/crudGridSearch/crudGridSearch.html",
+                                        url: "/uicontrols/crud/crudGridSearch/",
                                         text: "Search & paginate"
                                     },
                                     {
-                                        url: "/public/views/crud/crudGridSearchDirect/crudGridSearchDirect.html",
+                                        url: "/uicontrols/crud/crudGridSearchDirect/",
                                         text: "Search filter on top"
                                     },
                                     {
-                                        url: "/public/views/crud/crudGridPagination/crudGridPagination.html",
+                                        url: "/uicontrols/crud/crudGridPagination/",
                                         text: "Pagination config"
                                     },
                                     {
-                                        url: "/public/views/crud/crudScrollable/crudScrollable.html",
+                                        url: "/uicontrols/crud/crudScrollable/",
                                         text: "Scrollable"
                                     },
                                     {
-                                        url: "/public/views/crud/crudExpand/crudExpandAndResize.html",
+                                        url: "/uicontrols/crud/crudExpand/",
                                         text: "Expand grid & resize"
                                     },
                                 ],
@@ -361,11 +361,11 @@
                                 text: "Crud widget",
                                 childs: [
                                     {
-                                        url: "/public/views/crud/crudFormSimple/crudFormSimple.html",
+                                        url: "/uicontrols/crud/crudFormSimple/",
                                         text: "CRUD Simple form"
                                     },
                                     {
-                                        url: "/public/views/crud/crudFormExtended/crudFormExtended.html",
+                                        url: "/uicontrols/crud/crudFormExtended/",
                                         text: "CRUD Extended"
                                     },
                                 ],

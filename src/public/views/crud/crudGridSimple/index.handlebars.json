@@ -1,0 +1,7 @@
+{
+    "JsFiles": [
+        "../crudSamplesCustomerData.js",
+        "../crudSamplesCustomerDefaultOptions.js",
+        "crudGridSimpleSample.js"
+    ]
+}

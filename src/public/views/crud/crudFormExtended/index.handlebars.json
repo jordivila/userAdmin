@@ -1,0 +1,9 @@
+{
+    "JsFiles": [
+        "../crudSamplesCustomerData.js",
+        "../crudSamplesCustomerDefaultOptions.js",
+        "crudProductExtended.js",
+        "crudPage.js",
+        "crudFormExtendedSample.js"
+    ]
+}

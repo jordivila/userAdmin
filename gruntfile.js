@@ -60,6 +60,8 @@ module.exports = function (grunt) {
                     // jQuery UI components End
                     "src/public/scripts/libs/bowerComponents/jquery-validation/jquery.validate.js",
                     "src/public/scripts/libs/bowerComponents/history.js/scripts/bundled/html4+html5/jquery.history.js",
+                    "src/public/scripts/libs/bowerComponents/handlebars/handlebars.min.js",
+
                     "src/public/scripts/libs/jQuery-globalize/lib/globalize.js",
                     // app 
                     "src/public/scripts/Template.ExtendPrototypes.js",

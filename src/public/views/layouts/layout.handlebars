@@ -64,7 +64,7 @@
                         {{/if}}
                         <a href="{{this.url}}">{{this.title}}</a>
                     </li>
-                    {{/each}}                </li>
+                    {{/each}}
                 </ul>
                 <div class="ui-helper-clearfix"></div>
             </div>
@@ -73,14 +73,8 @@
         {{/if}}
         <!--Breadcrumb end-->
 
-        <div class="ui-siteContent">
-            {{{body}}}
-        </div>
+        <div class="ui-siteContent">{{{body}}}</div>
     </div>
-
-
-
-
 
     <script type="text/javascript" src="/public/cdn/{{Package.name}}.{{Package.version}}.ui_js.js"></script>
     <script type="text/javascript" src="/public/cdn/{{Package.name}}.{{Package.version}}.ui_regional_{{Globalization.cultureSelected}}.js"></script>
@@ -90,6 +84,9 @@
     {{#each JsFiles}}
     <script type="text/javascript" src="{{this}}"></script>
     {{/each}}
+
+
+
     <script type="text/javascript">
         (function ($) {
             jQuery(document).ready(function () {

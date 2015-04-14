@@ -86,7 +86,7 @@
     app.use('/public/fonts', express.static(__dirname + '/src/public/fonts', {
         maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
     }));
-    app.use('/public/fonts', express.static(__dirname + '/src/public/fonts', {
+    app.use('/public/images', express.static(__dirname + '/src/public/images', {
         maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
     }));
     //end -> set public static content folders
