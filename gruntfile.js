@@ -46,21 +46,21 @@ module.exports = function (grunt) {
                     },
                 },
                 src: [
-                    "src/public/scripts/libs/bowerComponents/jquery/jquery.min.js",
-                    //"src/public/scripts/libs/bowerComponents/jquery-ui/ui/minified/jquery-ui.custom.min.js",
+                    "bower_components/jquery/jquery.min.js",
+                    //"bower_components/jquery-ui/ui/minified/jquery-ui.custom.min.js",
                     // jQuery UI components Begin 
-                    "src/public/scripts/libs/bowerComponents/jquery-ui/ui/minified/jquery.ui.core.min.js",
-                    "src/public/scripts/libs/bowerComponents/jquery-ui/ui/minified/jquery.ui.widget.min.js",
-                    "src/public/scripts/libs/bowerComponents/jquery-ui/ui/minified/jquery.ui.datepicker.min.js",
-                    "src/public/scripts/libs/bowerComponents/jquery-ui/ui/minified/jquery.ui.button.min.js",
-                    "src/public/scripts/libs/bowerComponents/jquery-ui/ui/minified/jquery.ui.effect.min.js",
-                    "src/public/scripts/libs/bowerComponents/jquery-ui/ui/minified/jquery.ui.effect-drop.min.js",
-                    "src/public/scripts/libs/bowerComponents/jquery-ui/ui/minified/jquery.ui.effect-slide.min.js",
+                    "bower_components/jquery-ui/ui/minified/jquery.ui.core.min.js",
+                    "bower_components/jquery-ui/ui/minified/jquery.ui.widget.min.js",
+                    "bower_components/jquery-ui/ui/minified/jquery.ui.datepicker.min.js",
+                    "bower_components/jquery-ui/ui/minified/jquery.ui.button.min.js",
+                    "bower_components/jquery-ui/ui/minified/jquery.ui.effect.min.js",
+                    "bower_components/jquery-ui/ui/minified/jquery.ui.effect-drop.min.js",
+                    "bower_components/jquery-ui/ui/minified/jquery.ui.effect-slide.min.js",
 
                     // jQuery UI components End
-                    "src/public/scripts/libs/bowerComponents/jquery-validation/jquery.validate.js",
-                    "src/public/scripts/libs/bowerComponents/history.js/scripts/bundled/html4+html5/jquery.history.js",
-                    "src/public/scripts/libs/bowerComponents/handlebars/handlebars.min.js",
+                    "bower_components/jquery-validation/jquery.validate.js",
+                    "bower_components/history.js/scripts/bundled/html4+html5/jquery.history.js",
+                    "bower_components/handlebars/handlebars.min.js",
 
                     "src/public/scripts/libs/jQuery-globalize/lib/globalize.js",
                     // app 
@@ -104,8 +104,8 @@ module.exports = function (grunt) {
                           src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
                     },
                 },
-                src: [  "src/public/scripts/libs/bowerComponents/jquery-ui/ui/i18n/jquery.ui.datepicker-es.js",
-                        "src/public/scripts/libs/bowerComponents/jquery-validation/localization/messages_es.js",
+                src: [  "bower_components/jquery-ui/ui/i18n/jquery.ui.datepicker-es.js",
+                        "bower_components/jquery-validation/localization/messages_es.js",
                         "src/public/scripts/libs/jQuery-globalize/lib/cultures/globalize.culture.es.js",
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_regional_es.js'

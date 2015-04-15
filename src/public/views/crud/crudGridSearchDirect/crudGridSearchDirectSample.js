@@ -4,7 +4,7 @@
         gridFilterVisibleAlways: true,
         gridFilterButtonsInit: function (widgetFilter, defaultButtons) {
             for (var i = 0; i < defaultButtons.length; i++) {
-                if (defaultButtons[i].id = "filter") {
+                if (defaultButtons[i].id == "filter") {
                     defaultButtons[i].text = "Buscar clientes";
                 }
             }

@@ -100,7 +100,7 @@
                 //    m = util.extend(m, require('../public/views/themes/index.handlebars.json'));
                 //}
 
-                console.log(m);
+                //console.log(m);
 
                 if (m.IsFirstRequest) {
                     res.render(req.params[0] + '/index.handlebars', m);

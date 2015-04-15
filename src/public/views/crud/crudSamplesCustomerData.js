@@ -64,8 +64,6 @@
             for (var i = 0; i < customerAjax.ajax._fakeDataGrid.length; i++) {
                 if (customerAjax.ajax._fakeDataGrid[i].id === dataItem.id) {
 
-                    console.log("found!!!!!!!!!");
-                    console.log(customerAjax.ajax._fakeDataGrid[i].id);
 
                     dataResult = {
                         Data: jQuery.extend({},

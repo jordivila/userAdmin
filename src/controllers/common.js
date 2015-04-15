@@ -46,8 +46,6 @@
                 return next();
             }
 
-            console.log(err.message);
-            console.log(err.stack);
 
             log.error(err);
             res.status(err.status || 500);
