@@ -16,9 +16,6 @@
     //var glob = require('globalize');
     //var globCultures = require('globalize/lib/cultures/globalize.cultures');
 
-
-
-
     function modelForLayoutGet(req) {
 
 
@@ -55,11 +52,6 @@
 
         return m;
     }
-
-
-
-
-
 
     module.exports.setRoutes = function (app, log, authController) {
 
