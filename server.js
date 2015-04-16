@@ -9,9 +9,9 @@
     var compression = require('compression');
     var passport = require('passport');
     var bodyParser = require('body-parser');
-    var config = require('./src/libs/config');
-    var mongoose = require('./src/libs/db');
-    var log = require('./src/libs/log')(module);
+    var config = require('./src/backend/libs/config');
+    var mongoose = require('./src/backend/libs/db');
+    var log = require('./src/backend/libs/log')(module);
     var cookieParser = require('cookie-parser');
     var i18n = require('i18n-2');
     var util = require('util');
@@ -21,17 +21,18 @@
     
 
 
-    var authController = require('./src/controllers/auth');
-    var homeController = require('./src/controllers/home');
-    var usersController = require('./src/controllers/users');
-    var commonController = require('./src/controllers/common');
-    var ErrorHandled = require('./src/models/errorHandled');
+    var authController = require('./src/backend/controllers/auth');
+    var homeController = require('./src/backend/controllers/home');
+    var usersController = require('./src/backend/controllers/users');
+    var commonController = require('./src/backend/controllers/common');
+    var ErrorHandled = require('./src/backend/models/errorHandled');
+    var routingHandler = require('./src/backend/routing/routes');
 
     var app = express();
 
     app.use(cookieParser(config.get('encryptKeyForCookieParser')));
     app.set('port', config.get('port'));
-    app.use(favicon(__dirname + '/src/public/favicon.ico'));
+    app.use(favicon(__dirname + '/src/frontend/public/favicon.ico'));
     app.use(bodyParser.urlencoded({
         extended: true
     }));
@@ -40,10 +41,10 @@
     app.use(methodOverride('X-HTTP-Method-Override'));
     app.use(compression());
 
-    app.set('root', __dirname + '/src/');
-    app.set('views', __dirname + '/src/public/views');
+    app.set('root', __dirname + '/src/frontend/public/');
+    app.set('views', __dirname + '/src/frontend/public/views');
     app.engine('handlebars', exphbs({
-        layoutsDir: 'src/public/views/layouts/',
+        layoutsDir: 'src/frontend/public/views/layouts/',
         defaultLayout: 'layout'
     }));
     app.set('view engine', 'handlebars');
@@ -76,17 +77,17 @@
     //set the Cache-Control header to one day using milliseconds
 
     //old 
-    //app.use('/public', express.static(__dirname + '/src/public', {
+    //app.use('/public', express.static(__dirname + '/src/frontend/public', {
     //    maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
     //}));
 
-    app.use('/public/cdn', express.static(__dirname + '/src/public/cdn', {
+    app.use('/public/cdn', express.static(__dirname + '/src/frontend/public/cdn', {
         maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
     }));
-    app.use('/public/fonts', express.static(__dirname + '/src/public/fonts', {
+    app.use('/public/fonts', express.static(__dirname + '/src/frontend/public/fonts', {
         maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
     }));
-    app.use('/public/images', express.static(__dirname + '/src/public/images', {
+    app.use('/public/images', express.static(__dirname + '/src/frontend/public/images', {
         maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
     }));
     //end -> set public static content folders
@@ -95,10 +96,11 @@
 
 
 
+    routingHandler.setRoutes(app, log, authController);
 
-    homeController.setRoutes(app, log);
-    usersController.setRoutes(app, authController);
-    commonController.setRoutes(app, log);
+    //homeController.setRoutes(app, log);
+    //usersController.setRoutes(app, authController);
+    //commonController.setRoutes(app, log);
 
 
     //programmer errors

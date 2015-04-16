@@ -2,9 +2,10 @@
 
     "use strict";
 
-    module.exports.setRoutes = setRoutes;
     module.exports.setAccessControlOrigin = setAccessControlOrigin;
     module.exports.initTestEnvironment = initTestEnvironment;
+    module.exports.initDb = initDb;
+
 
     var userController = require('./users');
     var roleController = require('./usersRoles');
@@ -14,45 +15,6 @@
     var ErrorHandled = require('../models/errorHandled.js');
 
 
-    function setRoutes(app, log) {
-
-        if (process.env.node_env === 'test') {
-            app.get("/initDb", function(req, res, next) {
-                initDb(req, function(err, roleCreated) {
-                    if (err) return next(err);
-
-                    res.json(roleCreated);
-                });
-            });
-        }
-
-        //catch 404
-        app.use(function(req, res, next) {
-            res.status(404);
-            res.send({});
-
-            log.info('Not found URL: %s', req.url);
-        });
-
-        //operational errors
-        app.use(function(err, req, res, next) {
-            
-            if (!err) return next();
-            
-            if (err instanceof ErrorHandled) {
-                res.send(err.toDataResult());
-                res.status(200);
-                res.end();
-                return next();
-            }
-
-
-            log.error(err);
-            res.status(err.status || 500);
-            res.send({}); // do not send error messages as it can send private info
-
-        });
-    }
 
     function initDb(req, cb) {
 

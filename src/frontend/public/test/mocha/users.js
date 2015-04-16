@@ -4,10 +4,10 @@
     var utils = require('./libs/initMochaTests');
     var util = require('util');
     var assert = require("assert");
-    var userController = require('../../../controllers/users');
-    var roleController = require('../../../controllers/usersRoles');
-    var authController = require('../../../controllers/auth');
-    var ErrorHandled = require('../../../models/errorHandled');
+    var userController = require('../../../../backend/controllers/users');
+    var roleController = require('../../../../backend/controllers/usersRoles');
+    var authController = require('../../../../backend/controllers/auth');
+    var ErrorHandled = require('../../../../backend/models/errorHandled');
     
     
     describe('User\'s account', function () {

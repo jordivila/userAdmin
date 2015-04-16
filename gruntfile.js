@@ -4,7 +4,7 @@ module.exports = function (grunt) {
 
     var gruntOptions = {
         pkg: grunt.file.readJSON('package.json'),
-        cdnFolder: 'src/public/cdn',
+        cdnFolder: 'src/frontend/public/cdn',
         clean: {
             options: {
                 //'no-write': true
@@ -16,22 +16,22 @@ module.exports = function (grunt) {
                 options: {
                     separator: ' '
                 },
-                src: ["src/public/css/reset.css",
-                      "src/public/css/site.css",
-                      "src/public/css/font-awesome.min.css",
-                      "src/public/css/Site.FontSizes.css",
-                      "src/public/css/Site.jQuery.OverrideRoundCorners.css",
-                      "src/public/css/Site.JqueryUI.IconsExtendWithFontAwsome.css",
-                      "src/public/css/ui-widgetBase.css",
-                      "src/public/css/ui-widgetMsg.css",
-                      "src/public/css/ui-breadcrumb.css",
-                      "src/public/css/ui-dateSelector.css",
-                      "src/public/css/ui-menuList.css",
-                      "src/public/css/ui-widgetModel.css",
-                      "src/public/css/ui-widgetGrid.css",
-                      "src/public/css/ui-fieldItem.css",
-                      "src/public/css/ui-progress.css",
-                      "src/public/css/ui-crud.css",
+                src: ["src/frontend/public/css/reset.css",
+                      "src/frontend/public/css/site.css",
+                      "src/frontend/public/css/font-awesome.min.css",
+                      "src/frontend/public/css/Site.FontSizes.css",
+                      "src/frontend/public/css/Site.jQuery.OverrideRoundCorners.css",
+                      "src/frontend/public/css/Site.JqueryUI.IconsExtendWithFontAwsome.css",
+                      "src/frontend/public/css/ui-widgetBase.css",
+                      "src/frontend/public/css/ui-widgetMsg.css",
+                      "src/frontend/public/css/ui-breadcrumb.css",
+                      "src/frontend/public/css/ui-dateSelector.css",
+                      "src/frontend/public/css/ui-menuList.css",
+                      "src/frontend/public/css/ui-widgetModel.css",
+                      "src/frontend/public/css/ui-widgetGrid.css",
+                      "src/frontend/public/css/ui-fieldItem.css",
+                      "src/frontend/public/css/ui-progress.css",
+                      "src/frontend/public/css/ui-crud.css",
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.css'
             },
@@ -62,35 +62,35 @@ module.exports = function (grunt) {
                     "bower_components/history.js/scripts/bundled/html4+html5/jquery.history.js",
                     "bower_components/handlebars/handlebars.min.js",
 
-                    "src/public/scripts/libs/jQuery-globalize/lib/globalize.js",
+                    "src/frontend/public/scripts/libs/jQuery-globalize/lib/globalize.js",
                     // app 
-                    "src/public/scripts/Template.ExtendPrototypes.js",
-                    "src/public/scripts/Template.App.Init.js",
-                    "src/public/scripts/Template.App.Ajax.Init.js",
-                    "src/public/scripts/Template.App.Widgets.Init.js",
-                    "src/public/scripts/Template.App.Resources.Init.js",
-                    "src/public/scripts/Template.Widget.Base.js",
-                    //"src/public/scripts/Template.Widget.jQueryzer.js",
-                    "src/public/scripts/Template.Widget.Model.js",
-                    "src/public/scripts/Template.Widget.ModelDate.js",
-                    "src/public/scripts/Template.Widget.ModelBool.js",
-                    "src/public/scripts/Template.Widget.Grid.js",
-                    "src/public/scripts/Template.Widget.ButtonWrapper.js",
-                    "src/public/scripts/Template.Widget.UserActivity.js",
-                    "src/public/scripts/Template.Widget.Message.js",
-                    "src/public/scripts/Template.Widget.Dialogs.js",
-                    "src/public/scripts/Template.Widget.DialogInline.js",
-                    "src/public/scripts/Template.Widget.Menu.js",
-                    //"src/public/scripts/ui-widgetTreeList/ui-widgetTreeList.js"
+                    "src/frontend/public/scripts/Template.ExtendPrototypes.js",
+                    "src/frontend/public/scripts/Template.App.Init.js",
+                    "src/frontend/public/scripts/Template.App.Ajax.Init.js",
+                    "src/frontend/public/scripts/Template.App.Widgets.Init.js",
+                    "src/frontend/public/scripts/Template.App.Resources.Init.js",
+                    "src/frontend/public/scripts/Template.Widget.Base.js",
+                    //"src/frontend/public/scripts/Template.Widget.jQueryzer.js",
+                    "src/frontend/public/scripts/Template.Widget.Model.js",
+                    "src/frontend/public/scripts/Template.Widget.ModelDate.js",
+                    "src/frontend/public/scripts/Template.Widget.ModelBool.js",
+                    "src/frontend/public/scripts/Template.Widget.Grid.js",
+                    "src/frontend/public/scripts/Template.Widget.ButtonWrapper.js",
+                    "src/frontend/public/scripts/Template.Widget.UserActivity.js",
+                    "src/frontend/public/scripts/Template.Widget.Message.js",
+                    "src/frontend/public/scripts/Template.Widget.Dialogs.js",
+                    "src/frontend/public/scripts/Template.Widget.DialogInline.js",
+                    "src/frontend/public/scripts/Template.Widget.Menu.js",
+                    //"src/frontend/public/scripts/ui-widgetTreeList/ui-widgetTreeList.js"
                     //CRUD begin
-                    "src/public/scripts/crud/common.widget.base.js",
-                    "src/public/scripts/crud/common.widget.fieldItem.js",
-                    "src/public/scripts/crud/common.widget.crud.js",
-                    "src/public/scripts/crud/common.widget.grid.pagination.js",
+                    "src/frontend/public/scripts/crud/common.widget.base.js",
+                    "src/frontend/public/scripts/crud/common.widget.fieldItem.js",
+                    "src/frontend/public/scripts/crud/common.widget.crud.js",
+                    "src/frontend/public/scripts/crud/common.widget.grid.pagination.js",
                     //CRUD end
-                    "src/public/scripts/Template.Widget.Themepicker.js",
-                    "src/public/scripts/url/urlHelper.js",
-                    "src/public/scripts/Template.Widget.Page.js",
+                    "src/frontend/public/scripts/Template.Widget.Themepicker.js",
+                    "src/frontend/public/scripts/url/urlHelper.js",
+                    "src/frontend/public/scripts/Template.Widget.Page.js",
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_js.js'
             },
@@ -106,7 +106,7 @@ module.exports = function (grunt) {
                 },
                 src: [  "bower_components/jquery-ui/ui/i18n/jquery.ui.datepicker-es.js",
                         "bower_components/jquery-validation/localization/messages_es.js",
-                        "src/public/scripts/libs/jQuery-globalize/lib/cultures/globalize.culture.es.js",
+                        "src/frontend/public/scripts/libs/jQuery-globalize/lib/cultures/globalize.culture.es.js",
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_regional_es.js'
             }
@@ -131,7 +131,7 @@ module.exports = function (grunt) {
 
         },
         qunit: {
-            allTests: ['src/public/test/qunit/**/*.html']
+            allTests: ['src/frontend/public/test/qunit/**/*.html']
         },
         mochaTest: {
             test: {
@@ -143,20 +143,20 @@ module.exports = function (grunt) {
                     clearRequireCache: false, // Optionally clear the require cache before running tests (defaults to false),
                     bail: true // bail after first test failure
                 },
-                src: ['src/public/test/mocha/**/*.js', '!src/public/test/mocha/libs/**/*.js']
+                src: ['src/frontend/public/test/mocha/**/*.js', '!src/frontend/public/test/mocha/libs/**/*.js']
             }
         },
         jshint: {
             files: ['gruntfile.js',
                     'server.js',
                     'src/**/*.js',
-                    'src/public/test/qunit/**/*.js',
-                    'src/public/test/mocha/**/*.js',
+                    'src/frontend/public/test/qunit/**/*.js',
+                    'src/frontend/public/test/mocha/**/*.js',
 
-                    '!src/public/scripts/libs/**/*.*',
+                    '!src/frontend/public/scripts/libs/**/*.*',
 
-                    '!src/public/cdn/**/*.*',
-                    '!src/public/test/qunit/libs/**/*.js',
+                    '!src/frontend/public/cdn/**/*.*',
+                    '!src/frontend/public/test/qunit/libs/**/*.js',
             ],
             options: {
                 globals: {
@@ -229,10 +229,10 @@ module.exports = function (grunt) {
         },
         open: {
             qunit: {
-                path: 'http://localhost:3001/public/test/qunit/index.html'
+                path: 'http://localhost:3001/tests/'
             },
             home: {
-                path: 'http://localhost:3001/home'
+                path: 'http://localhost:3001/'
             }
         }
 

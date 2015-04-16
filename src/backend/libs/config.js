@@ -1,7 +1,7 @@
 ﻿var config = require('nconf');
 //
 
-var path = 'src/libs/config.json';
+var path = 'src/backend/libs/config.json';
 
 config
 	.argv()
