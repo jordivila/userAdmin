@@ -2,21 +2,22 @@
 
     'use strict';
 
-    /*
-     * Modified from https://github.com/elliotf/mocha-mongoose
-     */
 
-    //var db = require('../../../../libs/db');
-    var config = require('../../../../../backend/libs/config');
+    // set test environment before anything else
+    // this way config will load testing environment variables
+    process.env.NODE_ENV = 'test';
+
+    var pathToSrc = "./../../../";
+
+    var config = require(pathToSrc + 'backend/libs/config');
     var mongoose = require('mongoose');
     var i18n = new(require('i18n-2'))(config.get("i18n"));
-    var roleController = require('../../../../../backend/controllers/usersRoles');
+    var roleController = require(pathToSrc + 'backend/controllers/usersRoles');
     var assert = require("assert");
-    var ErrorHandled = require('../../../../../backend/models/errorHandled');
+    var ErrorHandled = require(pathToSrc + 'backend/models/errorHandled');
 
-    // ensure the NODE_ENV is set to 'test'
-    // this is helpful when you would like to change behavior when testing
-    process.env.NODE_ENV = 'test';
+
+    
 
     before(function(done) {
 

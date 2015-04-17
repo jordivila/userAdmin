@@ -6,7 +6,8 @@ var config      = require('../libs/config');
 
 function dbInit(cb)
 {
-    mongoose.connect(process.env.CUSTOMCONNSTR_MONGOLAB_URI || config.get('mongoose:uri'));
+    //mongoose.connect(process.env.CUSTOMCONNSTR_MONGOLAB_URI || config.get('mongoose:uri'));
+    mongoose.connect(config.get('mongoose:uri'));
 
     //var db = mongoose.connection;
 

@@ -22,7 +22,6 @@
 
 
     var authController = require('./src/backend/controllers/auth');
-    var homeController = require('./src/backend/controllers/home');
     var usersController = require('./src/backend/controllers/users');
     var commonController = require('./src/backend/controllers/common');
     var ErrorHandled = require('./src/backend/models/errorHandled');

@@ -3,8 +3,6 @@
     "use strict";
 
     module.exports.addToRole = addToRole;
-    module.exports.setRoutes = setRoutes;
-
 
     var log = require('../libs/log')(module);
     var validator = require('validator');
@@ -48,10 +46,6 @@
                 });
             });
         });
-    }
-
-    function setRoutes(app, authController) {
-
     }
 
 })(module);

@@ -1,13 +1,17 @@
 ﻿(function () {
     'use strict';
+
+
+    var pathToSrc = "./../../";
+
     // import the moongoose helper utilities
     var utils = require('./libs/initMochaTests');
     var util = require('util');
     var assert = require("assert");
-    var userController = require('../../../../backend/controllers/users');
-    var roleController = require('../../../../backend/controllers/usersRoles');
-    var authController = require('../../../../backend/controllers/auth');
-    var ErrorHandled = require('../../../../backend/models/errorHandled');
+    var userController = require(pathToSrc + 'backend/controllers/users');
+    var roleController = require(pathToSrc + 'backend/controllers/usersRoles');
+    var authController = require(pathToSrc + 'backend/controllers/auth');
+    var ErrorHandled = require(pathToSrc + 'backend/models/errorHandled');
     
     
     describe('User\'s account', function () {
@@ -19,8 +23,6 @@
         var CantAccessMyAccountToken; //Guid
         var UserNameValidUnActivated = new Date().toJSON().replace(/\W+/g, '').toLowerCase(); //Guid.NewGuid().ToString();
         var UserEmailValidUnActivated = UserNameValidUnActivated + "@valid.com";
-        
-        
         
         function initUser(email, password, passwordConfirm) {
             return {
@@ -41,7 +43,7 @@
             return false;
         }
         
-        
+
         
         describe('Register process', function () {
             
@@ -92,8 +94,6 @@
                 });
             });
         });
-        
-        
         
         describe('Confirm email address', function () {
             
@@ -161,7 +161,6 @@
             });
         });
         
-        
         describe('Reset password', function () {
             
             it('strength password is checked', function (done) {
@@ -228,7 +227,6 @@
             });
         });
         
-        
         describe('Users authentication', function () {
             
             it('invalid credentials are not wellcome', function (done) {
@@ -294,6 +292,7 @@
 
 
         });
+
 
 
 

@@ -19,13 +19,14 @@
     function modelForLayoutGet(req) {
 
 
+
         var i18n = req.i18n;
 
         var m = {
             Title: "Azure nodejs application template",
             DomainName: config.get('domainName'),
             Package: pkg,
-            IsTest: (process.env.NODE_ENV === 'test'),
+            IsTest: (config.get('NODE_ENV') === 'test') || (config.get('NODE_ENV') === 'dev'),
             Globalization: {
                 cultureSelected: i18n.locale,
                 cultureGlobalization: i18n.locale,
@@ -44,6 +45,8 @@
                 //"/public/views/home/home.js",
             ],
         };
+
+        
 
 
         if (m.IsFirstRequest) {

@@ -56,6 +56,9 @@
         
         var user = userGenerate();
         
+
+        
+
         userRegister(user, function (register) {
             ok(register.isValid === true, "Users can register credentials");
             ok(register.data.userId !== null, "User credentials generate userId");
@@ -70,6 +73,8 @@
                 });
             });
         });
+
+        
     });
     
 })(QUnit);

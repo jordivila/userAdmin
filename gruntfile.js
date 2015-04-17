@@ -131,7 +131,7 @@ module.exports = function (grunt) {
 
         },
         qunit: {
-            allTests: ['src/frontend/public/test/qunit/**/*.html']
+            allTests: ['src/test/qunit/**/*.html']
         },
         mochaTest: {
             test: {
@@ -141,22 +141,21 @@ module.exports = function (grunt) {
                     //captureFile: 'results.txt', // Optionally capture the reporter output to a file
                     quiet: false, // Optionally suppress output to standard out (defaults to false)
                     clearRequireCache: false, // Optionally clear the require cache before running tests (defaults to false),
-                    bail: true // bail after first test failure
+                    bail: true, // bail after first test failure
+                    node_env: 'test'
                 },
-                src: ['src/frontend/public/test/mocha/**/*.js', '!src/frontend/public/test/mocha/libs/**/*.js']
+                src: ['src/test/mocha/**/*.js', '!src/test/mocha/libs/**/*.js']
             }
         },
         jshint: {
             files: ['gruntfile.js',
                     'server.js',
                     'src/**/*.js',
-                    'src/frontend/public/test/qunit/**/*.js',
-                    'src/frontend/public/test/mocha/**/*.js',
-
+                    'src/test/qunit/**/*.js',
+                    'src/test/mocha/**/*.js',
                     '!src/frontend/public/scripts/libs/**/*.*',
-
                     '!src/frontend/public/cdn/**/*.*',
-                    '!src/frontend/public/test/qunit/libs/**/*.js',
+                    '!src/test/qunit/libs/**/*.js',
             ],
             options: {
                 globals: {
@@ -191,20 +190,15 @@ module.exports = function (grunt) {
                 options: {
                     script: './server.js',
                     node_env: 'test',
-                    //livereload: true,
                     spawn: false, //Must have for reload
                     port: 3000 //,
-                    //background: false // --> false = keep server alive after grunt tasks,
                 },
             },
             testLiveReload: {
                 options: {
                     script: './server.js',
-                    node_env: 'test',
-                    //livereload: true,
-                    //spawn: false, //Must have for reload
+                    node_env: 'dev',
                     port: 3001 //,
-                    //background: false // --> false = keep server alive after grunt tasks,
                 },
             }
         },
@@ -223,16 +217,15 @@ module.exports = function (grunt) {
 
             test: {
                 files: ['<%= jshint.files %>'],
-                //tasks: ['jshint:files', 'mochaTest', 'express:testQunit', 'qunit']
-                tasks: ['jshint:files', 'bump', 'mochaTest', 'express:testQunit', 'qunit']
+                tasks: ['jshint:files', /*'bump',*/ 'mochaTest', 'express:testQunit', 'qunit']
             },
         },
         open: {
-            qunit: {
-                path: 'http://localhost:3001/tests/'
-            },
+            //qunit: {
+            //    path: 'http://localhost:<%= express.testLiveReload.options.port %>/tests/'
+            //},
             home: {
-                path: 'http://localhost:3001/'
+                path: 'http://localhost:<%= express.testLiveReload.options.port %>/'
             }
         }
 
