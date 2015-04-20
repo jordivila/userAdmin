@@ -1,57 +1,58 @@
 ﻿
 var testSetup = {
-    
-    begin       : function (data) /* before any tests start */ {
+
+    begin: function (data) /* before any tests start */ {
         console.log("begin: [" + new Date().toLocaleTimeString() + "]");
     },
-    moduleStart : function (data) /* before the start of each module */ {
+    moduleStart: function (data) /* before the start of each module */ {
         console.log("-------\n  moduleStart:", data.name);
     },
-    testStart   : function (data) /* before the start of each test */ {
-        
+    testStart: function (data) /* before the start of each test */ {
+
         var module = data.module;
         var testName = data.name;
-        
+
 
         console.log("-------\n  testSTart -> " + testName);
 
         jQuery
-        .get(server.getBaseAddress() + "/initDb")
+        .get(server.getBaseAddress() + "/tests/initDb")
+        //.get("initDb")
             .done(function (result, textStatus, jqXHR) {
-            ok(result.isValid === true, "Drop Database & Init");
-        })
+                ok(result.isValid === true, "Drop Database & Init");
+            })
             .fail(function (jqXHR, textStatus, errorThrown) {
-            ok(false, "Unhandled error initiating db. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
+                ok(false, "Unhandled error initiating db. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
+            });
+
+
+    },
+    log: function (data) /* called after every assertion */ {
+        console.log("      log:", data.message);
+    },
+    testDone: function (data) /* after each test */ {
+        console.log("    testDone:", data);
+    },
+    moduleDone: function (data) /* after each module */ {
+        console.log("  moduleDone:", data);
+    },
+    done: function (data) /* all tests done */ {
+        console.log("done:", data);
+    },
+
+    init: function () {
+
+        console.log("\n======== QUnit events initialize ==========");
+
+        jQuery(document)
+        .ajaxSend(function (e, x, settings) {
+            stop();
+        })
+        .ajaxComplete(function (e, x, settings) {
+            start();
         });
 
 
-    },
-    log         : function (data) /* called after every assertion */ {
-        console.log("      log:", data.message);
-    },
-    testDone    : function (data) /* after each test */ {
-        console.log("    testDone:", data);
-    },
-    moduleDone  : function (data) /* after each module */ {
-        console.log("  moduleDone:", data);
-    },
-    done        : function (data) /* all tests done */ {
-        console.log("done:", data);
-    },
-    
-    init : function () {
-        
-        console.log("\n======== QUnit events initialize ==========");
-        
-        jQuery(document)
-        .ajaxSend(function (e, x, settings) {
-                stop();
-            })
-        .ajaxComplete(function (e, x, settings) {
-                start();
-            });
-
-        
         QUnit.begin(testSetup.begin);
         QUnit.moduleStart(testSetup.moduleStart);
         QUnit.testStart(testSetup.testStart);
@@ -59,7 +60,7 @@ var testSetup = {
         QUnit.testDone(testSetup.testDone);
         QUnit.moduleDone(testSetup.moduleDone);
         QUnit.done(testSetup.done);
-        
+
     }
 };
 

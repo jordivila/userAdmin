@@ -24,6 +24,42 @@
         };
 
 
+        function clearDB() {
+
+            // I tested few ways of doing the same thing
+
+            // 1.- This one is the slowest one (in execution time). 
+            //     But needs no maintenance 
+
+            //mongoose.connection.db.dropDatabase(function(err, result) {
+            //    createRoleGuest();
+            //});
+
+            // 2.- This one is faster than the fiorst one (in execution time). 
+            //     Removes all documents in all collections in db 
+
+
+            var modelsInDb = mongoose.connection.modelNames();
+            var modelCounter = 0;
+            var modelRemoveTrack = null;
+            modelRemoveTrack = function (err, rowsAffected) {
+
+                if (err) {
+                    console.error(err);
+                }
+
+                modelCounter++;
+
+                if (modelCounter < modelsInDb.length) {
+                    mongoose.connection.model(modelsInDb[modelCounter]).remove(modelRemoveTrack);
+                }
+                else {
+                    createRoleGuest();
+                }
+            };
+
+            mongoose.connection.model(modelsInDb[modelCounter]).remove(modelRemoveTrack);
+        }
         function createRoleGuest() {
 
             var newRole = {
@@ -36,13 +72,7 @@
                 return cb(null, roleCreated);
             });
         }
-
-        function clearDB() {
-
-            mongoose.connection.db.dropDatabase(function(err, result) {
-                createRoleGuest();
-            });
-        }
+        
 
         if (mongoose.connection.readyState === 0) {
 

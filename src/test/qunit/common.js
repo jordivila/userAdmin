@@ -3,7 +3,7 @@
 
 var server = {
     name : window.location.hostname === ''?'localhost':window.location.hostname,
-    port : window.location.hostname === ''?3000:window.location.port, 
+    port: window.location.hostname === '' ? 3000 : window.location.port,
     getBaseAddress: function () {
         return "http://" + this.name + ":" + this.port;
     }
@@ -18,6 +18,3 @@ var getRandomString = function (stringLength) {
     }
     return s;
 };
-
-
-

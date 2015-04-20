@@ -14,6 +14,7 @@ nconf.argv()
 
 nconf.set('port', process.env.PORT || nconf.get('port'));
 nconf.set('mongoose:uri', (process.env.CUSTOMCONNSTR_MONGOLAB_URI || nconf.get('mongoose:uri')));
+nconf.set('IsTestEnv', (nconf.get('NODE_ENV') === 'test') || (nconf.get('NODE_ENV') === 'dev'));
 
 
 

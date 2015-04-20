@@ -10,6 +10,7 @@
 
 
     var log = require('../libs/log')(module);
+    var config = require('../libs/config');
     var util = require('util');
     var validator = require('validator');
     var MailMessage = require('../models/mailMessage');
@@ -64,7 +65,7 @@
 
                                     var resultData = {};
 
-                                    if (process.env.node_env === 'test') {
+                                    if (config.get('IsTestEnv') === true) {
                                         resultData = {
                                             userId: user.userId,
                                             tokenId: token.guid
@@ -122,7 +123,7 @@
 
                                 var resultData = {};
 
-                                if (process.env.node_env === 'test') {
+                                if (config.get('IsTestEnv') === true) {
                                     resultData = {
                                         userId: user.userId,
                                         tokenId: token.guid
@@ -179,7 +180,7 @@
 
                                         var resultData = {};
 
-                                        if (process.env.node_env === 'test') {
+                                        if (config.get('IsTestEnv') === true) {
                                             resultData = {
                                                 userId: userCreated.userId,
                                                 tokenId: token.guid

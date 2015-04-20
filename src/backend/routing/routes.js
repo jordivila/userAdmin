@@ -26,7 +26,7 @@
             Title: "Azure nodejs application template",
             DomainName: config.get('domainName'),
             Package: pkg,
-            IsTest: (config.get('NODE_ENV') === 'test') || (config.get('NODE_ENV') === 'dev'),
+            IsTest: config.get('IsTestEnv'),
             Globalization: {
                 cultureSelected: i18n.locale,
                 cultureGlobalization: i18n.locale,
@@ -46,7 +46,7 @@
             ],
         };
 
-        
+
 
 
         if (m.IsFirstRequest) {
@@ -70,12 +70,6 @@
                     root: app.get('views')
                 });
             }
-        });
-
-        app.get('/tests*', function (req, res, next) {
-            res.sendFile('test/qunit/' + req.params[0], {
-                root: app.get('root')
-            });
         });
 
         app.get('/uicontrols/*/*', function (req, res, next) {
@@ -111,8 +105,6 @@
 
             }
         });
-
-
 
 
         /*api begin*/
@@ -272,14 +264,24 @@
 
         /*begin common routes -> 404, 500, etc*/
 
-        if (process.env.node_env === 'test') {
-            app.get("/initDb", function (req, res, next) {
+        if (config.get('IsTestEnv') === true) {
+
+            app.get("/tests/initDb", function (req, res, next) {
                 commonController.initDb(req, function (err, roleCreated) {
                     if (err) return next(err);
 
                     res.json(roleCreated);
                 });
             });
+
+            app.get('/tests/*', function (req, res, next) {
+
+                res.sendFile('test/qunit/' + req.params[0], {
+                    //root: app.get('root') + (config.get('NODE_ENV') === 'test' ? '../../' : '')
+                    root: app.get('root') + '../../'
+                });
+            });
+
         }
 
         //catch 404
