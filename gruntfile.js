@@ -1,6 +1,4 @@
-﻿
-
-module.exports = function (grunt) {
+﻿module.exports = function (grunt) {
 
     var gruntOptions = {
         pkg: grunt.file.readJSON('package.json'),
@@ -206,18 +204,22 @@ module.exports = function (grunt) {
         // grunt-watch will monitor the projects files
         // https://github.com/gruntjs/grunt-contrib-watch
         watch: {
-            testLiveReload: {
+            test: {
+                files: ['<%= jshint.files %>'],
+                tasks: ['jshint:files', /*'bump',*/ 'mochaTest', 'express:testQunit', 'qunit']
+            },
+            cdnCompile: {
                 files: ['<%= jshint.files %>', '<%= concat.ui_css.src %>'],
-                tasks: ['jshint:files', 'bump', 'clean', 'concat', /*'uglify',*/ 'cssmin', 'express:testLiveReload'],
+                tasks: ['cdnCompileFirst'],
+                
+            },
+            testLiveReload: {
+                files: ['<%= cdnFolder %>/**/*'],
+                tasks: ['express:testLiveReload'],
                 options: {
                     spawn: false, //Must have for reload
                     livereload: true //Enable LiveReload
                 }
-            },
-
-            test: {
-                files: ['<%= jshint.files %>'],
-                tasks: ['jshint:files', /*'bump',*/ 'mochaTest', 'express:testQunit', 'qunit']
             },
         },
         open: {
@@ -248,7 +250,8 @@ module.exports = function (grunt) {
 
 
 
-    grunt.registerTask('test', ['watch:test']);
-    grunt.registerTask('live', ['express:testLiveReload', 'open', 'watch:testLiveReload']);
+    grunt.registerTask('cdnCompileFirst', ['jshint:files', 'bump', 'clean', 'concat', /*'uglify', 'cssmin'*/]);
+    grunt.registerTask('live', ['cdnCompileFirst', 'express:testLiveReload', 'open', 'watch']);
+
 
 };
