@@ -259,7 +259,7 @@
         if (isDeploy && (isDeploy === 'deploy')) {
             //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
             //    I prefer not to use this min.css generated until bugs are fixed
-            tasks2Run.push('jshint:files', /*'bump',*/ 'clean', 'concat' /*,'uglify'*/ /*, 'cssmin'*/);
+            tasks2Run.push('jshint:files', /*'bump',*/ 'clean', 'concat', 'uglify' /*, 'cssmin'*/, 'mochaTest', 'express:testQunit', 'qunit');
         }
         else {
             tasks2Run.push('jshint:files', 'bump', 'clean', 'concat');
@@ -267,7 +267,7 @@
 
         grunt.task.run(tasks2Run);
     });
-    grunt.registerTask('onlyTests', 'Starts grunt with only tests option', function () {
+    grunt.registerTask('test', 'Starts grunt with only tests option', function () {
         grunt.event.on('watch', function (action, filepath) {
             grunt.config('watch.preCompile.tasks', []);
             grunt.config('watch.testLiveReload.tasks', []);
@@ -276,7 +276,7 @@
         grunt.task.run('watch');
 
     });
-    grunt.registerTask('onlyLive', 'Starts grunt with only livereload options', function () {
+    grunt.registerTask('live', 'Starts grunt with only livereload options', function () {
         grunt.event.on('watch', function (action, filepath) {
             grunt.config('watch.test.tasks', []);
         });
