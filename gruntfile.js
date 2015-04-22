@@ -102,7 +102,7 @@
                           src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
                     },
                 },
-                src: [  "bower_components/jquery-ui/ui/i18n/jquery.ui.datepicker-es.js",
+                src: ["bower_components/jquery-ui/ui/i18n/jquery.ui.datepicker-es.js",
                         "bower_components/jquery-validation/localization/messages_es.js",
                         "src/frontend/public/scripts/libs/jQuery-globalize/lib/cultures/globalize.culture.es.js",
                 ],
@@ -123,7 +123,7 @@
         cssmin: {
             target: {
                 files: {
-                    '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.min.css': ['<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.css']
+                    '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.css': ['<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.css']
                 }
             }
 
@@ -208,10 +208,10 @@
                 files: ['<%= jshint.files %>'],
                 tasks: ['jshint:files', /*'bump',*/ 'mochaTest', 'express:testQunit', 'qunit']
             },
-            cdnCompile: {
+            preCompile: {
                 files: ['<%= jshint.files %>', '<%= concat.ui_css.src %>'],
-                tasks: ['cdnCompileFirst'],
-                
+                tasks: ['preCompile'],
+
             },
             testLiveReload: {
                 files: ['<%= cdnFolder %>/**/*'],
@@ -249,9 +249,37 @@
 
 
 
+    //grunt.registerTask('preCompile', ['jshint:files', 'bump', 'clean', 'concat']);
 
-    grunt.registerTask('cdnCompileFirst', ['jshint:files', 'bump', 'clean', 'concat', /*'uglify', 'cssmin'*/]);
-    grunt.registerTask('live', ['cdnCompileFirst', 'express:testLiveReload', 'open', 'watch']);
+    grunt.registerTask('preCompile', 'Compile css, js & resources', function (isDeploy) {
+        // parameters are passed when grunt is run using -> grunt preCompile:deploy
 
+        var tasks2Run = ['jshint:files', 'bump', 'clean', 'concat', ];
 
+        if (isDeploy && (isDeploy === 'deploy')) {
+            //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
+            //    I prefer not to use this min.css generated until bugs are fixed
+            tasks2Run.push('uglify'/*, 'cssmin'*/);
+        }
+
+        grunt.task.run(tasks2Run);
+    });
+    grunt.registerTask('onlyTests', 'Starts grunt with only tests option', function () {
+        grunt.event.on('watch', function (action, filepath) {
+            grunt.config('watch.preCompile.tasks', []);
+            grunt.config('watch.testLiveReload.tasks', []);
+        });
+
+        grunt.task.run('watch');
+
+    });
+    grunt.registerTask('onlyLive', 'Starts grunt with only livereload options', function () {
+        grunt.event.on('watch', function (action, filepath) {
+            grunt.config('watch.test.tasks', []);
+        });
+
+        grunt.task.run('watch');
+    });
+
+    grunt.registerTask('default', ['preCompile', 'express:testLiveReload', 'open', 'watch']);
 };
