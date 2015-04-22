@@ -259,7 +259,7 @@
         if (isDeploy && (isDeploy === 'deploy')) {
             //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
             //    I prefer not to use this min.css generated until bugs are fixed
-            tasks2Run.push('jshint:files', 'bump', 'clean', 'concat', /*'uglify'*/ /*, 'cssmin'*/);
+            tasks2Run.push('jshint:files', /*'bump',*/ 'clean', 'concat', /*'uglify'*/ /*, 'cssmin'*/);
         }
         else {
             tasks2Run.push('jshint:files', 'bump', 'clean', 'concat');
