@@ -254,12 +254,15 @@
     grunt.registerTask('preCompile', 'Compile css, js & resources', function (isDeploy) {
         // parameters are passed when grunt is run using -> grunt preCompile:deploy
 
-        var tasks2Run = ['jshint:files', 'bump', 'clean', 'concat', ];
+        var tasks2Run = [];
 
         if (isDeploy && (isDeploy === 'deploy')) {
             //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
             //    I prefer not to use this min.css generated until bugs are fixed
-            tasks2Run.push('uglify'/*, 'cssmin'*/);
+            tasks2Run.push('jshint:files', 'clean', 'concat', 'uglify'/*, 'cssmin'*/);
+        }
+        else {
+            tasks2Run.push('jshint:files', 'bump', 'clean', 'concat');
         }
 
         grunt.task.run(tasks2Run);
