@@ -106,6 +106,8 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 )
 
 :: 4. Build & Test
+echo xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+echo begin custom deployment step
 pushd %DEPLOYMENT_TARGET%
 call :ExecuteCmd !NPM_CMD! install --development
 call :ExecuteCmd "%NODE_EXE%" node_modules\grunt-cli\bin\grunt preCompile:deploy
