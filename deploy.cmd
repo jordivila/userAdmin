@@ -108,6 +108,7 @@ IF EXIST "%DEPLOYMENT_TARGET%\package.json" (
 :: 4. Build & Test
 pushd %DEPLOYMENT_TARGET%
 call :ExecuteCmd !NPM_CMD! install --development
+call :ExecuteCmd "%NODE_EXE%" node_modules\bower\bin\bower install
 call :ExecuteCmd "%NODE_EXE%" node_modules\grunt-cli\bin\grunt preCompile:deploy
 :: call .\node_modules\.bin\grunt preCompile:deploy
 IF !ERRORLEVEL! NEQ 0 goto error
