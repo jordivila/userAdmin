@@ -12,14 +12,11 @@
     var ErrorHandledModel = require('../models/errorHandled');
     var MailMessage = require('../models/mailMessage');
     var config = require('../libs/config');
-    var sendgrid = require('sendgrid')(config.get("sendGrid:userName"), config.get("sendGrid:userPassword"));
+    var sendgrid = require('sendgrid')(config.get("mailing:credentials:userName"), config.get("mailing:credentials:password"));
 
     function testEmail(req, cb) {
 
         try {
-
-            console.log("Azure userName->" + config.get("mailing:credentials:userName"));
-            console.log("Azure userPassword->" + config.get("mailing:credentials:password"));
 
             var email = new sendgrid.Email({
                 to: 'jordi.vila@gmail.com',
