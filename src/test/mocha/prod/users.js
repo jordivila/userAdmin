@@ -23,9 +23,6 @@
 
             it('is alive', function (done) {
 
-                console.log(config.get('mongoose:uri'));
-                console.log(config.get('NODE_ENV'));
-
                 if (mongoose.connection.readyState === 0) {
 
                     mongoose.connect(config.get('mongoose:uri'), function (err) {
@@ -52,22 +49,22 @@
         });
 
         
-        //describe('Email Services', function () {
+        describe('Email Services', function () {
             
-        //    it('is alive', function (done) {
-        //        mailingController.testEmail(global, function (err, createdUser) {
-        //            if (err !== null)
-        //            {
-        //                console.log(err);
-        //            }
-        //            assert.equal(err, null, "No error expected using email services");
-        //            //assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
-        //            //assert.equal(resultHasMessage(i18n.__("DataAnnotations.EmailNotValid"), err.details), true);
-        //            done();
-        //        });
-        //    });
+            it('is alive', function (done) {
+                mailingController.testEmail(global, function (err) {
+                    if (err !== null)
+                    {
+                        console.log(err);
+                    }
+                    assert.equal(err, null, "No error expected using email services");
+                    //assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
+                    //assert.equal(resultHasMessage(i18n.__("DataAnnotations.EmailNotValid"), err.details), true);
+                    done();
+                });
+            });
             
-        //});
+        });
         
     });
 })();

@@ -18,6 +18,9 @@ nconf.set('IsTestEnv', (nconf.get('NODE_ENV') === 'test') || (nconf.get('NODE_EN
 
 
 
+nconf.set('sendGrid:userName', (process.env.SendGridUserName || 'sendGridUserFakeName'));
+nconf.set('sendGrid:userPassword', (process.env.SendGridUserPassword || 'sendGridUserFakePassword'));
+
 
 if (nconf.get('NODE_ENV') === 'test')
 {

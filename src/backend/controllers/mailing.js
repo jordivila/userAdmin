@@ -1,28 +1,32 @@
-(function(module) {
+(function (module) {
 
     "use strict";
 
     module.exports.testEmail = testEmail;
     module.exports.cantAccessYourAccount = cantAccessYourAccount;
     module.exports.resetPassword = resetPassword;
-    
+
 
     var util = require('util');
     var DataResultModel = require('../models/dataResult');
     var ErrorHandledModel = require('../models/errorHandled');
     var MailMessage = require('../models/mailMessage');
     var config = require('../libs/config');
-    var sendgrid = require('sendgrid')("username", "password");
+    var sendgrid = require('sendgrid')(config.get("sendGrid:userName"), config.get("sendGrid:userPassword"));
 
     function testEmail(req, cb) {
 
-        console.log("yahooooooooooooooooooooooooooooooo");
-
         try {
 
+
+            console.log('/************************/');
+            console.log("sendGridUserName:" + config.get("sendGrid:userName"));
+            console.log("sendGridUserPwd:" + config.get("sendGrid:userPassword"));
+            console.log('/************************/');
+
             var email = new sendgrid.Email({
-                to: 'john@contoso.com',
-                from: 'anna@contoso.com',
+                to: 'jordi.vila@gmail.com',
+                from: 'jordi.vila@gmail.com',
                 subject: 'test mail',
                 text: 'This is a sample email message.',
                 //html: 'This is a sample <b>HTML<b> email message.'
@@ -31,7 +35,7 @@
 
             sendgrid.send(email, function (err, json) {
                 if (err) { cb(err); }
-                
+
                 cb(null, json);
             });
 
@@ -102,7 +106,7 @@
 
         */
 
-        
+
         var resultData = {};
 
         if (config.get('IsTestEnv') === true) {
