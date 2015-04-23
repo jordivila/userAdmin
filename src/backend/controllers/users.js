@@ -61,25 +61,27 @@
                                 user,
                                 token,
                                 function (err, mailingResult) {
+
                                     if (err) return cb(err);
 
-                                    var resultData = {};
-
                                     if (config.get('IsTestEnv') === true) {
-                                        resultData = {
+
+                                        var resultData = {
                                             userId: user.userId,
                                             tokenId: token.guid
                                         };
+
+                                        return cb(null,
+                                            new DataResultModel(
+                                                true,
+                                                i18n.__("AccountResources.CantAccessYourAccount_PasswordChanged"),
+                                                resultData));
+
                                     } else {
                                         //send token via email
                                         return cb(new ErrorHandledModel(i18n.__("Not implemented")));
                                     }
 
-                                    return cb(null,
-                                        new DataResultModel(
-                                            true,
-                                            i18n.__("AccountResources.CantAccessYourAccount_PasswordChanged"),
-                                            resultData));
                                 });
                         });
                     });

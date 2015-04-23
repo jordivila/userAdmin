@@ -23,7 +23,6 @@
             name: "Guest"
         };
 
-
         function clearDB() {
 
             // I tested few ways of doing the same thing

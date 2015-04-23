@@ -290,7 +290,7 @@
             res.send({});
 
             log.info('Not found URL: %s', req.url);
-        });
+        }); 
 
         //operational errors
         app.use(function (err, req, res, next) {

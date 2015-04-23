@@ -1,6 +1,6 @@
 {
   "name": "userAdmin",
-  "version": "0.0.4880",
+  "version": "0.0.4919",
   "description": "userAdmin",
   "private": true,
   "author": {
@@ -23,6 +23,7 @@
     "grunt-contrib-qunit": "~0.5.2",
     "grunt-contrib-uglify": "~0.5.0",
     "grunt-contrib-watch": "0.6.1",
+    "grunt-env": "^0.4.4",
     "grunt-express-server": "^0.4.19",
     "grunt-mocha-test": "^0.12.4",
     "grunt-open": "^0.2.3",
@@ -43,6 +44,7 @@
     "node-uuid": "^1.4.2",
     "passport": "0.2.x",
     "passport-http": "0.2.x",
+    "sendgrid": "^1.6.1",
     "serve-favicon": "2.1.x",
     "validator": "^3.22.2",
     "winston": "0.8.x"

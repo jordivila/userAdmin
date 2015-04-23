@@ -2,13 +2,49 @@
 
     "use strict";
 
+    module.exports.testEmail = testEmail;
     module.exports.cantAccessYourAccount = cantAccessYourAccount;
     module.exports.resetPassword = resetPassword;
+    
 
     var util = require('util');
     var DataResultModel = require('../models/dataResult');
     var ErrorHandledModel = require('../models/errorHandled');
     var MailMessage = require('../models/mailMessage');
+    var config = require('../libs/config');
+    var sendgrid = require('sendgrid')("username", "password");
+
+    function testEmail(req, cb) {
+
+        console.log("yahooooooooooooooooooooooooooooooo");
+
+        try {
+
+            var email = new sendgrid.Email({
+                to: 'john@contoso.com',
+                from: 'anna@contoso.com',
+                subject: 'test mail',
+                text: 'This is a sample email message.',
+                //html: 'This is a sample <b>HTML<b> email message.'
+            });
+
+
+            sendgrid.send(email, function (err, json) {
+                if (err) { cb(err); }
+                
+                cb(null, json);
+            });
+
+
+            //return cb(null, new DataResultModel(true, i18n.__("AccountResources.CantAccessYourAccount_EmailSent"), {
+            //    userId: user.userId,
+            //    tokenId: token.guid
+            //}));
+
+        } catch (errMailing) {
+            return cb(errMailing);
+        }
+    }
 
     function cantAccessYourAccount(req, activateFormVirtualPath, user, token, cb) {
 
@@ -66,9 +102,56 @@
 
         */
 
-        return cb(null, {});
+        
+        var resultData = {};
+
+        if (config.get('IsTestEnv') === true) {
+            resultData = {
+                userId: user.userId,
+                tokenId: token.guid
+            };
+        } else {
+
+            //mailingController.resetPassword(req, user, token, )
+
+            //send token via email
+
+            return cb(new ErrorHandledModel(i18n.__("Not implemented")));
+        }
+
+        return cb(null, resultData);
     }
 
+    function activateAccount(req, user, token, cb) {
+
+        /*
+        MailMessage mail = new MailMessage();
+        mail.From = new MailAddress(ApplicationConfiguration.MailingSettingsSection.SupportTeamEmailAddress);
+        mail.Bcc.Add(new MailAddress(result.Data.User.Email));
+        mail.Subject = string.Format(AccountResources.ChangePassword_EmailTitle, ApplicationConfiguration.DomainInfoSettingsSection.DomainName);
+        mail.Body = string.Format(AccountResources.ChangePassword_EmailBody, ApplicationConfiguration.DomainInfoSettingsSection.DomainName);
+
+        */
+
+
+        var resultData = {};
+
+        if (config.get('IsTestEnv') === true) {
+            resultData = {
+                userId: user.userId,
+                tokenId: token.guid
+            };
+        } else {
+
+            //mailingController.resetPassword(req, user, token, )
+
+            //send token via email
+
+            return cb(new ErrorHandledModel(i18n.__("Not implemented")));
+        }
+
+        return cb(null, resultData);
+    }
 
 
 })(module);

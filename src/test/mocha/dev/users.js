@@ -2,7 +2,7 @@
     'use strict';
 
 
-    var pathToSrc = "./../../";
+    var pathToSrc = "./../../../";
 
     // import the moongoose helper utilities
     var utils = require('./libs/initMochaTests');

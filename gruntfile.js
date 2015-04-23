@@ -3,6 +3,17 @@
     var gruntOptions = {
         pkg: grunt.file.readJSON('package.json'),
         cdnFolder: 'src/frontend/public/cdn',
+        env: {
+            dev: {
+                NODE_ENV: 'development'
+            },
+            test: {
+                NODE_ENV: 'test'
+            },
+            prod: {
+                NODE_ENV: 'production'
+            }
+        },
         clean: {
             options: {
                 //'no-write': true
@@ -129,6 +140,9 @@
 
         },
         qunit: {
+            options: {
+
+            },
             allTests: ['src/test/qunit/**/*.html']
         },
         mochaTest: {
@@ -140,9 +154,21 @@
                     quiet: false, // Optionally suppress output to standard out (defaults to false)
                     clearRequireCache: false, // Optionally clear the require cache before running tests (defaults to false),
                     bail: true, // bail after first test failure
-                    node_env: 'test'
+                    //NODE_ENV: 'test'
                 },
-                src: ['src/test/mocha/**/*.js', '!src/test/mocha/libs/**/*.js']
+                src: ['src/test/mocha/dev/**/*.js', '!src/test/mocha/dev/libs/**/*.js']
+            },
+            testProd: {
+                options: {
+                    timeout: 4000,
+                    reporter: 'spec',
+                    //captureFile: 'results.txt', // Optionally capture the reporter output to a file
+                    quiet: false, // Optionally suppress output to standard out (defaults to false)
+                    clearRequireCache: false, // Optionally clear the require cache before running tests (defaults to false),
+                    bail: true, // bail after first test failure
+                    //NODE_ENV: 'test'
+                },
+                src: ['src/test/mocha/prod/**/*.js', '!src/test/mocha/prod/libs/**/*.js']
             }
         },
         jshint: {
@@ -187,7 +213,7 @@
             testQunit: {
                 options: {
                     script: './server.js',
-                    node_env: 'test',
+                    //node_env: 'test',
                     spawn: false, //Must have for reload
                     port: 3000 //,
                 },
@@ -195,7 +221,7 @@
             testLiveReload: {
                 options: {
                     script: './server.js',
-                    node_env: 'dev',
+                    //node_env: 'dev',
                     port: 3001 //,
                 },
             }
@@ -206,7 +232,7 @@
         watch: {
             test: {
                 files: ['<%= jshint.files %>'],
-                tasks: ['jshint:files', /*'bump',*/ 'mochaTest', 'express:testQunit', 'qunit']
+                tasks: ['env:test', 'jshint:files', /*'bump',*/ 'mochaTest:test', 'express:testQunit', 'qunit']
             },
             preCompile: {
                 files: ['<%= jshint.files %>', '<%= concat.ui_css.src %>'],
@@ -243,6 +269,7 @@
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-express-server');
+    grunt.loadNpmTasks('grunt-env');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-open');
     grunt.loadNpmTasks('grunt-bump');
@@ -259,7 +286,10 @@
         if (isDeploy && (isDeploy === 'deploy')) {
             //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
             //    I prefer not to use this min.css generated until bugs are fixed
-            tasks2Run.push('jshint:files', /*'bump',*/ 'clean', 'concat', 'uglify' /*, 'cssmin'*/, 'mochaTest', 'express:testQunit', 'qunit');
+            tasks2Run.push('env:prod', 'jshint:files', /*'bump',*/ 'clean', 'concat', 'uglify' /*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/);
+
+            //grunt.config('mochaTest.test.options.node_env', 'production');
+            //console.log(grunt.config('mochaTest'));
         }
         else {
             tasks2Run.push('jshint:files', 'bump', 'clean', 'concat');

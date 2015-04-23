@@ -2,12 +2,7 @@
 
     'use strict';
 
-
-    // set test environment before anything else
-    // this way config will load testing environment variables
-    process.env.NODE_ENV = 'test';
-
-    var pathToSrc = "./../../../";
+    var pathToSrc = "./../../../../";
 
     var config = require(pathToSrc + 'backend/libs/config');
     var mongoose = require('mongoose');
