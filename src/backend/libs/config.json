@@ -21,6 +21,7 @@
         "credentials": {
             "userName": "someFakeUserName",
             "password": "someFakeUserPassword"
-        }
+        },
+        "supportEmailAddress": "supportaccount@fakedomainname.com"
     }
 }

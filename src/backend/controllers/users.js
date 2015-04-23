@@ -13,7 +13,6 @@
     var config = require('../libs/config');
     var util = require('util');
     var validator = require('validator');
-    var MailMessage = require('../models/mailMessage');
     var UserModel = require('../models/users');
     var DataResultModel = require('../models/dataResult');
     var ErrorHandledModel = require('../models/errorHandled');
@@ -183,20 +182,29 @@
                                         var resultData = {};
 
                                         if (config.get('IsTestEnv') === true) {
+                                            // just when IsInTest
+                                            // because this data will be sent to client browser
                                             resultData = {
                                                 userId: userCreated.userId,
                                                 tokenId: token.guid
                                             };
-                                        } else {
-                                            //send token via email
-                                            return cb(new ErrorHandledModel(i18n.__("Not implemented")));
                                         }
 
-                                        return cb(null,
-                                            new DataResultModel(
-                                                true,
-                                                i18n.__("AccountResources.CreateNewAccount_EmailSent"),
-                                                resultData));
+                                        mailingController.createNewAccount(
+                                            req,
+                                            userCreated,
+                                            token,
+                                            function (err, mail) {
+                                                if (err) return cb(err);
+                                                // return cb(new ErrorHandledModel(i18n.__("Not implemented")));
+
+                                                return cb(null,
+                                                    new DataResultModel(
+                                                        true,
+                                                        i18n.__("AccountResources.CreateNewAccount_EmailSent"),
+                                                        resultData
+                                                    ));
+                                            });
                                     });
                             });
                     });
