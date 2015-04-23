@@ -18,11 +18,8 @@
 
         try {
 
-
-            console.log('/************************/');
-            console.log("sendGridUserName:" + config.get("sendGrid:userName"));
-            console.log("sendGridUserPwd:" + config.get("sendGrid:userPassword"));
-            console.log('/************************/');
+            console.log("Azure userName->" + config.get("mailing:credentials:userName"));
+            console.log("Azure userPassword->" + config.get("mailing:credentials:password"));
 
             var email = new sendgrid.Email({
                 to: 'jordi.vila@gmail.com',
@@ -32,18 +29,11 @@
                 //html: 'This is a sample <b>HTML<b> email message.'
             });
 
-
             sendgrid.send(email, function (err, json) {
                 if (err) { cb(err); }
 
                 cb(null, json);
             });
-
-
-            //return cb(null, new DataResultModel(true, i18n.__("AccountResources.CantAccessYourAccount_EmailSent"), {
-            //    userId: user.userId,
-            //    tokenId: token.guid
-            //}));
 
         } catch (errMailing) {
             return cb(errMailing);

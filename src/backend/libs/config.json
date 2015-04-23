@@ -10,11 +10,17 @@
 
     "i18n": {
         "directory": "./src/backend/libs/locales",
-        "locales": ["es", "en"],
+        "locales": [ "es", "en" ],
         "defaultLocale": "es",
-        "prefLocale":  "es",
+        "prefLocale": "es",
         "cookieName": "locale",
         "extension": ".json"
     },
-    "domainName": "localhost:3001"
+    "domainName": "localhost:3001",
+    "mailing": {
+        "credentials": {
+            "userName": "someFakeUserName",
+            "password": "someFakeUserPassword"
+        }
+    }
 }
