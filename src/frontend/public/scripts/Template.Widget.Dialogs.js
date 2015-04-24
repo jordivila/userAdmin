@@ -1,4 +1,11 @@
-﻿/// <reference path="VsixMvcAppResult.A.Intellisense.js" />
+﻿if (typeof VsixMvcAppResult === 'undefined') {
+    // this is for codeClimate purposes
+    // as far as files will be concatenated & 
+    // variable is defined in Template.App.Init.js
+
+    var VsixMvcAppResult = {};
+}
+
 
 VsixMvcAppResult.Widgets.Dialogs =
 {
