@@ -4,6 +4,6 @@
 
 [![Build Status](https://travis-ci.org/jordivila/userAdmin.svg?branch=master)](https://travis-ci.org/jordivila/userAdmin)
 
-[![Dependencies](https://david-dm.org/jordivila/userAdmin)](https://david-dm.org/jordivila/userAdmin)
+[![Dependency Status](https://david-dm.org/jordivila/userAdmin.svg)](https://david-dm.org/jordivila/userAdmin)
 
-
+[![devDependency Status](https://david-dm.org/jordivila/userAdmin/dev-status.svg)](https://david-dm.org/jordivila/userAdmin#info=devDependencies)
