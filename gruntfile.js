@@ -256,7 +256,6 @@
                 path: 'http://localhost:<%= express.testLiveReload.options.port %>/'
             }
         }
-
     };
 
     grunt.initConfig(gruntOptions);
