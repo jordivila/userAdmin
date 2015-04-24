@@ -94,7 +94,11 @@
                     //CRUD begin
                     "src/frontend/public/scripts/crud/common.widget.base.js",
                     "src/frontend/public/scripts/crud/common.widget.fieldItem.js",
+                    "src/frontend/public/scripts/crud/common.widget.crud.base.js",
                     "src/frontend/public/scripts/crud/common.widget.crud.js",
+                    "src/frontend/public/scripts/crud/common.widget.crud.filter.js",
+                    "src/frontend/public/scripts/crud/common.widget.crud.grid.js",
+                    "src/frontend/public/scripts/crud/common.widget.crud.form.js",
                     "src/frontend/public/scripts/crud/common.widget.grid.pagination.js",
                     //CRUD end
                     "src/frontend/public/scripts/Template.Widget.Themepicker.js",
