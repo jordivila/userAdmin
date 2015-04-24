@@ -1,4 +1,4 @@
-﻿
+
 jQuery(document).ready(function () {
     jQuery.ajaxSetup({
         type: "GET",
