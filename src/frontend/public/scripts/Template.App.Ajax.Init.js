@@ -1,4 +1,5 @@
-﻿jQuery(document).ready(function () {
+﻿
+jQuery(document).ready(function () {
     jQuery.ajaxSetup({
         type: "GET",
         contentType: "application/json; charset=utf-8",
@@ -7,50 +8,51 @@
 
             var urlHelper = new UrlHelper(settings.url);
 
-            if (urlHelper.hostname == window.location.hostname)
-            {
+            if (urlHelper.hostname == window.location.hostname) {
                 settings.url = new UrlHelper(settings.url).paramSet("appVersion", appVersion).href;
                 settings.url = new UrlHelper(settings.url).paramSet("firstRequest", false).href;
             }
-            
-            //xhr.setRequestHeader("appVersion", appVersion);
         }
-
     });
 });
 
 VsixMvcAppResult.Ajax = {};
 
+VsixMvcAppResult.Ajax._OkKo = function (options, onOK, onKO) {
+    jQuery.ajax(options)
+    .done(function (data, textStatus, jqXHR) {
+        onOK(data);
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+        onKO(jqXHR);
+    });
+};
+
+
+
 VsixMvcAppResult.Ajax.ThemeSet = function (theme, onOK, onKO) {
-    var jqxhr = jQuery.ajax({
+
+    var themesOpts = {
         url: "/api/user/theme",
         type: "POST",
         data: JSON.stringify({
             theme: theme
         })
-    })
-        .done(function (data, textStatus, jqXHR) {
-            onOK(data);
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            onKO(jqXHR);
-        });
+    };
+
+    VsixMvcAppResult.Ajax._OkKo(themesOpts);
 };
 
 VsixMvcAppResult.Ajax.CultureSet = function (culture, onOK, onKO) {
-    var jqxhr = jQuery.ajax({
+    var cultureOpts = {
         url: "/api/user/culture",
         type: "POST",
         data: JSON.stringify({
             culture: culture
         })
-    })
-        .done(function (data, textStatus, jqXHR) {
-            onOK(data);
-        })
-        .fail(function (jqXHR, textStatus, errorThrown) {
-            onKO(jqXHR);
-        });
+    };
+    
+    VsixMvcAppResult.Ajax._OkKo(cultureOpts);
 };
 
 VsixMvcAppResult.Ajax.UserUpdateLastActivity = function (onOK, onKO, onComplete) {

@@ -190,6 +190,7 @@
                     '!src/test/qunit/libs/**/*.js',
             ],
             options: {
+                //jshintrc: ".jshintrc",
                 globals: {
                     jQuery: true,
                     console: true,

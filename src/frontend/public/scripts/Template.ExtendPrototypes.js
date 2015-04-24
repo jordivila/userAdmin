@@ -51,6 +51,6 @@ function parseBoolean(value) {
     return value.toBoolean();
 }
 
-var VsixMvcAppResult = {};
+
 
 
