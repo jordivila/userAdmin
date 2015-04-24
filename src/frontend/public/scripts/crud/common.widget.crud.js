@@ -1,4 +1,5 @@
-﻿jQuery.widget("ui.crud", jQuery.ui.crudBase,
+
+jQuery.widget("ui.crud", jQuery.ui.crudBase,
 {
     options: {
         crudHeaderDomId: null,
