@@ -213,7 +213,7 @@ jQuery.widget("ui.menuTree", jQuery.ui.menuBase, {
 jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
     options: {
         //slidesOpened: [], //http://bugs.jqueryui.com/ticket/8645
-        slidesOpened: null, //since jQuery.ui 1.9 array options are static. So initialized them on create event
+        slidesOpened: null //since jQuery.ui 1.9 array options are static. So initialized them on create event
     },
     _create: function () {
 
