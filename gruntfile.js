@@ -81,6 +81,7 @@
                     "src/frontend/public/scripts/Template.Widget.Base.js",
                     //"src/frontend/public/scripts/Template.Widget.jQueryzer.js",
                     "src/frontend/public/scripts/Template.Widget.Model.js",
+                    "src/frontend/public/scripts/Template.Widget.ModelItem.js",
                     "src/frontend/public/scripts/Template.Widget.ModelDate.js",
                     "src/frontend/public/scripts/Template.Widget.ModelBool.js",
                     "src/frontend/public/scripts/Template.Widget.Grid.js",
