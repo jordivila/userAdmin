@@ -1,11 +1,9 @@
-﻿jQuery(document).ready(function () {
 
+jQuery(document).ready(function () {
 
     var customerOptions = jQuery.extend({}, crudCustomerDefaultFormOptions(), {
         gridFilterVisibleAlways: true,
     });
-
-
 
     jQuery('body')
         .find('h1:first')
@@ -17,6 +15,4 @@
             .removeClass('ui-helper-hidden')
             .fadeIn()
         .end();
-
-
 });

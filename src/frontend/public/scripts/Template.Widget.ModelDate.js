@@ -1,4 +1,4 @@
-﻿
+
 jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
 {
     options: {

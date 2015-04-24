@@ -1,4 +1,5 @@
-﻿VsixMvcAppResult.Ajax.UserMenu(
+
+VsixMvcAppResult.Ajax.UserMenu(
     function (data, textStatus, jqXHR) {
 
         jQuery('div.ui-menuSlidesSample:first')

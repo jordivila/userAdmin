@@ -1,4 +1,4 @@
-﻿
+
 
 VsixMvcAppResult.Ajax.UserMenu(
     function (data, textStatus, jqXHR) {

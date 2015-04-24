@@ -1,4 +1,5 @@
-﻿jQuery.widget("ui.menuTree", jQuery.ui.menuBase, {
+
+jQuery.widget("ui.menuTree", jQuery.ui.menuBase, {
     options: {
 
     },

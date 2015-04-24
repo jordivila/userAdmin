@@ -1,4 +1,5 @@
-﻿jQuery(document).ready(function () {
+
+jQuery(document).ready(function () {
 
     var customerOptions = jQuery.extend({}, crudCustomerDefaultOptions(), {
         gridFilterVisibleAlways: true,
@@ -16,4 +17,3 @@
             .fadeIn()
         .end();
 });
-
