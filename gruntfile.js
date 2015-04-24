@@ -89,8 +89,12 @@
                     "src/frontend/public/scripts/Template.Widget.Message.js",
                     "src/frontend/public/scripts/Template.Widget.Dialogs.js",
                     "src/frontend/public/scripts/Template.Widget.DialogInline.js",
-                    "src/frontend/public/scripts/Template.Widget.Menu.js",
-                    //"src/frontend/public/scripts/ui-widgetTreeList/ui-widgetTreeList.js"
+
+                    "src/frontend/public/scripts/Template.Widget.Menu.base.js",
+                    "src/frontend/public/scripts/Template.Widget.Menu.tree.js",
+                    "src/frontend/public/scripts/Template.Widget.Menu.slides.js",
+
+                    
                     //CRUD begin
                     "src/frontend/public/scripts/crud/common.widget.base.js",
                     "src/frontend/public/scripts/crud/common.widget.fieldItem.js",
