@@ -1,12 +1,4 @@
-﻿if (typeof VsixMvcAppResult === 'undefined') {
-    // this is for codeClimate purposes
-    // as far as files will be concatenated & 
-    // variable is defined in Template.App.Init.js
-
-    var VsixMvcAppResult = {};
-}
-
-VsixMvcAppResult.Widgets.Dialogs =
+﻿VsixMvcAppResult.Widgets.Dialogs =
 {
     _html: '<div class="ui-template-dialog"><div class="ui-template-dialogIcon"><span class="ui-icon "></span></div><div class="ui-template-dialogMsg"></div></div>', 
     createCustomInfo: function (message, onClose) {
