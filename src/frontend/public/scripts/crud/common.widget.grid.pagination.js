@@ -82,9 +82,8 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
             var start = self._getStartPage(nPagesInPaginator, TotalPages, self._getCurrentPage(Page));
             var end = self._getEndPage(nPagesInPaginator, TotalPages, start);
             var tPager = jQuery("<table></table>");
-
-
             var $firstColumn = jQuery(self._buildPage(0, self._getCurrentPage(Page), true, "&lt;&lt;", null));
+
             $firstColumn.addClass('ui-gridPagination-navBar-firstCol');
             tPager.append($firstColumn);
 
@@ -111,7 +110,6 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
                             });
         }
 
-
     },
     bind: function (pageIndex, pageSize, totalRows) {
 
@@ -130,87 +128,6 @@ jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
 
 
         if (this.options.paginationShow === true) {
-
-            //var buildPage = function (page, currentPage, isNavigationItem, text) {
-            //    var cssClass = ((currentPage == page) && (!isNavigationItem)) ? "ui-state-highlight" : "ui-state-default";
-            //    return "<td class='" + cssClass + "' value='" + page + "'>" + text + "</td>";
-            //};
-            //var getCurrentPage = function (currentPage) {
-            //    return parseInt(currentPage === null ? 0 : currentPage);
-            //};
-            //var getStartPage = function (nPagesInPaginators, totalPages, currentPage) {
-            //    var startPage = (currentPage > 0) ?
-            //                        (currentPage > (nPagesInPaginators / 2)) ?
-            //                            ((currentPage + 1) - Math.ceil((nPagesInPaginators / 2))) : 1 : 1;
-
-            //    if ((startPage + nPagesInPaginators) > totalPages) {
-            //        startPage = totalPages - nPagesInPaginators;
-            //    }
-
-            //    if (startPage < 1) {
-            //        startPage = 1;
-            //    }
-
-            //    return parseInt(startPage);
-            //};
-            //var getEndPage = function (nPagesInPaginators, totalPages, startPage) {
-            //    var endPage = startPage + nPagesInPaginators;
-            //    endPage = endPage > totalPages ? totalPages : endPage;
-            //    return parseInt(endPage);
-            //};
-            //var getNPagesInPaginator = function (nPagesInPaginators) {
-
-            //    var defaultNPages = 4;
-
-            //    if (isNaN(nPagesInPaginator)) {
-            //        return defaultNPages;
-            //    }
-            //    else {
-            //        if (nPagesInPaginator < defaultNPages) {
-            //            return defaultNPages;
-            //        }
-            //        else {
-            //            return parseInt(nPagesInPaginator) - 1;
-            //        }
-            //    }
-            //};
-
-            //if (TotalPages > 1) {
-            //    var nPagesInPaginator = self._getNPagesInPaginator(this.options.nPagesInPaginator);
-            //    var start = self._getStartPage(nPagesInPaginator, TotalPages, self._getCurrentPage(Page));
-            //    var end = self._getEndPage(nPagesInPaginator, TotalPages, start);
-            //    var tPager = jQuery("<table></table>");
-
-
-            //    var $firstColumn = jQuery(self._buildPage(0, self._getCurrentPage(Page), true, "&lt;&lt;", null));
-            //    $firstColumn.addClass('ui-gridPagination-navBar-firstCol');
-            //    tPager.append($firstColumn);
-
-            //    tPager.append(self._buildPage(self._getCurrentPage(Page) - 1 < 0 ? 0 : self._getCurrentPage(Page) - 1, self._getCurrentPage(Page), true, "&lt;", null));
-
-            //    for (var i = start; i <= end; i++) {
-            //        tPager.append(self._buildPage(i - 1, self._getCurrentPage(Page), false, i.toString(), null));
-            //    }
-
-            //    tPager.append(self._buildPage(self._getCurrentPage(Page) + 1 >= TotalPages ? self._getCurrentPage(Page) : self._getCurrentPage(Page) + 1, self._getCurrentPage(Page), true, "&gt;", null));
-
-
-            //    var $lastColumn = jQuery(self._buildPage(TotalPages - 1, self._getCurrentPage(Page), true, "&gt;&gt;", null));
-            //    $lastColumn.addClass('ui-gridPagination-navBar-lastCol');
-            //    tPager.append($lastColumn);
-
-
-
-
-            //    jQuery(self.element)
-            //            .append(tPager)
-            //            .find('table:first')
-            //                .wrapAll("<div class='ui-gridPagination-navBar'/>")
-            //                .find('td')
-            //                    .click(function () {
-            //                        self._onChange(jQuery(this).attr('value'));
-            //                    });
-            //}
 
             self._buildPagination(Page, PageSize, TotalRows, TotalPages);
         }

@@ -1,4 +1,5 @@
-﻿jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
+
+jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
 {
     options: {
         modelItems: null,
@@ -222,145 +223,184 @@ jQuery.widget("ui.widgetModelItem", jQuery.ui.widgetBase,
             this.options.displayName,
             this.options.errors.join('<br/>'));
     },
-    _formItemBuild: function ($parent) {
+
+    _formItemBuildDate: function ($parent) {
 
         var self = this;
         var t = '';
         var jqSelector = '#{0}'.format(this.options.id);
 
-        switch (this.options.input.type) {
-            case "date":
 
-                t = '<input id="{1}" name="{1}" type="text" />'.format(this.options.input.value, this.options.id);
+        t = '<input id="{1}" name="{1}" type="text" />'.format(this.options.input.value, this.options.id);
 
-
-                
-
-                jQuery($parent)
-                    .append(t)
-                    .find(jqSelector)
-                    .widgetModelItemDate({
-                        value: this.options.input.value,
-                        change: function () {
-                            self.change();
-                        }
-                    });
-
-                this.val = function () {
-                    //return jQuery(jqSelector).widgetModelItemDate('getDate');
-                    return jQuery($parent).find(jqSelector).val();
-                };
-                this.setValue = function (value) {
-                    return jQuery($parent).find(jqSelector).widgetModelItemDate('setDate', value);
-                };
-
-                break;
-            case "float":
-
-                t = '<input id="{1}" name="{1}" type="text" value="{0}" />'
-                    .format(isNaN(parseFloat(this.options.input.value)) ? "" : this.options.input.value,
-                            this.options.id);
-
-                jQuery($parent)
-                    .append(t)
-                    .find(jqSelector)
-                    .change(function () {
-                        self.change();
-                    });
-
-                this.val = function () {
-                    return jQuery($parent).find(jqSelector).val();
-                };
-                this.setValue = function (value) {
-                    return jQuery($parent).find(jqSelector).val(value);
-                };
-
-                break;
-            case "bool":
-
-                t = '<input id="{0}" name="{0}" type="checkbox" value="true" />'.format(this.options.id);
-
-                jQuery($parent)
-                    .append(t)
-                    .find(jqSelector)
-                    .widgetModelItemBool({
-                        value: self.options.input.value,
-                        nullable: self.options.input.nullable,
-                        id: self.options.id,
-                        change: function () {
-                            self.change();
-                        }
-                    });
-
-                this.val = function () {
-                    return jQuery($parent).find(jqSelector).widgetModelItemBool('val');
-                };
-                this.setValue = function (value) {
-                    return jQuery($parent).find(jqSelector).widgetModelItemBool('setValue', value);
-                };
-
-
-                break;
-            case "list":
-
-                t = '<select id="{0}" name="{0}" />'.format(this.options.id);
-
-                var opts = '';
-
-                if (jQuery.isArray(this.options.input.listValues)) {
-                    for (var i = 0; i < this.options.input.listValues.length; i++) {
-                        opts += "<option value='{0}'>{1}</option>".format(this.options.input.listValues[i].value, this.options.input.listValues[i].text);
-                    }
+        jQuery($parent)
+            .append(t)
+            .find(jqSelector)
+            .widgetModelItemDate({
+                value: this.options.input.value,
+                change: function () {
+                    self.change();
                 }
+            });
+
+        this.val = function () {
+            //return jQuery(jqSelector).widgetModelItemDate('getDate');
+            return jQuery($parent).find(jqSelector).val();
+        };
+        this.setValue = function (value) {
+            return jQuery($parent).find(jqSelector).widgetModelItemDate('setDate', value);
+        };
+
+    },
+    _formItemBuildFloat: function ($parent) {
+
+        var self = this;
+        var t = '';
+        var jqSelector = '#{0}'.format(this.options.id);
+
+        t = '<input id="{1}" name="{1}" type="text" value="{0}" />'
+            .format(isNaN(parseFloat(this.options.input.value)) ? "" : this.options.input.value,
+                    this.options.id);
+
+        jQuery($parent)
+            .append(t)
+            .find(jqSelector)
+            .change(function () {
+                self.change();
+            });
+
+        this.val = function () {
+            return jQuery($parent).find(jqSelector).val();
+        };
+        this.setValue = function (value) {
+            return jQuery($parent).find(jqSelector).val(value);
+        };
+
+    },
+    _formItemBuildBool: function ($parent) {
+
+        var self = this;
+        var t = '';
+        var jqSelector = '#{0}'.format(this.options.id);
+
+        t = '<input id="{0}" name="{0}" type="checkbox" value="true" />'.format(this.options.id);
+
+        jQuery($parent)
+            .append(t)
+            .find(jqSelector)
+            .widgetModelItemBool({
+                value: self.options.input.value,
+                nullable: self.options.input.nullable,
+                id: self.options.id,
+                change: function () {
+                    self.change();
+                }
+            });
+
+        this.val = function () {
+            return jQuery($parent).find(jqSelector).widgetModelItemBool('val');
+        };
+        this.setValue = function (value) {
+            return jQuery($parent).find(jqSelector).widgetModelItemBool('setValue', value);
+        };
 
 
-                jQuery($parent)
-                    .append(t)
-                    .find(jqSelector)
-                        .append(opts)
-                        .change(function () {
-                            self.change();
-                        });
+    },
+    _formItemBuildList: function ($parent) {
 
-                this.val = function () {
-                    return jQuery($parent).find(jqSelector).val();
-                };
-                this.setValue = function (value) {
-                    return jQuery($parent).find(jqSelector).val(value);
-                };
-                break;
+        var self = this;
+        var t = '';
+        var jqSelector = '#{0}'.format(this.options.id);
 
-            case "custom":
-                this.options.input.onItemBuild(jQuery(this.element), $parent);
-                this.val = function () {
-                    return self.options.input.onItemValue($parent);
-                };
-                this.setValue = function (value) {
-                    return self.options.input.onItemBind($parent, value);
-                };
-                break;
-            default:
+        t = '<select id="{0}" name="{0}" />'.format(this.options.id);
 
-                t = '<input id="{1}" name="{1}" type="text" value="{0}" />'.format(this.options.input.value, this.options.id);
+        var opts = '';
 
-                jQuery($parent)
-                    .append(t)
-                    .find(jqSelector)
-                    .change(function () {
-                        self.change();
-                    });
-
-                this.val = function () {
-                    return jQuery($parent).find(jqSelector).val();
-                };
-                this.setValue = function (value) {
-                    return jQuery($parent).find(jqSelector).val(value);
-                };
-
-                break;
+        if (jQuery.isArray(this.options.input.listValues)) {
+            for (var i = 0; i < this.options.input.listValues.length; i++) {
+                opts += "<option value='{0}'>{1}</option>".format(this.options.input.listValues[i].value, this.options.input.listValues[i].text);
+            }
         }
 
 
+        jQuery($parent)
+            .append(t)
+            .find(jqSelector)
+                .append(opts)
+                .change(function () {
+                    self.change();
+                });
+
+        this.val = function () {
+            return jQuery($parent).find(jqSelector).val();
+        };
+        this.setValue = function (value) {
+            return jQuery($parent).find(jqSelector).val(value);
+        };
+        
+
+    },
+    _formItemBuildCustom: function ($parent) {
+
+        var self = this;
+        var t = '';
+        var jqSelector = '#{0}'.format(this.options.id);
+
+        this.options.input.onItemBuild(jQuery(this.element), $parent);
+        this.val = function () {
+            return self.options.input.onItemValue($parent);
+        };
+        this.setValue = function (value) {
+            return self.options.input.onItemBind($parent, value);
+        };
+
+    },
+    _formItemBuildText: function ($parent) {
+
+        var self = this;
+        var t = '';
+        var jqSelector = '#{0}'.format(this.options.id);
+
+        t = '<input id="{1}" name="{1}" type="text" value="{0}" />'.format(this.options.input.value, this.options.id);
+
+        jQuery($parent)
+            .append(t)
+            .find(jqSelector)
+            .change(function () {
+                self.change();
+            });
+
+        this.val = function () {
+            return jQuery($parent).find(jqSelector).val();
+        };
+        this.setValue = function (value) {
+            return jQuery($parent).find(jqSelector).val(value);
+        };
+
+    },
+    _formItemBuild: function ($parent) {
+
+
+        switch (this.options.input.type) {
+            case "date":
+                self._formItemBuildDate($parent);
+                break;
+            case "float":
+                self._formItemBuildFloat($parent);
+                break;
+            case "bool":
+                self._formItemBuildBool($parent);
+                break;
+            case "list":
+                self._formItemBuildList($parent);
+                break;
+            case "custom":
+                self._formItemBuildCustom($parent);
+                break;
+            default:
+                self._formItemBuildText($parent);
+                break;
+        }
     },
     setErrors: function (errors) {
 
