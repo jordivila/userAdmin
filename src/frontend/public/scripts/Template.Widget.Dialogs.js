@@ -6,7 +6,6 @@
     var VsixMvcAppResult = {};
 }
 
-
 VsixMvcAppResult.Widgets.Dialogs =
 {
     _html: '<div class="ui-template-dialog"><div class="ui-template-dialogIcon"><span class="ui-icon "></span></div><div class="ui-template-dialogMsg"></div></div>', 
