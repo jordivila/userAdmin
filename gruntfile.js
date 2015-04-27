@@ -5,7 +5,7 @@
         cdnFolder: 'src/frontend/public/cdn',
         env: {
             dev: {
-                NODE_ENV: 'development'
+                NODE_ENV: 'dev'
             },
             test: {
                 NODE_ENV: 'test'
@@ -251,7 +251,7 @@
             },
             testLiveReload: {
                 files: ['<%= cdnFolder %>/**/*'],
-                tasks: ['express:testLiveReload'],
+                tasks: ['env:dev', 'express:testLiveReload'],
                 options: {
                     spawn: false, //Must have for reload
                     livereload: true //Enable LiveReload
@@ -320,8 +320,8 @@
             grunt.config('watch.test.tasks', []);
         });
 
-        grunt.task.run('watch');
+        grunt.task.run('env:dev', 'preCompile', 'express:testLiveReload', 'open', 'watch');
     });
 
-    grunt.registerTask('default', ['preCompile', 'express:testLiveReload', 'open', 'watch']);
+    grunt.registerTask('default', ['env:test', 'preCompile', 'express:testLiveReload', 'open', 'watch']);
 };
