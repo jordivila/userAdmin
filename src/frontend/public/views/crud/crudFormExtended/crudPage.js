@@ -1,7 +1,7 @@
 ﻿
 
 
-jQuery.widget("ui.crudExtendedSample", jQuery.ui.commonBaseWidget,
+jQuery.widget("ui.crudExtendedSample", jQuery.ui.widgetBase,
 {
     options: {
         customerDOMId: null,

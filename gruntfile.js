@@ -95,9 +95,9 @@
                     "src/frontend/public/scripts/Template.Widget.Menu.tree.js",
                     "src/frontend/public/scripts/Template.Widget.Menu.slides.js",
 
-                    
+
                     //CRUD begin
-                    "src/frontend/public/scripts/crud/common.widget.base.js",
+                    //"src/frontend/public/scripts/crud/common.widget.base.js",
                     "src/frontend/public/scripts/crud/common.widget.fieldItem.js",
                     "src/frontend/public/scripts/crud/common.widget.crud.base.js",
                     "src/frontend/public/scripts/crud/common.widget.crud.js",
@@ -127,7 +127,29 @@
                         "src/frontend/public/scripts/libs/jQuery-globalize/lib/cultures/globalize.culture.es.js",
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_regional_es.js'
-            }
+            },
+            ui_regional_en: {
+                options: {
+                    separator: ";",
+                    // Replace all 'use strict' statements in the code with a single one at the top
+                    banner: "'use strict';\n",
+                    process: function (src, filepath) {
+                        return '// Source: ' + filepath + '\n' +
+                          src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
+                    },
+                },
+                src: [
+                        // jquery datepicker english needs no resource file 
+                        //"bower_components/jquery-ui/ui/i18n/jquery.ui.datepicker-en.js",
+
+                        // jquery validation english needs no resource file 
+                        //"bower_components/jquery-validation/localization/messages_es.js",
+
+                        // jquery globalize needs no resource file 
+                        //"src/frontend/public/scripts/libs/jQuery-globalize/lib/cultures/globalize.culture.es.js",
+                ],
+                dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_regional_en.js'
+            },
         },
         uglify: {
             options: {
@@ -137,6 +159,7 @@
                 files: {
                     '<%= concat.ui_js.dest %>': ['<%= concat.ui_js.dest %>'],
                     '<%= concat.ui_regional_es.dest %>': ['<%= concat.ui_regional_es.dest %>'],
+                    '<%= concat.ui_regional_en.dest %>': ['<%= concat.ui_regional_en.dest %>'],
                 }
             }
         },

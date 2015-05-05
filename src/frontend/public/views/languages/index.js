@@ -1,0 +1,1 @@
+﻿jQuery('div.ui-languageSelector:first').langSelector();

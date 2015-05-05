@@ -2,7 +2,6 @@
 
     "use strict";
 
-
     var config = require('../libs/config');
     var pkg = require('../../../package.json');
     var i18n = require('i18n-2');
@@ -12,80 +11,112 @@
     var ErrorHandled = require('../models/errorHandled.js');
     var commonController = require('../controllers/common');
     var usersController = require('../controllers/users');
+    var languagesController = require('../controllers/languages');
+    var homeController = require('../controllers/home');
+    var themesController = require('../controllers/themes');
 
-    //var glob = require('globalize');
-    //var globCultures = require('globalize/lib/cultures/globalize.cultures');
-
-    function modelForLayoutGet(req) {
-
-
-
-        var i18n = req.i18n;
-
-        var m = {
-            Title: "Azure nodejs application template",
-            DomainName: config.get('domainName'),
-            Package: pkg,
-            IsTest: config.get('IsTestEnv'),
-            Globalization: {
-                cultureSelected: i18n.locale,
-                cultureGlobalization: i18n.locale,
-                cultureDatePicker: i18n.locale,
-            },
-            // Indica si la pagina viene de una peticion del menu o viene de una peticion para SEO
-            IsFirstRequest: (req.query.firstRequest === undefined),
-            //Breadcrumb: [
-            //{ title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
-            //{ title: i18n.__("GeneralTexts.Home"), url: "/" }
-            //],
-            CssFiles: [
-                //"/public/views/home/home.css",
-            ],
-            JsFiles: [
-                //"/public/views/home/home.js",
-            ],
-        };
-
-
-
-
-        if (m.IsFirstRequest) {
-            //m.JsFiles.push("/public/views/home/firstRequest.js");
-        }
-
-        return m;
-    }
 
     module.exports.setRoutes = function (app, log, authController) {
 
         app.get('/', function (req, res, next) {
 
-            var m = modelForLayoutGet(req);
-
-            if (m.IsFirstRequest) {
-                res.render('home/home.handlebars', m);
-            }
-            else {
-                res.sendFile('home/home.handlebars', {
-                    root: app.get('views')
-                });
-            }
+            res.writeHead(301,
+              {
+                  Location: '/home/'// + newRoom
+              }
+            );
+            res.end();
         });
+
+
+
+
+        /**************************************************/
+        /*              HOME                         */
+        /**************************************************/
+
+        app.get('/home', function (req, res, next) {
+            homeController.index(app, req, res, next);
+        });
+
+        app.get('/home/index.handlebars.json', function (req, res, next) {
+            homeController.indexJSON(app, req, res, next);
+        });
+
+        app.get('/home/*', function (req, res, next) {
+            var pathName = req._parsedUrl.pathname.replace('', '');
+            res.sendFile(pathName, {
+                root: app.get('views')
+            });
+        });
+
+
+
+        /**************************************************/
+        /*              LANGUAGES                         */
+        /**************************************************/
+
+        app.get('/languages/', function (req, res, next) {
+            languagesController.index(app, req, res, next);
+        });
+
+        app.get('/languages/index.handlebars.json', function (req, res, next) {
+            languagesController.indexJSON(app, req, res, next);
+        });
+
+        app.put('/languages/*', function (req, res, next) {
+            languagesController.update(req, res, next);
+        });
+
+        app.get('/languages/*', function (req, res, next) {
+            var pathName = req._parsedUrl.pathname.replace('', '');
+            res.sendFile(pathName, {
+                root: app.get('views')
+            });
+        });
+
+        /**************************************************/
+        /*              THEMES                            */
+        /**************************************************/
+
+        app.get('/themes/', function (req, res, next) {
+            themesController.index(app, req, res, next);
+        });
+
+        app.get('/themes/index.handlebars.json', function (req, res, next) {
+            themesController.indexJSON(app, req, res, next);
+        });
+
+        app.put('/themes/*', function (req, res, next) {
+            themesController.update(req, res, next);
+        });
+
+        app.get('/themes/*', function (req, res, next) {
+            var pathName = req._parsedUrl.pathname.replace('', '');
+            res.sendFile(pathName, {
+                root: app.get('views')
+            });
+        });
+
+
+        /**************************************************/
+        /*              UI CONTROLS SAMPLES               */
+        /**************************************************/
 
         app.get('/uicontrols/*/*', function (req, res, next) {
 
             if (req.params[1] === '') {
                 //browser requesting a page
-                var m = modelForLayoutGet(req);
+                var m = commonController.getModelBase(req);
 
                 //get template json config -> jsFiles, CssFiles, controllerInterface, etc
-                var templateContextPath = utilsNode.format(app.get('views') + '/%s/index.handlebars.json', req.params[0]);
+                var modelTemplate = utilsNode.format(app.get('views') + '/%s/index.handlebars.json', req.params[0]);
 
                 //extend common layout model with template config
-                m = util.extend(m, require(templateContextPath));
+                m = util.extend(m, require(modelTemplate));
 
                 //do render
-                if (m.IsFirstRequest) {
+                if (m.IsSEORequest) {
                     //render SEO friendly layout + template
                     res.render(req.params[0] + '/index.handlebars', m);
                 }
@@ -107,8 +138,14 @@
         });
 
 
-        /*api begin*/
 
+
+        /**************************************************/
+        /*              API ROUTES                        */
+        /**************************************************/
+
+
+        /*api begin*/
 
         app.get('/api/user', [
             authController.isAuthenticated,
@@ -164,30 +201,35 @@
             //authController.isAuthenticated, ????
             function (req, res, next) {
 
+
+                var i18n = req.i18n;
+
+
+
                 res.json([
                     {
-                        url: "/user/logon",
-                        text: "Log on",
+                        url: "/user/logon/",
+                        text: i18n.__("AccountResources.LogOn"),
                     },
                     {
-                        url: "/",
-                        text: "Inicio"
+                        url: "/home/",
+                        text: i18n.__("GeneralTexts.Home")
                     },
                     {
-                        url: "/blog",
-                        text: "Blog"
+                        url: "/about/",
+                        text: i18n.__("GeneralTexts.About")
                     },
                     {
-                        url: "/about",
-                        text: "Acerca de"
+                        url: "/languages/",
+                        text: i18n.__("GeneralTexts.Languages")
+                    },
+                    {
+                        url: "/themes/",
+                        text: i18n.__("GeneralTexts.SiteThemes")
                     },
                     {
                         text: "UI Controls",
                         childs: [
-                            {
-                                url: "/uicontrols/themes/",
-                                text: "Themepicker"
-                            },
                             {
                                 text: "Menu",
                                 childs: [
@@ -245,11 +287,6 @@
                             },
                         ]
                     },
-
-                    {
-                        url: "/user/languages",
-                        text: "Idiomas"
-                    },
                 ]);
 
                 res.end();
@@ -286,11 +323,34 @@
 
         //catch 404
         app.use(function (req, res, next) {
-            res.status(404);
-            res.send({});
 
-            log.info('Not found URL: %s', req.url);
-        }); 
+            var tplInfo = commonController.getModelBase(req);
+
+            if (tplInfo.IsSEORequest) {
+                res.render("errors/404/index.handlebars", tplInfo);
+            }
+            else {
+                res.status(404);
+                res.send({});
+
+                log.info('Not found URL: %s', req.url);
+            }
+
+
+
+
+
+
+
+
+
+
+
+            //res.status(404);
+            //res.send({});
+
+            //log.info('Not found URL: %s', req.url);
+        });
 
         //operational errors
         app.use(function (err, req, res, next) {

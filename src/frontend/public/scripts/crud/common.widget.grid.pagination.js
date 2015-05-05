@@ -1,5 +1,5 @@
 
-jQuery.widget("ui.gridPagination", jQuery.ui.commonBaseWidget,
+jQuery.widget("ui.gridPagination", jQuery.ui.widgetBase,
 {
     options: {
         paginationShow: true,

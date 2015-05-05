@@ -1,27 +1,41 @@
-﻿
+(function (module) {
 
-    jQuery.widget("ui.themepicker", jQuery.ui.widgetBase, {
-        options: {
+    "use strict";
 
-        },
-        _create: function () {
+    module.exports.initRequestTheme = initRequestTheme;
+    module.exports.index = index;
+    module.exports.indexJSON = indexJSON;
+    module.exports.getAll = getAll;
+    module.exports.update = update;
 
-            this._super();
+    var config = require('../libs/config');
+    var pkg = require('../../../package.json');
+    var i18n = require('i18n-2');
+    var util = require('../libs/commonFunctions');
+    var utilsNode = require('util');
+    var DataResultModel = require('../models/dataResult');
+    //var ErrorHandled = require('../models/errorHandled.js');
+    var commonController = require('../controllers/common');
 
-        },
-        _init: function () {
 
-            this._super();
+    function sendCookie(res, langId) {
+        res.cookie(config.get('themes:cookieName'), langId, { expires: new Date(Date.now() + 900000), httpOnly: true });
+    }
 
-            var self = this;
+    function initRequestTheme(req, res) {
 
+        if (req.cookies[config.get('themes:cookieName')]) {
 
-            var crudThemesAjax = {
-                ajax: {
-                    _fakeDataGrid: null,
-                    _fakeDataGridInit: function () {
+        }
+        else {
+            sendCookie(res, config.get('themes:default'));
+        }
+    }
 
-                        crudThemesAjax.ajax._fakeDataGrid = [
+    function getAll(req, cb) {
+
+        var viewModel = {
+            ThemesAvailable: [
                             {
                                 title: "Black Tie",
                                 name: "black-tie",
@@ -142,132 +156,67 @@
                                 name: "vader",
                                 icon: "theme_90_black_matte.png"
                             }
-                        ];
-                    },
-                    _fakeDelay: 1,
-                    themeSearch: function (filter) {
+            ]
+        };
 
-                        var self = this;
-                        var dfd = jQuery.Deferred();
+        cb(null, viewModel);
+    }
 
-                        filter.PageSize = 40; //-> ensure all themes are loaded
+    function indexBaseModel(app, req, res, next) {
+        var viewPath = 'themes/index.handlebars';
+        var viewModelPath = app.get('views') + '/' + viewPath + '.json';
+        var viewModel = commonController.getModelMerged(req, require(viewModelPath));
+        return {
+            viewPath: viewPath,
+            viewModel: viewModel
+        };
+    }
 
+    function index(app, req, res, next) {
 
-                        if (crudThemesAjax.ajax._fakeDataGrid === null) {
-                            crudThemesAjax.ajax._fakeDataGridInit();
-                        }
+        var tplInfo = indexBaseModel(app, req, res, next);
 
-                        var dataResult = {
-                            "IsValid": true,
-                            "Message": "",
-                            "MessageType": 0,
-                            "Data":
-                                {
-                                    "TotalRows": crudThemesAjax.ajax._fakeDataGrid.length - 10,
-                                    "Page": filter.Page,
-                                    "PageSize": filter.PageSize,
-                                    "SortBy": "",
-                                    "SortAscending": false,
-                                    "Data": [],
-                                }
-                        };
+        if (tplInfo.viewModel.IsSEORequest) {
 
-                        for (var i = (filter.Page * filter.PageSize) ; i < ((filter.Page * filter.PageSize) + filter.PageSize) ; i++) {
-                            if (i < crudThemesAjax.ajax._fakeDataGrid.length) {
-                                dataResult.Data.Data.push(crudThemesAjax.ajax._fakeDataGrid[i]);
-                            }
-                        }
-
-                        setTimeout(function () { dfd.resolve(dataResult); }, crudThemesAjax.ajax._fakeDelay);
-
-                        return dfd.promise();
-                    }
-                },
-                cache: {
-
+            getAll(req, function (err, result) {
+                if (err) {
+                    return next(err);
                 }
-            };
-            var crudThemesOptions = function () {
 
-                return {
-                    filterModel: [{
-                        id: "themeName",
-                        displayName: "Nombre",
-                        input: { value: "" },
-                    },
-                    ],
-                    gridSearchMethod: crudThemesAjax.ajax.themeSearch,
-                    gridModel: [
-                        {
-                            key: "icon",
-                            displayName: "thumbnail"
-                        },
-                    ],
-                    gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
+                res.render(tplInfo.viewPath, util.extend(tplInfo.viewModel, result));
+            });
+        }
+        else {
+            res.sendFile(tplInfo.viewPath, {
+                root: app.get('views')
+            });
+        }
+    }
 
-                        switch (columnName) {
-                            case "icon":
+    function indexJSON(app, req, res, next) {
 
-                                $cell.html('<img src="/public/images/jQueryUIThemes/{0}" alt="{1}" title="{1}" />'.format(dataItem.icon, dataItem.title));
-                                $cell.find('img')
-                                    .click(function () {
-                                        crudGridWidget._trigger('onSelect', null, dataItem);
-                                    });
-                                break;
-                            default:
-                                break;
-                        }
-                    },
-                    formInit: function (self, formOptions) {
+        var tplInfo = indexBaseModel(app, req, res, next);
 
-                    },
-                };
-            };
+        getAll(req, function (err, result) {
 
+            if (err) {
+                return next(err);
+            }
 
+            res.json(util.extend(tplInfo.viewModel, result));
+        });
+    }
 
-            jQuery(self.element)
-                .crud(jQuery.extend({}, crudThemesOptions(), {
-                    onSelect: function (e, dataItem) {
-                        var cssUri = '//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/{0}/jquery-ui.css'.format(dataItem.name);
+    function update(req, res, next) {
 
-                        self.progressShow('Loading styles');
+        var themeValue = req.body.newTheme;
 
-                        jQuery.ajax({
-                            url: cssUri,
-                            type: "GET",
-                            dataType: "text",
-                            data: {}
-                        })
-                        .done(function (data, textStatus, jqXHR) {
-                            jQuery('#jQueryUITheme').attr('href', cssUri);
-                        })
-                        .fail(function (jqXHR, textStatus, errorThrown) {
+        console.log("theme");
+        console.log(themeValue);
 
-                        })
-                        .always(function () {
-                            self.progressHide();
-                        });
+        sendCookie(res, themeValue);
 
+        res.json(new DataResultModel(true, '', {}));
+    }
 
-                    },
-                }))
-                .find('div.ui-crudFilter-buttons')
-                    .find('button.ui-search-button')
-                        .click()
-                    .end()
-                .end()
-                .find('div.ui-crudGrid-body:first')
-                    .addClass('ui-state-default');
-        },
-        destroy: function () {
-            this._super();
-
-            jQuery(this.element).crud('destroy');
-            jQuery(this.element).empty();
-        },
-    });
-
-    jQuery('div.ui-themeCrud:first').themepicker();
-
-
+})(module);

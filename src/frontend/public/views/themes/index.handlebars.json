@@ -1,8 +1,11 @@
 {
+    "Title": "GeneralTexts.SiteThemes",
     "CssFiles": [
 
     ],
     "JsFiles": [
-        "themepicker.js"
-    ]
+        "jqWidget.themeSelector.js",
+        "index.js"
+    ],
+    "Controller": "themes.js"
 }

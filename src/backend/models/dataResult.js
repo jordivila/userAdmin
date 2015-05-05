@@ -1,31 +1,34 @@
-﻿(function(module) {
+﻿(function (module) {
 
-	"use strict";
+    "use strict";
 
-	module.exports = DataResult;
+    module.exports = DataResult;
 
-	var util = require('util');
+    var util = require('util');
 
-	function DataResult(isValid, message, data) {
+    function DataResult(isValid, message, data) {
 
-		this.isValid = isValid;
-		this.messages = [];
-		if (util.isArray(message)) {
-			for (var i = 0; i < message.length; i++) {
-				this.messages.push(message[i]);
-			}
-		} else {
-			this.messages.push(message);
-		}
+        this.isValid = isValid;
+        this.messages = [];
+        if (util.isArray(message)) {
+            for (var i = 0; i < message.length; i++) {
+                this.messages.push(message[i]);
+            }
+        } else {
+            this.messages.push(message);
+        }
 
-		if (data) {
-			this.data = data;
-		}
-	}
+        if (data) {
+            this.data = data;
+        }
+        else {
+            this.data = {};
+        }
+    }
 
-	DataResult.prototype.addMessage = function(message) {
-		if (message)
-			this.messages.push(message);
-	};
+    DataResult.prototype.addMessage = function (message) {
+        if (message)
+            this.messages.push(message);
+    };
 
 })(module);

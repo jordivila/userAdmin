@@ -24,6 +24,9 @@
     var authController = require('./src/backend/controllers/auth');
     var usersController = require('./src/backend/controllers/users');
     var commonController = require('./src/backend/controllers/common');
+    var languagesController = require('./src/backend/controllers/languages');
+    var themesController = require('./src/backend/controllers/themes');
+
     var ErrorHandled = require('./src/backend/models/errorHandled');
     var routingHandler = require('./src/backend/routing/routes');
 
@@ -41,7 +44,7 @@
     app.use(compression());
 
     app.set('root', __dirname + '/src/frontend/public/');
-    app.set('views', __dirname + '/src/frontend/public/views');
+    app.set('views', __dirname + '/src/frontend/public/views/');
     app.engine('handlebars', exphbs({
         layoutsDir: 'src/frontend/public/views/layouts/',
         defaultLayout: 'layout'
@@ -59,9 +62,10 @@
 
     // set up the middleware
     app.use(function (req, res, next) {
-        req.i18n.setLocaleFromCookie();
-        //log.info('\n request URL: %s', req.url); // log all requests
-        //log.info('\n locale : %s', req.i18n.getLocale()); // log all requests
+
+        languagesController.initRequestLanguage(req, res);
+        themesController.initRequestTheme(req, res);
+
         next();
     });
 
@@ -72,13 +76,6 @@
 
 
 
-    //begin -> set public static content folders
-    //set the Cache-Control header to one day using milliseconds
-
-    //old 
-    //app.use('/public', express.static(__dirname + '/src/frontend/public', {
-    //    maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-    //}));
 
     app.use('/public/cdn', express.static(__dirname + '/src/frontend/public/cdn', {
         maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0

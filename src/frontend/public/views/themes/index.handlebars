@@ -1,11 +1,28 @@
 <style type="text/css">
-.ui-themeCrud {}
-.ui-themeCrud .ui-crud-messages,
-.ui-themeCrud .ui-ribbonButtons,
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-header,
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-pager {display:none !important;}
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-body { padding:0 0 0 2em;background-image:none;}
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-body .ui-widgetGrid-row { float:left;border:none !important;}
-.ui-themeCrud .ui-crudGrid .ui-crudGrid-body .ui-widgetGrid-row * { border:none !important;background:none;}
+    .ui-themeSelector-container {
+        padding: 1em;
+        background-image: none !important;
+    }
+
+    .ui-themeSelector-container ul.ui-themeSelector-list {
+        border-width: 0;
+    }
+
+    .ui-themeSelector-container ul.ui-themeSelector-list li {float:left;}
 </style>
-<div class="ui-themeCrud"></div>
+
+
+
+<div class="ui-themeSelector">
+    <div class="ui-themeSelector-messages"></div>
+    <div class="ui-themeSelector-container ui-state-default">
+        <h3>Select your preferred theme</h3>
+        <ul class="ui-themeSelector-list ui-menuTree ui-state-default ui-menuList ui-widget-content ui-corner-all" style="overflow: hidden;">
+            {{#each ThemesAvailable}}
+            <li class="ui-menuList-item ui-widget-content ui-corner-all ui-state-default" data-theme-id="{{this.name}}">
+                <img src="/public/images/jQueryUIThemes/{{this.icon}}" alt="{{this.name}}" title="{{this.name}}" />
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>

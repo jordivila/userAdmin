@@ -106,6 +106,22 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                     dataType: "json",
                 })
                 .done(function (dataJson, textStatusJson, jqXHRJson) {
+
+                    console.log("/***************************************/");
+                    console.log("DATA JSON");
+                    console.log(dataJson);
+
+
+                    if (dataJson.Title)
+                    {
+                        jQuery('body')
+                            .find('h1:first')
+                                .html(dataJson.Title);
+                    }
+
+
+
+
                     var html = template(jQuery.extend({}, dataJson, templateContext));
                     $siteContent.html(html);
                 })

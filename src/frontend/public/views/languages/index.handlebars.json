@@ -1,0 +1,11 @@
+{
+    "Title": "GeneralTexts.Languages",
+    "CssFiles": [
+
+    ],
+    "JsFiles": [
+        "jqWidget.langSelector.js",
+        "index.js"
+    ],
+    "Controller": "languages.js"
+}

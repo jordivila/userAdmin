@@ -5,14 +5,19 @@
     module.exports.setAccessControlOrigin = setAccessControlOrigin;
     module.exports.initTestEnvironment = initTestEnvironment;
     module.exports.initDb = initDb;
+    module.exports.getModelBase = getModelBase;
+    module.exports.getModelMerged = getModelMerged;
 
 
     var userController = require('./users');
     var roleController = require('./usersRoles');
-    var util = require('util');
+    
     var mongoose = require('mongoose');
     var config = require('../libs/config');
     var ErrorHandled = require('../models/errorHandled.js');
+    var pkg = require('../../../package.json');
+    var util = require('../libs/commonFunctions');
+    //var util = require('util');
 
 
 
@@ -108,6 +113,59 @@
             // Pass to next layer of middleware
             next();
         });
+    }
+
+    function getModelBase(req) {
+
+        var i18n = req.i18n;
+
+        var m = {
+            Title: '',
+            DomainName: config.get('domainName'),
+            Package: {
+                name: pkg.name,
+                version: pkg.version
+            },
+            IsTest: config.get('IsTestEnv'),
+            Theme: req.cookies[config.get('themes:cookieName')],
+            Globalization: {
+                cultureSelected: i18n.locale,
+                cultureGlobalization: i18n.locale,
+                cultureDatePicker: i18n.locale,
+            },
+            // Indica si la pagina viene de una peticion del menu o viene de una peticion para SEO
+            IsSEORequest: (req.query.seoRequest === undefined),
+            //Breadcrumb: [
+                //{ title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
+                //{ title: i18n.__("GeneralTexts.Home"), url: "/" }
+            //],
+            CssFiles: [
+                //"/public/views/home/home.css",
+            ],
+            JsFiles: [
+                //"/public/views/home/home.js",
+            ],
+        };
+
+        return m;
+    }
+
+    function getModelMerged(req, model2Merge) {
+        
+        var i18n = req.i18n;
+        var modelBase = getModelBase(req);
+        var viewModel = util.extend(modelBase, model2Merge);
+
+                
+        console.log("antes");
+        console.log(viewModel.Title);
+
+        viewModel.Title = i18n.__(viewModel.Title);
+
+        console.log("despues");
+        console.log(viewModel.Title);
+
+        return viewModel;
     }
 
 })(module);

@@ -10,7 +10,7 @@ jQuery(document).ready(function () {
 
             if (urlHelper.hostname == window.location.hostname) {
                 settings.url = new UrlHelper(settings.url).paramSet("appVersion", appVersion).href;
-                settings.url = new UrlHelper(settings.url).paramSet("firstRequest", false).href;
+                settings.url = new UrlHelper(settings.url).paramSet("seoRequest", false).href;
             }
         }
     });
@@ -60,6 +60,8 @@ VsixMvcAppResult.Ajax.onOkKoComplete = function (opts, onOK, onKO, onComplete) {
                         .always(function (jqXHR, textStatus, errorThrown) {
                             onComplete();
                         });
+
+    return jqxhr;
 };
 
 VsixMvcAppResult.Ajax.UserUpdateLastActivity = function (onOK, onKO, onComplete) {

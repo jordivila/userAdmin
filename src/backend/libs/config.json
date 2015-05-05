@@ -7,7 +7,10 @@
         "uri": "mongodb://localhost:27017/testAPI3"
     },
     "encryptKeyForCookieParser": "someEncriptiongKey",
-
+    "themes": {
+        "cookieName": "theme",
+        "default": "redmond"
+    },
     "i18n": {
         "directory": "./src/backend/libs/locales",
         "locales": [ "es", "en" ],

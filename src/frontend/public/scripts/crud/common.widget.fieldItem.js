@@ -1,6 +1,6 @@
 ﻿/// <reference path="inv.ajax.js" />
 
-jQuery.widget("ui.fieldItem", jQuery.ui.commonBaseWidget,
+jQuery.widget("ui.fieldItem", jQuery.ui.widgetBase,
 {
     options: {
         wrapElement: null
