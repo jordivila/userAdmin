@@ -59,11 +59,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var formControlClass = 'ui-{0}Crud-form'.format(this.widgetName);
 
         self._templateInit(gridFilterClass, gridButtonsClass, gridControlClass, formControlClass);
-
-        this.options.gridFilterDOMId = jQuery(this.element).find('div.{0}:first'.format(gridFilterClass));
-        this.options.gridDOMId = jQuery(this.element).find('div.{0}:first'.format(gridControlClass));
-        this.options.gridButtonsDOMId = jQuery(this.element).find('div.{0}:first'.format(gridButtonsClass));
-        this.options.formDOMId = jQuery(this.element).find('div.{0}:first'.format(formControlClass));
+        self._templateSetSelectors(gridFilterClass, gridButtonsClass, gridControlClass, formControlClass);
     },
     _init: function () {
 
@@ -231,6 +227,12 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                     gridButtonsClass,
                     gridControlClass,
                     formControlClass);
+    },
+    _templateSetSelectors: function (gridFilterClass, gridButtonsClass, gridControlClass, formControlClass) {
+        this.options.gridFilterDOMId = jQuery(this.element).find('div.{0}:first'.format(gridFilterClass));
+        this.options.gridDOMId = jQuery(this.element).find('div.{0}:first'.format(gridControlClass));
+        this.options.gridButtonsDOMId = jQuery(this.element).find('div.{0}:first'.format(gridButtonsClass));
+        this.options.formDOMId = jQuery(this.element).find('div.{0}:first'.format(formControlClass));
     },
 
     _actions: {
