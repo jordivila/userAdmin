@@ -64,10 +64,10 @@ jQuery.widget("ui.widgetBase",
             console.log(logMessage);
         }
     },
-    addCss: function (css) {
-        // TODO: check 'head' exists
-        jQuery('head').append(css);
-    },
+    //addCss: function (css) {
+    //    // TODO: check 'head' exists
+    //    jQuery('head').append(css);
+    //},
     cloneObject: function (obj) {
         var copy;
 
@@ -300,24 +300,24 @@ jQuery.widget("ui.widgetBase",
 
 
 
-    dfdFillCombo: function (selector, KeyValuePairArray) {
-        var dfd = jQuery.Deferred();
-        try {
-            var $domObj = jQuery(selector);
+    //dfdFillCombo: function (selector, KeyValuePairArray) {
+    //    var dfd = jQuery.Deferred();
+    //    try {
+    //        var $domObj = jQuery(selector);
 
-            $domObj.find('option').remove();
+    //        $domObj.find('option').remove();
 
-            for (var i = 0; i < KeyValuePairArray.length; i++) {
-                $domObj.append(jQuery("<option />").val(KeyValuePairArray[i].value).text(KeyValuePairArray[i].name));
-            }
+    //        for (var i = 0; i < KeyValuePairArray.length; i++) {
+    //            $domObj.append(jQuery("<option />").val(KeyValuePairArray[i].value).text(KeyValuePairArray[i].name));
+    //        }
 
-            dfd.resolve();
-        }
-        catch (e) {
-            dfd.reject("Error inicializando el formulario: " + e.message);
-        }
-        return dfd.promise();
-    }
+    //        dfd.resolve();
+    //    }
+    //    catch (e) {
+    //        dfd.reject("Error inicializando el formulario: " + e.message);
+    //    }
+    //    return dfd.promise();
+    //}
 
 
 
