@@ -1,7 +1,22 @@
-﻿jQuery.widget("ui.langSelector", jQuery.ui.widgetBase,
+jQuery.widget("ui.itemPicker", jQuery.ui.widgetBase,
 {
     options: {
-
+        itemsSelector: null,
+        itemsAttrId: null,
+        messageBoxSelector: null,
+        itemApllyingMsg: null,
+        itemApllyingFailUnhandledMsg:'',
+        itemServerPut: function (itemId) {
+            return jQuery.ajax({
+                url: "",
+                type: "PUT",
+                data: JSON.stringify({ itemId: itemId }),
+                cache: false
+            });
+        },
+        itemServerPutOk: function (result) {
+            
+        },
     },
     _create: function () {
 
@@ -17,18 +32,14 @@
         this._super();
 
         jQuery(self.element)
-            .find('ul.ui-languageSelector-list:first')
-                .find('li')
-                    .click(function (e, ui) {
-                        var langSelected = jQuery(this).attr('data-language-id');
-                        self.errorHide();
-                        self.applyLang(langSelected);
-                    })
-                .end()
-            .end();
-
-        jQuery(self.element)
-            .find('div.ui-languageSelector-messages:first')
+            .find(self.options.itemsSelector)
+                .click(function (e, ui) {
+                    var itemSelected = jQuery(this).attr(self.options.itemsAttrId);
+                    self.errorHide();
+                    self.applyItem(itemSelected);
+                })
+            .end()
+            .find(self.options.messageBoxSelector)
                 .each(function () {
                     self.errorInit(jQuery(this));
                 })
@@ -40,11 +51,11 @@
         this._super();
 
     },
-    applyLang: function (langId) {
+    applyItem: function (itemId) {
 
         var self = this;
 
-        self._applyLang(langId)
+        self._applyItem(itemId)
                 .progress(function (status) {
                     self.progressShow(status);
                 })
@@ -56,41 +67,31 @@
                     self.progressHide();
                 });
     },
-    _applyLang: function (langId) {
+    _applyItem: function (itemId) {
 
         var self = this;
         var dfd = jQuery.Deferred();
 
-        dfd.notify("Aplicando idioma...");
+        dfd.notify(self.options.itemApllyingMsg);
 
-        var ajaxMethod = function () {
-            return jQuery.ajax({
-                url: "/languages/",
-                type: "PUT",
-                data: JSON.stringify({ localeNewValue: langId }),
-                cache: false
-            });
-        };
-
-        jQuery.when(ajaxMethod())
+        jQuery.when(self.options.itemServerPut(itemId))
             .then(
                 function (result, statusText, jqXHR) {
                     if (result.isValid) {
                         dfd.resolve();
 
-                        location.reload();
+                        self.options.itemServerPutOk(result);
                     }
                     else {
                         dfd.reject(result.messages[0]);
                     }
                 },
                 function (jqXHR, textStatus, errorThrown) {
-                    dfd.reject("Error no controlado al seleccionar el idioma");
+                    dfd.reject(self.options.itemApllyingFailUnhandledMsg);
                 })
             .done(function () {
 
             });
-
 
         return dfd.promise();
     }

@@ -95,6 +95,9 @@
                     "src/frontend/public/scripts/Template.Widget.Menu.tree.js",
                     "src/frontend/public/scripts/Template.Widget.Menu.slides.js",
 
+                    "src/frontend/public/scripts/Template.Widget.ItemPicker.js",
+
+                    
 
                     //CRUD begin
                     //"src/frontend/public/scripts/crud/common.widget.base.js",

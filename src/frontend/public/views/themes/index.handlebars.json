@@ -4,7 +4,6 @@
 
     ],
     "JsFiles": [
-        "jqWidget.themeSelector.js",
         "index.js"
     ],
     "Controller": "themes.js"

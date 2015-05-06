@@ -4,7 +4,6 @@
 
     ],
     "JsFiles": [
-        "jqWidget.langSelector.js",
         "index.js"
     ],
     "Controller": "languages.js"
