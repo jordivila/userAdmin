@@ -12,6 +12,8 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         },
         gridSearchNotifyBeginMsg: "Searching...",
         gridSearchNotifyFailMsg: "Unhandled Error searching...",
+        gridSearchEditNotifyBeginMsg: "Searching item for edit...",
+        gridSearchEditNotifyFailMsg: "Unhandled Error searching item for edit...",
         formDOMId: null,
 
 
@@ -314,7 +316,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var self = this;
         var dfd = jQuery.Deferred();
 
-        dfd.notify("Buscando...");
+        dfd.notify(self.options.gridSearchNotifyBeginMsg);
 
         if (self.options.gridSearchMethod === null) {
             dfd.reject(self.namespace + '.' + self.widgetName + "options.gridSearchMethod is an abstract method. Child class must implement");
@@ -333,7 +335,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                         }
                     },
                     function (jqXHR, textStatus, errorThrown) {
-                        dfd.reject("Error buscando");
+                        dfd.reject(self.options.gridSearchNotifyFailMsg);
                     })
                 .done(function () {
 
@@ -363,7 +365,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var self = this;
         var dfd = jQuery.Deferred();
 
-        dfd.notify(self.options.gridSearchNotifyBeginMsg);
+        dfd.notify(self.options.gridSearchEditNotifyBeginMsg);
 
         if (self.options.gridSearchForEditMethod === null) {
             dfd.reject(self.namespace + '.' + self.widgetName + ".options.gridSearchForEditMethod is an abstract method. Child class must implement");
@@ -383,7 +385,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                             }
                         },
                         function (jqXHR, textStatus, errorThrown) {
-                            dfd.reject(self.options.gridSearchNotifyFailMsg);
+                            dfd.reject(self.options.gridSearchEditNotifyFailMsg);
                         })
                     .done(function () {
 
