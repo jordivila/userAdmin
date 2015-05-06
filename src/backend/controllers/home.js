@@ -13,19 +13,10 @@
     var commonController = require('../controllers/common');
 
 
-    function indexBaseModel(app, req, res, next) {
-        var viewPath = 'home/index.handlebars';
-        var viewModelPath = app.get('views') + '/' + viewPath + '.json';
-        var viewModel = commonController.getModelMerged(req, require(viewModelPath));
-        return {
-            viewPath: viewPath,
-            viewModel: viewModel
-        };
-    }
 
     function index(app, req, res, next) {
 
-        var tplInfo = indexBaseModel(app, req, res, next);
+        var tplInfo = commonController.getViewModel(app, req, 'home');
 
         if (tplInfo.viewModel.IsSEORequest) {
             res.render(tplInfo.viewPath, tplInfo.viewModel);
@@ -39,7 +30,8 @@
 
     function indexJSON(app, req, res, next) {
 
-        var tplInfo = indexBaseModel(app, req, res, next);
+        var tplInfo = commonController.getViewModel(app, req, 'home');
+
         res.json(tplInfo.viewModel);
     }
 

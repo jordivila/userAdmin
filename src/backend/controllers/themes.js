@@ -18,9 +18,6 @@
     var commonController = require('../controllers/common');
 
 
-    function sendCookie(res, langId) {
-        res.cookie(config.get('themes:cookieName'), langId, { expires: new Date(Date.now() + 900000), httpOnly: true });
-    }
 
     function initRequestTheme(req, res) {
 
@@ -28,7 +25,7 @@
 
         }
         else {
-            sendCookie(res, config.get('themes:default'));
+            commonController.setCookie(res, config.get('themes:cookieName'), config.get('themes:default'));
         }
     }
 
@@ -162,19 +159,10 @@
         cb(null, viewModel);
     }
 
-    function indexBaseModel(app, req, res, next) {
-        var viewPath = 'themes/index.handlebars';
-        var viewModelPath = app.get('views') + '/' + viewPath + '.json';
-        var viewModel = commonController.getModelMerged(req, require(viewModelPath));
-        return {
-            viewPath: viewPath,
-            viewModel: viewModel
-        };
-    }
 
     function index(app, req, res, next) {
 
-        var tplInfo = indexBaseModel(app, req, res, next);
+        var tplInfo = commonController.getViewModel(app, req, 'themes');
 
         if (tplInfo.viewModel.IsSEORequest) {
 
@@ -195,7 +183,7 @@
 
     function indexJSON(app, req, res, next) {
 
-        var tplInfo = indexBaseModel(app, req, res, next);
+        var tplInfo = commonController.getViewModel(app, req, 'themes');
 
         getAll(req, function (err, result) {
 
@@ -209,12 +197,7 @@
 
     function update(req, res, next) {
 
-        var themeValue = req.body.newTheme;
-
-        console.log("theme");
-        console.log(themeValue);
-
-        sendCookie(res, themeValue);
+        commonController.setCookie(res, config.get('themes:cookieName'), req.body.newTheme);
 
         res.json(new DataResultModel(true, '', {}));
     }

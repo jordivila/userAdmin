@@ -7,6 +7,8 @@
     module.exports.initDb = initDb;
     module.exports.getModelBase = getModelBase;
     module.exports.getModelMerged = getModelMerged;
+    module.exports.getViewModel = getViewModel;
+    module.exports.setCookie = setCookie;
 
 
     var userController = require('./users');
@@ -155,17 +157,26 @@
         var i18n = req.i18n;
         var modelBase = getModelBase(req);
         var viewModel = util.extend(modelBase, model2Merge);
-
                 
-        console.log("antes");
-        console.log(viewModel.Title);
-
         viewModel.Title = i18n.__(viewModel.Title);
 
-        console.log("despues");
-        console.log(viewModel.Title);
-
         return viewModel;
+    }
+
+    function getViewModel(app, req, route)
+    {
+        var viewPath = route + '/index.handlebars';
+        var viewModelPath = app.get('views') + '/' + viewPath + '.json';
+        var viewModel = getModelMerged(req, require(viewModelPath));
+        return {
+            viewPath: viewPath,
+            viewModel: viewModel
+        };
+
+    }
+
+    function setCookie(res, name, value) {
+        res.cookie(name, value, { expires: new Date(Date.now() + 900000), httpOnly: true });
     }
 
 })(module);

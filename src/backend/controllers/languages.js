@@ -17,12 +17,8 @@
     var ErrorHandled = require('../models/errorHandled.js');
     var commonController = require('../controllers/common');
     var usersController = require('../controllers/users');
-    var languagesController = require('../controllers/languages');
 
 
-    function sendCookie(res, langId) {
-        res.cookie(config.get('i18n:cookieName'), langId, { expires: new Date(Date.now() + 900000), httpOnly: true });
-    }
 
     function initRequestLanguage(req, res) {
 
@@ -32,7 +28,7 @@
 
         }
         else {
-            sendCookie(res, req.i18n.getLocale());
+            commonController.setCookie(res, config.get('i18n:cookieName'), req.i18n.getLocale());
         }
     }
 
@@ -57,19 +53,10 @@
         cb(null, viewModel);
     }
 
-    function indexBaseModel(app, req, res, next) {
-        var viewPath = 'languages/index.handlebars';
-        var viewModelPath = app.get('views') + '/' + viewPath + '.json';
-        var viewModel = commonController.getModelMerged(req, require(viewModelPath));
-        return {
-            viewPath: viewPath,
-            viewModel: viewModel
-        };
-    }
 
     function index(app, req, res, next) {
 
-        var tplInfo = indexBaseModel(app, req, res, next);
+        var tplInfo = commonController.getViewModel(app, req, 'languages');
 
         if (tplInfo.viewModel.IsSEORequest) {
 
@@ -90,7 +77,7 @@
 
     function indexJSON(app, req, res, next) {
 
-        var tplInfo = indexBaseModel(app, req, res, next);
+        var tplInfo = commonController.getViewModel(app, req, 'languages');
 
         getAll(req, function (err, result) {
 
@@ -104,9 +91,7 @@
 
     function update(req, res, next) {
 
-        var langValue = req.body.localeNewValue;
-
-        sendCookie(res, langValue);
+        commonController.setCookie(res, config.get('i18n:cookieName'), req.body.localeNewValue);
 
         res.json(new DataResultModel(true, '', {}));
     }
