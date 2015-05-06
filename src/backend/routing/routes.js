@@ -16,7 +16,39 @@
     var themesController = require('../controllers/themes');
 
 
+
+    function registerCommonGets(app, route, controller) {
+        app.get('/' + route + '/', function (req, res, next) {
+            controller.index(app, req, res, next);
+        });
+
+        app.get('/' + route + '/index.handlebars.json', function (req, res, next) {
+            controller.indexJSON(app, req, res, next);
+        });
+
+        app.get('/' + route + '/*', function (req, res, next) {
+
+            var pathName = req._parsedUrl.pathname.replace('', '');
+
+            res.sendFile(pathName, {
+                root: app.get('views')
+            }, function (err) {
+                if (err) {
+                    res.status(err.status);
+                    next();
+                }
+            });
+        });
+    }
+
+
     module.exports.setRoutes = function (app, log, authController) {
+
+
+        /**************************************************/
+        /*              VIEW ROUTES                       */
+        /**************************************************/
+
 
         app.get('/', function (req, res, next) {
 
@@ -29,79 +61,20 @@
         });
 
 
+        registerCommonGets(app, "home", homeController);
+        registerCommonGets(app, "languages", languagesController);
 
-
-        /**************************************************/
-        /*              HOME                         */
-        /**************************************************/
-
-        app.get('/home', function (req, res, next) {
-            homeController.index(app, req, res, next);
-        });
-
-        app.get('/home/index.handlebars.json', function (req, res, next) {
-            homeController.indexJSON(app, req, res, next);
-        });
-
-        app.get('/home/*', function (req, res, next) {
-            var pathName = req._parsedUrl.pathname.replace('', '');
-            res.sendFile(pathName, {
-                root: app.get('views')
-            });
-        });
-
-
-
-        /**************************************************/
-        /*              LANGUAGES                         */
-        /**************************************************/
-
-        app.get('/languages/', function (req, res, next) {
-            languagesController.index(app, req, res, next);
-        });
-
-        app.get('/languages/index.handlebars.json', function (req, res, next) {
-            languagesController.indexJSON(app, req, res, next);
-        });
 
         app.put('/languages/*', function (req, res, next) {
             languagesController.update(req, res, next);
         });
 
-        app.get('/languages/*', function (req, res, next) {
-            var pathName = req._parsedUrl.pathname.replace('', '');
-            res.sendFile(pathName, {
-                root: app.get('views')
-            });
-        });
 
-        /**************************************************/
-        /*              THEMES                            */
-        /**************************************************/
-
-        app.get('/themes/', function (req, res, next) {
-            themesController.index(app, req, res, next);
-        });
-
-        app.get('/themes/index.handlebars.json', function (req, res, next) {
-            themesController.indexJSON(app, req, res, next);
-        });
-
+        registerCommonGets(app, "themes", themesController);
         app.put('/themes/*', function (req, res, next) {
             themesController.update(req, res, next);
         });
 
-        app.get('/themes/*', function (req, res, next) {
-            var pathName = req._parsedUrl.pathname.replace('', '');
-            res.sendFile(pathName, {
-                root: app.get('views')
-            });
-        });
-
-
-        /**************************************************/
-        /*              UI CONTROLS SAMPLES               */
-        /**************************************************/
 
         app.get('/uicontrols/*/*', function (req, res, next) {
 
@@ -332,24 +305,8 @@
             else {
                 res.status(404);
                 res.send({});
-
                 log.info('Not found URL: %s', req.url);
             }
-
-
-
-
-
-
-
-
-
-
-
-            //res.status(404);
-            //res.send({});
-
-            //log.info('Not found URL: %s', req.url);
         });
 
         //operational errors
