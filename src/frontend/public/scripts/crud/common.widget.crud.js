@@ -233,13 +233,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
         var self = this;
 
-
-        console.log(actionSelected);
-
-        jQuery(self.options.gridFilterDOMId).hide();
-        jQuery(self.options.gridButtonsDOMId).hide();
-        jQuery(self.options.gridDOMId).hide();
-        jQuery(self.options.formDOMId).hide();
+        self._hidePanels();
 
         switch (actionSelected) {
             case self._actions.filter:
@@ -266,6 +260,12 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
             default:
                 break;
         }
+    },
+    _hidePanels: function () {
+        jQuery(this.options.gridFilterDOMId).hide();
+        jQuery(this.options.gridButtonsDOMId).hide();
+        jQuery(this.options.gridDOMId).hide();
+        jQuery(this.options.formDOMId).hide();
     },
     _search: function () {
 
