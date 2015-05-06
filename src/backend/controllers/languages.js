@@ -5,7 +5,7 @@
     module.exports.initRequestLanguage = initRequestLanguage;
     module.exports.index = index;
     module.exports.indexJSON = indexJSON;
-    module.exports.getAll = getAll;
+    module.exports.getLanguages = getLanguages;
     module.exports.update = update;
 
     var config = require('../libs/config');
@@ -32,21 +32,23 @@
         }
     }
 
-    function getAll(req, cb) {
+    function getLanguages(req, cb) {
+
+        
 
         var viewModel = {
             LangsAvailable: [
                 {
                     id: "es",
-                    name: 'Español'
+                    name: req.i18n.__("GeneralTexts.Language.Spanish")
                 },
                 {
                     id: "cat",
-                    name: 'Català'
+                    name: req.i18n.__("GeneralTexts.Language.Catalan")
                 },
                 {
                     id: "en",
-                    name: 'English'
+                    name: req.i18n.__("GeneralTexts.Language.English")
                 }]
         };
 
@@ -60,7 +62,7 @@
 
         if (tplInfo.viewModel.IsSEORequest) {
 
-            getAll(req, function (err, result) {
+            getLanguages(req, function (err, result) {
                 if (err) {
                     return next(err);
                 }
@@ -79,7 +81,7 @@
 
         var tplInfo = commonController.getViewModel(app, req, 'languages');
 
-        getAll(req, function (err, result) {
+        getLanguages(req, function (err, result) {
 
             if (err) {
                 return next(err);
