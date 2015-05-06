@@ -235,30 +235,44 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
         self._hidePanels();
 
-
-        if (actionSelected === self._actions.filter)
-        {
-            jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
+        if (actionSelected === self._actions.filter) {
+            self._actionSetFilter();
         }
 
-        if (actionSelected === self._actions.list)
-        {
-            jQuery(self.options.gridDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
-
-            if (self.options.gridFilterVisibleAlways) {
-                jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').show();
-                jQuery(self.options.gridButtonsDOMId).hide();
-            }
-            else {
-                jQuery(self.options.gridFilterDOMId).addClass('ui-helper-hidden');
-                jQuery(self.options.gridButtonsDOMId).show();
-            }
+        if (actionSelected === self._actions.list) {
+            self._actionSetList();
         }
 
-        if (actionSelected === self._actions.form)
-        {
-            jQuery(self.options.formDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
+        if (actionSelected === self._actions.form) {
+            self._actionSetForm();
         }
+    },
+    _actionSetForm: function () {
+
+        var self = this;
+
+        jQuery(self.options.formDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
+    },
+    _actionSetList: function () {
+
+        var self = this;
+
+        jQuery(self.options.gridDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
+
+        if (self.options.gridFilterVisibleAlways) {
+            jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').show();
+            jQuery(self.options.gridButtonsDOMId).hide();
+        }
+        else {
+            jQuery(self.options.gridFilterDOMId).addClass('ui-helper-hidden');
+            jQuery(self.options.gridButtonsDOMId).show();
+        }
+    },
+    _actionSetFilter: function () {
+
+        var self = this;
+
+        jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
     },
     _hidePanels: function () {
         jQuery(this.options.gridFilterDOMId).hide();
