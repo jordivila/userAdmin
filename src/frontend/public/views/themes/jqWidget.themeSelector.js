@@ -1,4 +1,4 @@
-﻿jQuery.widget("ui.themeSelector", jQuery.ui.widgetBase,
+jQuery.widget("ui.themeSelector", jQuery.ui.widgetBase,
 {
     options: {
 
