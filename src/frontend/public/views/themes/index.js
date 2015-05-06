@@ -1,4 +1,4 @@
-﻿jQuery('div.ui-themeSelector:first').itemPicker({
+jQuery('div.ui-themeSelector:first').itemPicker({
     messageBoxSelector: 'div.ui-themeSelector-messages:first',
     itemsSelector: 'ul.ui-themeSelector-list:first > li',
     itemsAttrId: 'data-theme-id',

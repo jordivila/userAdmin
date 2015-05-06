@@ -1,4 +1,4 @@
-﻿jQuery('div.ui-languageSelector:first').itemPicker({
+jQuery('div.ui-languageSelector:first').itemPicker({
     messageBoxSelector: 'div.ui-languageSelector-messages:first',
     itemsSelector: 'ul.ui-languageSelector-list:first > li',
     itemsAttrId: 'data-language-id',
