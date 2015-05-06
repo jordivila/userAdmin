@@ -1,6 +1,3 @@
-﻿/// <reference path="VsixMvcAppResult.A.Intellisense.js" />
-
-
 var progressBoxSelector = "#progressFeedBack";
 
 jQuery.widget("ui.widgetBase",
