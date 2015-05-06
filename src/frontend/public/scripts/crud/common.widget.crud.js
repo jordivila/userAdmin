@@ -57,29 +57,8 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var gridButtonsClass = 'ui-{0}Crud-gridButtons'.format(this.widgetName);
         var gridControlClass = 'ui-{0}Crud-gridControl'.format(this.widgetName);
         var formControlClass = 'ui-{0}Crud-form'.format(this.widgetName);
-        var templateGet = function () {
 
-            var template = '<div class="ui-crud-messages ui-state-default ui-helper-hidden"></div>' +
-                            '<div class="{0}"></div>' +
-                            '<div class="{1} ui-ribbonButtons  ui-state-default"></div>' +
-                            '<div class="{2}"></div>' +
-                            '<div class="{3}"></div>';
-
-            return template
-                .format(gridFilterClass,
-                        gridButtonsClass,
-                        gridControlClass,
-                        formControlClass);
-        };
-
-        jQuery(this.element)
-            .addClass('ui-crud ui-widget-content')
-            .append(templateGet())
-            .find('div.ui-crud-messages:first')
-                .each(function () {
-                    self.options.crudHeaderDomId = jQuery(this);
-                    self.errorInit(jQuery(this));
-                });
+        self._templateInit(gridFilterClass, gridButtonsClass, gridControlClass, formControlClass);
 
         this.options.gridFilterDOMId = jQuery(this.element).find('div.{0}:first'.format(gridFilterClass));
         this.options.gridDOMId = jQuery(this.element).find('div.{0}:first'.format(gridControlClass));
@@ -224,6 +203,36 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
     destroy: function () {
         this._super();
     },
+    _templateInit: function (gridFilterClass, gridButtonsClass, gridControlClass, formControlClass) {
+
+        var self = this;
+
+        jQuery(this.element)
+            .addClass('ui-crud ui-widget-content')
+            .append(self._templateGet(gridFilterClass, gridButtonsClass, gridControlClass, formControlClass))
+            .find('div.ui-crud-messages:first')
+                .each(function () {
+                    self.options.crudHeaderDomId = jQuery(this);
+                    self.errorInit(jQuery(this));
+                });
+
+
+    },
+    _templateGet: function (gridFilterClass, gridButtonsClass, gridControlClass, formControlClass) {
+
+        var template = '<div class="ui-crud-messages ui-state-default ui-helper-hidden"></div>' +
+                        '<div class="{0}"></div>' +
+                        '<div class="{1} ui-ribbonButtons  ui-state-default"></div>' +
+                        '<div class="{2}"></div>' +
+                        '<div class="{3}"></div>';
+
+        return template
+            .format(gridFilterClass,
+                    gridButtonsClass,
+                    gridControlClass,
+                    formControlClass);
+    },
+
     _actions: {
         list: 1,
         filter: 2,
