@@ -34,7 +34,7 @@ jQuery.widget("ui.widgetBase",
 
         //this.log(this.element);
         this.log("{0}.{1}->Init->{2}".format(this.namespace, this.widgetName, jQuery(this.element)[0].className));
-        
+
 
 
 
@@ -68,47 +68,56 @@ jQuery.widget("ui.widgetBase",
     //    // TODO: check 'head' exists
     //    jQuery('head').append(css);
     //},
-    cloneObject: function (obj) {
-        var copy;
+    //cloneObject: function (obj) {
 
-        // Handle the 3 simple types, and null or undefined
-        if (null === obj || "object" != typeof obj) return obj;
 
-        // Handle Date
-        if (obj instanceof Date) {
-            copy = new Date();
-            copy.setTime(obj.getTime());
-            return copy;
-        }
+    //    console.log("ppppppppp");
+    //    console.log(obj);
 
-        // Handle Array
-        if (obj instanceof Array) {
-            copy = [];
-            for (var i = 0, len = obj.length; i < len; i++) {
-                copy[i] = this.cloneObject(obj[i]);
-            }
-            return copy;
-        }
+    //    var o = jQuery.extend({}, obj, obj);
 
-        // Handle Object
-        if (obj instanceof Object) {
-            copy = {};
-            for (var attr in obj) {
-                if (obj.hasOwnProperty(attr)) copy[attr] = this.cloneObject(obj[attr]);
-            }
-            return copy;
-        }
+    //    console.log(o);
 
-        throw new Error("Unable to copy obj! Its type isn't supported.");
-    },
+
+    //    //var copy;
+
+    //    //// Handle the 3 simple types, and null or undefined
+    //    //if (null === obj || "object" != typeof obj) return obj;
+
+    //    //// Handle Date
+    //    //if (obj instanceof Date) {
+    //    //    copy = new Date();
+    //    //    copy.setTime(obj.getTime());
+    //    //    return copy;
+    //    //}
+
+    //    //// Handle Array
+    //    //if (obj instanceof Array) {
+    //    //    copy = [];
+    //    //    for (var i = 0, len = obj.length; i < len; i++) {
+    //    //        copy[i] = this.cloneObject(obj[i]);
+    //    //    }
+    //    //    return copy;
+    //    //}
+
+    //    //// Handle Object
+    //    //if (obj instanceof Object) {
+    //    //    copy = {};
+    //    //    for (var attr in obj) {
+    //    //        if (obj.hasOwnProperty(attr)) copy[attr] = this.cloneObject(obj[attr]);
+    //    //    }
+    //    //    return copy;
+    //    //}
+
+    //    //throw new Error("Unable to copy obj! Its type isn't supported.");
+    //},
     boxButtonsContainerGet: function () {
         var self = this;
 
-        if(jQuery(this.element)
+        if (jQuery(this.element)
             .find('div.ui-widget-header:first')
                 .find('div.ui-widget-boxButtons:first')
-                .length === 0)
-        {
+                .length === 0) {
             jQuery(this.element)
                 .find('div.ui-widget-header:first')
                     .wrapInner("<div class='ui-widget-headerText'></div>")
@@ -118,7 +127,7 @@ jQuery.widget("ui.widgetBase",
         return jQuery(this.element)
                 .find('div.ui-widget-header:first')
                     .find('div.ui-widget-boxButtons:first');
-    }, 
+    },
     allowClose: function () {
 
         if (this.options.allowClose) {
@@ -134,7 +143,7 @@ jQuery.widget("ui.widgetBase",
                 })
                 .show();
         }
-    }, 
+    },
     allowCollapse: function () {
 
         if (this.options.allowCollapse) {

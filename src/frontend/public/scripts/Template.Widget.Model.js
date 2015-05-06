@@ -42,7 +42,10 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
         return this._template();
     },
     val: function () {
-        var o = this.cloneObject(this.options.modelItems);
+
+        // clone array so widget model value properties are not updated
+        var o = jQuery.extend([], this.options.modelItems, []);
+
         for (var i = 0; i < o.length; i++) {
             var propName = o[i].id;
             var propValue = jQuery(this.element).find('div[data-widgetModelItem-id="{0}"]:first'.format(propName)).widgetModelItem('val');
