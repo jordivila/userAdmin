@@ -10,6 +10,8 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         gridFilterButtonsInit: function (widgetFilter, defaultButtons) {
             return defaultButtons;
         },
+        gridSearchNotifyBeginMsg: "Searching...",
+        gridSearchNotifyFailMsg: "Unhandled Error searching...",
         formDOMId: null,
 
 
@@ -361,7 +363,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var self = this;
         var dfd = jQuery.Deferred();
 
-        dfd.notify("Buscando información...");
+        dfd.notify(self.options.gridSearchNotifyBeginMsg);
 
         if (self.options.gridSearchForEditMethod === null) {
             dfd.reject(self.namespace + '.' + self.widgetName + ".options.gridSearchForEditMethod is an abstract method. Child class must implement");
@@ -381,7 +383,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                             }
                         },
                         function (jqXHR, textStatus, errorThrown) {
-                            dfd.reject("Error obteniendo información");
+                            dfd.reject(self.options.gridSearchNotifyFailMsg);
                         })
                     .done(function () {
 

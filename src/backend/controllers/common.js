@@ -1,4 +1,4 @@
-(function(module) {
+(function (module) {
 
     "use strict";
 
@@ -13,7 +13,7 @@
 
     var userController = require('./users');
     var roleController = require('./usersRoles');
-    
+
     var mongoose = require('mongoose');
     var config = require('../libs/config');
     var ErrorHandled = require('../models/errorHandled.js');
@@ -72,17 +72,17 @@
                 name: "Guest"
             };
 
-            roleController.create(newRole, i18n, function(errRole, roleCreated) {
+            roleController.create(newRole, i18n, function (errRole, roleCreated) {
                 if (errRole) return cb(errRole);
 
                 return cb(null, roleCreated);
             });
         }
-        
+
 
         if (mongoose.connection.readyState === 0) {
 
-            mongoose.connect(config.get('mongoose:uri'), function(err) {
+            mongoose.connect(config.get('mongoose:uri'), function (err) {
                 if (err) {
                     throw err;
                 }
@@ -100,7 +100,7 @@
 
     function setAccessControlOrigin(app) {
         // This is not intended for production environments
-        app.use(function(req, res, next) {
+        app.use(function (req, res, next) {
 
             // Website you wish to allow to connect
             res.setHeader('Access-Control-Allow-Origin', '*');
@@ -129,7 +129,7 @@
                 version: pkg.version
             },
             IsTest: config.get('IsTestEnv'),
-            Theme: req.cookies[config.get('themes:cookieName')],
+            Theme: req.cookies[config.get('themes:cookieName')] ? req.cookies[config.get('themes:cookieName')] : config.get('themes:default'),
             Globalization: {
                 cultureSelected: i18n.locale,
                 cultureGlobalization: i18n.locale,
@@ -138,8 +138,8 @@
             // Indica si la pagina viene de una peticion del menu o viene de una peticion para SEO
             IsSEORequest: (req.query.seoRequest === undefined),
             //Breadcrumb: [
-                //{ title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
-                //{ title: i18n.__("GeneralTexts.Home"), url: "/" }
+            //{ title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
+            //{ title: i18n.__("GeneralTexts.Home"), url: "/" }
             //],
             CssFiles: [
                 //"/public/views/home/home.css",
@@ -153,18 +153,17 @@
     }
 
     function getModelMerged(req, model2Merge) {
-        
+
         var i18n = req.i18n;
         var modelBase = getModelBase(req);
         var viewModel = util.extend(modelBase, model2Merge);
-                
+
         viewModel.Title = i18n.__(viewModel.Title);
 
         return viewModel;
     }
 
-    function getViewModel(app, req, route)
-    {
+    function getViewModel(app, req, route) {
         var viewPath = route + '/index.handlebars';
         var viewModelPath = app.get('views') + '/' + viewPath + '.json';
         var viewModel = getModelMerged(req, require(viewModelPath));
