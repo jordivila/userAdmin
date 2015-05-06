@@ -18,8 +18,6 @@
     var commonController = require('../controllers/common');
     var usersController = require('../controllers/users');
 
-
-
     function initRequestLanguage(req, res) {
 
         req.i18n.setLocaleFromCookie();
@@ -30,11 +28,10 @@
         else {
             commonController.setCookie(res, config.get('i18n:cookieName'), req.i18n.getLocale());
         }
+
     }
 
     function getLanguages(req, cb) {
-
-        
 
         var viewModel = {
             LangsAvailable: [
@@ -58,28 +55,27 @@
 
     function index(app, req, res, next) {
 
-        var tplInfo = commonController.getViewModel(app, req, 'languages');
-
-        if (tplInfo.viewModel.IsSEORequest) {
+        if (req.myInfo.IsSEORequest) {
 
             getLanguages(req, function (err, result) {
                 if (err) {
                     return next(err);
                 }
 
-                res.render(tplInfo.viewPath, util.extend(tplInfo.viewModel, result));
+                res.render(req.myInfo.viewPath, util.extend(req.myInfo, result));
             });
+
         }
         else {
-            res.sendFile(tplInfo.viewPath, {
+
+            res.sendFile(req.myInfo.viewPath, {
                 root: app.get('views')
             });
+
         }
     }
 
     function indexJSON(app, req, res, next) {
-
-        var tplInfo = commonController.getViewModel(app, req, 'languages');
 
         getLanguages(req, function (err, result) {
 
@@ -87,7 +83,7 @@
                 return next(err);
             }
 
-            res.json(util.extend(tplInfo.viewModel, result));
+            res.json(util.extend(req.myInfo, result));
         });
     }
 

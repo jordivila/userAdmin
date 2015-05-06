@@ -6,8 +6,7 @@
     module.exports.initTestEnvironment = initTestEnvironment;
     module.exports.initDb = initDb;
     module.exports.getModelBase = getModelBase;
-    module.exports.getModelMerged = getModelMerged;
-    module.exports.getViewModel = getViewModel;
+    module.exports.setViewInfo = setViewInfo;
     module.exports.setCookie = setCookie;
 
 
@@ -149,29 +148,17 @@
             ],
         };
 
-        return m;
+        req.myInfo = m;
+
     }
 
-    function getModelMerged(req, model2Merge) {
-
-        var i18n = req.i18n;
-        var modelBase = getModelBase(req);
-        var viewModel = util.extend(modelBase, model2Merge);
-
-        viewModel.Title = i18n.__(viewModel.Title);
-
-        return viewModel;
-    }
-
-    function getViewModel(app, req, route) {
+    function setViewInfo(app, req, route) {
         var viewPath = route + '/index.handlebars';
         var viewModelPath = app.get('views') + '/' + viewPath + '.json';
-        var viewModel = getModelMerged(req, require(viewModelPath));
-        return {
-            viewPath: viewPath,
-            viewModel: viewModel
-        };
 
+        req.myInfo = util.extend(req.myInfo, require(viewModelPath));
+        req.myInfo.viewPath = viewPath;
+        req.myInfo.viewModelPath = viewModelPath;
     }
 
     function setCookie(res, name, value) {

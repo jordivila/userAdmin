@@ -2,10 +2,10 @@
 
 module.exports.extend = extend;
 
-//function extend(obj) {
-//    return util._extend(obj, {});
-//}
-
+/*
+    Uses nodeJS private method _extend 
+    Extends does NOT create a new instance
+*/
 function extend(obj1, obj2) {
     return util._extend(obj1, obj2);
 }

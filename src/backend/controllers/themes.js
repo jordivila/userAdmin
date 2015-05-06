@@ -14,10 +14,7 @@
     var util = require('../libs/commonFunctions');
     var utilsNode = require('util');
     var DataResultModel = require('../models/dataResult');
-    //var ErrorHandled = require('../models/errorHandled.js');
     var commonController = require('../controllers/common');
-
-
 
     function initRequestTheme(req, res) {
 
@@ -161,37 +158,31 @@
 
 
     function index(app, req, res, next) {
-
-        var tplInfo = commonController.getViewModel(app, req, 'themes');
-
-        if (tplInfo.viewModel.IsSEORequest) {
+        if (req.myInfo.IsSEORequest) {
 
             getAll(req, function (err, result) {
                 if (err) {
                     return next(err);
                 }
 
-                res.render(tplInfo.viewPath, util.extend(tplInfo.viewModel, result));
+                res.render(req.myInfo.viewPath, util.extend(req.myInfo, result));
             });
         }
         else {
-            res.sendFile(tplInfo.viewPath, {
+            res.sendFile(req.myInfo.viewPath, {
                 root: app.get('views')
             });
         }
     }
 
     function indexJSON(app, req, res, next) {
-
-        var tplInfo = commonController.getViewModel(app, req, 'themes');
-
         getAll(req, function (err, result) {
 
             if (err) {
                 return next(err);
             }
 
-            res.json(util.extend(tplInfo.viewModel, result));
+            res.json(util.extend(req.myInfo, result));
         });
     }
 

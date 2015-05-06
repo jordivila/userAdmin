@@ -60,15 +60,6 @@
 
     });
 
-    // set up the middleware
-    app.use(function (req, res, next) {
-
-        languagesController.initRequestLanguage(req, res);
-        themesController.initRequestTheme(req, res);
-
-        next();
-    });
-
 
     if (process.env.NODE_ENV === 'test') {
         commonController.initTestEnvironment(app);
@@ -77,6 +68,7 @@
 
 
 
+    //begin -> set public static
     app.use('/public/cdn', express.static(__dirname + '/src/frontend/public/cdn', {
         maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
     }));

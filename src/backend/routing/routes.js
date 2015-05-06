@@ -19,10 +19,12 @@
 
     function registerCommonGets(app, route, controller) {
         app.get('/' + route + '/', function (req, res, next) {
+            commonController.setViewInfo(app, req, route);
             controller.index(app, req, res, next);
         });
 
         app.get('/' + route + '/index.handlebars.json', function (req, res, next) {
+            commonController.setViewInfo(app, req, route);
             controller.indexJSON(app, req, res, next);
         });
 
@@ -43,6 +45,26 @@
 
 
     module.exports.setRoutes = function (app, log, authController) {
+
+
+        // set up the middleware
+        app.use(function (req, res, next) {
+
+            languagesController.initRequestLanguage(req, res);
+            themesController.initRequestTheme(req, res);
+            commonController.getModelBase(req);
+
+            next();
+        });
+
+
+
+
+
+
+
+
+
 
 
         /**************************************************/
@@ -79,14 +101,12 @@
         app.get('/uicontrols/*/*', function (req, res, next) {
 
             if (req.params[1] === '') {
-                //browser requesting a page
-                var m = commonController.getModelBase(req);
 
                 //get template json config -> jsFiles, CssFiles, controllerInterface, etc
                 var modelTemplate = utilsNode.format(app.get('views') + '/%s/index.handlebars.json', req.params[0]);
 
                 //extend common layout model with template config
-                m = util.extend(m, require(modelTemplate));
+                var m = util.extend(req.myInfo, require(modelTemplate));
 
                 //do render
                 if (m.IsSEORequest) {
@@ -296,11 +316,8 @@
 
         //catch 404
         app.use(function (req, res, next) {
-
-            var tplInfo = commonController.getModelBase(req);
-
-            if (tplInfo.IsSEORequest) {
-                res.render("errors/404/index.handlebars", tplInfo);
+            if (req.myInfo.IsSEORequest) {
+                res.render("errors/404/index.handlebars", req.myInfo);
             }
             else {
                 res.status(404);

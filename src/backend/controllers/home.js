@@ -16,13 +16,11 @@
 
     function index(app, req, res, next) {
 
-        var tplInfo = commonController.getViewModel(app, req, 'home');
-
-        if (tplInfo.viewModel.IsSEORequest) {
-            res.render(tplInfo.viewPath, tplInfo.viewModel);
+        if (req.myInfo.IsSEORequest) {
+            res.render(req.myInfo.viewPath, req.myInfo);
         }
         else {
-            res.sendFile(tplInfo.viewPath, {
+            res.sendFile(req.myInfo.viewPath, {
                 root: app.get('views')
             });
         }
@@ -30,9 +28,7 @@
 
     function indexJSON(app, req, res, next) {
 
-        var tplInfo = commonController.getViewModel(app, req, 'home');
-
-        res.json(tplInfo.viewModel);
+        res.json(req.myInfo);
     }
 
 })(module);
