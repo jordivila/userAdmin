@@ -88,8 +88,6 @@
                     "src/frontend/public/scripts/Template.Widget.ButtonWrapper.js",
                     "src/frontend/public/scripts/Template.Widget.UserActivity.js",
                     "src/frontend/public/scripts/Template.Widget.Message.js",
-                    "src/frontend/public/scripts/Template.Widget.Dialogs.js",
-                    "src/frontend/public/scripts/Template.Widget.DialogInline.js",
 
                     "src/frontend/public/scripts/Template.Widget.Menu.base.js",
                     "src/frontend/public/scripts/Template.Widget.Menu.tree.js",
