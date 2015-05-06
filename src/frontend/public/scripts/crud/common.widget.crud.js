@@ -235,30 +235,29 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
 
         self._hidePanels();
 
-        switch (actionSelected) {
-            case self._actions.filter:
-                jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
-                break;
-            case self._actions.list:
 
-                jQuery(self.options.gridDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
+        if (actionSelected === self._actions.filter)
+        {
+            jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
+        }
 
-                if (self.options.gridFilterVisibleAlways) {
-                    jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').show();
-                    jQuery(self.options.gridButtonsDOMId).hide();
-                }
-                else {
-                    jQuery(self.options.gridFilterDOMId).addClass('ui-helper-hidden');
-                    jQuery(self.options.gridButtonsDOMId).show();
-                }
+        if (actionSelected === self._actions.list)
+        {
+            jQuery(self.options.gridDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
 
+            if (self.options.gridFilterVisibleAlways) {
+                jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').show();
+                jQuery(self.options.gridButtonsDOMId).hide();
+            }
+            else {
+                jQuery(self.options.gridFilterDOMId).addClass('ui-helper-hidden');
+                jQuery(self.options.gridButtonsDOMId).show();
+            }
+        }
 
-                break;
-            case self._actions.form:
-                jQuery(self.options.formDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
-                break;
-            default:
-                break;
+        if (actionSelected === self._actions.form)
+        {
+            jQuery(self.options.formDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
         }
     },
     _hidePanels: function () {
