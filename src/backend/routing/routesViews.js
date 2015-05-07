@@ -40,6 +40,11 @@
                 }
             });
         });
+
+        app.put('/' + route + '/*', function (req, res, next) {
+            controller.update(req, res, next);
+        });
+
     }
 
 
@@ -58,17 +63,7 @@
 
         registerCommonGets(app, "home", homeController);
         registerCommonGets(app, "languages", languagesController);
-
-
-        app.put('/languages/*', function (req, res, next) {
-            languagesController.update(req, res, next);
-        });
-
-
         registerCommonGets(app, "themes", themesController);
-        app.put('/themes/*', function (req, res, next) {
-            themesController.update(req, res, next);
-        });
 
 
         app.get('/uicontrols/*/*', function (req, res, next) {

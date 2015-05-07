@@ -23,8 +23,8 @@ html, body {height:100%;display:table;width:100%;}
 .ui-sitePage .ui-site-title,
 .ui-sitePage .ui-site-header,
 .ui-sitePage .ui-crud  {border-width:0em !important;}
-.ui-sitePage .ui-site-nameBox{font-size:1em;padding:0.5em;margin:0em;}
-.ui-sitePage .ui-site-title {margin:0em 0em 0em 0em;padding:0.5em; text-align:center;}
+.ui-sitePage .ui-site-nameBox{font-size:1em;padding:1em;margin:0em;}
+.ui-sitePage .ui-site-title {margin:0em 0em 0em 0em;padding:1em; text-align:center;}
 .ui-sitePage .ui-site-title * {}
 .ui-sitePage .ui-site-title h1{font-size: 1em;margin:0em;font-weight:normal;}
 .ui-sitePage .ui-siteContent  {background-image:none;width:100%;margin:0 auto 0 auto;}
