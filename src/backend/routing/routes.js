@@ -20,33 +20,6 @@
     var routerViews = require('./routesViews');
 
 
-    function registerCommonGets(app, route, controller) {
-        app.get('/' + route + '/', function (req, res, next) {
-            commonController.setViewInfo(app, req, route);
-            controller.index(app, req, res, next);
-        });
-
-        app.get('/' + route + '/index.handlebars.json', function (req, res, next) {
-            commonController.setViewInfo(app, req, route);
-            controller.indexJSON(app, req, res, next);
-        });
-
-        app.get('/' + route + '/*', function (req, res, next) {
-
-            var pathName = req._parsedUrl.pathname.replace('', '');
-
-            res.sendFile(pathName, {
-                root: app.get('views')
-            }, function (err) {
-                if (err) {
-                    res.status(err.status);
-                    next();
-                }
-            });
-        });
-    }
-
-
     module.exports.setRoutes = function (app, log, authController) {
 
 
