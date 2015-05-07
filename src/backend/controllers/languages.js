@@ -5,36 +5,19 @@
     module.exports.initRequestLanguage = initRequestLanguage;
     module.exports.index = index;
     module.exports.indexJSON = indexJSON;
-    module.exports.getLanguages = getLanguages;
     module.exports.update = update;
 
     var config = require('../libs/config');
-    var pkg = require('../../../package.json');
-    var i18n = require('i18n-2');
-    var util = require('../libs/commonFunctions');
-    var utilsNode = require('util');
-    var DataResultModel = require('../models/dataResult');
-    var ErrorHandled = require('../models/errorHandled.js');
-    var commonController = require('../controllers/common');
-    var usersController = require('../controllers/users');
+    var PreferenceSetter = require('./classes/preferenceSetter.js');
 
-    function initRequestLanguage(req, res) {
 
-        req.i18n.setLocaleFromCookie();
-
-        if (req.cookies[config.get('i18n:cookieName')]) {
-
-        }
-        else {
-            commonController.setCookie(res, config.get('i18n:cookieName'), req.i18n.getLocale());
-        }
-
+    function LangController() {
+        PreferenceSetter.apply(this, Array.prototype.slice.call(arguments));
     }
+    LangController.prototype = new PreferenceSetter();
+    LangController.prototype.getAll = function (req, cb) {
 
-    function getLanguages(req, cb) {
-
-        var viewModel = {
-            LangsAvailable: [
+        this.data = [
                 {
                     id: "es",
                     name: req.i18n.__("GeneralTexts.Language.Spanish")
@@ -46,52 +29,33 @@
                 {
                     id: "en",
                     name: req.i18n.__("GeneralTexts.Language.English")
-                }]
-        };
+                }];
 
-        cb(null, viewModel);
+        cb(null, this.data);
+
+    };
+    LangController.prototype.initRequest = function (req, res) {
+        req.i18n.setLocaleFromCookie();
+        PreferenceSetter.prototype.initRequest.call(this, req, res);
+    };
+
+    var langController = new LangController(config.get('i18n:cookieName'), config.get('i18n:locales')[0]);
+
+    function initRequestLanguage(req, res) {
+        langController.initRequest(req, res);
     }
 
-
     function index(app, req, res, next) {
-
-        if (req.myInfo.IsSEORequest) {
-
-            getLanguages(req, function (err, result) {
-                if (err) {
-                    return next(err);
-                }
-
-                res.render(req.myInfo.viewPath, util.extend(req.myInfo, result));
-            });
-
-        }
-        else {
-
-            res.sendFile(req.myInfo.viewPath, {
-                root: app.get('views')
-            });
-
-        }
+        langController.viewIndex(app, req, res, next);
     }
 
     function indexJSON(app, req, res, next) {
-
-        getLanguages(req, function (err, result) {
-
-            if (err) {
-                return next(err);
-            }
-
-            res.json(util.extend(req.myInfo, result));
-        });
+        langController.viewIndexJson(app, req, res, next);
     }
 
+
     function update(req, res, next) {
-
-        commonController.setCookie(res, config.get('i18n:cookieName'), req.body.localeNewValue);
-
-        res.json(new DataResultModel(true, '', {}));
+        langController.update(req, res, next);
     }
 
 })(module);

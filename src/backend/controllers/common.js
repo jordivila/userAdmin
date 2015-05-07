@@ -5,17 +5,17 @@
     module.exports.setAccessControlOrigin = setAccessControlOrigin;
     module.exports.initTestEnvironment = initTestEnvironment;
     module.exports.initDb = initDb;
-    module.exports.getModelBase = getModelBase;
+    module.exports.setViewModelBase = setViewModelBase;
     module.exports.setViewInfo = setViewInfo;
     module.exports.setCookie = setCookie;
 
 
-    var userController = require('./users');
+    //var userController = require('./users');
     var roleController = require('./usersRoles');
 
     var mongoose = require('mongoose');
     var config = require('../libs/config');
-    var ErrorHandled = require('../models/errorHandled.js');
+    //var ErrorHandled = require('../models/errorHandled.js');
     var pkg = require('../../../package.json');
     var util = require('../libs/commonFunctions');
     //var util = require('util');
@@ -116,9 +116,7 @@
         });
     }
 
-    function getModelBase(req) {
-
-        var i18n = req.i18n;
+    function setViewModelBase(req) {
 
         var m = {
             Title: '',
@@ -130,9 +128,9 @@
             IsTest: config.get('IsTestEnv'),
             Theme: req.cookies[config.get('themes:cookieName')] ? req.cookies[config.get('themes:cookieName')] : config.get('themes:default'),
             Globalization: {
-                cultureSelected: i18n.locale,
-                cultureGlobalization: i18n.locale,
-                cultureDatePicker: i18n.locale,
+                cultureSelected: req.i18n.locale,
+                cultureGlobalization: req.i18n.locale,
+                cultureDatePicker: req.i18n.locale,
             },
             // Indica si la pagina viene de una peticion del menu o viene de una peticion para SEO
             IsSEORequest: (req.query.seoRequest === undefined),

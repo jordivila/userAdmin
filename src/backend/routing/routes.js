@@ -52,7 +52,7 @@
 
             languagesController.initRequestLanguage(req, res);
             themesController.initRequestTheme(req, res);
-            commonController.getModelBase(req);
+            commonController.setViewModelBase(req);
 
             next();
         });

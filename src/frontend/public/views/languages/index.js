@@ -8,7 +8,7 @@ jQuery('div.ui-languageSelector:first').itemPicker({
         return jQuery.ajax({
             url: "/languages/",
             type: "PUT",
-            data: JSON.stringify({ localeNewValue: itemId }),
+            data: JSON.stringify({ newValue: itemId }),
             cache: false
         });
     },

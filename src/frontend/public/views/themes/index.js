@@ -8,7 +8,7 @@ jQuery('div.ui-themeSelector:first').itemPicker({
         return jQuery.ajax({
             url: "/themes/",
             type: "PUT",
-            data: JSON.stringify({ newTheme: itemId }),
+            data: JSON.stringify({ newValue: itemId }),
             cache: false
         });
     },
