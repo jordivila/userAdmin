@@ -1,4 +1,4 @@
-﻿(function (module) {
+(function (module) {
 
     "use strict";
 
@@ -108,7 +108,7 @@
                 //extend common layout model with template config
                 var m = util.extend(req.myInfo, require(modelTemplate));
 
-                //do render
+                //do render     
                 if (m.IsSEORequest) {
                     //render SEO friendly layout + template
                     res.render(req.params[0] + '/index.handlebars', m);
