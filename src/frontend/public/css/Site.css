@@ -1,6 +1,4 @@
-﻿
-
-.ui-sitePage{display:table; width:100%;height:100%; margin:0 auto 0 auto;
+﻿.ui-sitePage{display:table; width:100%;height:100%; margin:0 auto 0 auto;
              /*DO NOT Remove position:relative -> child position:absolute content will take this as parent relative */
              position:relative;
              /*DO NOT Remove position:relative*/
@@ -23,9 +21,6 @@
 .ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
 /* menu panel  */
 .ui-mainMenu { width:99%; position:absolute !important;min-height:100%;overflow:auto !important;background-image:none !important;}
-/*.ui-mainMenu .ui-mainMenuToggle{float:right;margin: 0.5em 2em 0 0;}
-.ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-icon {float:left;}
-.ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}*/
 .ui-mainMenu .ui-site-version {font-weight:normal;font-size:0.8em;margin: 17em 0 0 0;text-align:center;position:absolute;bottom:0;width:99%;}
 /*menu Mode MenuList*/
 .ui-mainMenu {position:relative;}
@@ -49,6 +44,7 @@
     .ui-sitePage .ui-site-header,
     .ui-sitePage .ui-crud  {border-width:0.1em !important;}
 
+    .ui-mainMenuToggle {display:none !important;}
     .ui-mainMenu {position:relative !important;display:block !important;float:left;width:25%;}
     .ui-mainMenu .ui-menuList .ui-menuSlide-backButton {position:relative;top:0;margin:0 0 0 0;}
 
