@@ -2,43 +2,43 @@
 
     "use strict";
 
-    //var config = require('../libs/config');
-    //var pkg = require('../../../package.json');
-    //var i18n = require('i18n-2');
-    //var util = require('../libs/commonFunctions');
-    //var utilsNode = require('util');
-    //var DataResult = require('../models/dataResult');
-    //var ErrorHandled = require('../models/errorHandled.js');
     var commonController = require('../controllers/common');
-    //var usersController = require('../controllers/users');
     var languagesController = require('../controllers/languages');
     var homeController = require('../controllers/home');
     var themesController = require('../controllers/themes');
 
 
     function registerCommonGets(app, route, controller) {
-        app.get('/' + route + '/', function (req, res, next) {
-            commonController.setViewInfo(app, req, route);
-            controller.index(app, req, res, next);
-        });
-
-        app.get('/' + route + '/index.handlebars.json', function (req, res, next) {
-            commonController.setViewInfo(app, req, route);
-            controller.indexJSON(app, req, res, next);
-        });
 
         app.get('/' + route + '/*', function (req, res, next) {
 
-            var pathName = req._parsedUrl.pathname.replace('', '');
+            var requestingView = (!req.params[0]);
+            var requestingViewModel = (req.params[0] == 'index.handlebars.json');
 
-            res.sendFile(pathName, {
-                root: app.get('views')
-            }, function (err) {
-                if (err) {
-                    res.status(err.status);
-                    next();
+            if (requestingView || requestingViewModel) {
+                
+                commonController.setViewInfo(app, req, route);
+
+                if (requestingView) {
+                    controller.index(app, req, res, next);
                 }
-            });
+                else {
+                    controller.indexJSON(app, req, res, next);
+                }
+
+            }
+            else {
+                var pathName = req._parsedUrl.pathname.replace('', '');
+
+                res.sendFile(pathName, {
+                    root: app.get('views')
+                }, function (err) {
+                    if (err) {
+                        res.status(err.status);
+                        next();
+                    }
+                });
+            }
         });
 
         app.put('/' + route + '/*', function (req, res, next) {
