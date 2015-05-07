@@ -72,7 +72,11 @@
         {{/if}}
         <!--Breadcrumb end-->
 
-        <div class="ui-siteContent">{{{body}}}</div>
+        <div class="ui-siteContent">
+            {{#if body}}
+                {{{body}}}
+            {{/if}}
+        </div>
     </div>
 
     <script type="text/javascript" src="/public/cdn/{{Package.name}}.{{Package.version}}.ui_js.js"></script>

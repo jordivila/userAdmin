@@ -31,16 +31,16 @@ html, body {height:100%;display:table;width:100%;}
 .ui-sitePage .ui-site-templateInfo {padding:2em;}
 /* header */
 .ui-sitePage .ui-site-header {position: relative;margin:0em 0em 0em 0em ;padding:0.2em;}
-.ui-sitePage .ui-site-header .ui-mainMenuToggle{float:right;margin:.2em .5em 0 .5em;width:6em;}
-.ui-sitePage .ui-site-header .ui-mainMenuToggle .ui-mainMenuToggle-icon {float:left;}
-.ui-sitePage .ui-site-header .ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
 /* menu toggle */
 .ui-mainMenuToggle {display:block !important;cursor:pointer;}
+.ui-mainMenuToggle{position:absolute;top:1em;right:0em;width:6em;}
+.ui-mainMenuToggle .ui-mainMenuToggle-icon {float:left;}
+.ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
 /* menu panel  */
 .ui-mainMenu { width:99%; position:absolute !important;min-height:100%;overflow:auto !important;background-image:none !important;}
-.ui-mainMenu .ui-mainMenuToggle{float:right;margin: 0.5em 2em 0 0;}
+/*.ui-mainMenu .ui-mainMenuToggle{float:right;margin: 0.5em 2em 0 0;}
 .ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-icon {float:left;}
-.ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
+.ui-mainMenu .ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}*/
 .ui-mainMenu .ui-site-version {font-weight:normal;font-size:0.8em;margin: 17em 0 0 0;text-align:center;position:absolute;bottom:0;width:99%;}
 /*menu Mode MenuList*/
 .ui-mainMenu {position:relative;}
@@ -64,8 +64,6 @@ html, body {height:100%;display:table;width:100%;}
     .ui-sitePage .ui-site-header,
     .ui-sitePage .ui-crud  {border-width:0.1em !important;}
 
-
-    .ui-mainMenuToggle {display:none !important;}
     .ui-mainMenu {position:relative !important;display:block !important;float:left;width:25%;}
     .ui-mainMenu .ui-menuList .ui-menuSlide-backButton {position:relative;top:0;margin:0 0 0 0;}
 
