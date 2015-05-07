@@ -60,43 +60,9 @@
             res.end();
         });
 
-
         registerCommonVerbs(app, "home", homeController);
         registerCommonVerbs(app, "languages", languagesController);
         registerCommonVerbs(app, "themes", themesController);
-
-
-        app.get('/uicontrols/*/*', function (req, res, next) {
-
-            if (req.params[1] === '') {
-
-                //get template json config -> jsFiles, CssFiles, controllerInterface, etc
-                var modelTemplate = utilsNode.format(app.get('views') + '/%s/index.handlebars.json', req.params[0]);
-
-                //extend common layout model with template config
-                var m = util.extend(req.myInfo, require(modelTemplate));
-
-                //do render     
-                if (m.IsSEORequest) {
-                    //render SEO friendly layout + template
-                    res.render(req.params[0] + '/index.handlebars', m);
-                }
-                else {
-                    //return template and let frontend engine render results
-                    res.sendFile(req.params[0] + '/index.handlebars', {
-                        root: app.get('views')
-                    });
-                }
-            }
-            else {
-                // browser requesting a resource -> *.js, *.png, *.css
-                var pathName = req._parsedUrl.pathname.replace('/uicontrols', '');
-                res.sendFile(pathName, {
-                    root: app.get('views')
-                });
-
-            }
-        });
 
     };
 

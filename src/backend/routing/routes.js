@@ -18,6 +18,7 @@
 
     var routerApiUser = require('./routesApiUser');
     var routerViews = require('./routesViews');
+    var routerViewsCustom = require('./routesViewsCustom');
 
 
     module.exports.setRoutes = function (app, log, authController) {
@@ -35,8 +36,10 @@
 
 
         
-        routerViews.setRoutes(app, log, authController);
+        routerViews.setRoutes(app);
+        routerViewsCustom.setRoutes(app);
         routerApiUser.setRoutes(app, log, authController);
+        
 
 
 
