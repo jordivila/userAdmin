@@ -8,7 +8,7 @@
     var themesController = require('../controllers/themes');
 
 
-    function registerCommonGets(app, route, controller) {
+    function registerCommonVerbs(app, route, controller) {
 
         app.get('/' + route + '/*', function (req, res, next) {
 
@@ -61,9 +61,9 @@
         });
 
 
-        registerCommonGets(app, "home", homeController);
-        registerCommonGets(app, "languages", languagesController);
-        registerCommonGets(app, "themes", themesController);
+        registerCommonVerbs(app, "home", homeController);
+        registerCommonVerbs(app, "languages", languagesController);
+        registerCommonVerbs(app, "themes", themesController);
 
 
         app.get('/uicontrols/*/*', function (req, res, next) {
