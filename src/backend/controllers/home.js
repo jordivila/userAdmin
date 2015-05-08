@@ -2,75 +2,56 @@
 
     "use strict";
 
-    module.exports.index = index;
-    module.exports.indexJSON = indexJSON;
+    module.exports.viewIndex = viewIndex;
+    module.exports.viewIndexJson = viewIndexJson;
 
-    var config = require('../libs/config');
-    var pkg = require('../../../package.json');
-    var i18n = require('i18n-2');
-    var util = require('../libs/commonFunctions');
-    var utilsNode = require('util');
-    var commonController = require('../controllers/common');
     var markdown = require("markdown").markdown;
     var fs = require('fs');
+    var GenericViewController = require('./classes/genericView');
 
-    var readMeMarkDownContent = null;
 
-    function viewIndexModel(cb) {
+    function HomeController() {
+        GenericViewController.apply(this, {});
+    }
+    HomeController.prototype = new GenericViewController();
+    HomeController.prototype.ReadMeMarkDownContent = null; // shared between instances
+    HomeController.prototype.viewIndexModel = function (req, cb) {
 
-        if (readMeMarkDownContent === null) {
-            fs.readFile(__dirname + '../../../../README.md', 'utf8', function (err, data) {
+        var self = this;
+
+        if (this.ReadMeMarkDownContent === null) {
+
+            var readmeFilePath = __dirname + '../../../../README.md';
+
+            fs.readFile(readmeFilePath, 'utf8', function (err, data) {
+
                 if (err) {
                     return cb(err);
                 }
 
-                readMeMarkDownContent = markdown.toHTML(data);
+                self.ReadMeMarkDownContent = markdown.toHTML(data);
 
-                cb(null, { ReadmeMarkDown: readMeMarkDownContent });
+                cb(null, { ReadmeMarkDown: self.ReadMeMarkDownContent });
+
             });
         }
         else {
-            cb(null, { ReadmeMarkDown: readMeMarkDownContent });
+            cb(null, { ReadmeMarkDown: this.ReadMeMarkDownContent });
         }
+    };
 
+    var homeController = new HomeController();
+
+    function viewIndexModel(req, cb) {
+        homeController.viewIndexModel(req, cb);
     }
 
-
-
-
-    function index(app, req, res, next) {
-
-        if (req.myInfo.IsSEORequest) {
-
-            viewIndexModel(function (err, result) {
-
-                if (err) {
-                    return next(err);
-                }
-
-                res.render(req.myInfo.viewPath, util.extend(req.myInfo, result));
-            });
-
-        }
-        else {
-
-            res.sendFile(req.myInfo.viewPath, {
-                root: app.get('views')
-            });
-
-        }
+    function viewIndex(app, req, res, next) {
+        homeController.viewIndex(app, req, res, next);
     }
 
-    function indexJSON(app, req, res, next) {
-
-        viewIndexModel(function (err, result) {
-
-            if (err) {
-                return next(err);
-            }
-
-            res.json(util.extend(req.myInfo, result));
-        });
+    function viewIndexJson(app, req, res, next) {
+        homeController.viewIndexJson(app, req, res, next);
     }
 
 })(module);

@@ -8,21 +8,32 @@
     var commonController = require('../../controllers/common');
     var config = require('../../libs/config');
     var DataResultModel = require('../../models/dataResult');
+    var GenericViewController = require('./genericView');
 
     function PreferenceSetter(cookieName, defaultValue) {
 
         this.data = [];
-        this.cookieName = cookieName;
-        this.defaultValue = defaultValue;
+
+        GenericViewController.apply(this, {});
     }
 
+    PreferenceSetter.prototype = new GenericViewController();
+
+    PreferenceSetter.prototype.cookieName = '';
+
+    PreferenceSetter.prototype.cookieValueGet = function (req) {
+        return req.cookies[this.cookieName];
+    };
+
     PreferenceSetter.prototype.Data = function (value) {
+
         if (value) {
             this.data = Data;
         }
         else {
             return this.data;
         }
+
     };
 
     PreferenceSetter.prototype.getAll = function (req, cb) {
@@ -43,7 +54,7 @@
 
         }
         else {
-            commonController.setCookie(res, this.cookieName, this.defaultValue);
+            commonController.setCookie(res, this.cookieName, this.cookieValueGet(req));
         }
 
     };
@@ -56,44 +67,9 @@
                 return cb(err);
             }
 
-            cb(null, { itemList: getAllResult });
-        });
-
-    };
-
-    PreferenceSetter.prototype.viewIndex = function (app, req, res, next) {
-
-        if (req.myInfo.IsSEORequest) {
-
-            this.viewIndexModel(req, function (err, result) {
-
-                if (err) {
-                    return next(err);
-                }
-
-                res.render(req.myInfo.viewPath, util.extend(req.myInfo, result));
+            cb(null, {
+                itemList: getAllResult
             });
-
-        }
-        else {
-
-            res.sendFile(req.myInfo.viewPath, {
-                root: app.get('views')
-            });
-
-        }
-
-    };
-
-    PreferenceSetter.prototype.viewIndexJson = function (app, req, res, next) {
-
-        this.viewIndexModel(req, function (err, result) {
-
-            if (err) {
-                return next(err);
-            }
-
-            res.json(util.extend(req.myInfo, result));
         });
 
     };

@@ -9,14 +9,11 @@
 
 Task List
 
-1. Create Generic Controller
-2. Add Home as a generic Controller
-3. Create PrefernceSetterController and inherit from Generic controller
-4. Create Language & Theme Controllers as PrefernceSetterController
+1. UI Menu. Set selected menu on SEO requests
+2. Preferences. Set selected item 
 
 
 Use this as a check list when deploying
-
 
 - [http://seositecheckup.com](http://seositecheckup.com "Seo Check")
 - [https://asafaweb.com/Scan?Url=jordivilanode.azurewebsites.net](https://asafaweb.com/Scan?Url=jordivilanode.azurewebsites.net)

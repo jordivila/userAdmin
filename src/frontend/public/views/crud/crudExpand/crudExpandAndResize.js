@@ -29,7 +29,7 @@ jQuery(document).ready(function () {
             return value * (parseFloat(getComputedStyle(document.documentElement).fontSize));
         }
 
-        $gridControl.height(jQuery(window).height() - convertEmToPixels(9.7));
+        $gridControl.height(jQuery(window).height() - convertEmToPixels(11.7));
     };
 
     jQuery(window)

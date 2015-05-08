@@ -20,10 +20,10 @@
                 commonController.setViewInfo(app, req, route);
 
                 if (requestingView) {
-                    controller.index(app, req, res, next);
+                    controller.viewIndex(app, req, res, next);
                 }
                 else {
-                    controller.indexJSON(app, req, res, next);
+                    controller.viewIndexJson(app, req, res, next);
                 }
 
             }
