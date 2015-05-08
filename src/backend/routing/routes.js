@@ -9,7 +9,7 @@
     var utilsNode = require('util');
     var DataResult = require('../models/dataResult');
     var ErrorHandled = require('../models/errorHandled.js');
-    var commonController = require('../controllers/common');
+    var testsController = require('../controllers/tests');
     var usersController = require('../controllers/users');
     var LanguagesController = require('../controllers/languages');
     var ThemesController = require('../controllers/themes');
@@ -33,7 +33,11 @@
 
             languagesController.initRequest(req, res);
             themesController.initRequest(req, res);
-            baseController.setViewModelBase(req);
+
+            // do not setViewModelBase here
+            // otherwise viewModelBase will be set
+            // event when requesting jpg, bmp, pdf, etc
+            //baseController.setViewModelBase(req);
 
             next();
         });
@@ -50,7 +54,7 @@
         if (config.get('IsTestEnv') === true) {
 
             app.get("/tests/initDb", function (req, res, next) {
-                commonController.initDb(req, function (err, roleCreated) {
+                testsController.initDb(req, function (err, roleCreated) {
                     if (err) return next(err);
 
                     res.json(roleCreated);
@@ -69,6 +73,9 @@
 
         //catch 404
         app.use(function (req, res, next) {
+
+            baseController.setViewModelBase(req);
+
             if (req.viewModel.IsSEORequest) {
                 res.render("errors/404/index.handlebars", req.viewModel);
             }
@@ -92,9 +99,37 @@
                 return next();
             }
 
+
+            console.error(err);
             log.error(err);
             res.status(err.status || 500);
-            res.send({}); // do not send error messages as it can send private info
+
+
+            /*************************************************
+                    beautify internal server errors
+
+            /**************************************************/
+            if (!req.viewModel)
+            {
+                baseController.setViewModelBase(req);
+            }
+
+            if (req.viewModel.IsSEORequest) {
+                res.render("errors/500/index.handlebars", req.viewModel);
+            }
+            else {
+                res.send({}); // do not send error messages as it can send private info
+            }
+            /*************************************************
+                    end beautify internal server errors
+            /**************************************************/
+
+
+
+
+            //log.error(err);
+            //res.status(err.status || 500);
+            //res.send({}); // do not send error messages as it can send private info
 
         });
 

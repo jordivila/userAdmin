@@ -23,7 +23,7 @@
 
     var authController = require('./src/backend/controllers/auth');
     var usersController = require('./src/backend/controllers/users');
-    var commonController = require('./src/backend/controllers/common');
+    var testsController = require('./src/backend/controllers/tests');
     var languagesController = require('./src/backend/controllers/languages');
     var themesController = require('./src/backend/controllers/themes');
 
@@ -62,7 +62,7 @@
 
 
     if (process.env.NODE_ENV === 'test') {
-        commonController.initTestEnvironment(app);
+        testsController.initTestEnvironment(app);
     }
 
 
@@ -85,11 +85,6 @@
 
 
     routingHandler.setRoutes(app, log, authController);
-
-    //homeController.setRoutes(app, log);
-    //usersController.setRoutes(app, authController);
-    //commonController.setRoutes(app, log);
-
 
     //programmer errors
     process.on('uncaughtException', function (err) {

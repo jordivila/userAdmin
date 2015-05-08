@@ -5,13 +5,22 @@
     var LanguagesController = require('../controllers/languages');
     var HomeController = require('../controllers/home');
     var ThemesController = require('../controllers/themes');
+    var BaseController = require('../controllers/classes/base');
 
     var languagesController = new LanguagesController();
     var homeController = new HomeController();
     var themesController = new ThemesController();
-
+    var baseController = new BaseController();
 
     function registerCommonVerbs(app, route, controller) {
+
+        // set up the middleware
+        app.use('/' + route + '/*', function (req, res, next) {
+
+            baseController.setViewModelBase(req);
+
+            next();
+        });
 
         app.get('/' + route + '/*', function (req, res, next) {
 

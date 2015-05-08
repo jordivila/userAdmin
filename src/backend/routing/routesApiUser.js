@@ -2,8 +2,6 @@
 
     "use strict";
 
-    //var i18n = require('i18n-2');
-    var commonController = require('../controllers/common');
     var usersController = require('../controllers/users');
 
     module.exports.setRoutes = function (app, log, authController) {

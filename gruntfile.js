@@ -346,6 +346,6 @@
 
         grunt.task.run('env:dev', 'preCompile', 'express:testLiveReload', 'open', 'watch');
     });
-
+    
     grunt.registerTask('default', ['env:test', 'preCompile', 'express:testLiveReload', 'open', 'watch']);
 };

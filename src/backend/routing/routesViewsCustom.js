@@ -4,15 +4,16 @@
 
     var util = require('../libs/commonFunctions');
     var utilsNode = require('util');
-    var commonController = require('../controllers/common');
-    var languagesController = require('../controllers/languages');
-    var homeController = require('../controllers/home');
-    var themesController = require('../controllers/themes');
+    var BaseController = require('../controllers/classes/base');
 
+
+    var baseController = new BaseController();
 
     module.exports.setRoutes = function (app) {
 
         app.get('/uicontrols/*/*', function (req, res, next) {
+
+            baseController.setViewModelBase(req);
 
             if (req.params[1] === '') {
 
