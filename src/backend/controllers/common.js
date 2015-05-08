@@ -5,9 +5,8 @@
     module.exports.setAccessControlOrigin = setAccessControlOrigin;
     module.exports.initTestEnvironment = initTestEnvironment;
     module.exports.initDb = initDb;
-    module.exports.setViewModelBase = setViewModelBase;
-    module.exports.setViewInfo = setViewInfo;
-    module.exports.setCookie = setCookie;
+    //module.exports.setViewModelBase = setViewModelBase;
+    //module.exports.setCookie = setCookie;
 
 
     //var userController = require('./users');
@@ -116,51 +115,5 @@
         });
     }
 
-    function setViewModelBase(req) {
-
-        var m = {
-            Title: '',
-            DomainName: config.get('domainName'),
-            Package: {
-                name: pkg.name,
-                version: pkg.version
-            },
-            IsTest: config.get('IsTestEnv'),
-            Theme: req.cookies[config.get('themes:cookieName')] ? req.cookies[config.get('themes:cookieName')] : config.get('themes:default'),
-            Globalization: {
-                cultureSelected: req.i18n.locale,
-                cultureGlobalization: req.i18n.locale,
-                cultureDatePicker: req.i18n.locale,
-            },
-            // Indica si la pagina viene de una peticion del menu o viene de una peticion para SEO
-            IsSEORequest: (req.query.seoRequest === undefined),
-            //Breadcrumb: [
-            //{ title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
-            //{ title: i18n.__("GeneralTexts.Home"), url: "/" }
-            //],
-            CssFiles: [
-                //"/public/views/home/home.css",
-            ],
-            JsFiles: [
-                //"/public/views/home/home.js",
-            ],
-        };
-
-        req.myInfo = m;
-
-    }
-
-    function setViewInfo(app, req, route) {
-        var viewPath = route + '/index.handlebars';
-        var viewModelPath = app.get('views') + '/' + viewPath + '.json';
-
-        req.myInfo = util.extend(req.myInfo, require(viewModelPath));
-        req.myInfo.viewPath = viewPath;
-        req.myInfo.viewModelPath = viewModelPath;
-    }
-
-    function setCookie(res, name, value) {
-        res.cookie(name, value, { expires: new Date(Date.now() + 900000), httpOnly: true });
-    }
 
 })(module);

@@ -5,13 +5,27 @@
     module.exports = GenericView;
 
     var util = require('../../libs/commonFunctions');
-    var commonController = require('../../controllers/common');
+    //var commonController = require('../../controllers/common');
     var config = require('../../libs/config');
-    var DataResultModel = require('../../models/dataResult');
+    //var DataResultModel = require('../../models/dataResult');
+    var BaseController = require('./base');
 
     function GenericView() {
-
+        BaseController.apply(this, arguments);
     }
+
+    GenericView.prototype = new BaseController();
+
+    GenericView.prototype.setViewInfo = function (app, req, route) {
+        var viewPath = route + '/index.handlebars';
+        var viewModelPath = app.get('views') + '/' + viewPath + '.json';
+
+        req.viewModel = util.extend(req.viewModel, require(viewModelPath));
+        req.viewInfo = {
+            viewPath: viewPath,
+            viewModelPath: viewModelPath
+        };
+    };
 
     GenericView.prototype.viewIndexModel = function (req, cb) {
 
@@ -21,7 +35,7 @@
 
     GenericView.prototype.viewIndex = function (app, req, res, next) {
 
-        if (req.myInfo.IsSEORequest) {
+        if (req.viewModel.IsSEORequest) {
 
             this.viewIndexModel(req, function (err, result) {
 
@@ -29,13 +43,13 @@
                     return next(err);
                 }
 
-                res.render(req.myInfo.viewPath, util.extend(req.myInfo, result));
+                res.render(req.viewInfo.viewPath, util.extend(req.viewModel, result));
             });
 
         }
         else {
 
-            res.sendFile(req.myInfo.viewPath, {
+            res.sendFile(req.viewInfo.viewPath, {
                 root: app.get('views')
             });
 
@@ -51,7 +65,7 @@
                 return next(err);
             }
 
-            res.json(util.extend(req.myInfo, result));
+            res.json(util.extend(req.viewModel, result));
         });
 
     };

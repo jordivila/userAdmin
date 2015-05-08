@@ -11,9 +11,9 @@
     var ErrorHandled = require('../models/errorHandled.js');
     var commonController = require('../controllers/common');
     var usersController = require('../controllers/users');
-    var languagesController = require('../controllers/languages');
-    var homeController = require('../controllers/home');
-    var themesController = require('../controllers/themes');
+    var LanguagesController = require('../controllers/languages');
+    var ThemesController = require('../controllers/themes');
+    var BaseController = require('../controllers/classes/base');
 
 
     var routerApiUser = require('./routesApiUser');
@@ -21,21 +21,23 @@
     var routerViewsCustom = require('./routesViewsCustom');
 
 
+    var languagesController = new LanguagesController();
+    var themesController = new ThemesController();
+    var baseController = new BaseController();
+
     module.exports.setRoutes = function (app, log, authController) {
 
 
         // set up the middleware
         app.use(function (req, res, next) {
 
-            languagesController.initRequestLanguage(req, res);
-            themesController.initRequestTheme(req, res);
-            commonController.setViewModelBase(req);
+            languagesController.initRequest(req, res);
+            themesController.initRequest(req, res);
+            baseController.setViewModelBase(req);
 
             next();
         });
 
-
-        
         routerViews.setRoutes(app);
         routerViewsCustom.setRoutes(app);
         routerApiUser.setRoutes(app, log, authController);
@@ -67,8 +69,8 @@
 
         //catch 404
         app.use(function (req, res, next) {
-            if (req.myInfo.IsSEORequest) {
-                res.render("errors/404/index.handlebars", req.myInfo);
+            if (req.viewModel.IsSEORequest) {
+                res.render("errors/404/index.handlebars", req.viewModel);
             }
             else {
                 res.status(404);

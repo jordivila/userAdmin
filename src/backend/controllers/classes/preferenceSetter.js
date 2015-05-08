@@ -5,7 +5,6 @@
     module.exports = PreferenceSetter;
 
     var util = require('../../libs/commonFunctions');
-    var commonController = require('../../controllers/common');
     var config = require('../../libs/config');
     var DataResultModel = require('../../models/dataResult');
     var GenericViewController = require('./genericView');
@@ -42,7 +41,7 @@
 
     PreferenceSetter.prototype.update = function (req, res, next) {
 
-        commonController.setCookie(res, this.cookieName, req.body.newValue);
+        this.setCookie(res, this.cookieName, req.body.newValue);
 
         res.json(new DataResultModel(true, '', {}));
 
@@ -54,7 +53,7 @@
 
         }
         else {
-            commonController.setCookie(res, this.cookieName, this.cookieValueGet(req));
+            this.setCookie(res, this.cookieName, this.cookieValueGet(req));
         }
 
     };

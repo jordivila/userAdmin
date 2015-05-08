@@ -20,7 +20,7 @@
                 var modelTemplate = utilsNode.format(app.get('views') + '/%s/index.handlebars.json', req.params[0]);
 
                 //extend common layout model with template config
-                var m = util.extend(req.myInfo, require(modelTemplate));
+                var m = util.extend(req.viewModel, require(modelTemplate));
 
                 //do render     
                 if (m.IsSEORequest) {

@@ -2,17 +2,13 @@
 
     "use strict";
 
-    module.exports.initRequestTheme = initRequestTheme;
-    module.exports.viewIndex = viewIndex;
-    module.exports.viewIndexJson = viewIndexJson;
-    module.exports.update = update;
+    module.exports = ThemeController;
 
     var config = require('../libs/config');
     var PreferenceSetter = require('./classes/preferenceSetter.js');
 
-
     function ThemeController() {
-        PreferenceSetter.apply(this, Array.prototype.slice.call(arguments));
+        PreferenceSetter.apply(this, arguments);
     }
     ThemeController.prototype = new PreferenceSetter();
     ThemeController.prototype.getAll = function (req, cb) {
@@ -152,24 +148,5 @@
             return config.get('themes:default');
         }
     };
-
-
-    var themeController = new ThemeController();
-
-    function initRequestTheme(req, res) {
-        themeController.initRequest(req, res);
-    }
-
-    function viewIndex(app, req, res, next) {
-        themeController.viewIndex(app, req, res, next);
-    }
-
-    function viewIndexJson(app, req, res, next) {
-        themeController.viewIndexJson(app, req, res, next);
-    }
-
-    function update(req, res, next) {
-        themeController.update(req, res, next);
-    }
 
 })(module);

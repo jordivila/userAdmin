@@ -2,17 +2,13 @@
 
     "use strict";
 
-    module.exports.initRequestLanguage = initRequestLanguage;
-    module.exports.viewIndex = viewIndex;
-    module.exports.viewIndexJson = viewIndexJson;
-    module.exports.update = update;
+    module.exports = LangController;
 
     var config = require('../libs/config');
     var PreferenceSetter = require('./classes/preferenceSetter.js');
 
-
     function LangController() {
-        PreferenceSetter.apply(this, {});
+        PreferenceSetter.apply(this, arguments);
     }
     LangController.prototype = new PreferenceSetter();
     LangController.prototype.getAll = function (req, cb) {
@@ -51,23 +47,5 @@
             return config.get('i18n:locales')[0];
         }
     };
-
-    var langController = new LangController();
-
-    function initRequestLanguage(req, res) {
-        langController.initRequest(req, res);
-    }
-
-    function viewIndex(app, req, res, next) {
-        langController.viewIndex(app, req, res, next);
-    }
-
-    function viewIndexJson(app, req, res, next) {
-        langController.viewIndexJson(app, req, res, next);
-    }
-
-    function update(req, res, next) {
-        langController.update(req, res, next);
-    }
 
 })(module);

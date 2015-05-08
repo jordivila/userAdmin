@@ -2,10 +2,13 @@
 
     "use strict";
 
-    var commonController = require('../controllers/common');
-    var languagesController = require('../controllers/languages');
-    var homeController = require('../controllers/home');
-    var themesController = require('../controllers/themes');
+    var LanguagesController = require('../controllers/languages');
+    var HomeController = require('../controllers/home');
+    var ThemesController = require('../controllers/themes');
+
+    var languagesController = new LanguagesController();
+    var homeController = new HomeController();
+    var themesController = new ThemesController();
 
 
     function registerCommonVerbs(app, route, controller) {
@@ -17,7 +20,7 @@
 
             if (requestingView || requestingViewModel) {
                 
-                commonController.setViewInfo(app, req, route);
+                controller.setViewInfo(app, req, route);
 
                 if (requestingView) {
                     controller.viewIndex(app, req, res, next);
@@ -46,7 +49,6 @@
         });
 
     }
-
 
     module.exports.setRoutes = function (app) {
 
