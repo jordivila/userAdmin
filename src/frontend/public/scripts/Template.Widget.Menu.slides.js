@@ -22,8 +22,23 @@ jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
         var self = this;
         var $backButton = jQuery(this.element).find('div.ui-menuSlide-backButton:first');
 
+
         $backButton
             .click(function () {
+
+                var $selectedItem = jQuery(self.element).find('div.ui-menuList-itemLink.ui-state-highlight:first').parents('li:first');
+
+                if ($selectedItem.length > 0) {
+                    var itemPath = self._itemPath($selectedItem, []);
+
+                    
+
+                    for (var i = 0; i < itemPath.length; i++) {
+                        jQuery(itemPath[i]).find('div.ui-menuList-itemLink:first').addClass('ui-state-active');
+                    }
+                }
+
+
                 jQuery(self.element)
                     .find('ul.ui-menuList-childs:visible:first')
                     .each(function () {
@@ -41,6 +56,12 @@ jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
     },
     destroy: function () {
         this._super();
+    },
+    _beforeSelected: function () {
+        jQuery(this.element)
+            .find('div.ui-menuList-itemLink')
+                .removeClass('ui-state-highlight ui-state-active')
+            .end();
     },
     _animatePanel: function ($hidingList, $showingList, forward, cb) {
 
@@ -158,8 +179,75 @@ jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
         };
 
         menuRender();
-        
+
 
         return dfd.promise();
     },
+    _itemPath: function ($li, currentPath) {
+
+        if ($li) {
+
+            currentPath.push($li);
+
+            if ($li.parents('ul:first').length > 0) {
+                return this._itemPath($li.parents('ul:first').data('parentNode'), currentPath);
+            }
+            else {
+                return currentPath;
+            }
+
+        }
+        else {
+            return currentPath;
+        }
+    },
+    _itemSlidesPath: function ($currentSlideUl, currentSlidePath) {
+
+        currentSlidePath.push($currentSlideUl);
+
+        var $pNode = $currentSlideUl.data('parentNode');
+
+        if ($pNode) {
+            return this._itemSlidesPath(jQuery($pNode).parents('ul.ui-menuList-childs:first'), currentSlidePath);
+        }
+        else {
+            // top parent found
+            return currentSlidePath.reverse();
+        }
+    },
+    _itemSlidesPathInit: function () {
+
+        for (var i = 0; i < this.options.slidesOpened.length; i++) {
+            jQuery(this.options.slidesOpened[i]).hide();
+        }
+
+        jQuery(this.options.slidesOpened[this.options.slidesOpened.length - 1]).show();
+
+        if (this.options.slidesOpened.length > 1) {
+            jQuery(this.element)
+                .find('div.ui-menuSlide-backButton:first')
+                .removeClass('ui-helper-hidden');
+        }
+
+    },
+
+    select: function (setSelected) {
+
+        var self = this;
+
+        self.options.slidesOpened = [];
+
+        var slidesPath = [];
+
+        jQuery(self.element)
+            .find('li.ui-menuList-item')
+                .each(function () {
+                    if (setSelected(jQuery(this).data('dataItem'))) {
+                        self._setSelectedCss(jQuery(this));
+                        self.options.slidesOpened = self._itemSlidesPath(jQuery(this).parents('ul.ui-menuList-childs:first'), []);
+                        self._itemSlidesPathInit();
+                        self.options.slidesOpened.pop();
+                    }
+                });
+    }
 });

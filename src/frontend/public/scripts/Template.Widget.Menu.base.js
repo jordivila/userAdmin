@@ -32,17 +32,12 @@
                     var liData = $node.data('dataItem');
 
                     if (liData.childs === undefined) {
-
-                        jQuery(w.element)
-                            .find('div.ui-menuList-itemLink')
-                                .removeClass('ui-state-highlight')
-                            .end();
-
-                        $node.find('div.ui-menuList-itemLink:first').addClass('ui-state-highlight');
-
+                        w._beforeSelected();
+                        w._setSelectedCss($node);
                         w._trigger('selected', null, liData);
                     }
                     else {
+
                         var b = $node.find('ul:first').is(':visible');
                         if (b) w.closeNode($node);
                         else w.openNode($node);
@@ -55,8 +50,16 @@
                     jQuery(this).children().last().addClass('ui-menuList-item-last');
                 });
 
-        w._trigger('dataBound', null, null);
+        w._trigger('dataBound', null, { IMenuModel: w.options.IMenuModel });
 
+    },
+    _beforeSelected: function () {
+        var self = this;
+        var dfd = jQuery.Deferred();
+        //dfd.notify("message...");
+        //dfd.resolve();
+        dfd.reject("{0}.{1}._beforeSelected is an abstract method and should be imlpemented in child class".format(this.namespace, this.widgetName));
+        return dfd.promise();
     },
     _build: function () {
         var self = this;
@@ -99,7 +102,10 @@
             .done(function () {
                 self._dataBound();
                 self.collapseAll();
+                self._trigger('done', null, null);
             });
     },
+    _setSelectedCss: function ($node) {
+        $node.find('div.ui-menuList-itemLink:first').addClass('ui-state-highlight');
+    },
 });
-

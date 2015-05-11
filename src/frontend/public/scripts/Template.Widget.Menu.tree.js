@@ -19,7 +19,8 @@ jQuery.widget("ui.menuTree", jQuery.ui.menuBase, {
     },
     openNode: function ($lisOpen) {
         if ($lisOpen) {
-            $lisOpen
+            $lisOpen.each(function () {
+                jQuery(this)
                 //.removeClass('ui-state-default')
                 .children('ul')
                     .addClass('ui-state-active')
@@ -33,6 +34,7 @@ jQuery.widget("ui.menuTree", jQuery.ui.menuBase, {
                         .addClass('ui-icon ui-icon-triangle-1-s')
                     .end()
                 .end();
+            });
         }
     },
     closeNode: function ($lisClose) {
@@ -61,6 +63,13 @@ jQuery.widget("ui.menuTree", jQuery.ui.menuBase, {
     collapseAll: function () {
         this.closeNode(jQuery(this.element).find('li'));
     },
+    _beforeSelected: function () {
+        jQuery(this.element)
+            .find('div.ui-menuList-itemLink')
+                .removeClass('ui-state-highlight')
+            .end();
+    },
+
     _build: function () {
 
         var self = this;

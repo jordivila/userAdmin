@@ -107,8 +107,7 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                 })
                 .done(function (dataJson, textStatusJson, jqXHRJson) {
 
-                    if (dataJson.Title)
-                    {
+                    if (dataJson.Title) {
                         jQuery('body')
                             .find('h1:first')
                                 .html(dataJson.Title);
@@ -201,6 +200,9 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
                 else {
                     templGetFunc();
                 }
+            },
+            done: function (e) {
+                self._initMenuSelected($panelMenuList);
             }
         });
 
@@ -235,5 +237,18 @@ jQuery.widget("ui.userActivity", jQuery.ui.widgetBase, {
             function () {
                 self._trigger('complete', null, null);
             });
+    },
+    _initMenuSelected: function ($widgetMenuList) {
+
+        var pathName = location.pathname;
+
+        $widgetMenuList.menuSlides('select', function (menuItem) {
+
+            if (menuItem.url == pathName) {
+                return true;
+            }
+        });
+
+
     }
 });

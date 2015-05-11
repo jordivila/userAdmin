@@ -9,8 +9,7 @@
 
 Task List
 
-1. UI Menu. Set selected menu on SEO requests
-2. Preferences. Set selected item 
+ 
 
 
 Use this as a check list when deploying
