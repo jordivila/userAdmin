@@ -87,9 +87,6 @@
     {{#each JsFiles}}
     <script type="text/javascript" src="{{this}}"></script>
     {{/each}}
-
-
-
     <script type="text/javascript">
         (function ($) {
             jQuery(document).ready(function () {
@@ -103,7 +100,6 @@
             });
         })(jQuery);
     </script>
-
     {{#if IsTest}}
     <script src="http://localhost:35729/livereload.js"></script>
     {{/if}}

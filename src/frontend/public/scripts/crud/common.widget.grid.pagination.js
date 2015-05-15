@@ -7,6 +7,11 @@ jQuery.widget("ui.gridPagination", jQuery.ui.widgetBase,
         pageSizeShow: true,
         nPagesInPaginator: 3,
         pageSize: 10,
+
+        texts: {
+            showingData: "Showing {0}-{1} of {2}",
+            showXPerPage: "per page"
+        }
     },
     _create: function () {
 
@@ -153,14 +158,19 @@ jQuery.widget("ui.gridPagination", jQuery.ui.widgetBase,
         //Showing results begin...
 
         $totalsBox
-                .append("<div class='ui-gridPagination-totalRows'>Mostrando {0}-{1} resultados de {2}</div>"
-                    .format(((Page * PageSize) + 1), (((Page + 1) * PageSize)), TotalRows));
+                .append(function () {
+
+                    var str = "<div class='ui-gridPagination-totalRows'>" + self.options.texts.showingData + "</div>";
+
+                    return str.format(((Page * PageSize) + 1), (((Page + 1) * PageSize)), TotalRows);
+
+                });
 
 
 
         //Showing pagesize begin...
         $totalsBox
-                .append("<div class='ui-gridPagination-pageSizePicker'><select></select> por pagina</div>"
+                .append("<div class='ui-gridPagination-pageSizePicker'><select></select> " + self.options.texts.showXPerPage + "</div>"
                     .format(PageSize));
 
 
@@ -208,12 +218,5 @@ jQuery.widget("ui.gridPagination", jQuery.ui.widgetBase,
             }
         }
 
-
-
-
-
-        //} catch (e) {
-        //    console.error(e);
-        //}
     }
 });

@@ -9,10 +9,6 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
 
         this._super();
 
-        //jQuery(this.element)
-        //.attr('data-widget', this.widgetName);
-        //.addClass('ui-corner-all ui-widget-content');
-
         this._bindModelSchema(this.options.modelItems);
     },
     _init: function () {
@@ -24,19 +20,7 @@ jQuery.widget("ui.widgetModel", jQuery.ui.widgetBase,
         this._super();
     },
     _template: function () {
-        return "<div class='ui-corner-bottom ui-widgetModel-content '></div>";
-
-
-        //var valSummary = '' +
-        //'<div class="ui-widgetForm-ValidationSummary ui-state-error ui-corner-all" data-widget="widgetFormSummary">' +
-        //    '<span>Por favor, revise el formulario</span>' +
-        //    '<ul>' +
-        //        '<li modelKey="Email">El campo "Correo electrónico" es obligatorio</li>' +
-        //        '<li modelKey="Password">El campo "Contraseña" es obligatorio</li>' +
-        //    '</ul>' +
-        //'</div>';
-
-        //return "<div class='ui-corner-top ui-widget-header'>{0}</div><div class='ui-corner-bottom ui-widget-content ui-widgetModel-content'></div>" + valSummary;
+        return "<div class='ui-corner-bottom ui-widgetModel-content'></div>";
     },
     _templateFormat: function () {
         return this._template();

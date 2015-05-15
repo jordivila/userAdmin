@@ -35,11 +35,6 @@ jQuery.widget("ui.widgetBase",
         //this.log(this.element);
         this.log("{0}.{1}->Init->{2}".format(this.namespace, this.widgetName, jQuery(this.element)[0].className));
 
-
-
-
-
-
         var widgetName = this.namespace + '.' + this.widgetName;
         var dataWidgetInitialized = widgetName + ".IsInitialized";
 
@@ -47,7 +42,7 @@ jQuery.widget("ui.widgetBase",
             jQuery(this.element).data(dataWidgetInitialized, true);
         }
         else {
-            throw new Error("Se ha intentado crear una instancia de widget que ya estaba creada. Podrian duplicarse eventos." + widgetName);
+            throw new Error("Widget is already initialized. Reinitializing would duplicate events." + widgetName);
         }
 
 
@@ -56,8 +51,11 @@ jQuery.widget("ui.widgetBase",
 
         this._super();
 
+        //jQuery.removeData(jQuery(this.element)); // ??
+
         this.log(this.namespace + "." + this.widgetName + " -> destroy");
 
+        
     },
     log: function (logMessage) {
         if (window.console) {

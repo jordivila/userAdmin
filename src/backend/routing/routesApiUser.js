@@ -76,6 +76,20 @@
                         text: i18n.__("GeneralTexts.Home")
                     },
                     {
+                        //url: "/globalize/",
+                        text: i18n.__("Globalize"),
+                        childs: [
+                            {
+                                url: "/globalize/serverside/",
+                                text: "Server side"
+                            },
+                            {
+                                url: "/globalize/clientside/",
+                                text: "Client side"
+                            },
+                        ]
+                    },
+                    {
                         url: "/about/",
                         text: i18n.__("GeneralTexts.About")
                     },

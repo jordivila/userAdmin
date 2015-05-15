@@ -8,6 +8,14 @@
         formBind: function (self, dataItem) {
             throw new Error(self.namespace + '.' + self.widgetName + ".formBind() is an abstract method. Child class method must be implemented");
         },
+
+        texts: {
+            buttonCancelText: "Cancel",
+            buttonSaveText: "Save changes",
+            UnhandledBindingError: "Unhandled error ocurred binding form data",
+            SaveBeginText: "Saving data...",
+            SavingErrorUnhandled:"Unhandled error ocurred saving data"
+        }
     },
     _create: function () {
 
@@ -28,8 +36,6 @@
     _init: function () {
 
         this._super();
-
-        //this._done();
     },
     _formButtonsInit: function () {
 
@@ -37,7 +43,7 @@
 
         var defaultButtons = this.options.formButtonsGet(this, [{
             id: "cancel",
-            text: "Cancelar",
+            text: self.options.texts.buttonCancelText,
             cssClass: "ui-cancel-button",
             icon: "ui-icon-circle-arrow-w",
             click: function (self) {
@@ -45,7 +51,7 @@
             }
         }, {
             id: "save",
-            text: "Guardar cambios",
+            text: self.options.texts.buttonSaveText,
             cssClass: "ui-save-button",
             icon: "ui-icon-disk",
             click: function (self) {
@@ -76,7 +82,7 @@
             this._trigger('dataBound', null, dataItem);
         } catch (e) {
             console.error(e);
-            this._trigger('errorDisplay', null, "Ha ocurrido un error en el formulario");
+            this._trigger('errorDisplay', null, this.options.texts.UnhandledBindingError);
         }
     },
     _save: function () {
@@ -104,7 +110,7 @@
             dfd.reject(self.namespace + '.' + self.widgetName + ".options.formSaveMethod is an abstract method. Child class must implement");
         }
         else {
-            dfd.notify("Guardando informacion...");
+            dfd.notify(self.options.texts.SaveBeginText);
 
             var viewModel = self._formValueGet();
 
@@ -128,7 +134,7 @@
                         }
                     },
                     function (jqXHR, textStatus, errorThrown) {
-                        dfd.reject("Error no controlado guadando la información");
+                        dfd.reject(self.options.texts.SavingErrorUnhandled);
                     })
             .done(function () {
 

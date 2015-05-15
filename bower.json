@@ -19,6 +19,8 @@
     "jquery": "1.9.1",
     "jquery-ui": "1.10.0",
     "jquery-validation": "1.11.0",
-    "handlebars": "3.0.0"
+    "handlebars": "3.0.0",
+    "cldr-data": "27.0.0",
+    "globalize": "1.0.0"
   }
 }

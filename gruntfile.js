@@ -67,7 +67,7 @@
                     "bower_components/jquery-ui/ui/minified/jquery.ui.effect-slide.min.js",
 
                     // jQuery UI components End
-                    "bower_components/jquery-validation/jquery.validate.js",
+                    //"bower_components/jquery-validation/jquery.validate.js",
                     "bower_components/history.js/scripts/bundled/html4+html5/jquery.history.js",
                     "bower_components/handlebars/handlebars.min.js",
 
@@ -79,19 +79,18 @@
                     "src/frontend/public/scripts/Template.App.Widgets.Init.js",
                     "src/frontend/public/scripts/Template.App.Resources.Init.js",
                     "src/frontend/public/scripts/Template.Widget.Base.js",
-                    //"src/frontend/public/scripts/Template.Widget.jQueryzer.js",
+
                     "src/frontend/public/scripts/Template.Widget.Model.js",
                     "src/frontend/public/scripts/Template.Widget.ModelItem.js",
                     "src/frontend/public/scripts/Template.Widget.ModelDate.js",
                     "src/frontend/public/scripts/Template.Widget.ModelBool.js",
-                    "src/frontend/public/scripts/Template.Widget.Grid.js",
-                    "src/frontend/public/scripts/Template.Widget.ButtonWrapper.js",
+
                     "src/frontend/public/scripts/Template.Widget.UserActivity.js",
-                    "src/frontend/public/scripts/Template.Widget.Message.js",
 
                     "src/frontend/public/scripts/Template.Widget.Menu.base.js",
                     "src/frontend/public/scripts/Template.Widget.Menu.tree.js",
                     "src/frontend/public/scripts/Template.Widget.Menu.slides.js",
+                    "src/frontend/public/scripts/Template.Widget.Menu.nav.js",
 
                     "src/frontend/public/scripts/Template.Widget.ItemPicker.js",
 
@@ -107,7 +106,7 @@
                     "src/frontend/public/scripts/crud/common.widget.crud.form.js",
                     "src/frontend/public/scripts/crud/common.widget.grid.pagination.js",
                     //CRUD end
-                    "src/frontend/public/scripts/Template.Widget.Themepicker.js",
+                    //"src/frontend/public/scripts/Template.Widget.Themepicker.js",
                     "src/frontend/public/scripts/url/urlHelper.js",
                     "src/frontend/public/scripts/Template.Widget.Page.js",
                 ],
@@ -123,8 +122,9 @@
                           src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
                     },
                 },
-                src: ["bower_components/jquery-ui/ui/i18n/jquery.ui.datepicker-es.js",
-                        "bower_components/jquery-validation/localization/messages_es.js",
+                src: [
+                        "bower_components/jquery-ui/ui/i18n/jquery.ui.datepicker-es.js",
+                        //"bower_components/jquery-validation/localization/messages_es.js",
                         "src/frontend/public/scripts/libs/jQuery-globalize/lib/cultures/globalize.culture.es.js",
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_regional_es.js'
@@ -212,6 +212,8 @@
                     'src/test/mocha/**/*.js',
                     '!src/frontend/public/scripts/libs/**/*.*',
                     '!src/frontend/public/cdn/**/*.*',
+                    '!src/frontend/public/bower_components/**/*.*',
+                    '!src/frontend/public/views/globalize/**/*.js',
                     '!src/test/qunit/libs/**/*.js',
             ],
             options: {
@@ -320,9 +322,6 @@
             //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
             //    I prefer not to use this min.css generated until bugs are fixed
             tasks2Run.push('env:prod', 'jshint:files', /*'bump',*/ 'clean', 'concat', 'uglify' /*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/);
-
-            //grunt.config('mochaTest.test.options.node_env', 'production');
-            //console.log(grunt.config('mochaTest'));
         }
         else {
             tasks2Run.push('jshint:files', 'bump', 'clean', 'concat');

@@ -36,7 +36,7 @@
             ) {
                 result.isValid = false;
                 result.messages.push({
-                    password: i18n.__("Invalid role name")
+                    password: i18n.__("DataAnnotations.InvalidRoleName")
                 });
             }
 

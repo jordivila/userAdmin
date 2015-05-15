@@ -19,7 +19,10 @@
         "cookieName": "locale",
         "extension": ".json"
     },
-    "domainName": "localhost:3001",
+    "domainInfo": {
+        "domainName": "localhost:3001",
+        "secutiryProtocol": "https"
+    },
     "mailing": {
         "credentials": {
             "userName": "someFakeUserName",

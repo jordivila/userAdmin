@@ -1,21 +1,38 @@
-# userAdmin
-
-    
+# Nodejs website template
 
 [![Build Status](https://travis-ci.org/jordivila/userAdmin.svg?branch=master)](https://travis-ci.org/jordivila/userAdmin)
 [![Dependency Status](https://david-dm.org/jordivila/userAdmin.svg)](https://david-dm.org/jordivila/userAdmin)
 [![devDependency Status](https://david-dm.org/jordivila/userAdmin/dev-status.svg)](https://david-dm.org/jordivila/userAdmin#info=devDependencies)
 [![Code Climate](https://codeclimate.com/github/jordivila/userAdmin/badges/gpa.svg)](https://codeclimate.com/github/jordivila/userAdmin)
 
+This website template is in beta. I'm using Nodejs & Mongodb to build a website deployable to an azure website in just one click.
+
+Objectives
+
+1. Lightweight application 
+2. SPA application and SEO support 
+3. Internationalization support at client & server 
+4. 
+
 Task List
-
  
+1. Globalize at client & server side
+2. i18n Texts at client & server side
+3. Use Google & Facebook & github passport authentication
 
+SEO Tools
+
+1. http://seositecheckup.com/
+2. http://www.woorank.com 
 
 Use this as a check list when deploying
 
 - [http://seositecheckup.com](http://seositecheckup.com "Seo Check")
 - [https://asafaweb.com/Scan?Url=jordivilanode.azurewebsites.net](https://asafaweb.com/Scan?Url=jordivilanode.azurewebsites.net)
+
+Dev Words
+
+1. Nodejs, Mongodb, Mocha , jqUnit, grunt, bower, express, handlebars, azure
 
 Next things to keep an eye
 
@@ -25,3 +42,4 @@ Next things to keep an eye
 Utils
 
 - [http://markdownpad.com/](http://markdownpad.com/ "http://markdownpad.com/")
+

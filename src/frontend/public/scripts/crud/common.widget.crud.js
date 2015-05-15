@@ -10,10 +10,14 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         gridFilterButtonsInit: function (widgetFilter, defaultButtons) {
             return defaultButtons;
         },
-        gridSearchNotifyBeginMsg: "Searching...",
-        gridSearchNotifyFailMsg: "Unhandled Error searching...",
-        gridSearchEditNotifyBeginMsg: "Searching item for edit...",
-        gridSearchEditNotifyFailMsg: "Unhandled Error searching item for edit...",
+
+        texts:{
+            gridSearchNotifyBeginMsg: "Searching...",
+            gridSearchNotifyFailMsg: "Unhandled Error searching...",
+            gridSearchEditNotifyBeginMsg: "Searching item for edit...",
+            gridSearchEditNotifyFailMsg: "Unhandled Error searching item for edit...",
+        },
+
         formDOMId: null,
 
 
@@ -316,7 +320,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var self = this;
         var dfd = jQuery.Deferred();
 
-        dfd.notify(self.options.gridSearchNotifyBeginMsg);
+        dfd.notify(self.options.texts.gridSearchNotifyBeginMsg);
 
         if (self.options.gridSearchMethod === null) {
             dfd.reject(self.namespace + '.' + self.widgetName + "options.gridSearchMethod is an abstract method. Child class must implement");
@@ -335,7 +339,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                         }
                     },
                     function (jqXHR, textStatus, errorThrown) {
-                        dfd.reject(self.options.gridSearchNotifyFailMsg);
+                        dfd.reject(self.options.texts.gridSearchNotifyFailMsg);
                     })
                 .done(function () {
 
@@ -365,7 +369,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
         var self = this;
         var dfd = jQuery.Deferred();
 
-        dfd.notify(self.options.gridSearchEditNotifyBeginMsg);
+        dfd.notify(self.options.texts.gridSearchEditNotifyBeginMsg);
 
         if (self.options.gridSearchForEditMethod === null) {
             dfd.reject(self.namespace + '.' + self.widgetName + ".options.gridSearchForEditMethod is an abstract method. Child class must implement");
@@ -385,7 +389,7 @@ jQuery.widget("ui.crud", jQuery.ui.crudBase,
                             }
                         },
                         function (jqXHR, textStatus, errorThrown) {
-                            dfd.reject(self.options.gridSearchEditNotifyFailMsg);
+                            dfd.reject(self.options.texts.gridSearchEditNotifyFailMsg);
                         })
                     .done(function () {
 

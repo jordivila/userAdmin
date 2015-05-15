@@ -5,11 +5,13 @@
     var LanguagesController = require('../controllers/languages');
     var HomeController = require('../controllers/home');
     var ThemesController = require('../controllers/themes');
+    var GlobalizeController = require('../controllers/globalize');
     var BaseController = require('../controllers/classes/base');
 
     var languagesController = new LanguagesController();
     var homeController = new HomeController();
     var themesController = new ThemesController();
+    var globalizeController = new GlobalizeController();
     var baseController = new BaseController();
 
     function registerCommonVerbs(app, route, controller) {
@@ -74,6 +76,8 @@
         registerCommonVerbs(app, "home", homeController);
         registerCommonVerbs(app, "languages", languagesController);
         registerCommonVerbs(app, "themes", themesController);
+        registerCommonVerbs(app, "globalize/serverside", globalizeController);
+        registerCommonVerbs(app, "globalize/clientside", globalizeController);
 
     };
 

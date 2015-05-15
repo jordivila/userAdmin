@@ -9,9 +9,13 @@
             return defaultButtons;
         },
         gridFilterVisibleAlways: false,
+
+        texts: {
+            buttonCancelText: "Cancel",
+            buttonSearchText: "Search",
+        }
     },
     _create: function () {
-
 
         this._super();
 
@@ -47,7 +51,7 @@
             defaultButtonsArray.push(
             {
                 id: "cancel",
-                text: "Volver",
+                text: self.options.texts.buttonCancelText,
                 cssClass: "ui-cancel-button ui-state-default",
                 icon: "ui-icon-circle-arrow-w",
                 click: function (self) {
@@ -59,7 +63,7 @@
         defaultButtonsArray.push(
         {
             id: "filter",
-            text: "Buscar",
+            text: self.options.texts.buttonSearchText,
             cssClass: "ui-search-button ui-state-default",
             icon: "ui-icon-search",
             click: function (self) {

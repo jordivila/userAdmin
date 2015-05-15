@@ -8,7 +8,7 @@
     var mongoose = require('mongoose');
     var i18n = new (require('i18n-2'))(config.get("i18n"));
     var assert = require("assert");
-    var commonController = require(pathToSrc + 'backend/controllers/common');
+    var commonController = require(pathToSrc + 'backend/controllers/tests');
 
 
     before(function (done) {

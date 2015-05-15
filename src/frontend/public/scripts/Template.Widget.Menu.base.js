@@ -1,4 +1,4 @@
-﻿jQuery.widget("ui.menuBase", jQuery.ui.widgetBase, {
+jQuery.widget("ui.menuBase", jQuery.ui.widgetBase, {
     options: {
         IMenuModel: null
     },

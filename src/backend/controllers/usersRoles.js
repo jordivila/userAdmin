@@ -24,13 +24,13 @@
 
             getByName(roleReqModel.name, function(err, role) {
                 if (err) return cb(err);
-                if (role) return cb(new ErrorHandledModel(i18n.__("Role already exists")));
+                if (role) return cb(new ErrorHandledModel(i18n.__("AccountResources.RoleAlreadyExists")));
 
 
                 roleReqModel.save(function(err, roleCreated) {
                     if (err) return cb(err);
 
-                    return cb(null, new DataResultModel(true, i18n.__("Role created"), {
+                    return cb(null, new DataResultModel(true, i18n.__("AccountResources.RoleCreated"), {
                         roleId: roleCreated.roleId
                     }));
                 });

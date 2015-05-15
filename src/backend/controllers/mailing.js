@@ -39,33 +39,24 @@
         try {
 
             var mailMessage = new MailMessage();
-            mailMessage.From(config.get('mailing:supportEmailAddress')); //ApplicationConfiguration.MailingSettingsSection.SupportTeamEmailAddress
+            mailMessage.From(config.get('mailing:supportEmailAddress'));
             mailMessage.Bcc(user.email);
             mailMessage.Subject(util.format('%s: %s',
-                'ApplicationConfiguration.DomainInfoSettingsSection.DomainName',
+                config.get('domainInfo:domainName'),
                 i18n.__("AccountResources.CantAccessYourAccount_EmailTitle")));
 
 
             var backUri = util.format('%s://%s%s/%s',
-                "https", //ApplicationConfiguration.DomainInfoSettingsSection.SecurityProtocol
-                "domainname.com", //ApplicationConfiguration.DomainInfoSettingsSection.DomainName
+                config.get('domainInfo:secutiryProtocol'),
+                config.get('domainInfo:domainName'),
                 activateFormVirtualPath,
                 token.guid);
 
             mailMessage.Body(
                 util.format(i18n.__("AccountResources.CantAccessYourAccount_Email"),
                     backUri,
-                    "domainname.com" //ApplicationConfiguration.DomainInfoSettingsSection.DomainName
+                    config.get('domainInfo:domainName')
                 ));
-
-            /*
-                using (ISmtpClient smtp = DependencyFactory.Resolve<ISmtpClient>())
-                {
-                    // Do not use SendAsync -> otherwise transaction could commit without sending mail
-                    smtp.Send(mail);
-                }
-
-            */
 
             return cb(null, new DataResultModel(true, i18n.__("AccountResources.CantAccessYourAccount_EmailSent"), {
                 userId: user.userId,

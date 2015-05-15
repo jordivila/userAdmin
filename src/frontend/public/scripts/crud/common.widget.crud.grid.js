@@ -26,6 +26,10 @@
             //    }
             //};
         },
+
+        texts: {
+            emptyRowText: "No data found here"
+        }
     },
     _create: function () {
 
@@ -106,24 +110,6 @@
                     '<div class="ui-helper-clearfix" ></div>' +
                 '</div>'
         ;
-
-
-
-        //return '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
-        //        '<div class="ui-helper-clearfix" ></div>' +
-        //        '<div class="ui-crudGrid">' +
-        //            '<div class="ui-crudGrid-header ui-widgetGrid-header ui-state-default">' +
-        //                '<div class="ui-widgetGrid-row" >' +
-        //                    this._gridHeaderTemplate() +
-        //                '</div>' +
-        //            '</div>' +
-        //            '<div class="ui-helper-clearfix" ></div>' +
-        //            '<div class="ui-crudGrid-body ui-widgetGrid-body ui-helper-clearfix" >' +
-
-        //            '</div>' +
-        //            '<div class="ui-helper-clearfix" ></div>' +
-        //        '</div>' +
-        //        '<div class="ui-crudGrid-pager ui-crudGrid-pager-bottom ui-state-default"></div>';
     },
     _gridHeaderTemplate: function () {
 
@@ -194,7 +180,7 @@
         }
         else {
             var $emtpyRow = '<div class="ui-widgetGrid-emptyRow ui-widgetGrid-column  ui-state-active"><div class="ui-widgetGrid-column-content">{0}</div></div>'
-                                .format('No data here');
+                                .format(self.options.texts.emptyRowText);
 
             jQuery(self.options.gridBodyDOMId).append($emtpyRow);
         }

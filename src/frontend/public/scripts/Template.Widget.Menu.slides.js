@@ -2,7 +2,10 @@
 jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
     options: {
         //slidesOpened: [], //http://bugs.jqueryui.com/ticket/8645
-        slidesOpened: null //since jQuery.ui 1.9 array options are static. So initialized them on create event
+        slidesOpened: null, //since jQuery.ui 1.9 array options are static. So initialized them on create event,
+        texts: {
+            back: "Back"
+        }
     },
     _create: function () {
 
@@ -10,7 +13,7 @@ jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
 
         this.options.slidesOpened = [];
 
-        jQuery(this.element).prepend('<div class="ui-menuSlide-backButton ui-helper-hidden ui-state-default"><span class="ui-icon ui-icon-triangle-1-w"></span><span>Back</span><div class="ui-helper-clearfix"></div></div>');
+        jQuery(this.element).prepend('<div class="ui-menuSlide-backButton ui-helper-hidden ui-state-default"><span class="ui-icon ui-icon-triangle-1-w"></span><span>' + this.options.texts.back + '</span><div class="ui-helper-clearfix"></div></div>');
 
     },
     _init: function () {

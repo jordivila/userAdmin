@@ -34,6 +34,7 @@
             languagesController.initRequest(req, res);
             themesController.initRequest(req, res);
 
+
             // do not setViewModelBase here
             // otherwise viewModelBase will be set
             // event when requesting jpg, bmp, pdf, etc
@@ -77,6 +78,7 @@
             baseController.setViewModelBase(req);
 
             if (req.viewModel.IsSEORequest) {
+                res.status(404);
                 res.render("errors/404/index.handlebars", req.viewModel);
             }
             else {

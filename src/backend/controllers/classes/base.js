@@ -17,7 +17,7 @@
 
         var m = {
             Title: '',
-            DomainName: config.get('domainName'),
+            DomainName: config.get('domainInfo:domainName'),
             Package: {
                 name: pkg.name,
                 version: pkg.version

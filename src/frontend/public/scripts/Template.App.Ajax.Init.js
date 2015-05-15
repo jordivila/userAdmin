@@ -18,36 +18,6 @@ jQuery(document).ready(function () {
 
 VsixMvcAppResult.Ajax = {};
 
-//VsixMvcAppResult.Ajax._OkKo = function (options, onOK, onKO) {
-//    jQuery.ajax(options)
-//    .done(function (data, textStatus, jqXHR) {
-//        onOK(data);
-//    })
-//    .fail(function (jqXHR, textStatus, errorThrown) {
-//        onKO(jqXHR);
-//    });
-//};
-
-//VsixMvcAppResult.Ajax.ThemeSet = function (theme, onOK, onKO) {
-//    VsixMvcAppResult.Ajax._OkKo({
-//        url: "/api/user/theme",
-//        type: "POST",
-//        data: JSON.stringify({
-//            theme: theme
-//        })
-//    }, onOK, onKO);
-//};
-
-//VsixMvcAppResult.Ajax.CultureSet = function (culture, onOK, onKO) {
-//    VsixMvcAppResult.Ajax._OkKo({
-//        url: "/api/user/culture",
-//        type: "POST",
-//        data: JSON.stringify({
-//            culture: culture
-//        })
-//    }, onOK, onKO);
-//};
-
 VsixMvcAppResult.Ajax.onOkKoComplete = function (opts, onOK, onKO, onComplete) {
 
     var jqxhr = jQuery.ajax(opts)
@@ -62,16 +32,6 @@ VsixMvcAppResult.Ajax.onOkKoComplete = function (opts, onOK, onKO, onComplete) {
                         });
 
     return jqxhr;
-};
-
-VsixMvcAppResult.Ajax.UserUpdateLastActivity = function (onOK, onKO, onComplete) {
-    VsixMvcAppResult.Ajax.onOkKoComplete({
-        url: "/api/user/lastActivity",
-        type: "PUT",
-        data: {},
-        //dataType: "html",
-        cache: false
-    }, onOK, onKO, onComplete);
 };
 
 VsixMvcAppResult.Ajax.UserMenu = function (onOK, onKO, onComplete) {
