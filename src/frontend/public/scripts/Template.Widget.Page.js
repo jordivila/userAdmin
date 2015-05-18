@@ -72,7 +72,9 @@ jQuery.widget("ui.page", jQuery.ui.widgetBase, {
     },
     initGlobalization: function() {
         /* Globalization Initializaer */
-        Globalize.culture(this.options.cultureGlobalization);
+
+        //Globalize.culture(this.options.cultureGlobalization);
+
         //jQuery('div.sample').append('<span>' + Globalize.format(3899.888, "c") + '</span><br/>');
         //jQuery('div.sample').append('<span>' + Globalize.format(new Date(2011, 12, 25), "D") + '</span><br/>');
         //jQuery('div.sample').append('<span>' + Globalize.format(45678, "n0") + '</span><br/>');

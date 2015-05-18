@@ -72,6 +72,9 @@
     app.use('/public/cdn', express.static(__dirname + '/src/frontend/public/cdn', {
         maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
     }));
+    app.use('/public/cldr-data', express.static(__dirname + '/src/frontend/public/cldr-data', {
+        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
+    }));
     app.use('/public/bower_components', express.static(__dirname + '/src/frontend/public/bower_components', {
         maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
     }));

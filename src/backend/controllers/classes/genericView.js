@@ -21,6 +21,13 @@
         var viewModelPath = app.get('views') + '/' + viewPath + '.json';
 
         req.viewModel = util.extend(req.viewModel, require(viewModelPath));
+
+        //req.viewModel.JsFiles
+        for (var i = 0; i < req.viewModel.JsFiles.length; i++) {
+            req.viewModel.JsFiles[i] = req.viewModel.JsFiles[i].replace('{{Package.name}}', req.viewModel.Package.name).replace('{{Package.version}}', req.viewModel.Package.version);
+        }
+
+
         req.viewInfo = {
             viewPath: viewPath,
             viewModelPath: viewModelPath

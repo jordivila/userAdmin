@@ -3,6 +3,7 @@
     var gruntOptions = {
         pkg: grunt.file.readJSON('package.json'),
         cdnFolder: 'src/frontend/public/cdn',
+        cldrDataFolder:'src/frontend/public/cldr-data',
         env: {
             dev: {
                 NODE_ENV: 'dev'
@@ -17,8 +18,11 @@
         clean: {
             options: {
                 //'no-write': true
+                force: true
             },
-            plugins: ['<%= cdnFolder %>/**/*']
+            plugins: [
+                '<%= cdnFolder %>/**/*',
+            ]
         },
         concat: {
             ui_css: {
@@ -94,7 +98,7 @@
 
                     "src/frontend/public/scripts/Template.Widget.ItemPicker.js",
 
-                    
+
 
                     //CRUD begin
                     //"src/frontend/public/scripts/crud/common.widget.base.js",
@@ -150,6 +154,57 @@
                         //"src/frontend/public/scripts/libs/jQuery-globalize/lib/cultures/globalize.culture.es.js",
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_regional_en.js'
+            },
+            ui_globalize_base: {
+                options: {
+                    separator: ";",
+                    // Replace all 'use strict' statements in the code with a single one at the top
+                    //banner: "'use strict';\n",
+                    process: function (src, filepath) {
+                        return '// Source: ' + filepath + '\n' +
+                          src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
+                    },
+                },
+                src: [
+                        "bower_components/cldrjs/dist/cldr.js",
+                        "bower_components/cldrjs/dist/cldr/event.js",
+                        "bower_components/cldrjs/dist/cldr/supplemental.js",
+
+                        "bower_components/globalize/dist/globalize.js",
+                        "bower_components/globalize/dist/globalize/message.js",
+                        "bower_components/globalize/dist/globalize/number.js",
+                        "bower_components/globalize/dist/globalize/plural.js",
+
+                        "bower_components/globalize/dist/globalize/date.js",
+                        "bower_components/globalize/dist/globalize/currency.js",
+
+                        "bower_components/globalize/dist/globalize/relative-time.js",
+                ],
+                dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_globalize_base.js'
+            },
+
+        },
+        copy: {
+            main: {
+                files: [
+
+                    { expand: true, src: ['bower_components/cldr-data/supplemental/**'], dest: '<%= cldrDataFolder %>/' },
+                    { expand: true, src: ['bower_components/cldr-data/main/es/**'], dest: '<%= cldrDataFolder %>/' },
+                    { expand: true, src: ['bower_components/cldr-data/main/en/**'], dest: '<%= cldrDataFolder %>/' },
+
+
+                  //// includes files within path
+                  //{ expand: true, src: ['path/*'], dest: 'dest/', filter: 'isFile' },
+
+                  //// includes files within path and its sub-directories
+                  //{ expand: true, src: ['path/**'], dest: 'dest/' },
+
+                  //// makes all src relative to cwd
+                  //{ expand: true, cwd: 'path/', src: ['**'], dest: 'dest/' },
+
+                  //// flattens results to a single level
+                  //{ expand: true, flatten: true, src: ['path/**'], dest: 'dest/', filter: 'isFile' },
+                ],
             },
         },
         uglify: {
@@ -212,8 +267,6 @@
                     'src/test/mocha/**/*.js',
                     '!src/frontend/public/scripts/libs/**/*.*',
                     '!src/frontend/public/cdn/**/*.*',
-                    '!src/frontend/public/bower_components/**/*.*',
-                    '!src/frontend/public/views/globalize/**/*.js',
                     '!src/test/qunit/libs/**/*.js',
             ],
             options: {
@@ -296,6 +349,8 @@
 
     grunt.initConfig(gruntOptions);
 
+
+    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
@@ -313,6 +368,7 @@
 
     //grunt.registerTask('preCompile', ['jshint:files', 'bump', 'clean', 'concat']);
 
+
     grunt.registerTask('preCompile', 'Compile css, js & resources', function (isDeploy) {
         // parameters are passed when grunt is run using -> grunt preCompile:deploy
 
@@ -324,7 +380,7 @@
             tasks2Run.push('env:prod', 'jshint:files', /*'bump',*/ 'clean', 'concat', 'uglify' /*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/);
         }
         else {
-            tasks2Run.push('jshint:files', 'bump', 'clean', 'concat');
+            tasks2Run.push('jshint:files', 'bump', 'clean', 'copy', 'concat');
         }
 
         grunt.task.run(tasks2Run);
@@ -345,6 +401,8 @@
 
         grunt.task.run('env:dev', 'preCompile', 'express:testLiveReload', 'open', 'watch');
     });
-    
+
+
     grunt.registerTask('default', ['env:test', 'preCompile', 'express:testLiveReload', 'open', 'watch']);
+
 };
