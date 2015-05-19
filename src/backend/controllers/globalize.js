@@ -6,11 +6,25 @@
 
     var markdown = require("markdown").markdown;
     var GenericViewController = require('./classes/genericView');
+    var cldrDownloader = require("cldr-data-downloader");
 
     function GlobalizeController() {
         GenericViewController.apply(this, arguments);
     }
     GlobalizeController.prototype = new GenericViewController();
+    GlobalizeController.prototype.initCldrData = function (cb) {
+        cldrDownloader(
+          "http://www.unicode.org/Public/cldr/26/json.zip",
+          "./src/frontend/public/cldr-data",
+          function (error) {
+              if (error) {
+                  console.error("Whops", error.message);
+                  cb(error);
+              }
+              cb(null);
+          }
+        );
+    };
     GlobalizeController.prototype.viewIndexModel = function (req, cb) {
 
 

@@ -1,14 +1,14 @@
 ﻿// Use $.getJSON instead of $.get if your server is not configured to return the
 // right MIME type for .json files.
 jQuery.when(
-  jQuery.get("/public/cldr-data/bower_components/cldr-data/main/en/ca-gregorian.json"),
-  jQuery.get("/public/cldr-data/bower_components/cldr-data/main/en/numbers.json"),
-  jQuery.get("/public/cldr-data/bower_components/cldr-data/main/en/currencies.json"),
-  jQuery.get("/public/cldr-data/bower_components/cldr-data/supplemental/currencyData.json"),
-  jQuery.get("/public/cldr-data/bower_components/cldr-data/supplemental/plurals.json"),
-  jQuery.get("/public/cldr-data/bower_components/cldr-data/supplemental/likelySubtags.json"),
-  jQuery.get("/public/cldr-data/bower_components/cldr-data/supplemental/timeData.json"),
-  jQuery.get("/public/cldr-data/bower_components/cldr-data/supplemental/weekData.json")
+  jQuery.get("/public/cldr-data/main/en/ca-gregorian.json"),
+  jQuery.get("/public/cldr-data/main/en/numbers.json"),
+  jQuery.get("/public/cldr-data/main/en/currencies.json"),
+  jQuery.get("/public/cldr-data/supplemental/currencyData.json"),
+  jQuery.get("/public/cldr-data/supplemental/plurals.json"),
+  jQuery.get("/public/cldr-data/supplemental/likelySubtags.json"),
+  jQuery.get("/public/cldr-data/supplemental/timeData.json"),
+  jQuery.get("/public/cldr-data/supplemental/weekData.json")
 ).then(function () {
 
     // Normalize jQuery.get results, we only need the JSON, not the request statuses.

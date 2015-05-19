@@ -29,6 +29,7 @@
 
     var ErrorHandled = require('./src/backend/models/errorHandled');
     var routingHandler = require('./src/backend/routing/routes');
+    var GlobalizeController = require('./src/backend/controllers/globalize');
 
     var app = express();
 
@@ -61,6 +62,11 @@
     });
 
 
+    new GlobalizeController().initCldrData(function (err) {
+
+    });
+
+
     if (process.env.NODE_ENV === 'test') {
         testsController.initTestEnvironment(app);
     }
@@ -73,9 +79,6 @@
         maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
     }));
     app.use('/public/cldr-data', express.static(__dirname + '/src/frontend/public/cldr-data', {
-        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-    }));
-    app.use('/public/bower_components', express.static(__dirname + '/src/frontend/public/bower_components', {
         maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
     }));
     app.use('/public/fonts', express.static(__dirname + '/src/frontend/public/fonts', {

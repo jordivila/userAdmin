@@ -184,29 +184,6 @@
             },
 
         },
-        copy: {
-            main: {
-                files: [
-
-                    { expand: true, src: ['bower_components/cldr-data/supplemental/**'], dest: '<%= cldrDataFolder %>/' },
-                    { expand: true, src: ['bower_components/cldr-data/main/es/**'], dest: '<%= cldrDataFolder %>/' },
-                    { expand: true, src: ['bower_components/cldr-data/main/en/**'], dest: '<%= cldrDataFolder %>/' },
-
-
-                  //// includes files within path
-                  //{ expand: true, src: ['path/*'], dest: 'dest/', filter: 'isFile' },
-
-                  //// includes files within path and its sub-directories
-                  //{ expand: true, src: ['path/**'], dest: 'dest/' },
-
-                  //// makes all src relative to cwd
-                  //{ expand: true, cwd: 'path/', src: ['**'], dest: 'dest/' },
-
-                  //// flattens results to a single level
-                  //{ expand: true, flatten: true, src: ['path/**'], dest: 'dest/', filter: 'isFile' },
-                ],
-            },
-        },
         uglify: {
             options: {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
@@ -380,7 +357,7 @@
             tasks2Run.push('env:prod', 'jshint:files', /*'bump',*/ 'clean', 'concat', 'uglify' /*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/);
         }
         else {
-            tasks2Run.push('jshint:files', 'bump', 'clean', 'copy', 'concat');
+            tasks2Run.push('jshint:files', 'bump', 'clean', 'concat');
         }
 
         grunt.task.run(tasks2Run);

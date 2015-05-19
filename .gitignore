@@ -1,5 +1,6 @@
 bower_components
 .ntvs_analysis.dat
+src/frontend/public/cldr-data/
 
 
 ## Ignore Visual Studio temporary files, build results, and
