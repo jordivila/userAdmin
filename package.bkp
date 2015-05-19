@@ -1,6 +1,6 @@
 {
   "name": "userAdmin",
-  "version": "0.0.6207",
+  "version": "0.0.6206",
   "description": "userAdmin",
   "private": true,
   "author": {
@@ -48,7 +48,11 @@
     "sendgrid": "1.7.0",
     "serve-favicon": "2.2.0",
     "validator": "3.39.0",
-    "winston": "1.0.0"
+    "winston": "1.0.0",
+
+
+    "cldr-data": "latest",
+    "globalize": "1.x"
   },
   "license": "MIT"
 }
