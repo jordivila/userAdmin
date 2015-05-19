@@ -4,7 +4,7 @@
         "tokenLife": 3600
     },
     "mongoose": {
-        "uri": "mongodb://localhost:27017/testAPI3"
+        "uri": "mongodb://localfrost:27017/testAPI3"
     },
     "encryptKeyForCookieParser": "someEncriptiongKey",
     "themes": {
