@@ -62,9 +62,9 @@
     });
 
 
-    new GlobalizeController().initCldrData(function (err) {
+    //new GlobalizeController().initCldrData(function (err) {
 
-    });
+    //});
 
 
     if (process.env.NODE_ENV === 'test') {
