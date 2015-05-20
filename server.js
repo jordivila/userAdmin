@@ -29,7 +29,7 @@
 
     var ErrorHandled = require('./src/backend/models/errorHandled');
     var routingHandler = require('./src/backend/routing/routes');
-    //var GlobalizeController = require('./src/backend/controllers/globalize');
+    var GlobalizeController = require('./src/backend/controllers/globalize');
 
     var app = express();
 
@@ -62,9 +62,9 @@
     });
 
 
-    //new GlobalizeController().initCldrData(function (err) {
+    new GlobalizeController().initCldrData(function (err) {
 
-    //});
+    });
 
 
     if (process.env.NODE_ENV === 'test') {
