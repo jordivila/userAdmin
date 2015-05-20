@@ -5,10 +5,8 @@
 
 VsixMvcAppResult.Widgets.PageOptions = {
     selector: null,
-    cultureSelected: null,
     cultureGlobalization: null,
     cultureDatePicker: null,
-    defaultTheme: null,
     _initCallbacks: [],
     onInit: function(callBack) {
         this._initCallbacks.push(callBack);
@@ -16,11 +14,8 @@ VsixMvcAppResult.Widgets.PageOptions = {
     Init: function() {
         var self = this;
         jQuery(this.selector).page({
-            allowCssClasses: this.allowCssClasses,
-            cultureSelected: this.cultureSelected,
             cultureGlobalization: this.cultureGlobalization,
             cultureDatePicker: this.cultureDatePicker,
-            defaultTheme: this.defaultTheme,
             initComplete: function() {
 
                 for (var i = 0; i < self._initCallbacks.length; i++) {

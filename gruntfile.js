@@ -193,6 +193,8 @@
                     '<%= concat.ui_js.dest %>': ['<%= concat.ui_js.dest %>'],
                     '<%= concat.ui_regional_es.dest %>': ['<%= concat.ui_regional_es.dest %>'],
                     '<%= concat.ui_regional_en.dest %>': ['<%= concat.ui_regional_en.dest %>'],
+                    '<%= concat.ui_globalize_base.dest %>': ['<%= concat.ui_globalize_base.dest %>'],
+                    
                 }
             }
         },

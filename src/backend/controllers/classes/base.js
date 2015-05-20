@@ -25,7 +25,6 @@
             IsTest: config.get('IsTestEnv'),
             Theme: req.cookies[config.get('themes:cookieName')] ? req.cookies[config.get('themes:cookieName')] : config.get('themes:default'),
             Globalization: {
-                cultureSelected: req.i18n.locale,
                 cultureGlobalization: req.i18n.locale,
                 cultureDatePicker: req.i18n.locale,
             },

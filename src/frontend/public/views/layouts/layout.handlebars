@@ -80,7 +80,7 @@
     </div>
 
     <script type="text/javascript" src="/public/cdn/{{Package.name}}.{{Package.version}}.ui_js.js"></script>
-    <script type="text/javascript" src="/public/cdn/{{Package.name}}.{{Package.version}}.ui_regional_{{Globalization.cultureSelected}}.js"></script>
+    <script type="text/javascript" src="/public/cdn/{{Package.name}}.{{Package.version}}.ui_regional_{{Globalization.cultureGlobalization}}.js"></script>
     <script type="text/javascript">
         jQuery.noConflict();
     </script>
@@ -91,10 +91,8 @@
         (function ($) {
             jQuery(document).ready(function () {
                 VsixMvcAppResult.Widgets.PageOptions.selector = "body";
-                VsixMvcAppResult.Widgets.PageOptions.cultureSelected = "{{Globalization.cultureSelected}}";
                 VsixMvcAppResult.Widgets.PageOptions.cultureGlobalization = "{{Globalization.cultureGlobalization}}";
                 VsixMvcAppResult.Widgets.PageOptions.cultureDatePicker = "{{Globalization.cultureDatePicker}}";
-                VsixMvcAppResult.Widgets.PageOptions.defaultTheme = "Redmond";
                 VsixMvcAppResult.Widgets.PageOptions.onInit(function () { jQuery('body').removeClass('ui-helper-hidden'); });
                 VsixMvcAppResult.Widgets.PageOptions.Init();
             });
