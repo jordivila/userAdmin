@@ -59,80 +59,81 @@
 
     mongoose.dbInit(function (err, cnn) {
 
-        new GlobalizeController().initCldrData(function (err) {
+    });
 
-            if (process.env.NODE_ENV === 'test') {
-                testsController.initTestEnvironment(app);
+    new GlobalizeController().initCldrData(function (err) {
+
+
+    });
+
+
+
+    if (process.env.NODE_ENV === 'test') {
+        testsController.initTestEnvironment(app);
+    }
+
+
+
+
+    //begin -> set public static
+    app.use('/public/scripts', express.static(__dirname + '/src/frontend/public/scripts', {
+        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
+    }));
+    app.use('/public/bower_components', express.static(__dirname + '/src/frontend/public/bower_components', {
+        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
+    }));
+    app.use('/public/cdn', express.static(__dirname + '/src/frontend/public/cdn', {
+        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
+    }));
+    app.use('/public/cldr-data', express.static(__dirname + '/src/frontend/public/cldr-data', {
+        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
+    }));
+    app.use('/public/fonts', express.static(__dirname + '/src/frontend/public/fonts', {
+        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
+    }));
+    app.use('/public/images', express.static(__dirname + '/src/frontend/public/images', {
+        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
+    }));
+    //end -> set public static content folders
+
+
+
+
+
+    routingHandler.setRoutes(app, log, authController);
+
+    //programmer errors
+    process.on('uncaughtException', function (err) {
+        try {
+            //try logging
+
+            console.log(err.stack);
+
+            log.error(err);
+
+        } catch (errLogging) {
+
+            try {
+                //try sending email
+                //sendMail.error(err);
+            } catch (errSendingEmail) {
+                // do nothing here
+
             }
+        }
+        process.exit(1);
+    });
 
 
+    app.listen(app.get('port'), function () {
 
+        var d = new Date();
 
-            //begin -> set public static
-            app.use('/public/scripts', express.static(__dirname + '/src/frontend/public/scripts', {
-                maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-            }));
-            app.use('/public/bower_components', express.static(__dirname + '/src/frontend/public/bower_components', {
-                maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-            }));
-            app.use('/public/cdn', express.static(__dirname + '/src/frontend/public/cdn', {
-                maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-            }));
-            app.use('/public/cldr-data', express.static(__dirname + '/src/frontend/public/cldr-data', {
-                maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-            }));
-            app.use('/public/fonts', express.static(__dirname + '/src/frontend/public/fonts', {
-                maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-            }));
-            app.use('/public/images', express.static(__dirname + '/src/frontend/public/images', {
-                maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-            }));
-            //end -> set public static content folders
+        log.info("********************************************************************");
+        log.info("Express server listening : " + util.format('%s', d.toString()));
+        log.info('Express server listening on port ' + app.get('port'));
+        log.info("********************************************************************");
 
-
-
-
-
-            routingHandler.setRoutes(app, log, authController);
-
-            //programmer errors
-            process.on('uncaughtException', function (err) {
-                try {
-                    //try logging
-
-                    console.log(err.stack);
-
-                    log.error(err);
-
-                } catch (errLogging) {
-
-                    try {
-                        //try sending email
-                        //sendMail.error(err);
-                    } catch (errSendingEmail) {
-                        // do nothing here
-
-                    }
-                }
-                process.exit(1);
-            });
-
-
-            app.listen(app.get('port'), function () {
-
-                var d = new Date();
-
-                log.info("********************************************************************");
-                log.info("Express server listening : " + util.format('%s', d.toString()));
-                log.info('Express server listening on port ' + app.get('port'));
-                log.info("********************************************************************");
-
-
-
-            });
-
-
-        });
 
 
     });
