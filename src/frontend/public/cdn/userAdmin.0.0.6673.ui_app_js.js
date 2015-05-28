@@ -1,6 +1,6 @@
 
  'use strict'
- define(["jquery", "jqueryui", "history", "handlebars"],function (jQuery, jqUI, historyReq, Handlebars) { var appVersion = "0.0.6671";  jQuery.noConflict();// Source: src/frontend/public/scripts/Template.ExtendPrototypes.js
+ define(["jquery", "jqueryui", "history", "handlebars"],function (jQuery, jqUI, historyReq, Handlebars) { var appVersion = "0.0.6673";  jQuery.noConflict();// Source: src/frontend/public/scripts/Template.ExtendPrototypes.js
 
 if (!window.console) {
     console = {
