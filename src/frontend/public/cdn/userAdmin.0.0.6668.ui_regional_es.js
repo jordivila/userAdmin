@@ -1,5 +1,5 @@
 'use strict';
-// Source: bower_components/jquery-ui/ui/i18n/jquery.ui.datepicker-es.js
+// Source: src/frontend/public/bower_components/jquery-ui/ui/i18n/jquery.ui.datepicker-es.js
 /* Inicialización en español para la extensión 'UI date picker' para jQuery. */
 /* Traducido por Vester (xvester@gmail.com). */
 jQuery(function($){

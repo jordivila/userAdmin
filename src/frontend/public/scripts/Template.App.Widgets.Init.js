@@ -1,3 +1,8 @@
-﻿/// <reference path="VsixMvcAppResult.A.Intellisense.js" />
+﻿//define(["jquery", "scripts/Template.App.Init"],
+//       function ($) {
 
-VsixMvcAppResult.Widgets = {};
+           VsixMvcAppResult.Widgets = {};
+
+
+       //    return VsixMvcAppResult;
+       //});

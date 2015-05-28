@@ -7,77 +7,129 @@
     var markdown = require("markdown").markdown;
     var GenericViewController = require('./classes/genericView');
     var cldrDownloader = require("cldr-data-downloader");
+    var Globalize = require("globalize");
+    var config = require("../libs/config");
+    var util = require("../libs/commonFunctions");
+
 
     function GlobalizeController() {
         GenericViewController.apply(this, arguments);
     }
     GlobalizeController.prototype = new GenericViewController();
     GlobalizeController.prototype.initCldrData = function (cb) {
+
         cldrDownloader(
           "http://www.unicode.org/Public/cldr/26/json.zip",
-          "./src/frontend/public/cldr-data",
+          "./src/frontend/public/bower_components/cldr-data",
           function (error) {
+
+
+
               if (error) {
                   console.error("Whops", error.message);
-                  cb(error);
               }
-              cb(null);
+
+
+              // Before we can use Globalize, we need to feed it on the appropriate I18n content (Unicode CLDR). 
+              //Read Requirements on Getting Started on the root's README.md for more information.
+              Globalize.load(
+                  require("cldr-data/main/es/ca-gregorian"),
+                  require("cldr-data/main/es/currencies"),
+                  require("cldr-data/main/es/dateFields"),
+                  require("cldr-data/main/es/numbers"),
+
+                  require("cldr-data/main/en/ca-gregorian"),
+                  require("cldr-data/main/en/currencies"),
+                  require("cldr-data/main/en/dateFields"),
+                  require("cldr-data/main/en/numbers"),
+
+                  require("cldr-data/supplemental/currencyData"),
+                  require("cldr-data/supplemental/likelySubtags"),
+                  require("cldr-data/supplemental/plurals"),
+                  require("cldr-data/supplemental/timeData"),
+                  require("cldr-data/supplemental/weekData")
+              );
+
+
+              Globalize.loadMessages({
+                  "es": {
+                      "like": [
+                        "{0, plural, offset:1",
+                        "     =0 {Se el primero en darle click a 'Me gusta'}",
+                        "     =1 {Te gusta esto}",
+                        "    one {A ti y a alguien mas le gsuta esto}",
+                        "  other {A ti y a # mas os gusta esto}",
+                        "}"
+                      ]
+                  },
+                  "en": {
+                      "like": [
+                        "{0, plural, offset:1",
+                        "     =0 {Be the first to like this}",
+                        "     =1 {You liked this}",
+                        "    one {You and someone else liked this}",
+                        "  other {You and # others liked this}",
+                        "}"
+                      ]
+                  },
+              });
+
+
+              cb(error);
           }
         );
+
+
     };
     GlobalizeController.prototype.viewIndexModel = function (req, cb) {
 
 
         var like;
-        var Globalize = require("globalize");
+        var currentCulture = req.viewModel.Globalization.cultureGlobalization;
 
-        var currentCulture = 'es';
 
-        // Before we can use Globalize, we need to feed it on the appropriate I18n content (Unicode CLDR). Read Requirements on Getting Started on the root's README.md for more information.
-        Globalize.load(
-            require("cldr-data/main/" + currentCulture + "/ca-gregorian"),
-            require("cldr-data/main/" + currentCulture + "/currencies"),
-            require("cldr-data/main/" + currentCulture + "/dateFields"),
-            require("cldr-data/main/" + currentCulture + "/numbers"),
-            require( "cldr-data/supplemental/currencyData" ),
-            require( "cldr-data/supplemental/likelySubtags" ),
-            require( "cldr-data/supplemental/plurals" ),
-            require( "cldr-data/supplemental/timeData" ),
-            require( "cldr-data/supplemental/weekData" )
-        );
-        //Globalize.loadMessages( require( "./messages/es" ) );
-
-        // Set "en" as our default locale.
         Globalize.locale(currentCulture);
 
+        var globInstance = new Globalize(Globalize.cldr);
+
+
+
         // Use Globalize to format dates.
-        console.log( Globalize.formatDate( new Date(), { datetime: "medium" } ) );
+        console.log(globInstance.formatDate(new Date(), { datetime: "medium" }));
 
         // Use Globalize to format numbers.
-        console.log( Globalize.formatNumber( 12345.6789 ) );
+        console.log(globInstance.formatNumber(12345.6789));
 
         // Use Globalize to format currencies.
-        console.log( Globalize.formatCurrency( 69900, "USD" ) );
+        console.log(globInstance.formatCurrency(69900, "USD"));
 
         // Use Globalize to get the plural form of a numeric value.
-        console.log( Globalize.plural( 12345.6789 ) );
+        console.log(globInstance.plural(12345.6789));
 
         // Use Globalize to format a message with plural inflection.
-        //like = Globalize.messageFormatter( "like" );
-        //console.log( like( 0 ) );
-        //console.log( like( 1 ) );
-        //console.log( like( 2 ) );
-        //console.log( like( 3 ) );
+        like = globInstance.messageFormatter("like");
+        console.log(like(0));
+        console.log(like(1));
+        console.log(like(2));
+        console.log(like(3));
+
+        // do the same in other way
+        console.log(globInstance.formatMessage("like", [0]));
+        console.log(globInstance.formatMessage("like", [1]));
+        console.log(globInstance.formatMessage("like", [2]));
+        console.log(globInstance.formatMessage("like", [3]));
+
 
         // Use Globalize to format relative time.
-        console.log( Globalize.formatRelativeTime( -35, "second" ) );
+        console.log(globInstance.formatRelativeTime(-35, "second"));
 
         cb(null, {
-            TheDate: Globalize.formatDate(new Date(), { datetime: "medium" }),
-            TheNumber: Globalize.formatNumber(12345.6789),
-            TheCurrency: Globalize.formatCurrency(69900, "USD"),
-            ThePlural: Globalize.plural(12345.6789),
-            TheTimeAgo: Globalize.formatRelativeTime(-35, "second")
+            TheDate: globInstance.formatDate(new Date(), { datetime: "medium" }),
+            TheNumber: globInstance.formatNumber(12345.6789),
+            TheCurrency: globInstance.formatCurrency(69900, "USD"),
+            ThePlural: globInstance.plural(12345.6789),
+            TheTimeAgo: globInstance.formatRelativeTime(-35, "second"),
+            TheMessages: [like(0), like(1), like(2), like(3)]
         });
     };
 

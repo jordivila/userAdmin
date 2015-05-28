@@ -1,44 +1,47 @@
-﻿/// <reference path="inv.ajax.js" />
+﻿define(["jquery", "jqueryui", "/public/scripts/Template.Widget.Base.js"],
+       function ($, jqUI) {
 
-jQuery.widget("ui.fieldItem", jQuery.ui.widgetBase,
-{
-    options: {
-        wrapElement: null
-    },
-    _create: function () {
 
-        this._super();
+           jQuery.widget("ui.fieldItem", jQuery.ui.widgetBase,
+           {
+               options: {
+                   wrapElement: null
+               },
+               _create: function () {
 
-        this.options.wrapElement = '<div class="ui-field-box">' +
-                                        '<div class="ui-fieldName"></div>' +
-                                        '<div class="ui-fieldValue"></div>' +
-                                        '<div class="ui-helper-clearfix"></div>' +
-                                    '</div>';
-    },
-    _init: function () {
+                   this._super();
 
-        this._super();
+                   this.options.wrapElement = '<div class="ui-field-box">' +
+                                                   '<div class="ui-fieldName"></div>' +
+                                                   '<div class="ui-fieldValue"></div>' +
+                                                   '<div class="ui-helper-clearfix"></div>' +
+                                               '</div>';
+               },
+               _init: function () {
 
-        var self = this;
+                   this._super();
 
-        jQuery(self.element)
-            .find(':input[data-fieldItem], div[data-fieldItem]')
-            .each(function (index, ui) {
+                   var self = this;
 
-                if (jQuery(this).data("isInitialized") === undefined)
-                {
-                    var box = jQuery(self.options.wrapElement).insertBefore(jQuery(this));
-                    box.find("div.ui-fieldName:first").html(jQuery(this).attr('data-fieldItem-name'));
+                   jQuery(self.element)
+                       .find(':input[data-fieldItem], div[data-fieldItem]')
+                       .each(function (index, ui) {
 
-                    jQuery(this).appendTo(box.find("div.ui-fieldValue:first"));
+                           if (jQuery(this).data("isInitialized") === undefined) {
+                               var box = jQuery(self.options.wrapElement).insertBefore(jQuery(this));
+                               box.find("div.ui-fieldName:first").html(jQuery(this).attr('data-fieldItem-name'));
 
-                    jQuery(this).data("isInitialized", true);
-                }
+                               jQuery(this).appendTo(box.find("div.ui-fieldValue:first"));
 
-            });
-    },
-    destroy: function () {
-        this._super();
-    }
- 
-});
+                               jQuery(this).data("isInitialized", true);
+                           }
+
+                       });
+               },
+               destroy: function () {
+                   this._super();
+               }
+
+           });
+
+       });

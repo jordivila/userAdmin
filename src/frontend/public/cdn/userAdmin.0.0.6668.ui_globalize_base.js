@@ -1,4 +1,4 @@
-// Source: bower_components/cldrjs/dist/cldr.js
+// Source: src/frontend/public/bower_components/cldrjs/dist/cldr.js
 /**
  * CLDR JavaScript Library v0.4.1
  * http://jquery.com/
@@ -666,7 +666,7 @@
 
 
 }));
-;// Source: bower_components/cldrjs/dist/cldr/event.js
+;// Source: src/frontend/public/bower_components/cldrjs/dist/cldr/event.js
 /**
  * CLDR JavaScript Library v0.4.1
  * http://jquery.com/
@@ -1252,7 +1252,7 @@ EventEmitter = (function () {
 
 
 }));
-;// Source: bower_components/cldrjs/dist/cldr/supplemental.js
+;// Source: src/frontend/public/bower_components/cldrjs/dist/cldr/supplemental.js
 /**
  * CLDR JavaScript Library v0.4.1
  * http://jquery.com/
@@ -1354,7 +1354,7 @@ EventEmitter = (function () {
 
 
 }));
-;// Source: bower_components/globalize/dist/globalize.js
+;// Source: src/frontend/public/bower_components/globalize/dist/globalize.js
 /**
  * Globalize v1.0.0
  *
@@ -1710,7 +1710,7 @@ return Globalize;
 
 
 }));
-;// Source: bower_components/globalize/dist/globalize/message.js
+;// Source: src/frontend/public/bower_components/globalize/dist/globalize/message.js
 /**
  * Globalize v1.0.0
  *
@@ -3733,7 +3733,7 @@ return Globalize;
 
 
 }));
-;// Source: bower_components/globalize/dist/globalize/number.js
+;// Source: src/frontend/public/bower_components/globalize/dist/globalize/number.js
 /**
  * Globalize v1.0.0
  *
@@ -5000,7 +5000,7 @@ return Globalize;
 
 
 }));
-;// Source: bower_components/globalize/dist/globalize/plural.js
+;// Source: src/frontend/public/bower_components/globalize/dist/globalize/plural.js
 /**
  * Globalize v1.0.0
  *
@@ -5360,7 +5360,7 @@ return Globalize;
 
 
 }));
-;// Source: bower_components/globalize/dist/globalize/date.js
+;// Source: src/frontend/public/bower_components/globalize/dist/globalize/date.js
 /**
  * Globalize v1.0.0
  *
@@ -7206,7 +7206,7 @@ return Globalize;
 
 
 }));
-;// Source: bower_components/globalize/dist/globalize/currency.js
+;// Source: src/frontend/public/bower_components/globalize/dist/globalize/currency.js
 /*!
  * Globalize v1.0.0
  *
@@ -7620,7 +7620,7 @@ return Globalize;
 
 
 }));
-;// Source: bower_components/globalize/dist/globalize/relative-time.js
+;// Source: src/frontend/public/bower_components/globalize/dist/globalize/relative-time.js
 /**
  * Globalize v1.0.0
  *

@@ -18,7 +18,7 @@ function dbInit(cb)
     mongoose.connection.on('open', function callback() {
         log.info("Connected to DB!");
 
-        cb(null, cb(mongoose.connection));
+        cb(null, mongoose.connection);
     });
 
     // When the connection is disconnected

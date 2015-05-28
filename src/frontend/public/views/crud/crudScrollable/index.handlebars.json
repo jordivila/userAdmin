@@ -1,7 +1,5 @@
 {
     "JsFiles": [
-        "../crudSamplesCustomerData.js",
-        "../crudSamplesCustomerDefaultOptions.js",
         "crudScrollableSample.js"
     ]
 }

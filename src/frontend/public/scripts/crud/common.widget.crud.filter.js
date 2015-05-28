@@ -1,106 +1,117 @@
-﻿jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
-{
-    options: {
-        Page: 0,
-        PageSize: 10,
-        SortBy: "",
-        SortAscending: false,
-        filterButtonsInit: function (self, defaultButtons) {
-            return defaultButtons;
-        },
-        gridFilterVisibleAlways: false,
+﻿define([
+    "jquery",
+    "jqueryui",
+    "/public/scripts/crud/common.widget.crud.base.js",
+    "/public/scripts/Template.Widget.Model.js"
+],
+       function ($, jqUI) {
 
-        texts: {
-            buttonCancelText: "Cancel",
-            buttonSearchText: "Search",
-        }
-    },
-    _create: function () {
+           jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
+           {
+               options: {
+                   Page: 0,
+                   PageSize: 10,
+                   SortBy: "",
+                   SortAscending: false,
+                   filterButtonsInit: function (self, defaultButtons) {
+                       return defaultButtons;
+                   },
+                   gridFilterVisibleAlways: false,
 
-        this._super();
+                   texts: {
+                       buttonCancelText: "Cancel",
+                       buttonSearchText: "Search",
+                   }
+               },
+               _create: function () {
 
-        jQuery(this.element).widgetModel({
-            modelItems: this.options.Model
-        });
+                   this._super();
 
-        jQuery(this.element)
-            .addClass('ui-crudFilter ui-helper-hidden')
-                .children()
-                .wrapAll('<div class="ui-crudFilter-form " />')
-                .end()
-        .prepend('<div class="ui-crudFilter-buttons ui-ribbonButtons  ui-state-default"></div>');
+                   jQuery(this.element).widgetModel({
+                       modelItems: this.options.Model
+                   });
 
-        this._filterButtonsInit();
-    },
-    _init: function () {
+                   jQuery(this.element)
+                       .addClass('ui-crudFilter ui-helper-hidden')
+                           .children()
+                           .wrapAll('<div class="ui-crudFilter-form " />')
+                           .end()
+                   .prepend('<div class="ui-crudFilter-buttons ui-ribbonButtons  ui-state-default"></div>');
 
-        this._super();
+                   this._filterButtonsInit();
+               },
+               _init: function () {
 
-        this._done();
-    },
-    _done: function () {
-        this._trigger('done', null, null);
-    },
-    _filterButtonsInit: function () {
+                   this._super();
 
-        var self = this;
+                   this._done();
+               },
+               _done: function () {
+                   this._trigger('done', null, null);
+               },
+               _filterButtonsInit: function () {
 
-        var defaultButtonsArray = [];
+                   var self = this;
 
-        if (!self.options.gridFilterVisibleAlways) {
-            defaultButtonsArray.push(
-            {
-                id: "cancel",
-                text: self.options.texts.buttonCancelText,
-                cssClass: "ui-cancel-button ui-state-default",
-                icon: "ui-icon-circle-arrow-w",
-                click: function (self) {
-                    self._trigger('cancel', null, null);
-                }
-            });
-        }
+                   var defaultButtonsArray = [];
 
-        defaultButtonsArray.push(
-        {
-            id: "filter",
-            text: self.options.texts.buttonSearchText,
-            cssClass: "ui-search-button ui-state-default",
-            icon: "ui-icon-search",
-            click: function (self) {
-                var filter = self.val();
-                self._trigger('change', null, filter);
-            }
-        });
+                   if (!self.options.gridFilterVisibleAlways) {
+                       defaultButtonsArray.push(
+                       {
+                           id: "cancel",
+                           text: self.options.texts.buttonCancelText,
+                           cssClass: "ui-cancel-button ui-state-default",
+                           icon: "ui-icon-circle-arrow-w",
+                           click: function (self) {
+                               self._trigger('cancel', null, null);
+                           }
+                       });
+                   }
 
-        var defaultButtons = self.options.filterButtonsInit(this, defaultButtonsArray);
+                   defaultButtonsArray.push(
+                   {
+                       id: "filter",
+                       text: self.options.texts.buttonSearchText,
+                       cssClass: "ui-search-button ui-state-default",
+                       icon: "ui-icon-search",
+                       click: function (self) {
+                           var filter = self.val();
+                           self._trigger('change', null, filter);
+                       }
+                   });
 
-        var $buttonsBox = jQuery(this.element).find('div.ui-crudFilter-buttons:first');
+                   var defaultButtons = self.options.filterButtonsInit(this, defaultButtonsArray);
 
-        for (var i = 0; i < defaultButtons.length; i++) {
-            this._initButton(this, defaultButtons[i], $buttonsBox);
-        }
+                   var $buttonsBox = jQuery(this.element).find('div.ui-crudFilter-buttons:first');
 
-        jQuery($buttonsBox).append('<div class="ui-helper-clearfix"></div>');
-    },
-    destroy: function () {
+                   for (var i = 0; i < defaultButtons.length; i++) {
+                       this._initButton(this, defaultButtons[i], $buttonsBox);
+                   }
 
-        this._super();
+                   jQuery($buttonsBox).append('<div class="ui-helper-clearfix"></div>');
+               },
+               destroy: function () {
 
-        ///TODO: unbind select change events + button events
-    },
-    val: function () {
+                   this._super();
 
-        var self = this;
+                   ///TODO: unbind select change events + button events
+               },
+               val: function () {
 
-        var model = {
+                   var self = this;
 
-            Filter: jQuery(this.element).widgetModel('valAsObject'),
-            Page: 0,
-            PageSize: this.options.PageSize,
-            SortBy: this.options.SortBy,
-            SortAscending: this.options.SortAscending
-        };
+                   var model = {
 
-        return model;
-    }
-});
+                       Filter: jQuery(this.element).widgetModel('valAsObject'),
+                       Page: 0,
+                       PageSize: this.options.PageSize,
+                       SortBy: this.options.SortBy,
+                       SortAscending: this.options.SortAscending
+                   };
+
+                   return model;
+               }
+           });
+
+
+       });

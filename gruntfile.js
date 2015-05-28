@@ -3,7 +3,6 @@
     var gruntOptions = {
         pkg: grunt.file.readJSON('package.json'),
         cdnFolder: 'src/frontend/public/cdn',
-        cldrDataFolder:'src/frontend/public/cldr-data',
         env: {
             dev: {
                 NODE_ENV: 'dev'
@@ -48,6 +47,7 @@
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui.css'
             },
+
             ui_js: {
                 options: {
                     separator: ';',
@@ -59,23 +59,22 @@
                     },
                 },
                 src: [
-                    "bower_components/jquery/jquery.min.js",
+                    "src/frontend/public/bower_components/jquery/jquery.min.js",
                     //"bower_components/jquery-ui/ui/minified/jquery-ui.custom.min.js",
                     // jQuery UI components Begin 
-                    "bower_components/jquery-ui/ui/minified/jquery.ui.core.min.js",
-                    "bower_components/jquery-ui/ui/minified/jquery.ui.widget.min.js",
-                    "bower_components/jquery-ui/ui/minified/jquery.ui.datepicker.min.js",
-                    "bower_components/jquery-ui/ui/minified/jquery.ui.button.min.js",
-                    "bower_components/jquery-ui/ui/minified/jquery.ui.effect.min.js",
-                    "bower_components/jquery-ui/ui/minified/jquery.ui.effect-drop.min.js",
-                    "bower_components/jquery-ui/ui/minified/jquery.ui.effect-slide.min.js",
+                    "src/frontend/public/bower_components/jquery-ui/ui/minified/jquery.ui.core.min.js",
+                    "src/frontend/public/bower_components/jquery-ui/ui/minified/jquery.ui.widget.min.js",
+                    "src/frontend/public/bower_components/jquery-ui/ui/minified/jquery.ui.datepicker.min.js",
+                    "src/frontend/public/bower_components/jquery-ui/ui/minified/jquery.ui.button.min.js",
+                    "src/frontend/public/bower_components/jquery-ui/ui/minified/jquery.ui.effect.min.js",
+                    "src/frontend/public/bower_components/jquery-ui/ui/minified/jquery.ui.effect-drop.min.js",
+                    "src/frontend/public/bower_components/jquery-ui/ui/minified/jquery.ui.effect-slide.min.js",
 
                     // jQuery UI components End
                     //"bower_components/jquery-validation/jquery.validate.js",
-                    "bower_components/history.js/scripts/bundled/html4+html5/jquery.history.js",
-                    "bower_components/handlebars/handlebars.min.js",
+                    "src/frontend/public/bower_components/history.js/scripts/bundled/html4+html5/jquery.history.js",
+                    "src/frontend/public/bower_components/handlebars/handlebars.min.js",
 
-                    "src/frontend/public/scripts/libs/jQuery-globalize/lib/globalize.js",
                     // app 
                     "src/frontend/public/scripts/Template.ExtendPrototypes.js",
                     "src/frontend/public/scripts/Template.App.Init.js",
@@ -116,6 +115,72 @@
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_js.js'
             },
+            ui_app_js: {
+                options: {
+                    separator: ';',
+                    banner: function (/*define(["jquery", "jqueryui", "history", "handlebars"]*/) {
+
+                        return '\n ' +
+                                "'use strict'" +
+                                '\n ' +
+                                'define(["jquery", "jqueryui", "history", "handlebars"],' +
+                                'function (jQuery, jqUI, historyReq, Handlebars) { ' +
+                                    'var appVersion = "<%= grunt.file.readJSON("package.json").version %>";  ' +
+
+                                    'jQuery.noConflict();' + 
+
+                                    ''
+                        ;
+
+                    }(),
+                    process: function (src, filepath) {
+                        return '// Source: ' + filepath + '\n' +
+                          src.replace(/(^|\n)[ \t]*('use strict'|"use strict");?\s*/g, '$1');
+                    },
+                    footer: ' return VsixMvcAppResult; });',
+                },
+                src: [
+                    // app 
+                    "src/frontend/public/scripts/Template.ExtendPrototypes.js",
+                    "src/frontend/public/scripts/Template.App.Init.js",
+                    "src/frontend/public/scripts/Template.App.Ajax.Init.js",
+                    "src/frontend/public/scripts/Template.App.Widgets.Init.js",
+                    "src/frontend/public/scripts/Template.App.Resources.Init.js",
+                    "src/frontend/public/scripts/Template.Widget.Base.js",
+
+                    "src/frontend/public/scripts/Template.Widget.Model.js",
+                    "src/frontend/public/scripts/Template.Widget.ModelItem.js",
+                    "src/frontend/public/scripts/Template.Widget.ModelDate.js",
+                    "src/frontend/public/scripts/Template.Widget.ModelBool.js",
+
+                    "src/frontend/public/scripts/Template.Widget.UserActivity.js",
+
+                    "src/frontend/public/scripts/Template.Widget.Menu.base.js",
+                    "src/frontend/public/scripts/Template.Widget.Menu.tree.js",
+                    "src/frontend/public/scripts/Template.Widget.Menu.slides.js",
+                    "src/frontend/public/scripts/Template.Widget.Menu.nav.js",
+
+                    "src/frontend/public/scripts/Template.Widget.ItemPicker.js",
+
+
+
+                    //CRUD begin
+                    //"src/frontend/public/scripts/crud/common.widget.base.js",
+                    "src/frontend/public/scripts/crud/common.widget.fieldItem.js",
+                    "src/frontend/public/scripts/crud/common.widget.crud.base.js",
+                    "src/frontend/public/scripts/crud/common.widget.crud.js",
+                    "src/frontend/public/scripts/crud/common.widget.crud.filter.js",
+                    "src/frontend/public/scripts/crud/common.widget.crud.grid.js",
+                    "src/frontend/public/scripts/crud/common.widget.crud.form.js",
+                    "src/frontend/public/scripts/crud/common.widget.grid.pagination.js",
+                    //CRUD end
+                    //"src/frontend/public/scripts/Template.Widget.Themepicker.js",
+                    "src/frontend/public/scripts/url/urlHelper.js",
+                    "src/frontend/public/scripts/Template.Widget.Page.js",
+                ],
+                dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_app_js.js'
+            },
+
             ui_regional_es: {
                 options: {
                     separator: ";",
@@ -127,7 +192,7 @@
                     },
                 },
                 src: [
-                        "bower_components/jquery-ui/ui/i18n/jquery.ui.datepicker-es.js",
+                        "src/frontend/public/bower_components/jquery-ui/ui/i18n/jquery.ui.datepicker-es.js",
                         //"bower_components/jquery-validation/localization/messages_es.js",
                         "src/frontend/public/scripts/libs/jQuery-globalize/lib/cultures/globalize.culture.es.js",
                 ],
@@ -166,19 +231,19 @@
                     },
                 },
                 src: [
-                        "bower_components/cldrjs/dist/cldr.js",
-                        "bower_components/cldrjs/dist/cldr/event.js",
-                        "bower_components/cldrjs/dist/cldr/supplemental.js",
+                        "src/frontend/public/bower_components/cldrjs/dist/cldr.js",
+                        "src/frontend/public/bower_components/cldrjs/dist/cldr/event.js",
+                        "src/frontend/public/bower_components/cldrjs/dist/cldr/supplemental.js",
 
-                        "bower_components/globalize/dist/globalize.js",
-                        "bower_components/globalize/dist/globalize/message.js",
-                        "bower_components/globalize/dist/globalize/number.js",
-                        "bower_components/globalize/dist/globalize/plural.js",
+                        "src/frontend/public/bower_components/globalize/dist/globalize.js",
+                        "src/frontend/public/bower_components/globalize/dist/globalize/message.js",
+                        "src/frontend/public/bower_components/globalize/dist/globalize/number.js",
+                        "src/frontend/public/bower_components/globalize/dist/globalize/plural.js",
 
-                        "bower_components/globalize/dist/globalize/date.js",
-                        "bower_components/globalize/dist/globalize/currency.js",
+                        "src/frontend/public/bower_components/globalize/dist/globalize/date.js",
+                        "src/frontend/public/bower_components/globalize/dist/globalize/currency.js",
 
-                        "bower_components/globalize/dist/globalize/relative-time.js",
+                        "src/frontend/public/bower_components/globalize/dist/globalize/relative-time.js",
                 ],
                 dest: '<%= cdnFolder %>/<%= pkg.name %>.<%= grunt.file.readJSON("package.json").version %>.ui_globalize_base.js'
             },
@@ -194,7 +259,7 @@
                     '<%= concat.ui_regional_es.dest %>': ['<%= concat.ui_regional_es.dest %>'],
                     '<%= concat.ui_regional_en.dest %>': ['<%= concat.ui_regional_en.dest %>'],
                     '<%= concat.ui_globalize_base.dest %>': ['<%= concat.ui_globalize_base.dest %>'],
-                    
+
                 }
             }
         },
@@ -244,8 +309,14 @@
                     'src/**/*.js',
                     'src/test/qunit/**/*.js',
                     'src/test/mocha/**/*.js',
+
+                    '!src/frontend/public/scripts/modules/**/*',
+                    '!src/frontend/build/**/*.*',
+                    '!src/frontend/public-build/**/*.*',
+
                     '!src/frontend/public/scripts/libs/**/*.*',
                     '!src/frontend/public/cdn/**/*.*',
+                    '!src/frontend/public/bower_components/**/*',
                     '!src/test/qunit/libs/**/*.js',
             ],
             options: {

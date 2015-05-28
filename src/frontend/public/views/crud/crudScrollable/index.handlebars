@@ -1,5 +1,44 @@
 <div class="ui-customerCrud ui-helper-hidden"></div>
 <link href="../crudSamples.css" rel="stylesheet" />
 <style type="text/css">
-    .ui-crudGrid-body {height:10em;overflow:auto;}
+    .ui-crudGrid-body { height: 10em; overflow: auto; }
 </style>
+<script>
+    require([
+    "jquery",
+    "jqueryui",
+
+    "/public/scripts/crud/common.widget.fieldItem.js",
+    "/public/scripts/crud/common.widget.crud.base.js",
+    "/public/scripts/crud/common.widget.crud.js",
+    "/public/scripts/crud/common.widget.crud.filter.js",
+    "/public/scripts/crud/common.widget.crud.grid.js",
+    "/public/scripts/crud/common.widget.crud.form.js",
+    "/public/scripts/crud/common.widget.grid.pagination.js",
+
+    "/uicontrols/crud/crudSamplesCustomerData.js",
+    "/uicontrols/crud/crudSamplesCustomerDefaultOptions.js",
+    ],
+function ($, jqUI) {
+
+    jQuery(document).ready(function () {
+
+        var customerOptions = jQuery.extend({}, crudCustomerDefaultOptions(), {
+            gridFilterVisibleAlways: true,
+        });
+
+        jQuery('body')
+            .find('h1:first')
+                .html('Crud widget - Grid scrollable (javascript)')
+            .end()
+            .find('div.ui-customerCrud:first')
+                .crud(customerOptions)
+
+                .hide()
+                .removeClass('ui-helper-hidden')
+                .fadeIn()
+            .end();
+    });
+
+});
+</script>

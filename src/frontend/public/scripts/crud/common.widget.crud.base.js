@@ -1,40 +1,45 @@
-﻿jQuery.widget("ui.crudBase", jQuery.ui.widgetBase,
-{
-    options: {
+﻿define(["jquery", "jqueryui", "/public/scripts/Template.Widget.Base.js"],
+       function ($, jqUI) {
 
-    },
-    _create: function () {
+           jQuery.widget("ui.crudBase", jQuery.ui.widgetBase,
+           {
+               options: {
 
-        this._super();
-    },
-    _init: function () {
-        this._super();
-    },
-    destroy: function () {
+               },
+               _create: function () {
 
-        this._super();
-    },
-    _initButton: function (widgetInstance, theButtonOptions, buttonsBox) {
+                   this._super();
+               },
+               _init: function () {
+                   this._super();
+               },
+               destroy: function () {
 
-        var self = this;
+                   this._super();
+               },
+               _initButton: function (widgetInstance, theButtonOptions, buttonsBox) {
 
-        var theButton = jQuery('<button type="button" class="{0}">{1}</button>'
-                            .format(theButtonOptions.cssClass,
-                                    theButtonOptions.text));
+                   var self = this;
 
-        jQuery(buttonsBox).append(theButton);
+                   var theButton = jQuery('<button type="button" class="{0}">{1}</button>'
+                                       .format(theButtonOptions.cssClass,
+                                               theButtonOptions.text));
 
-        theButton
-            .button({
-                icons: {
-                    primary: theButtonOptions.icon
-                }
-            });
+                   jQuery(buttonsBox).append(theButton);
 
-        if (theButtonOptions.click) {
-            theButton.click(function () {
-                theButtonOptions.click(widgetInstance);
-            });
-        }
-    },
-});
+                   theButton
+                       .button({
+                           icons: {
+                               primary: theButtonOptions.icon
+                           }
+                       });
+
+                   if (theButtonOptions.click) {
+                       theButton.click(function () {
+                           theButtonOptions.click(widgetInstance);
+                       });
+                   }
+               },
+           });
+
+       });

@@ -4,7 +4,7 @@
 
     ],
     "JsFiles": [
-        "index.js"
+        "./index.js"
     ],
     "Controller": "languages.js"
 }

@@ -4,7 +4,6 @@
 
     ],
     "JsFiles": [
-        "/public/cdn/{{Package.name}}.{{Package.version}}.ui_globalize_base.js",
         "clientSideGlobalize.js"
     ]
 }

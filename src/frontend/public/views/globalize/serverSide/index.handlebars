@@ -6,10 +6,9 @@
     <p>Plural form of <span id="plural-number">{{ThePlural}}</span> is <span id="plural-form"></span></p>
     <p>Messages:</p>
     <ul>
-        <li><span id="message-0"></span></li>
-        <li><span id="message-1"></span></li>
-        <li><span id="message-2"></span></li>
-        <li><span id="message-3"></span></li>
+        {{#each TheMessages}}
+        <li><span>{{this}}</span></li>
+        {{/each}}
     </ul>
     <p>Something happened: <span id="relative-time">{{TheTimeAgo}}</span></p>
 </div>

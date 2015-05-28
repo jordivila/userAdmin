@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0" />
+    <title>{{Title}}</title>
+    <!--Common styles begin-->
+    <link id="jQueryUITheme" href="//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/{{Theme}}/jquery-ui.css" rel="Stylesheet" type="text/css" />
+    <link href="/public/cdn/{{Package.name}}.{{Package.version}}.ui.css" rel="Stylesheet" type="text/css" />
+    <!--Common styles end-->
+    <!--View specific styles begin-->
+    {{#each CssFiles}}
+    <link href="{{this}}" rel="Stylesheet" type="text/css" />
+    {{/each}}
+    <!--View specific styles end-->
+</head>
+<body class="ui-widget ui-widget-content ui-helper-hidden">
+
+    <div id="panelMenu" class="ui-mainMenu ui-state-default">
+        <div class="ui-mainMenuToggle">
+            <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
+            <div class="ui-mainMenuToggle-text">Menu</div>
+        </div>
+        <div class="ui-helper-clearfix"></div>
+        <div class="ui-menuBase"></div>
+        <div class="ui-helper-clearfix"></div>
+        <div class="ui-site-version">
+            <div>Copyright © 2012 Company Co.</div>
+            <div>All rights reserved</div>
+            <div>v. - {{Package.version}}</div>
+        </div>
+    </div>
+
+    <div class="ui-sitePage">
+
+        <div data-widget="userActivity">
+            <div class="ui-site-header ui-widget-content ui-corner-all ui-state-highlight">
+                <div class="ui-mainMenuToggle">
+                    <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
+                    <div class="ui-mainMenuToggle-text">Menu</div>
+                    <div class="ui-helper-clearfix"></div>
+                </div>
+                <div class="ui-site-nameBox">
+                    <a href="/">{{DomainName}}</a>
+                </div>
+            </div>
+            <div class="ui-helper-clearfix"></div>
+        </div>
+        <div class="ui-helper-clearfix"></div>
+
+        <div class="ui-site-title ui-widget-header">
+            <h1>{{Title}}</h1>
+        </div>
+
+        <!--Breadcrumb begin-->
+        {{#if this.Breadcrumb }}
+        <div class="ui-breadcrumb">
+            <div class="ui-widget-content ui-corner-all ui-state-default">
+                <ul>
+                    {{#each Breadcrumb}}
+                    <li>
+                        {{#if this.url }}
+                        <span class="ui-icon ui-icon-play"></span>
+                        {{/if}}
+                        <a href="{{this.url}}">{{this.title}}</a>
+                    </li>
+                    {{/each}}
+                </ul>
+                <div class="ui-helper-clearfix"></div>
+            </div>
+        </div>
+        <br />
+        {{/if}}
+        <!--Breadcrumb end-->
+
+        <div class="ui-siteContent">
+            {{#if body}}
+            {{{body}}}
+            {{/if}}
+        </div>
+    </div>
+
+
+
+
+
+    <script src="/public/bower_components/requirejs/require.js"></script>
+    <script>
+
+        var appVersion = "{{Package.version}}";
+
+        require({
+            //Set config for finding 'jqueryui'. The path is relative
+            //to the location of require-jquery.js.
+            urlArgs: "bust=" + appVersion,
+            paths: {
+                jquery: "/public/bower_components/jquery/jquery.min",
+                jqueryui: "/public/bower_components/jquery-ui/ui/jquery-ui.custom",
+                scripts: "/public/scripts",
+                bower: "/public/bower_components",
+                domReady: "/public/bower_components/requirejs-domready/domReady",
+                handlebars: "/public/bower_components/handlebars/handlebars.min",
+                history: '/public/bower_components/history.js/scripts/bundled/html4+html5/jquery.history',
+            },
+            shim: {
+                'jqueryui': {
+                    deps: ["jquery"]
+                },
+                'history': {
+                    deps: ["jquery"]
+                },
+            }
+        },
+
+
+        ['require',
+         'scripts/modules/baseJarl2',
+        ],
+                function (req, $) {
+
+                    //console.log(arguments);
+
+                    jQuery(document).ready(function () {
+
+                        console.log("jq ready");
+
+                        //req(['scripts/modules/basePage'], function () {
+
+                        //    VsixMvcAppResult.Widgets.PageOptions.selector = "body";
+                        //    VsixMvcAppResult.Widgets.PageOptions.cultureGlobalization = "{{Globalization.cultureGlobalization}}";
+                        //    VsixMvcAppResult.Widgets.PageOptions.cultureDatePicker = "{{Globalization.cultureDatePicker}}";
+                        //    VsixMvcAppResult.Widgets.PageOptions.onInit(function () {
+                        //        jQuery("body").removeClass("ui-helper-hidden");
+                        //    });
+                        //    VsixMvcAppResult.Widgets.PageOptions.Init();
+
+                        //});
+
+
+                    });
+
+                });
+    </script>
+    {{#if IsTest}}
+    <script src="http://localhost:35729/livereload.js"></script>
+    {{/if}}
+</body>
+</html>

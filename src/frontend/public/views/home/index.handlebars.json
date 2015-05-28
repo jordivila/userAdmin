@@ -4,6 +4,7 @@
 
     ],
     "JsFiles": [
+        "./main.js"
     ],
     "ReadmeMarkDown": ""
 }

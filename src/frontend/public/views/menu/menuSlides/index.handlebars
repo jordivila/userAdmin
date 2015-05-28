@@ -1,10 +1,50 @@
 <style type="text/css">
-    .ui-menuSlides-contentPage { padding: 1em;background-image:none !important; }
-    .ui-menuSlides-contentPage div.ui-menuSlidesSample { border-width: 0; }
-    .ui-menuSlides .ui-treeList-childs {padding:0; margin:0;}
+    .ui-menuSlides-contentPage {
+        padding: 1em;
+        background-image: none !important;
+    }
+
+    .ui-menuSlides-contentPage div.ui-menuSlidesSample {
+        border-width: 0;
+    }
+
+    .ui-menuSlides .ui-treeList-childs {
+        padding: 0;
+        margin: 0;
+    }
 </style>
 
 <div class="ui-menuSlides-contentPage ui-state-default">
     <h3>Menu slides mode</h3>
     <div class="ui-menuSlidesSample ui-helper-hidden"></div>
 </div>
+
+
+<script>
+
+    require(["jquery", "jqueryui", "/public/scripts/Template.App.Ajax.Init.js", "/public/scripts/Template.Widget.Menu.slides.js"], function () {
+
+        VsixMvcAppResult.Ajax.UserMenu(
+            function (data, textStatus, jqXHR) {
+
+                jQuery('div.ui-menuSlidesSample:first')
+                    .menuSlides({
+                        dataBound: function (e) {
+                            jQuery(this).hide().removeClass('ui-helper-hidden').show('blind');
+                        },
+                        selected: function (e, liData) {
+                            console.log(liData);
+                        }
+                    })
+                    .menuSlides('bind', data);
+            },
+            function (jqXHR, textStatus, errorThrown) {
+
+            },
+            function (jqXHR, textStatus, errorThrown) {
+
+            });
+
+    });
+
+</script>

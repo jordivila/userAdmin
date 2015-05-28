@@ -21,6 +21,10 @@
     "jquery-validation": "1.11.0",
     "handlebars": "3.0.0",
     "cldr-data": "27.0.0",
-    "globalize": "1.0.0"
+    "globalize": "1.0.0",
+    "requirejs": "2.1.17",
+    "requirejs-domready": "2.0.1",
+    "requirejs-plugins": "~1.0.3",
+    "requirejs-text": "~2.0.14"
   }
 }

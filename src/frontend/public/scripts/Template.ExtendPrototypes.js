@@ -1,4 +1,4 @@
-﻿/// <reference path="VsixMvcAppResult.A.Intellisense.js" />
+﻿
 if (!window.console) {
     console = {
         log: function (msg) {
@@ -50,7 +50,3 @@ String.prototype.toBoolean = function () {
 function parseBoolean(value) {
     return value.toBoolean();
 }
-
-
-
-

@@ -1,14 +1,5 @@
 {
     "JsFiles": [
-        "../crudSamplesCustomerData.js",
-        "../crudSamplesCustomerDefaultOptions.js",
-        "crudProductExtended.AjaxFake.js",
-        "crudProductExtended.FilterModel.js",
-        "crudProductExtended.FormModel.js",
-        "crudProductExtended.GridModel.js",
-        "crudProductExtended.Widget.js",
-
-        "crudPage.js",
         "crudFormExtendedSample.js"
     ]
 }
