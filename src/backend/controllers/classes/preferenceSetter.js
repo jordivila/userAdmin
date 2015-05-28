@@ -41,7 +41,7 @@
 
     PreferenceSetter.prototype.update = function (req, res, next) {
 
-        this.setCookie(res, this.cookieName, req.body.newValue);
+        this.setCookieClientAccess(res, this.cookieName, req.body.newValue);
 
         res.json(new DataResultModel(true, '', {}));
 
@@ -53,7 +53,7 @@
 
         }
         else {
-            this.setCookie(res, this.cookieName, this.cookieValueGet(req));
+            this.setCookieClientAccess(res, this.cookieName, this.cookieValueGet(req));
         }
 
     };

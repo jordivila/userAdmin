@@ -1,8 +1,8 @@
-﻿//define(["jquery", "scripts/Template.App.Init"],
-//       function ($) {
+﻿define(["/public/scripts/Template.App.Init.js"],
+       function (VsixMvcAppResult) {
 
            VsixMvcAppResult.Widgets = {};
 
+           return VsixMvcAppResult;
 
-       //    return VsixMvcAppResult;
-       //});
+       });

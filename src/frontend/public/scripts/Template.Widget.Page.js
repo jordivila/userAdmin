@@ -1,34 +1,9 @@
-define(["jquery", "jqueryui", "/public/scripts/Template.Widget.Menu.nav.js", "/public/scripts/Template.App.Widgets.Init.js"],
-       function ($, jqUI, Handlebars) {
-
-
-           /*******************************************************************************
-                                           HELPER PUBLIC METHODS
-           ********************************************************************************/
-
-           VsixMvcAppResult.Widgets.PageOptions = {
-               selector: null,
-               cultureGlobalization: null,
-               cultureDatePicker: null,
-               _initCallbacks: [],
-               onInit: function (callBack) {
-                   this._initCallbacks.push(callBack);
-               },
-               Init: function () {
-                   var self = this;
-                   jQuery(this.selector).page({
-                       cultureGlobalization: this.cultureGlobalization,
-                       cultureDatePicker: this.cultureDatePicker,
-                       initComplete: function () {
-
-                           for (var i = 0; i < self._initCallbacks.length; i++) {
-                               self._initCallbacks[i]();
-                           }
-                       }
-                   });
-               }
-           };
-
+define([
+    "jquery",
+    "jqueryui",
+    "/public/scripts/Template.Widget.Menu.nav.js",
+    "/public/scripts/Template.App.Widgets.Init.js"],
+       function ($, jqUI, nav, VsixMvcAppResult) {
 
            /*******************************************************************************
                                            WIDGET DEFINITION
@@ -78,20 +53,36 @@ define(["jquery", "jqueryui", "/public/scripts/Template.Widget.Menu.nav.js", "/p
                    //jQuery('div.sample').append('<span>' + Globalize.format(45678, "n0") + '</span><br/>');
                    jQuery.datepicker.setDefaults(jQuery.datepicker.regional[this.options.cultureDatePicker]);
                },
-               //initValidate: function() {
-
-               //    jQuery.validator.setDefaults({
-               //        debug: false,
-               //        errorClass: "ui-state-error"
-               //    });
-
-               //    jQuery.validator.methods.number = function (value, element) {
-               //        if (Globalize.parseFloat(value)) {
-               //            return true;
-               //        }
-               //        return false;
-               //    };
-               //},
            });
+
+
+           /*******************************************************************************
+                                           HELPER PUBLIC METHODS
+           ********************************************************************************/
+
+           VsixMvcAppResult.Widgets.PageOptions = {
+               selector: null,
+               cultureGlobalization: null,
+               cultureDatePicker: null,
+               _initCallbacks: [],
+               onInit: function (callBack) {
+                   this._initCallbacks.push(callBack);
+               },
+               Init: function () {
+                   var self = this;
+                   jQuery(this.selector).page({
+                       cultureGlobalization: this.cultureGlobalization,
+                       cultureDatePicker: this.cultureDatePicker,
+                       initComplete: function () {
+
+                           for (var i = 0; i < self._initCallbacks.length; i++) {
+                               self._initCallbacks[i]();
+                           }
+                       }
+                   });
+               }
+           };
+
+           return VsixMvcAppResult;
 
        });

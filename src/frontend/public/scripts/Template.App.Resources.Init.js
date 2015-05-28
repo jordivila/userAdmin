@@ -1,5 +1,5 @@
-﻿//define(["jquery", "scripts/Template.App.Init"],
-//       function ($) {
+﻿define(["/public/scripts/Template.App.Init.js"],
+       function (VsixMvcAppResult) {
 
            VsixMvcAppResult.Resources = {
                accept: "Aceptar",
@@ -22,5 +22,5 @@
            };
 
 
-       //    return VsixMvcAppResult;
-       //});
+           return VsixMvcAppResult;
+       });

@@ -1,5 +1,11 @@
-define(["jquery", "jqueryui", "handlebars", "history", "/public/scripts/Template.Widget.Menu.slides.js"],
-       function ($, jqUI, Handlebars) {
+define([
+    "jquery",
+    "jqueryui",
+    "handlebars",
+    "history",
+    "/public/scripts/Template.App.Ajax.Init.js",
+    "/public/scripts/Template.Widget.Menu.slides.js"],
+       function ($, jqUI, Handlebars, hist, VsixMvcAppResult) {
 
 
            jQuery.widget("ui.menuNav", jQuery.ui.widgetBase, {

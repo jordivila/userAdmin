@@ -1,5 +1,5 @@
 define(["jquery", "/public/scripts/Template.App.Init.js"],
-       function ($) {
+       function ($, VsixMvcAppResult) {
 
 
            jQuery(document).ready(function () {
@@ -46,5 +46,5 @@ define(["jquery", "/public/scripts/Template.App.Init.js"],
                }, onOK, onKO, onComplete);
            };
 
-  return VsixMvcAppResult;
-  });
+           return VsixMvcAppResult;
+       });

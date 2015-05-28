@@ -1,6 +1,6 @@
 
  'use strict'
- define(["jquery", "jqueryui", "history", "handlebars"],function (jQuery, jqUI, historyReq, Handlebars) { var appVersion = "0.0.6673";  jQuery.noConflict();// Source: src/frontend/public/scripts/Template.ExtendPrototypes.js
+ define(["jquery", "jqueryui", "history", "handlebars"],function (jQuery, jqUI, historyReq, Handlebars) { var appVersion = "0.0.6690";  jQuery.noConflict();// Source: src/frontend/public/scripts/Template.ExtendPrototypes.js
 
 if (!window.console) {
     console = {
@@ -54,18 +54,35 @@ function parseBoolean(value) {
     return value.toBoolean();
 }
 ;// Source: src/frontend/public/scripts/Template.App.Init.js
-//define(["jquery", "scripts/Template.App.Init"],
-//       function ($) {
+define([],
+       function () {
 
 
            var VsixMvcAppResult = {};
 
-       //    return VsixMvcAppResult;
-       //});
+           //    return VsixMvcAppResult;
+           //});
 
-;// Source: src/frontend/public/scripts/Template.App.Ajax.Init.js
+           VsixMvcAppResult.Utils = {
+
+               getCookie: function (cname) {
+                   var name = cname + "=";
+                   var ca = document.cookie.split(';');
+                   for (var i = 0; i < ca.length; i++) {
+                       var c = ca[i];
+                       while (c.charAt(0) == ' ') c = c.substring(1);
+                       if (c.indexOf(name) === 0) return c.substring(name.length, c.length);
+                   }
+                   return "";
+               }
+
+           };
+
+           return VsixMvcAppResult;
+
+       });;// Source: src/frontend/public/scripts/Template.App.Ajax.Init.js
 define(["jquery", "/public/scripts/Template.App.Init.js"],
-       function ($) {
+       function ($, VsixMvcAppResult) {
 
 
            jQuery(document).ready(function () {
@@ -112,18 +129,18 @@ define(["jquery", "/public/scripts/Template.App.Init.js"],
                }, onOK, onKO, onComplete);
            };
 
-  return VsixMvcAppResult;
-  });;// Source: src/frontend/public/scripts/Template.App.Widgets.Init.js
-//define(["jquery", "scripts/Template.App.Init"],
-//       function ($) {
+           return VsixMvcAppResult;
+       });;// Source: src/frontend/public/scripts/Template.App.Widgets.Init.js
+define(["/public/scripts/Template.App.Init.js"],
+       function (VsixMvcAppResult) {
 
            VsixMvcAppResult.Widgets = {};
 
+           return VsixMvcAppResult;
 
-       //    return VsixMvcAppResult;
-       //});;// Source: src/frontend/public/scripts/Template.App.Resources.Init.js
-//define(["jquery", "scripts/Template.App.Init"],
-//       function ($) {
+       });;// Source: src/frontend/public/scripts/Template.App.Resources.Init.js
+define(["/public/scripts/Template.App.Init.js"],
+       function (VsixMvcAppResult) {
 
            VsixMvcAppResult.Resources = {
                accept: "Aceptar",
@@ -146,8 +163,9 @@ define(["jquery", "/public/scripts/Template.App.Init.js"],
            };
 
 
-       //    return VsixMvcAppResult;
-       //});;// Source: src/frontend/public/scripts/Template.Widget.Base.js
+           return VsixMvcAppResult;
+       });
+;// Source: src/frontend/public/scripts/Template.Widget.Base.js
 
 var progressBoxSelector = "#progressFeedBack";
 
@@ -1639,8 +1657,14 @@ define(["jquery", "jqueryui", "/public/scripts/Template.Widget.Menu.base.js"],
 
 
        });;// Source: src/frontend/public/scripts/Template.Widget.Menu.nav.js
-define(["jquery", "jqueryui", "handlebars", "history", "/public/scripts/Template.Widget.Menu.slides.js"],
-       function ($, jqUI, Handlebars) {
+define([
+    "jquery",
+    "jqueryui",
+    "handlebars",
+    "history",
+    "/public/scripts/Template.App.Ajax.Init.js",
+    "/public/scripts/Template.Widget.Menu.slides.js"],
+       function ($, jqUI, Handlebars, hist, VsixMvcAppResult) {
 
 
            jQuery.widget("ui.menuNav", jQuery.ui.widgetBase, {
@@ -3302,37 +3326,12 @@ UrlHelper.prototype.paramSet = function (key, value) {
 
 
 ;// Source: src/frontend/public/scripts/Template.Widget.Page.js
-define(["jquery", "jqueryui", "/public/scripts/Template.Widget.Menu.nav.js", "/public/scripts/Template.App.Widgets.Init.js"],
-       function ($, jqUI, Handlebars) {
-
-
-           /*******************************************************************************
-                                           HELPER PUBLIC METHODS
-           ********************************************************************************/
-
-           VsixMvcAppResult.Widgets.PageOptions = {
-               selector: null,
-               cultureGlobalization: null,
-               cultureDatePicker: null,
-               _initCallbacks: [],
-               onInit: function (callBack) {
-                   this._initCallbacks.push(callBack);
-               },
-               Init: function () {
-                   var self = this;
-                   jQuery(this.selector).page({
-                       cultureGlobalization: this.cultureGlobalization,
-                       cultureDatePicker: this.cultureDatePicker,
-                       initComplete: function () {
-
-                           for (var i = 0; i < self._initCallbacks.length; i++) {
-                               self._initCallbacks[i]();
-                           }
-                       }
-                   });
-               }
-           };
-
+define([
+    "jquery",
+    "jqueryui",
+    "/public/scripts/Template.Widget.Menu.nav.js",
+    "/public/scripts/Template.App.Widgets.Init.js"],
+       function ($, jqUI, nav, VsixMvcAppResult) {
 
            /*******************************************************************************
                                            WIDGET DEFINITION
@@ -3382,20 +3381,36 @@ define(["jquery", "jqueryui", "/public/scripts/Template.Widget.Menu.nav.js", "/p
                    //jQuery('div.sample').append('<span>' + Globalize.format(45678, "n0") + '</span><br/>');
                    jQuery.datepicker.setDefaults(jQuery.datepicker.regional[this.options.cultureDatePicker]);
                },
-               //initValidate: function() {
-
-               //    jQuery.validator.setDefaults({
-               //        debug: false,
-               //        errorClass: "ui-state-error"
-               //    });
-
-               //    jQuery.validator.methods.number = function (value, element) {
-               //        if (Globalize.parseFloat(value)) {
-               //            return true;
-               //        }
-               //        return false;
-               //    };
-               //},
            });
+
+
+           /*******************************************************************************
+                                           HELPER PUBLIC METHODS
+           ********************************************************************************/
+
+           VsixMvcAppResult.Widgets.PageOptions = {
+               selector: null,
+               cultureGlobalization: null,
+               cultureDatePicker: null,
+               _initCallbacks: [],
+               onInit: function (callBack) {
+                   this._initCallbacks.push(callBack);
+               },
+               Init: function () {
+                   var self = this;
+                   jQuery(this.selector).page({
+                       cultureGlobalization: this.cultureGlobalization,
+                       cultureDatePicker: this.cultureDatePicker,
+                       initComplete: function () {
+
+                           for (var i = 0; i < self._initCallbacks.length; i++) {
+                               self._initCallbacks[i]();
+                           }
+                       }
+                   });
+               }
+           };
+
+           return VsixMvcAppResult;
 
        }); return VsixMvcAppResult; });

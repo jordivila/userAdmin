@@ -25,14 +25,10 @@
             urlArgs: "bust=" + appVersion,
             paths: {
                 jquery: "/public/bower_components/jquery/jquery.min",
-                jqueryui: "/public/bower_components/jquery-ui/ui/jquery-ui.custom",
-                //scripts: "/public/scripts",
-                bower: "/public/bower_components",
+                jqueryui: "/public/bower_components/jquery-ui/ui/minified/jquery-ui.custom.min",
                 domReady: "/public/bower_components/requirejs-domready/domReady",
                 handlebars: "/public/bower_components/handlebars/handlebars.min",
                 history: '/public/bower_components/history.js/scripts/bundled/html5/jquery.history',
-
-                uadmn: '/public/cdn/{{Package.name}}.{{Package.version}}.ui_app_js'
             },
             shim: {
                 'jqueryui': {
@@ -68,7 +64,7 @@
 
 
             ],
-        function (req, $, domReady) {
+        function (req, $, domReady, jqUI, hist, handl, url, a,b,c,d,e,f,g,h,i,VsixMvcAppResult) {
 
             domReady(function () {
                 //This function is called once the DOM is ready.

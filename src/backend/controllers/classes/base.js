@@ -45,8 +45,16 @@
         req.viewModel = m;
 
     };
+
     Base.prototype.setCookie = function (res, name, value) {
         res.cookie(name, value, { expires: new Date(Date.now() + 900000), httpOnly: true });
     };
+
+    Base.prototype.setCookieClientAccess = function (res, name, value) {
+        // WARNING !! httpOnly->false
+        res.cookie(name, value, { expires: new Date(Date.now() + 900000), httpOnly: false });
+    };
+
+
 
 })(module);
