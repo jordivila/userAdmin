@@ -17,7 +17,7 @@
         var fancyerror = function(message, url, linenumber) {
             var errorbox = document.createElement('div');
             errorbox.className = 'fancyerror';
-            errorbox.innerHTML = 'JS: <span class="errmsg"' +
+            errorbox.innerHTML = 'JS: <span class="ui-state-error"' +
                 message.replace('<', '&lt;').replace('>', '&gt;') +
                 '</span><br>line number: ' + linenumber +
                 '<br>located: ' + url;
