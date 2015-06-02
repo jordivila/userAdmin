@@ -14,21 +14,10 @@
     <!--View specific styles end-->
 
     <script>
-        var fancyerror = function(message, url, linenumber) {
-            var errorbox = document.createElement('div');
-            errorbox.className = 'fancyerror';
-            errorbox.innerHTML = 'JS: <span class="ui-state-error"' +
-                message.replace('<', '&lt;').replace('>', '&gt;') +
-                '</span><br>line number: ' + linenumber +
-                '<br>located: ' + url;
-            document.body.appendChild(errorbox);
-            return false;
-        }
-
         var sendErrorToServer = function(message, url, linenumber) {
             if (window.XMLHttpRequest) {
                 var xhr = new XMLHttpRequest();
-                var scripturl = 'http://yourdomain.example.com/log';
+                var scripturl = '/api/log/clienterror';
                 var log = linenumber + message + url;
                 xhr.open('POST', scripturl);
                 xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
@@ -39,11 +28,10 @@
 
         window.onerror = function(message, url, linenumber) {
 
-            //var send = sendErrorToServer(message, url, linenumber);
-            var fancy = fancyerror(message, url, linenumber);
+            var send = sendErrorToServer(message, url, linenumber);
 
-            // return true == supress errors
-            // returning false triggers the execution of the built-in error handler
+            // return true  == supress errors
+            // return false == execution of the built-in error handler
             return false;
         }
     </script>

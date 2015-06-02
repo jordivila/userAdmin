@@ -22,29 +22,31 @@
 
 <script>
 
-    require(["jquery", "jqueryui", "/public/scripts/Template.App.Ajax.Init.js", "/public/scripts/Template.Widget.Menu.slides.js"], function () {
+    require(["jquery", "jqueryui", "/public/scripts/Template.App.Ajax.Init.js", "/public/scripts/Template.Widget.Menu.slides.js"],
 
-        VsixMvcAppResult.Ajax.UserMenu(
-            function (data, textStatus, jqXHR) {
+        function (jq, jqUI, VsixMvcAppResult) {
 
-                jQuery('div.ui-menuSlidesSample:first')
-                    .menuSlides({
-                        dataBound: function (e) {
-                            jQuery(this).hide().removeClass('ui-helper-hidden').show('blind');
-                        },
-                        selected: function (e, liData) {
-                            console.log(liData);
-                        }
-                    })
-                    .menuSlides('bind', data);
-            },
-            function (jqXHR, textStatus, errorThrown) {
+            VsixMvcAppResult.Ajax.UserMenu(
+                function (data, textStatus, jqXHR) {
 
-            },
-            function (jqXHR, textStatus, errorThrown) {
+                    jQuery('div.ui-menuSlidesSample:first')
+                        .menuSlides({
+                            dataBound: function (e) {
+                                jQuery(this).hide().removeClass('ui-helper-hidden').show('blind');
+                            },
+                            selected: function (e, liData) {
+                                console.log(liData);
+                            }
+                        })
+                        .menuSlides('bind', data);
+                },
+                function (jqXHR, textStatus, errorThrown) {
 
-            });
+                },
+                function (jqXHR, textStatus, errorThrown) {
 
-    });
+                });
+
+        });
 
 </script>

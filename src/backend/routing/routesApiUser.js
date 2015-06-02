@@ -1,8 +1,13 @@
 (function (module) {
 
+
     "use strict";
 
     var usersController = require('../controllers/users');
+    var bodyParser = require('body-parser');
+
+    var bodyParserText = bodyParser.text();
+
 
     module.exports.setRoutes = function (app, log, authController) {
 
@@ -166,6 +171,13 @@
                 res.end();
             }
         ]);
+
+
+        app.post('/api/log/clienterror', bodyParserText, function (req, res, next) {
+
+            console.error(req.body);
+
+        });
 
 
     };

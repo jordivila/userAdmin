@@ -1,7 +1,13 @@
 
 <style type="text/css">
-    .ui-menuTree-contentPage { padding: 1em;background-image:none !important; }
-    .ui-menuTree-contentPage ul.ui-menuTreeSample { border-width: 0; }
+    .ui-menuTree-contentPage {
+        padding: 1em;
+        background-image: none !important;
+    }
+
+    .ui-menuTree-contentPage ul.ui-menuTreeSample {
+        border-width: 0;
+    }
 </style>
 
 <div class="ui-menuTree-contentPage ui-state-default">
@@ -11,28 +17,30 @@
 
 
 <script>
-    require(["jquery", "jqueryui", "/public/scripts/Template.App.Ajax.Init.js", "/public/scripts/Template.Widget.Menu.tree.js"], function () {
+    require(["jquery", "jqueryui", "/public/scripts/Template.App.Ajax.Init.js", "/public/scripts/Template.Widget.Menu.tree.js"],
 
-        VsixMvcAppResult.Ajax.UserMenu(
-            function (data, textStatus, jqXHR) {
+        function (jq, jqUI, VsixMvcAppResult) {
 
-                jQuery('ul.ui-menuTreeSample:first')
-                    .menuTree({
-                        dataBound: function (e) {
-                            jQuery(this).hide().removeClass('ui-helper-hidden').show('blind');
-                        },
-                        selected: function (e, liData) {
-                            console.log(liData);
-                        }
-                    })
-                    .menuTree('bind', data);
-            },
-            function (jqXHR, textStatus, errorThrown) {
+            VsixMvcAppResult.Ajax.UserMenu(
+                function (data, textStatus, jqXHR) {
 
-            },
-            function (jqXHR, textStatus, errorThrown) {
+                    jQuery('ul.ui-menuTreeSample:first')
+                        .menuTree({
+                            dataBound: function (e) {
+                                jQuery(this).hide().removeClass('ui-helper-hidden').show('blind');
+                            },
+                            selected: function (e, liData) {
+                                console.log(liData);
+                            }
+                        })
+                        .menuTree('bind', data);
+                },
+                function (jqXHR, textStatus, errorThrown) {
 
-            });
+                },
+                function (jqXHR, textStatus, errorThrown) {
 
-    });
+                });
+
+        });
 </script>
