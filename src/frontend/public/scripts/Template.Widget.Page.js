@@ -2,8 +2,10 @@ define([
     "jquery",
     "jqueryui",
     "/public/scripts/Template.Widget.Menu.nav.js",
-    "/public/scripts/Template.App.Widgets.Init.js"],
-       function ($, jqUI, nav, VsixMvcAppResult) {
+    "/public/scripts/Template.App.Widgets.Init.js",
+    "/public/scripts/Template.App.Globalize.Init.js"
+],
+function ($, jqUI, nav, VsixMvcAppResult, VsixMvcAppResult2) {
 
            /*******************************************************************************
                                            WIDGET DEFINITION
@@ -17,12 +19,19 @@ define([
                },
                _init: function () {
 
+                   var self = this;
+
                    this._super();
 
-                   //this.initAjaxProgress();
-                   this.initGlobalization();
-                   //this.initValidate();
-                   this.initMenuNav();
+
+                   VsixMvcAppResult.Globalizer.init(this.options.cultureGlobalization)
+                    .done(function () {
+                        
+                        self.initDatepicker();
+                        self.initMenuNav();
+
+                    });
+
                },
                _create: function () {
                    this._super();
@@ -38,20 +47,14 @@ define([
 
                    jQuery(this.element).find('div[data-widget="userActivity"]:first').menuNav({
                        complete: function () {
-                           //self.initJQueryzer();
                            self._trigger('initComplete', null, null);
                        }
                    });
                },
-               initGlobalization: function () {
-                   /* Globalization Initializaer */
+               initDatepicker: function () {
 
-                   //Globalize.culture(this.options.cultureGlobalization);
-
-                   //jQuery('div.sample').append('<span>' + Globalize.format(3899.888, "c") + '</span><br/>');
-                   //jQuery('div.sample').append('<span>' + Globalize.format(new Date(2011, 12, 25), "D") + '</span><br/>');
-                   //jQuery('div.sample').append('<span>' + Globalize.format(45678, "n0") + '</span><br/>');
                    jQuery.datepicker.setDefaults(jQuery.datepicker.regional[this.options.cultureDatePicker]);
+
                },
            });
 

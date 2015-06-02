@@ -31,7 +31,8 @@
                    },
 
                    texts: {
-                       emptyRowText: "No data found here"
+                       emptyRowText: "No data found here",
+                       gridBindingError:"Unhandled error binding data"
                    }
                },
                _create: function () {
@@ -88,10 +89,17 @@
 
                },
                bind: function (data) {
-                   var self = this;
-                   self._bindRows(data);
-                   self._bindPagination(data);
-                   self._trigger('dataBound', null, data);
+
+                   try {
+                       this._bindRows(data);
+                       this._bindPagination(data);
+                       this._trigger('dataBound', null, data);
+                   } catch (e) {
+
+                       console.error(e);
+                       this._trigger('errorDisplay', null, this.options.texts.gridBindingError);
+                   }
+                   
                },
                _gridTemplate: function () {
 

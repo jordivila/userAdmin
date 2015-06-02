@@ -23,21 +23,26 @@
 </div>
 
 <script>
-    require.config({
-        paths: {
-            // Globalize dependencies paths.
-            cldr: "/public/bower_components/cldrjs/dist/cldr",
-            // Unicode CLDR JSON data.
-            "cldr-data": "/public/bower_components/cldr-data",
-            // require.js plugin we'll use to fetch CLDR JSON content.
-            json: "/public/bower_components/requirejs-plugins/src/json",
-            // text is json's dependency.
-            text: "/public/bower_components/requirejs-text/text",
-            // Globalize.
-            globalize: "/public/bower_components/globalize/dist/globalize"
-            //
-        }
-    });
+
+
+    // Uncomment these lines for a standalone sample
+    // This config is actually setted at layout initialization
+
+    //require.config({
+    //    paths: {
+    //        // Globalize dependencies paths.
+    //        cldr: "/public/bower_components/cldrjs/dist/cldr",
+    //        // Unicode CLDR JSON data.
+    //        "cldr-data": "/public/bower_components/cldr-data",
+    //        // require.js plugin we'll use to fetch CLDR JSON content.
+    //        json: "/public/bower_components/requirejs-plugins/src/json",
+    //        // text is json's dependency.
+    //        text: "/public/bower_components/requirejs-text/text",
+    //        // Globalize.
+    //        globalize: "/public/bower_components/globalize/dist/globalize"
+    //        //
+    //    }
+    //});
 
 
     require([
@@ -87,18 +92,22 @@
                 weekData
             );
 
-            Globalize.loadMessages({
-                "en": {
-                    "like": [
-                      "{0, plural, offset:1",
-                      "     =0 {Be the first to like this}",
-                      "     =1 {You liked this}",
-                      "    one {You and someone else liked this}",
-                      "  other {You and # others liked this}",
-                      "}"
-                    ]
-                }
-            });
+
+            // Uncomment these lines for a standalone sample
+            // This messages are actually setted at layout initialization
+
+            //Globalize.loadMessages({
+            //    "en": {
+            //        "like": [
+            //          "{0, plural, offset:1",
+            //          "     =0 {Be the first to like this}",
+            //          "     =1 {You liked this}",
+            //          "    one {You and someone else liked this}",
+            //          "  other {You and # others liked this}",
+            //          "}"
+            //        ]
+            //    }
+            //});
 
             
 

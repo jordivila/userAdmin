@@ -1,5 +1,10 @@
-define(["jquery", "jqueryui", "/public/scripts/Template.Widget.Base.js"],
-       function ($, jqUI) {
+define([
+    "jquery",
+    "jqueryui",
+    "/public/scripts/Template.Widget.Base.js",
+    "/public/scripts/Template.App.Resources.Init.js"
+],
+       function ($, jqUI, wBase, VsixMvcAppResult) {
 
 
            jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,

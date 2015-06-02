@@ -1,6 +1,6 @@
 
  'use strict'
- define(["jquery", "jqueryui", "history", "handlebars"],function (jQuery, jqUI, historyReq, Handlebars) { var appVersion = "0.0.6690";  jQuery.noConflict();// Source: src/frontend/public/scripts/Template.ExtendPrototypes.js
+ define(["jquery", "jqueryui", "history", "handlebars"],function (jQuery, jqUI, historyReq, Handlebars) { var appVersion = "0.0.6716";  jQuery.noConflict();// Source: src/frontend/public/scripts/Template.ExtendPrototypes.js
 
 if (!window.console) {
     console = {
@@ -869,8 +869,13 @@ function ($, jqUI) {
 
 
 });;// Source: src/frontend/public/scripts/Template.Widget.ModelDate.js
-define(["jquery", "jqueryui", "/public/scripts/Template.Widget.Base.js"],
-       function ($, jqUI) {
+define([
+    "jquery",
+    "jqueryui",
+    "/public/scripts/Template.Widget.Base.js",
+    "/public/scripts/Template.App.Resources.Init.js"
+],
+       function ($, jqUI, wBase, VsixMvcAppResult) {
 
 
            jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
@@ -2714,7 +2719,8 @@ define(["jquery", "jqueryui", "/public/scripts/crud/common.widget.crud.base.js"]
                    },
 
                    texts: {
-                       emptyRowText: "No data found here"
+                       emptyRowText: "No data found here",
+                       gridBindingError:"Unhandled error binding data"
                    }
                },
                _create: function () {
@@ -2771,10 +2777,17 @@ define(["jquery", "jqueryui", "/public/scripts/crud/common.widget.crud.base.js"]
 
                },
                bind: function (data) {
-                   var self = this;
-                   self._bindRows(data);
-                   self._bindPagination(data);
-                   self._trigger('dataBound', null, data);
+
+                   try {
+                       this._bindRows(data);
+                       this._bindPagination(data);
+                       this._trigger('dataBound', null, data);
+                   } catch (e) {
+
+                       console.error(e);
+                       this._trigger('errorDisplay', null, this.options.texts.gridBindingError);
+                   }
+                   
                },
                _gridTemplate: function () {
 
@@ -3330,8 +3343,10 @@ define([
     "jquery",
     "jqueryui",
     "/public/scripts/Template.Widget.Menu.nav.js",
-    "/public/scripts/Template.App.Widgets.Init.js"],
-       function ($, jqUI, nav, VsixMvcAppResult) {
+    "/public/scripts/Template.App.Widgets.Init.js",
+    "/public/scripts/Template.App.Globalize.Init.js"
+],
+function ($, jqUI, nav, VsixMvcAppResult, VsixMvcAppResult2) {
 
            /*******************************************************************************
                                            WIDGET DEFINITION
@@ -3345,12 +3360,19 @@ define([
                },
                _init: function () {
 
+                   var self = this;
+
                    this._super();
 
-                   //this.initAjaxProgress();
-                   this.initGlobalization();
-                   //this.initValidate();
-                   this.initMenuNav();
+
+                   VsixMvcAppResult.Globalizer.init(this.options.cultureGlobalization)
+                    .done(function () {
+                        
+                        self.initDatepicker();
+                        self.initMenuNav();
+
+                    });
+
                },
                _create: function () {
                    this._super();
@@ -3366,20 +3388,14 @@ define([
 
                    jQuery(this.element).find('div[data-widget="userActivity"]:first').menuNav({
                        complete: function () {
-                           //self.initJQueryzer();
                            self._trigger('initComplete', null, null);
                        }
                    });
                },
-               initGlobalization: function () {
-                   /* Globalization Initializaer */
+               initDatepicker: function () {
 
-                   //Globalize.culture(this.options.cultureGlobalization);
-
-                   //jQuery('div.sample').append('<span>' + Globalize.format(3899.888, "c") + '</span><br/>');
-                   //jQuery('div.sample').append('<span>' + Globalize.format(new Date(2011, 12, 25), "D") + '</span><br/>');
-                   //jQuery('div.sample').append('<span>' + Globalize.format(45678, "n0") + '</span><br/>');
                    jQuery.datepicker.setDefaults(jQuery.datepicker.regional[this.options.cultureDatePicker]);
+
                },
            });
 
