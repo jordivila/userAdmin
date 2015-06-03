@@ -1,8 +1,8 @@
 ﻿define([
     "jquery",
     "jqueryui",
-    "/public/scripts/crud/common.widget.crud.base.js",
-    "/public/scripts/Template.Widget.Model.js"
+    "scripts/crud/common.widget.crud.base",
+    "scripts/Template.Widget.Model"
 ],
        function ($, jqUI) {
 

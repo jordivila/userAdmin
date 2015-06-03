@@ -1,4 +1,4 @@
-define(["jquery", "/public/scripts/Template.App.Init.js"],
+define(["jquery", "scripts/Template.App.Init"],
        function ($, VsixMvcAppResult) {
 
 

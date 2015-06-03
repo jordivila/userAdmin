@@ -1,7 +1,7 @@
 
 var progressBoxSelector = "#progressFeedBack";
 
-define(["jquery", "jqueryui"],
+define(["jquery", "jqueryui", "scripts/Template.ExtendPrototypes"],
        function ($, jqUI) {
 
            jQuery.widget("ui.widgetBase",

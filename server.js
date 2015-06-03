@@ -33,9 +33,14 @@
 
     var app = express();
 
-    app.use(cookieParser(config.get('encryptKeyForCookieParser')));
+    app.set('root', __dirname + '/src/frontend/public-build/');
+    app.set('views', app.get('root') + 'views/');
     app.set('port', config.get('port'));
-    app.use(favicon(__dirname + '/src/frontend/public/favicon.ico'));
+
+
+    app.use(cookieParser(config.get('encryptKeyForCookieParser')));
+    
+    app.use(favicon(app.get('root') + 'favicon.ico'));
     app.use(bodyParser.urlencoded({
         extended: true
     }));
@@ -44,10 +49,8 @@
     app.use(methodOverride('X-HTTP-Method-Override'));
     app.use(compression());
 
-    app.set('root', __dirname + '/src/frontend/public/');
-    app.set('views', __dirname + '/src/frontend/public/views/');
     app.engine('handlebars', exphbs({
-        layoutsDir: 'src/frontend/public/views/layouts/',
+        layoutsDir: app.get('views') + 'layouts/',
         defaultLayout: 'layoutRequire'
     }));
     app.set('view engine', 'handlebars');
@@ -74,21 +77,19 @@
         
 
         //begin -> set public static
-        console.log("//begin -> set public static");
-
-        app.use('/public/scripts', express.static(__dirname + '/src/frontend/public/scripts', {
+        app.use('/public/scripts', express.static(app.get('root') + 'scripts', {
             maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
         }));
-        app.use('/public/bower_components', express.static(__dirname + '/src/frontend/public/bower_components', {
+        app.use('/public/bower_components', express.static(app.get('root') + 'bower_components', {
             maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
         }));
-        app.use('/public/cdn', express.static(__dirname + '/src/frontend/public/cdn', {
+        app.use('/public/cdn', express.static(app.get('root') + 'cdn', {
             maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
         }));
-        app.use('/public/fonts', express.static(__dirname + '/src/frontend/public/fonts', {
+        app.use('/public/fonts', express.static(app.get('root') + 'fonts', {
             maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
         }));
-        app.use('/public/images', express.static(__dirname + '/src/frontend/public/images', {
+        app.use('/public/images', express.static(app.get('root') + 'images', {
             maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
         }));
         //end -> set public static content folders

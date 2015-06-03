@@ -1,6 +1,6 @@
-﻿require([
+﻿define([
     "jquery",
-    "/public/scripts/Template.App.Init.js",
+    "scripts/Template.App.Init",
 ], function ($, VsixMvcAppResult) {
 
     VsixMvcAppResult.Globalizer = {

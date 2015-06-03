@@ -3,8 +3,8 @@ define([
     "jqueryui",
     "handlebars",
     "history",
-    "/public/scripts/Template.App.Ajax.Init.js",
-    "/public/scripts/Template.Widget.Menu.slides.js"],
+    "scripts/Template.App.Ajax.Init",
+    "scripts/Template.Widget.Menu.slides"],
        function ($, jqUI, Handlebars, hist, VsixMvcAppResult) {
 
 

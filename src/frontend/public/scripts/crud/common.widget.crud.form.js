@@ -1,4 +1,4 @@
-﻿define(["jquery", "jqueryui", "/public/scripts/crud/common.widget.crud.base.js"],
+﻿define(["jquery", "jqueryui", "scripts/crud/common.widget.crud.base"],
        function ($, jqUI) {
 
            jQuery.widget("ui.crudForm", jQuery.ui.crudBase,

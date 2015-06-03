@@ -1,5 +1,6 @@
 src/frontend/public/cldr-data/
 src/frontend/public/bower_components
+src/frontend/public-build
 
 
 ## Ignore Visual Studio temporary files, build results, and

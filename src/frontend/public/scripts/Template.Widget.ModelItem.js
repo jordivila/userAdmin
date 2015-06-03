@@ -1,9 +1,9 @@
 define([
     "jquery",
     "jqueryui",
-    "/public/scripts/Template.Widget.Base.js",
-    "/public/scripts/Template.Widget.ModelBool.js",
-    "/public/scripts/Template.Widget.ModelDate.js",
+    "scripts/Template.Widget.Base",
+    "scripts/Template.Widget.ModelBool",
+    "scripts/Template.Widget.ModelDate",
 ],
 function ($, jqUI) {
 

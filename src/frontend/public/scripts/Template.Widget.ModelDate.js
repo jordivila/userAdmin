@@ -1,8 +1,8 @@
 define([
     "jquery",
     "jqueryui",
-    "/public/scripts/Template.Widget.Base.js",
-    "/public/scripts/Template.App.Resources.Init.js"
+    "scripts/Template.Widget.Base",
+    "scripts/Template.App.Resources.Init"
 ],
        function ($, jqUI, wBase, VsixMvcAppResult) {
 

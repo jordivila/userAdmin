@@ -1,4 +1,4 @@
-﻿define(["/public/scripts/Template.App.Init.js"],
+﻿define(["scripts/Template.App.Init"],
        function (VsixMvcAppResult) {
 
            VsixMvcAppResult.Resources = {

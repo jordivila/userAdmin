@@ -1,4 +1,4 @@
-﻿define(["jquery", "jqueryui", "/public/scripts/Template.Widget.Base.js"],
+﻿define(["jquery", "jqueryui", "scripts/Template.Widget.Base"],
        function ($, jqUI) {
 
            jQuery.widget("ui.crudBase", jQuery.ui.widgetBase,

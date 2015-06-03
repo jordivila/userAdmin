@@ -1,4 +1,4 @@
-define(["jquery", "jqueryui", "/public/scripts/Template.Widget.Base.js", "/public/scripts/Template.Widget.ModelItem.js"],
+define(["jquery", "jqueryui", "scripts/Template.Widget.Base", "scripts/Template.Widget.ModelItem"],
        function ($, jqUI) {
 
 

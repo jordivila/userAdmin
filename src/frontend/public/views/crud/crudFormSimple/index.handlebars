@@ -5,18 +5,21 @@
         "jquery",
         "jqueryui",
 
-        "/public/scripts/crud/common.widget.fieldItem.js",
-        "/public/scripts/crud/common.widget.crud.base.js",
-        "/public/scripts/crud/common.widget.crud.js",
-        "/public/scripts/crud/common.widget.crud.filter.js",
-        "/public/scripts/crud/common.widget.crud.grid.js",
-        "/public/scripts/crud/common.widget.crud.form.js",
-        "/public/scripts/crud/common.widget.grid.pagination.js",
+        "scripts/crud/common.widget.fieldItem",
+        "scripts/crud/common.widget.crud.base",
+        "scripts/crud/common.widget.crud",
+        "scripts/crud/common.widget.crud.filter",
+        "scripts/crud/common.widget.crud.grid",
+        "scripts/crud/common.widget.crud.form",
+        "scripts/crud/common.widget.grid.pagination",
 
         "/uicontrols/crud/crudSamplesCustomerData.js",
         "/uicontrols/crud/crudSamplesCustomerDefaultOptions.js",
     ],
 function ($, jqUI) {
+
+
+
 
     var customerOptions = jQuery.extend({}, crudCustomerDefaultFormOptions(), {
         gridFilterVisibleAlways: true,

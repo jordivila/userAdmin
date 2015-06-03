@@ -12,6 +12,7 @@
     <link href="{{this}}" rel="Stylesheet" type="text/css" />
     {{/each}}
     <!--View specific styles end-->
+
     <!--<script>
         var sendErrorToServer = function(message, url, linenumber) {
             if (window.XMLHttpRequest) {
@@ -23,7 +24,7 @@
                 xhr.send(log);
             }
             return true;
-        }
+        } 
 
         window.onerror = function(message, url, linenumber) {
 
@@ -39,18 +40,10 @@
 
         var appVersion = "{{Package.version}}";
 
-
-        var layoutModel = {
-            appVersion : "{{Package.version}}",
-            cultureGlobalization : "{{Globalization.cultureGlobalization}}",
-            cultureDatePicker : "{{Globalization.cultureDatePicker}}",
-
-        };
-
         requirejs.config({
             //Set config for finding 'jqueryui'. The path is relative
             //to the location of require-jquery.js.
-            urlArgs: "bust=" + layoutModel.appVersion,
+            urlArgs: "bust=" + appVersion,
             waitSeconds: 0,
             baseUrl: "/public",
             paths: {
@@ -91,36 +84,53 @@
 
         require(
         ['require',
-         'scripts/modules/main',
-        {{#each JsFiles}}
-            //'{{this}}',
-        {{/each}}
+            'jquery',
+            'domReady',
+            'jqueryui',
+            'history',
+            'handlebars',
+            'scripts/url/urlHelper',
+            'scripts/Template.ExtendPrototypes',
+            "scripts/Template.App.Init",
+            "scripts/Template.App.Ajax.Init",
+            "scripts/Template.App.Widgets.Init",
+            "scripts/Template.App.Resources.Init",
+            'scripts/Template.App.Globalize.Init',
+            'scripts/Template.Widget.Base',
+            'scripts/Template.Widget.Menu.base',
+            'scripts/Template.Widget.Menu.slides',
+            'scripts/Template.Widget.Menu.nav',
+            'scripts/Template.Widget.Page',
+
+
+
+            {{#each JsFiles}}
+                //'{{this}}',
+            {{/each}}
+
 
         ],
-        function (req, VsixMvcAppResult) {
+        function (req, $, domReady, jqUI, hist, handl, url, a,b,c,d,e,f,g,h,i,j,VsixMvcAppResult) {
 
-            jQuery(document).ready(function(){
-
-                //domReady(function () {
+            domReady(function () {
                 //This function is called once the DOM is ready.
                 //It will be safe to query the DOM and manipulate
                 //DOM nodes in this function.
                 VsixMvcAppResult.Widgets.PageOptions.selector = "body";
-                VsixMvcAppResult.Widgets.PageOptions.cultureGlobalization = 'en';
-                VsixMvcAppResult.Widgets.PageOptions.cultureDatePicker = 'en';
+                VsixMvcAppResult.Widgets.PageOptions.cultureGlobalization = "{{Globalization.cultureGlobalization}}";
+                VsixMvcAppResult.Widgets.PageOptions.cultureDatePicker = "{{Globalization.cultureDatePicker}}";
                 VsixMvcAppResult.Widgets.PageOptions.onInit(function () {
                     jQuery("body").removeClass("ui-helper-hidden");
 
 
                 });
                 VsixMvcAppResult.Widgets.PageOptions.Init();
-                //});
-            
             });
+
         });
     </script>
 </head>
-<body class="ui-widget ui-widget-content ui-helper-hidden">
+<body class="ui-widget ui-widget-content ui-helper-hidden" >
 
     <div id="panelMenu" class="ui-mainMenu ui-state-default">
         <div class="ui-mainMenuToggle">

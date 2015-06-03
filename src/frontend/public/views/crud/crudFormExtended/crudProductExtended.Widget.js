@@ -1,7 +1,7 @@
 require([
     "jquery",
     "jqueryui",
-    "/public/scripts/crud/common.widget.crud.js",
+    "scripts/crud/common.widget.crud",
 ],
 function ($, jqUI) {
 

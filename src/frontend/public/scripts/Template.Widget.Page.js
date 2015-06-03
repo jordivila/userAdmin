@@ -1,15 +1,11 @@
 define([
     "jquery",
     "jqueryui",
-    "/public/scripts/Template.Widget.Menu.nav.js",
-    "/public/scripts/Template.App.Widgets.Init.js",
-    "/public/scripts/Template.App.Globalize.Init.js"
+    "scripts/Template.Widget.Menu.nav",
+    "scripts/Template.App.Widgets.Init",
+    "scripts/Template.App.Globalize.Init"
 ],
-function ($, jqUI, nav, VsixMvcAppResult, VsixMvcAppResult2) {
-
-           /*******************************************************************************
-                                           WIDGET DEFINITION
-           ********************************************************************************/
+function ($, jqUI, nav, VsixMvcAppResult) {
 
            jQuery.widget("ui.page", jQuery.ui.widgetBase, {
                options: {
@@ -23,6 +19,7 @@ function ($, jqUI, nav, VsixMvcAppResult, VsixMvcAppResult2) {
 
                    this._super();
 
+                   
 
                    VsixMvcAppResult.Globalizer.init(this.options.cultureGlobalization)
                     .done(function () {
@@ -57,34 +54,6 @@ function ($, jqUI, nav, VsixMvcAppResult, VsixMvcAppResult2) {
 
                },
            });
-
-
-           /*******************************************************************************
-                                           HELPER PUBLIC METHODS
-           ********************************************************************************/
-
-           VsixMvcAppResult.Widgets.PageOptions = {
-               selector: null,
-               cultureGlobalization: null,
-               cultureDatePicker: null,
-               _initCallbacks: [],
-               onInit: function (callBack) {
-                   this._initCallbacks.push(callBack);
-               },
-               Init: function () {
-                   var self = this;
-                   jQuery(this.selector).page({
-                       cultureGlobalization: this.cultureGlobalization,
-                       cultureDatePicker: this.cultureDatePicker,
-                       initComplete: function () {
-
-                           for (var i = 0; i < self._initCallbacks.length; i++) {
-                               self._initCallbacks[i]();
-                           }
-                       }
-                   });
-               }
-           };
 
            return VsixMvcAppResult;
 

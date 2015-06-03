@@ -2,7 +2,8 @@
 require([
     "jquery",
     "jqueryui",
-    "/public/scripts/Template.Widget.Base.js",
+    "scripts/Template.Widget.Base",
+    "scripts/crud/common.widget.crud",
 ],
 function ($, jqUI) {
 

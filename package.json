@@ -1,6 +1,6 @@
 {
   "name": "userAdmin",
-  "version": "0.0.6720",
+  "version": "0.0.6778",
   "description": "userAdmin",
   "private": true,
   "author": {
@@ -21,13 +21,15 @@
     "grunt-contrib-jshint": "0.11.2",
     "grunt-contrib-nodeunit": "0.4.1",
     "grunt-contrib-qunit": "0.7.0",
+    "grunt-contrib-requirejs": "^0.4.4",
     "grunt-contrib-uglify": "0.9.1",
     "grunt-contrib-watch": "0.6.1",
     "grunt-env": "0.4.4",
     "grunt-express-server": "0.5.1",
     "grunt-mocha-test": "0.12.4",
     "grunt-open": "0.2.3",
-    "mocha": "2.2.4"
+    "mocha": "2.2.4",
+    "rjs-build-analysis": "0.0.3"
   },
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
@@ -48,6 +50,7 @@
     "node-uuid": "1.4.3",
     "passport": "0.2.1",
     "passport-http": "0.2.2",
+    "requirejs": "^2.1.18",
     "sendgrid": "1.7.0",
     "serve-favicon": "2.2.0",
     "validator": "3.39.0",
