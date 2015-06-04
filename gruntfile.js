@@ -2,7 +2,7 @@
 
     var gruntOptions = {
         pkg: grunt.file.readJSON('package.json'),
-        cdnFolder: 'src/frontend/public-build/cdn',
+        cdnFolder: 'src/frontend/public/cdn',
         env: {
             dev: {
                 NODE_ENV: 'dev'
@@ -411,9 +411,6 @@
 
 
                     fileExclusionRegExp: /^\.|bower_components\/jquery-ui\/themes|build|examples/, // https://regex101.com/#javascript -> 
-                    optimize: 'uglify',
-                    skipDirOptimize :false,
-                    keepBuildDir: false,
 
 
                     //Set config for finding 'jqueryui'. The path is relative
@@ -505,9 +502,9 @@
 
         if (isDeploy && (isDeploy === 'deploy')) {
 
-            //grunt.config('requirejs.compile.options.optimize', 'uglify');
-            //grunt.config('requirejs.compile.options.skipDirOptimize', true);
-            //grunt.config('requirejs.compile.options.keepBuildDir', false);
+            grunt.config('requirejs.compile.options.optimize', 'uglify');
+            grunt.config('requirejs.compile.options.skipDirOptimize', false);
+            grunt.config('requirejs.compile.options.keepBuildDir', false);
 
 
             //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
@@ -516,9 +513,9 @@
         }
         else {
 
-            //grunt.config('requirejs.compile.options.optimize', 'none');
-            //grunt.config('requirejs.compile.options.skipDirOptimize', true);
-            //grunt.config('requirejs.compile.options.keepBuildDir', true);
+            grunt.config('requirejs.compile.options.optimize', 'none');
+            grunt.config('requirejs.compile.options.skipDirOptimize', true);
+            grunt.config('requirejs.compile.options.keepBuildDir', true);
 
             //optimize: "none",//The biggest time drain is minification. If you are just doing builds as part of a dev workflow, then set optimize to "none".
             //skipDirOptimize: true, //If doing a whole project optimization, but only want to minify the build layers specified in modules options and not the rest of the JS files in the build output directory, you can set skipDirOptimize to true.
