@@ -1,6 +1,6 @@
 
  'use strict'
- define(["jquery", "jqueryui", "history", "handlebars"],function (jQuery, jqUI, historyReq, Handlebars) { var appVersion = "0.0.6785";  jQuery.noConflict();// Source: src/frontend/public/scripts/Template.ExtendPrototypes.js
+ define(["jquery", "jqueryui", "history", "handlebars"],function (jQuery, jqUI, historyReq, Handlebars) { var appVersion = "0.0.6786";  jQuery.noConflict();// Source: src/frontend/public/scripts/Template.ExtendPrototypes.js
 
 if (!window.console) {
     console = {
@@ -81,7 +81,7 @@ define([],
            return VsixMvcAppResult;
 
        });;// Source: src/frontend/public/scripts/Template.App.Ajax.Init.js
-define(["jquery", "scripts/Template.App.Init"],
+define(["jquery", "scripts/Template.App.Init", "scripts/url/UrlHelper"],
        function ($, VsixMvcAppResult) {
 
 
