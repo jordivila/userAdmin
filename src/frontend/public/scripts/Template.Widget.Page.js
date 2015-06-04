@@ -2,7 +2,6 @@ define([
     "jquery",
     "jqueryui",
     "scripts/Template.Widget.Menu.nav",
-    "scripts/Template.App.Widgets.Init",
     "scripts/Template.App.Globalize.Init"
 ],
 function ($, jqUI, nav, VsixMvcAppResult) {
@@ -18,8 +17,6 @@ function ($, jqUI, nav, VsixMvcAppResult) {
                    var self = this;
 
                    this._super();
-
-                   
 
                    VsixMvcAppResult.Globalizer.init(this.options.cultureGlobalization)
                     .done(function () {
@@ -55,6 +52,6 @@ function ($, jqUI, nav, VsixMvcAppResult) {
                },
            });
 
-           return VsixMvcAppResult;
+          
 
        });

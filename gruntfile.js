@@ -405,12 +405,12 @@
                     dir: "src/frontend/public-build",
                     modules: [
                         {
-                            name: "scripts/modules/main"
+                            name: "scripts/modules/main",
                         }
                     ],
-                    optimize: "none",//The biggest time drain is minification. If you are just doing builds as part of a dev workflow, then set optimize to "none".
-                    skipDirOptimize: true, //If doing a whole project optimization, but only want to minify the build layers specified in modules options and not the rest of the JS files in the build output directory, you can set skipDirOptimize to true.
-                    keepBuildDir: true, //Normally each run of a whole project optimization will delete the output build directory specified by dir for cleanliness. Some build options, like onBuildWrite, will modify the output directory in a way that is hazardous to do twice over the same files. However, if you are doing simple builds with no extra file transforms besides build layer minification, then you can set keepBuildDir to true to keep the build directory between runs. Then, only files that have changed between build runs will be copied.
+
+
+                    fileExclusionRegExp: /^\.|bower_components\/jquery-ui\/themes|build|examples/, // https://regex101.com/#javascript -> 
 
                     //Set config for finding 'jqueryui'. The path is relative
                     //to the location of require-jquery.js.
@@ -450,17 +450,18 @@
 
 
                     done: function (done, output) {
-                        var duplicates = require('rjs-build-analysis').duplicates(output);
 
-                        if (Object.keys(duplicates).length > 0) {
-                            grunt.log.subhead('Duplicates found in requirejs build:');
-                            for (var key in duplicates) {
-                                grunt.log.error(duplicates[key] + ": " + key);
-                            }
-                            return done(new Error('r.js built duplicate modules, please check the excludes option.'));
-                        } else {
-                            grunt.log.success("No duplicates found!");
-                        }
+                        //var duplicates = require('rjs-build-analysis').duplicates(output);
+
+                        //if (Object.keys(duplicates).length > 0) {
+                        //    grunt.log.subhead('Duplicates found in requirejs build:');
+                        //    for (var key in duplicates) {
+                        //        grunt.log.error(duplicates[key] + ": " + key);
+                        //    }
+                        //    return done(new Error('r.js built duplicate modules, please check the excludes option.'));
+                        //} else {
+                        //    grunt.log.success("No duplicates found!");
+                        //}
 
                         done();
                     }
@@ -499,11 +500,28 @@
         var tasks2Run = [];
 
         if (isDeploy && (isDeploy === 'deploy')) {
+
+            grunt.config('requirejs.compile.options.optimize', 'uglify');
+            grunt.config('requirejs.compile.options.skipDirOptimize', true);
+            grunt.config('requirejs.compile.options.keepBuildDir', false);
+
+
             //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
             //    I prefer not to use this min.css generated until bugs are fixed
             tasks2Run.push('env:prod', 'jshint:files', /*'bump',*/ 'clean', 'concat', 'requirejs', 'uglify' /*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/);
         }
         else {
+
+            grunt.config('requirejs.compile.options.optimize', 'none');
+            grunt.config('requirejs.compile.options.skipDirOptimize', true);
+            grunt.config('requirejs.compile.options.keepBuildDir', true);
+
+            //optimize: "none",//The biggest time drain is minification. If you are just doing builds as part of a dev workflow, then set optimize to "none".
+            //skipDirOptimize: true, //If doing a whole project optimization, but only want to minify the build layers specified in modules options and not the rest of the JS files in the build output directory, you can set skipDirOptimize to true.
+            //keepBuildDir: true, //Normally each run of a whole project optimization will delete the output build directory specified by dir for cleanliness. Some build options, like onBuildWrite, will modify the output directory in a way that is hazardous to do twice over the same files. However, if you are doing simple builds with no extra file transforms besides build layer minification, then you can set keepBuildDir to true to keep the build directory between runs. Then, only files that have changed between build runs will be copied.
+
+
+
             tasks2Run.push('jshint:files', 'bump', 'clean', 'concat', 'requirejs');
         }
 
