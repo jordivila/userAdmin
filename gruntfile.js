@@ -411,6 +411,10 @@
 
 
                     fileExclusionRegExp: /^\.|bower_components\/jquery-ui\/themes|build|examples/, // https://regex101.com/#javascript -> 
+                    optimize: 'uglify',
+                    skipDirOptimize :false,
+                    keepBuildDir: false,
+
 
                     //Set config for finding 'jqueryui'. The path is relative
                     //to the location of require-jquery.js.
@@ -501,20 +505,20 @@
 
         if (isDeploy && (isDeploy === 'deploy')) {
 
-            grunt.config('requirejs.compile.options.optimize', 'uglify');
-            grunt.config('requirejs.compile.options.skipDirOptimize', true);
-            grunt.config('requirejs.compile.options.keepBuildDir', false);
+            //grunt.config('requirejs.compile.options.optimize', 'uglify');
+            //grunt.config('requirejs.compile.options.skipDirOptimize', true);
+            //grunt.config('requirejs.compile.options.keepBuildDir', false);
 
 
             //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
             //    I prefer not to use this min.css generated until bugs are fixed
-            tasks2Run.push('env:prod', 'jshint:files', /*'bump',*/ 'clean', 'concat', 'requirejs', 'uglify' /*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/);
+            tasks2Run.push('env:prod', 'jshint:files', /*'bump',*/ 'clean', 'concat', 'uglify' /*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/,'requirejs');
         }
         else {
 
-            grunt.config('requirejs.compile.options.optimize', 'none');
-            grunt.config('requirejs.compile.options.skipDirOptimize', true);
-            grunt.config('requirejs.compile.options.keepBuildDir', true);
+            //grunt.config('requirejs.compile.options.optimize', 'none');
+            //grunt.config('requirejs.compile.options.skipDirOptimize', true);
+            //grunt.config('requirejs.compile.options.keepBuildDir', true);
 
             //optimize: "none",//The biggest time drain is minification. If you are just doing builds as part of a dev workflow, then set optimize to "none".
             //skipDirOptimize: true, //If doing a whole project optimization, but only want to minify the build layers specified in modules options and not the rest of the JS files in the build output directory, you can set skipDirOptimize to true.
