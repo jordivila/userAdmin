@@ -18,13 +18,13 @@ function ($, jqUI, nav, VsixMvcAppResult) {
 
                    this._super();
 
-                   VsixMvcAppResult.Globalizer.init(this.options.cultureGlobalization)
-                    .done(function () {
+                   //VsixMvcAppResult.Globalizer.init(this.options.cultureGlobalization)
+                    //.done(function () {
                         
                         self.initDatepicker();
                         self.initMenuNav();
 
-                    });
+                    //});
 
                },
                _create: function () {

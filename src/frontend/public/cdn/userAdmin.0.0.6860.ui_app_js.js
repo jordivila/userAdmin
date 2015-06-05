@@ -1,6 +1,6 @@
 
  'use strict'
- define(["jquery", "jqueryui", "history", "handlebars"],function (jQuery, jqUI, historyReq, Handlebars) { var appVersion = "0.0.6850";  jQuery.noConflict();// Source: src/frontend/public/scripts/Template.ExtendPrototypes.js
+ define(["jquery", "jqueryui", "history", "handlebars"],function (jQuery, jqUI, historyReq, Handlebars) { var appVersion = "0.0.6860";  jQuery.noConflict();// Source: src/frontend/public/scripts/Template.ExtendPrototypes.js
 
 if (!window.console) {
     console = {
@@ -3382,13 +3382,13 @@ function ($, jqUI, nav, VsixMvcAppResult) {
 
                    this._super();
 
-                   VsixMvcAppResult.Globalizer.init(this.options.cultureGlobalization)
-                    .done(function () {
+                   //VsixMvcAppResult.Globalizer.init(this.options.cultureGlobalization)
+                    //.done(function () {
                         
                         self.initDatepicker();
                         self.initMenuNav();
 
-                    });
+                    //});
 
                },
                _create: function () {

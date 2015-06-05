@@ -4,6 +4,7 @@
 ], function ($, VsixMvcAppResult) {
 
     VsixMvcAppResult.Globalizer = {
+        instance: null,
         init: function (currentCulture) {
 
             var dfd = jQuery.Deferred();
@@ -74,7 +75,7 @@
                     }
                 });
 
-                return dfd.resolve();
+                return dfd.resolve(Globalize);
 
             });
 
