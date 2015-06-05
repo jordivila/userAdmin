@@ -12,6 +12,80 @@
     <link href="{{this}}" rel="Stylesheet" type="text/css" />
     {{/each}}
     <!--View specific styles end-->
+</head>
+<body class="ui-widget ui-widget-content ui-helper-hidden">
+
+    <div id="panelMenu" class="ui-mainMenu ui-state-default">
+        <div class="ui-mainMenuToggle">
+            <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
+            <div class="ui-mainMenuToggle-text">Menu</div>
+        </div>
+        <div class="ui-helper-clearfix"></div>
+        <div class="ui-menuBase"></div>
+        <div class="ui-helper-clearfix"></div>
+        <div class="ui-site-version">
+            <div>Copyright © 2012 Company Co.</div>
+            <div>All rights reserved</div>
+            <div>v. - {{Package.version}}</div>
+        </div>
+    </div>
+
+    <div class="ui-sitePage">
+
+        <div data-widget="userActivity">
+            <div class="ui-site-header ui-widget-content ui-corner-all ui-state-highlight">
+                <div class="ui-mainMenuToggle">
+                    <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
+                    <div class="ui-mainMenuToggle-text">Menu</div>
+                    <div class="ui-helper-clearfix"></div>
+                </div>
+                <div class="ui-site-nameBox">
+                    <a href="/">{{DomainName}}</a>
+                </div>
+            </div>
+            <div class="ui-helper-clearfix"></div>
+        </div>
+        <div class="ui-helper-clearfix"></div>
+
+        <div class="ui-site-title ui-widget-header">
+            <h1>{{Title}}</h1>
+        </div>
+
+        <!--Breadcrumb begin-->
+        {{#if this.Breadcrumb }}
+        <div class="ui-breadcrumb">
+            <div class="ui-widget-content ui-corner-all ui-state-default">
+                <ul>
+                    {{#each Breadcrumb}}
+                    <li>
+                        {{#if this.url }}
+                        <span class="ui-icon ui-icon-play"></span>
+                        {{/if}}
+                        <a href="{{this.url}}">{{this.title}}</a>
+                    </li>
+                    {{/each}}
+                </ul>
+                <div class="ui-helper-clearfix"></div>
+            </div>
+        </div>
+        <br />
+        {{/if}}
+        <!--Breadcrumb end-->
+
+        <div class="ui-siteContent">
+            {{#if body}}
+            {{{body}}}
+            {{/if}}
+        </div>
+    </div>
+
+
+
+
+
+
+
+
     <!--<script>
         var sendErrorToServer = function(message, url, linenumber) {
             if (window.XMLHttpRequest) {
@@ -92,10 +166,6 @@
         require(
         ['require',
          'scripts/modules/main',
-        {{#each JsFiles}}
-            //'{{this}}',
-        {{/each}}
-
         ],
         function (req, VsixMvcAppResult) {
 
@@ -111,83 +181,24 @@
                 VsixMvcAppResult.Widgets.PageOptions.onInit(function () {
                     jQuery("body").removeClass("ui-helper-hidden");
 
+                    {{#if ViewEntryPoint}}
+
+                        require(['{{ViewEntryPoint}}'],
+                                function (VsixMvcAppResult) {
+                                    VsixMvcAppResult.View.main();
+                                },
+                                function (errRequiring) {
+                                    console.error(errRequiring);
+                                });
+
+                    {{/if}}
 
                 });
                 VsixMvcAppResult.Widgets.PageOptions.Init();
-                //});
-            
+                        //});
             });
         });
     </script>
-</head>
-<body class="ui-widget ui-widget-content ui-helper-hidden">
-
-    <div id="panelMenu" class="ui-mainMenu ui-state-default">
-        <div class="ui-mainMenuToggle">
-            <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
-            <div class="ui-mainMenuToggle-text">Menu</div>
-        </div>
-        <div class="ui-helper-clearfix"></div>
-        <div class="ui-menuBase"></div>
-        <div class="ui-helper-clearfix"></div>
-        <div class="ui-site-version">
-            <div>Copyright © 2012 Company Co.</div>
-            <div>All rights reserved</div>
-            <div>v. - {{Package.version}}</div>
-        </div>
-    </div>
-
-    <div class="ui-sitePage">
-
-        <div data-widget="userActivity">
-            <div class="ui-site-header ui-widget-content ui-corner-all ui-state-highlight">
-                <div class="ui-mainMenuToggle">
-                    <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
-                    <div class="ui-mainMenuToggle-text">Menu</div>
-                    <div class="ui-helper-clearfix"></div>
-                </div>
-                <div class="ui-site-nameBox">
-                    <a href="/">{{DomainName}}</a>
-                </div>
-            </div>
-            <div class="ui-helper-clearfix"></div>
-        </div>
-        <div class="ui-helper-clearfix"></div>
-
-        <div class="ui-site-title ui-widget-header">
-            <h1>{{Title}}</h1>
-        </div>
-
-        <!--Breadcrumb begin-->
-        {{#if this.Breadcrumb }}
-        <div class="ui-breadcrumb">
-            <div class="ui-widget-content ui-corner-all ui-state-default">
-                <ul>
-                    {{#each Breadcrumb}}
-                    <li>
-                        {{#if this.url }}
-                        <span class="ui-icon ui-icon-play"></span>
-                        {{/if}}
-                        <a href="{{this.url}}">{{this.title}}</a>
-                    </li>
-                    {{/each}}
-                </ul>
-                <div class="ui-helper-clearfix"></div>
-            </div>
-        </div>
-        <br />
-        {{/if}}
-        <!--Breadcrumb end-->
-
-        <div class="ui-siteContent">
-            {{#if body}}
-            {{{body}}}
-            {{/if}}
-        </div>
-    </div>
-
-
-
 
 
 

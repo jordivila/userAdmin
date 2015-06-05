@@ -34,7 +34,8 @@
     var app = express();
 
     app.set('root', __dirname + '/src/frontend/public-build/');
-    app.set('views', app.get('root') + 'views/');
+    app.set('views', __dirname + '/src/frontend/public/views/');
+    //app.set('views', app.get('root') + 'views/');
     app.set('port', config.get('port'));
 
 

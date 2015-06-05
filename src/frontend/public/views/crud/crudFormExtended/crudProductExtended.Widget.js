@@ -1,4 +1,4 @@
-require([
+define([
     "jquery",
     "jqueryui",
     "scripts/crud/common.widget.crud",

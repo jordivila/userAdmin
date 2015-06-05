@@ -1,5 +1,3 @@
 {
-    "JsFiles": [
-        "crudGridSearchDirectSample.js"
-    ]
+    "ViewEntryPoint": "./index.js"
 }

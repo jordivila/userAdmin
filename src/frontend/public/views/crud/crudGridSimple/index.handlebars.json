@@ -1,5 +1,3 @@
 {
-    "JsFiles": [
-
-    ]
+    "ViewEntryPoint": "./index.js"
 }

@@ -1,10 +1,4 @@
 {
     "Title": "GeneralTexts.Home",
-    "CssFiles": [
-
-    ],
-    "JsFiles": [
-        "./main.js"
-    ],
     "ReadmeMarkDown": ""
 }

@@ -18,35 +18,3 @@
     <h3>Menu slides mode</h3>
     <div class="ui-menuSlidesSample ui-helper-hidden"></div>
 </div>
-
-
-<script>
-
-    require(["jquery", "jqueryui", "scripts/Template.App.Ajax.Init", "scripts/Template.Widget.Menu.slides"],
-
-        function (jq, jqUI, VsixMvcAppResult) {
-
-            VsixMvcAppResult.Ajax.UserMenu(
-                function (data, textStatus, jqXHR) {
-
-                    jQuery('div.ui-menuSlidesSample:first')
-                        .menuSlides({
-                            dataBound: function (e) {
-                                jQuery(this).hide().removeClass('ui-helper-hidden').show('blind');
-                            },
-                            selected: function (e, liData) {
-                                console.log(liData);
-                            }
-                        })
-                        .menuSlides('bind', data);
-                },
-                function (jqXHR, textStatus, errorThrown) {
-
-                },
-                function (jqXHR, textStatus, errorThrown) {
-
-                });
-
-        });
-
-</script>

@@ -1,5 +1,3 @@
 {
-    "JsFiles": [
-        "crudFormExtendedSample.js"
-    ]
+    "ViewEntryPoint": "./index.js"
 }

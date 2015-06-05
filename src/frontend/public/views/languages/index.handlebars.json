@@ -1,10 +1,4 @@
 {
     "Title": "GeneralTexts.Languages",
-    "CssFiles": [
-
-    ],
-    "JsFiles": [
-        "./index.js"
-    ],
-    "Controller": "languages.js"
+    "ViewEntryPoint": "./index.js"
 }

@@ -73,8 +73,9 @@ define([
                        }
                    };
 
-                   var loadTemplate = function (templUrl) {
+                   var loadTemplate = function (State) {
 
+                       var templUrl = State.hash;
 
                        $siteContent.empty();
 
@@ -87,11 +88,8 @@ define([
                        .done(function (data, textStatus, jqXHR) {
 
                            var templatePartialCssFiles = "{{#each CssFiles}}<link href='{{this}}' rel='Stylesheet' type='text/css' />{{/each}}";
-                           var templatePartialJsFiles = "<script>{{#each JsFiles}}require(['{{this}}']);{{/each}}</script>";
+                           var templatePartialJsFiles = "";
                            var template = Handlebars.compile(data + templatePartialCssFiles + templatePartialJsFiles);
-
-                           
-
                            var templateContext = {};
 
 
@@ -113,7 +111,24 @@ define([
 
                                $siteContent.html(html);
 
-
+                               if (dataJson.ViewEntryPoint && dataJson.ViewEntryPoint !== null)
+                               {
+                                   require(
+                                       //{
+                                       //// requirejs cachea los scripts por nombre
+                                       //// mediante bust=State.url prevenimos
+                                       //// que cache tome como cacheado un script que se llame igual en otra vista o carpeta
+                                       //// 
+                                       //urlArgs: "bust=" + 
+                                       //},
+                                       [State.url + dataJson.ViewEntryPoint],
+                                       function (VsixMvcAppResult) {
+                                           VsixMvcAppResult.View.main();
+                                       },
+                                       function (errRequiring) {
+                                           console.error(errRequiring);
+                                       });
+                               }
 
 
                            })
@@ -157,7 +172,7 @@ define([
                        History.log('statechange:', State.data, State.title, State.url);
 
 
-                       loadTemplate(State.hash);
+                       loadTemplate(State);
                    });
 
 

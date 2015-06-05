@@ -1,5 +1,3 @@
 {
-    "JsFiles": [
-        "crudGridPaginationSample.js"
-    ]
+    "ViewEntryPoint": "./index.js"
 }

@@ -1,9 +1,10 @@
 ﻿
-require([
+define([
     "jquery",
     "jqueryui",
     "scripts/Template.Widget.Base",
     "scripts/crud/common.widget.crud",
+    "./crudProductExtended.Widget.js"
 ],
 function ($, jqUI) {
 

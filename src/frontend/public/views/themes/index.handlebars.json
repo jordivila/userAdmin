@@ -1,10 +1,4 @@
 {
     "Title": "GeneralTexts.SiteThemes",
-    "CssFiles": [
-
-    ],
-    "JsFiles": [
-        "index"
-    ],
-    "Controller": "themes.js"
+    "ViewEntryPoint": "./index.js"
 }

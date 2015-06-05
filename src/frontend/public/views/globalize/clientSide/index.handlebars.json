@@ -1,9 +1,4 @@
 {
     "Title": "Client side - Globalize Hello World (plain javascript)",
-    "CssFiles": [
-
-    ],
-    "JsFiles": [
-        "clientSideGlobalize.js"
-    ]
+    "ViewEntryPoint": "./index.js"
 }

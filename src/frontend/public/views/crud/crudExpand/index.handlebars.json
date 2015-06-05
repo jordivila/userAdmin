@@ -1,5 +1,3 @@
 {
-    "JsFiles": [
-        "crudExpandAndResize.js"
-    ]
+    "ViewEntryPoint": "./index.js"
 }

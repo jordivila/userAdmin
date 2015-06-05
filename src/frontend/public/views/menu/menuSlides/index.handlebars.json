@@ -1,9 +1,4 @@
 {
-    "Title":  "Menu slides sample",
-    "CssFiles": [
-
-    ],
-    "JsFiles": [
-        "menuSlidesSample.js"
-    ]
+    "Title": "Menu slides sample",
+    "ViewEntryPoint": "./index.js"
 }
