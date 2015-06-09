@@ -127,7 +127,7 @@
                                 'function (jQuery, jqUI, historyReq, Handlebars) { ' +
                                     'var appVersion = "<%= grunt.file.readJSON("package.json").version %>";  ' +
 
-                                    'jQuery.noConflict();' + 
+                                    'jQuery.noConflict();' +
 
                                     ''
                         ;
@@ -406,7 +406,33 @@
                     modules: [
                         {
                             name: "scripts/modules/main",
+                        },
+                        {
+                            name: "scripts/modules/crud",
+                            exclude: [
+                                    // exclude all dependencies set on main module
+                                    // as far as main module load them before crud
+                                    'jquery',
+                                    'domReady',
+                                    'jqueryui',
+                                    'history',
+                                    'handlebars',
+                                    '/scripts/url/urlHelper.js',
+                                    '/scripts/Template.ExtendPrototypes.js',
+                                    '/scripts/Template.Widget.Base.js',
+                                    '/scripts/Template.Widget.Menu.base.js',
+                                    '/scripts/Template.Widget.Menu.slides.js',
+                                    '/scripts/Template.Widget.Menu.nav.js',
+                                    '/scripts/Template.Widget.Page.js',
+                                    "/scripts/Template.App.Init.js",
+                                    "/scripts/Template.App.Ajax.Init.js",
+                                    "/scripts/Template.App.Widgets.Init.js",
+                                    "/scripts/Template.App.Resources.Init.js",
+                                    '/scripts/Template.App.Globalize.Init.js',
+                                    '/scripts/Template.App.Page.Init.js',
+                            ]
                         }
+
                     ],
 
 
@@ -509,7 +535,7 @@
 
             //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
             //    I prefer not to use this min.css generated until bugs are fixed
-            tasks2Run.push('env:prod', 'jshint:files', /*'bump',*/ 'clean', 'concat', 'uglify' /*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/,'requirejs');
+            tasks2Run.push('env:prod', 'jshint:files', /*'bump',*/ 'clean', 'concat', 'uglify' /*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/, 'requirejs');
         }
         else {
 

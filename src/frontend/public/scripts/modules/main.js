@@ -1,6 +1,7 @@
 ﻿
 define(
-['require',
+[
+    'require',
     'jquery',
     'domReady',
     'jqueryui',
