@@ -34,8 +34,8 @@
     var app = express();
 
     app.set('root', __dirname + '/src/frontend/public-build/');
+    app.set('bower_components', __dirname + '/src/frontend/bower_components/');
     app.set('views', __dirname + '/src/frontend/public/views/');
-    //app.set('views', app.get('root') + 'views/');
     app.set('port', config.get('port'));
 
 
@@ -81,7 +81,7 @@
         app.use('/public/scripts', express.static(app.get('root') + 'scripts', {
             maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
         }));
-        app.use('/public/bower_components', express.static(app.get('root') + 'bower_components', {
+        app.use('/public/bower_components', express.static(app.get('bower_components'), {
             maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
         }));
         app.use('/public/cdn', express.static(app.get('root') + 'cdn', {

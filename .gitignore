@@ -1,5 +1,5 @@
 src/frontend/public/cldr-data/
-src/frontend/public/bower_components
+src/frontend/bower_components
 src/frontend/public-build
 
 

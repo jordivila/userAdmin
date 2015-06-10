@@ -11,6 +11,9 @@
     var config = require("../libs/config");
     var util = require("../libs/commonFunctions");
 
+    var fs = require('fs');
+    var bowerSrc = JSON.parse(fs.readFileSync(__dirname + "../../../../.bowerrc", 'utf8'));
+    //var bowerSrc = JSON.parse(require("../../../.bowerrc"));
 
     function GlobalizeController() {
         GenericViewController.apply(this, arguments);
@@ -20,7 +23,7 @@
 
         cldrDownloader(
           "http://www.unicode.org/Public/cldr/26/json.zip",
-          "./src/frontend/public/bower_components/cldr-data",
+          "./" + bowerSrc.directory + "/cldr-data",
           function (error) {
 
 
