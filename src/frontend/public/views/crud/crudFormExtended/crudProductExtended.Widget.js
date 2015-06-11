@@ -1,9 +1,11 @@
 define([
     "jquery",
     "jqueryui",
+    "scripts/Template.App.Init",
     "scripts/crud/common.widget.crud",
+    "./crudProductExtended.AjaxFake.js"
 ],
-function ($, jqUI) {
+function ($, jqUI, VsixMvcAppResult, wCrud, productAjax) {
 
     jQuery.widget("ui.product", jQuery.ui.crud,
     {
@@ -22,7 +24,6 @@ function ($, jqUI) {
             },
             gridModel: productGridModelGet(),
             gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
-
                 switch (columnName) {
                     case "productId":
 
@@ -35,14 +36,17 @@ function ($, jqUI) {
                         break;
                     case "fechaDesde":
 
-                        $cell.html(dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '');
+                        VsixMvcAppResult.Globalizer.get()
+                         .done(function (Globalize) {
+
+                             $cell.html(dataItem.fechaDesde !== null ? Globalize.formatDate(dataItem.fechaDesde) : '');
+
+                         });
 
                         break;
                     default: break;
                 }
             },
-
-
             formInit: function (crudWidget, $parent) {
 
                 var tBasicInfo = '' +
@@ -94,18 +98,24 @@ function ($, jqUI) {
             },
             formBind: function (self, dataItem) {
 
-                jQuery(self.element)
-                    .find('div.ui-productCrud-form-searchOutput')
-                        .find('div[data-fieldItem="productId"]').html(dataItem.productId)
-                        .end()
-                        .find('div[data-fieldItem="nombre"]').html(dataItem.nombre)
-                        .end()
-                        .find('div[data-fieldItem="productTypeDesc"]').html(dataItem.productTypeDesc)
-                        .end()
-                        .find('div[data-fieldItem="fechaDesde"]').html(dataItem.fechaDesde !== null ? Globalize.format(dataItem.fechaDesde, 'd') : '')
-                        .end()
-                        .find('div[data-fieldItem="fechaHasta"]').html(dataItem.fechaHasta !== null ? Globalize.format(dataItem.fechaHasta, 'd') : '')
-                        .end();
+                VsixMvcAppResult.Globalizer.get()
+                 .done(function (Globalize) {
+
+                     jQuery(self.element)
+                         .find('div.ui-productCrud-form-searchOutput')
+                             .find('div[data-fieldItem="productId"]').html(dataItem.productId)
+                             .end()
+                             .find('div[data-fieldItem="nombre"]').html(dataItem.nombre)
+                             .end()
+                             .find('div[data-fieldItem="productTypeDesc"]').html(dataItem.productTypeDesc)
+                             .end()
+                             .find('div[data-fieldItem="fechaDesde"]').html(dataItem.fechaDesde !== null ? Globalize.formatDate(dataItem.fechaDesde) : '')
+                             .end()
+                             .find('div[data-fieldItem="fechaHasta"]').html(dataItem.fechaHasta !== null ? Globalize.formatDate(dataItem.fechaHasta) : '')
+                             .end();
+
+                 });
+
             },
             formSaveMethod: productAjax.ajax.productSave,
             formValueGet: function (self, currentValue) {

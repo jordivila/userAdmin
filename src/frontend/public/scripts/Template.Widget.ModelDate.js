@@ -2,7 +2,8 @@ define([
     "jquery",
     "jqueryui",
     "scripts/Template.Widget.Base",
-    "scripts/Template.App.Resources.Init"
+    "scripts/Template.App.Resources.Init",
+    "scripts/Template.App.Init",
 ],
        function ($, jqUI, wBase, VsixMvcAppResult) {
 
@@ -93,13 +94,20 @@ define([
 
                    var d = jQuery(self.element).datepicker('getDate');
 
-                   jQuery(self.element)
-                       .parents('div:first')
-                       .find('a')
-                           .html(d === null ? self.options.text : Globalize.format(d, "D"))
-                       .end()
-                       .find('div')
-                           .show();
+                   VsixMvcAppResult.Globalizer.get()
+                    .done(function (Globalize) {
+
+                        jQuery(self.element)
+                            .parents('div:first')
+                            .find('a')
+                                .html(d === null ? self.options.text : Globalize.formatDate(d))
+                            .end()
+                            .find('div')
+                                .show();
+
+                    });
+
+
                },
                getDate: function () {
                    if (jQuery(this.element).find('input').val() !== '') {

@@ -10,10 +10,9 @@
     var Globalize = require("globalize");
     var config = require("../libs/config");
     var util = require("../libs/commonFunctions");
-
     var fs = require('fs');
     var bowerSrc = JSON.parse(fs.readFileSync(__dirname + "../../../../.bowerrc", 'utf8'));
-    //var bowerSrc = JSON.parse(require("../../../.bowerrc"));
+
 
     function GlobalizeController() {
         GenericViewController.apply(this, arguments);

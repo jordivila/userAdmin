@@ -30,7 +30,7 @@
                 },
                 src: ["src/frontend/public/css/reset.css",
                       "src/frontend/public/css/site.css",
-                      "src/frontend/public/css/font-awesome.min.css",
+                      "src/frontend/bower_components/components-font-awesome/css/font-awesome.min.css",
                       "src/frontend/public/css/Site.FontSizes.css",
                       "src/frontend/public/css/Site.jQuery.OverrideRoundCorners.css",
                       "src/frontend/public/css/Site.JqueryUI.IconsExtendWithFontAwsome.css",
@@ -343,7 +343,7 @@
         }
         else {
 
-            requireConfig('none', false, false);
+            requireConfig('none', true, true);
 
 
             tasks2Run.push('jshint:files', 'bump', 'clean', 'concat', 'requirejs');

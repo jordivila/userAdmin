@@ -87,7 +87,7 @@
         app.use('/public/cdn', express.static(app.get('root') + 'cdn', {
             maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
         }));
-        app.use('/public/fonts', express.static(app.get('root') + 'fonts', {
+        app.use('/public/fonts', express.static(app.get('bower_components') + 'components-font-awesome/fonts', {
             maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
         }));
         app.use('/public/images', express.static(app.get('root') + 'images', {

@@ -4,8 +4,11 @@
 
            var VsixMvcAppResult = {};
 
-           //    return VsixMvcAppResult;
-           //});
+           VsixMvcAppResult.LayoutModel = {
+               appVersion: null,
+               cultureGlobalization: null,
+               cultureDatePicker: null,
+           };
 
            VsixMvcAppResult.Utils = {
 

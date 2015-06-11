@@ -5,7 +5,13 @@
 
     VsixMvcAppResult.Globalizer = {
         instance: null,
-        init: function (currentCulture) {
+        get: function (currentCulture) {
+
+            if (currentCulture !== undefined) {
+                // argument passed and not undefined
+            } else {
+                currentCulture = VsixMvcAppResult.Utils.getCookie("locale");
+            }
 
             var dfd = jQuery.Deferred();
 
@@ -74,6 +80,10 @@
                         ]
                     }
                 });
+
+
+                Globalize.locale(currentCulture);
+
 
                 return dfd.resolve(Globalize);
 

@@ -12,7 +12,7 @@ define(["jquery", "scripts/Template.App.Init", "scripts/url/UrlHelper"],
                        var urlHelper = new UrlHelper(settings.url);
 
                        if (urlHelper.hostname == window.location.hostname) {
-                           settings.url = new UrlHelper(settings.url).paramSet("appVersion", appVersion).href;
+                           settings.url = new UrlHelper(settings.url).paramSet("appVersion", VsixMvcAppResult.LayoutModel.appVersion).href;
                            settings.url = new UrlHelper(settings.url).paramSet("seoRequest", false).href;
                        }
                    }

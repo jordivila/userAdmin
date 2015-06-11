@@ -3,15 +3,11 @@
 <head>
     <meta name="viewport" content="initial-scale=1.0" />
     <title>{{Title}}</title>
-    <!--Common styles begin-->
     <link id="jQueryUITheme" href="//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/{{Theme}}/jquery-ui.css" rel="Stylesheet" type="text/css" />
     <link href="/public/cdn/{{Package.name}}.{{Package.version}}.ui.css" rel="Stylesheet" type="text/css" />
-    <!--Common styles end-->
-    <!--View specific styles begin-->
     {{#each CssFiles}}
     <link href="{{this}}" rel="Stylesheet" type="text/css" />
     {{/each}}
-    <!--View specific styles end-->
 </head>
 <body class="ui-widget ui-widget-content ui-helper-hidden">
 
@@ -108,23 +104,16 @@
             return false;
         }
     </script>-->
+    {{#if IsTest}}
+    <script src="http://localhost:35729/livereload.js"></script>
+    {{/if}}
     <script src="/public/bower_components/requirejs/require.js"></script>
     <script>
-
-        var appVersion = "{{Package.version}}";
-
-
-        var layoutModel = {
-            appVersion : "{{Package.version}}",
-            cultureGlobalization : "{{Globalization.cultureGlobalization}}",
-            cultureDatePicker : "{{Globalization.cultureDatePicker}}",
-
-        };
 
         requirejs.config({
             //Set config for finding 'jqueryui'. The path is relative
             //to the location of require-jquery.js.
-            urlArgs: "bust=" + layoutModel.appVersion,
+            urlArgs: "bust={{Package.version}}",
             waitSeconds: 0,
             baseUrl: "/public",
             paths: {
@@ -169,41 +158,40 @@
         ],
         function (req, VsixMvcAppResult) {
 
+            VsixMvcAppResult.LayoutModel = {
+                appVersion : "{{Package.version}}",
+                cultureGlobalization : "{{Globalization.cultureGlobalization}}",
+                cultureDatePicker : "{{Globalization.cultureDatePicker}}",
+            };
+
             jQuery(document).ready(function(){
 
-                //domReady(function () {
-                //This function is called once the DOM is ready.
-                //It will be safe to query the DOM and manipulate
-                //DOM nodes in this function.
                 VsixMvcAppResult.Widgets.PageOptions.selector = "body";
-                VsixMvcAppResult.Widgets.PageOptions.cultureGlobalization = 'en';
-                VsixMvcAppResult.Widgets.PageOptions.cultureDatePicker = 'en';
+                VsixMvcAppResult.Widgets.PageOptions.cultureGlobalization = '{{Globalization.cultureGlobalization}}';
+                VsixMvcAppResult.Widgets.PageOptions.cultureDatePicker = '{{Globalization.cultureDatePicker}}';
                 VsixMvcAppResult.Widgets.PageOptions.onInit(function () {
                     jQuery("body").removeClass("ui-helper-hidden");
 
                     {{#if ViewEntryPoint}}
 
-                        require(['{{ViewEntryPoint}}'],
-                                function (VsixMvcAppResult) {
-                                    VsixMvcAppResult.View.main();
-                                },
-                                function (errRequiring) {
-                                    console.error(errRequiring);
-                                });
+                    require(['{{ViewEntryPoint}}'],
+                            function (VsixMvcAppResult) {
+                                VsixMvcAppResult.View.main();
+                            },
+                            function (errRequiring) {
+                                console.error(errRequiring);
+                            });
 
                     {{/if}}
 
+                    });
+                        VsixMvcAppResult.Widgets.PageOptions.Init();
+
+                    });
                 });
-                VsixMvcAppResult.Widgets.PageOptions.Init();
-                        //});
-            });
-        });
     </script>
 
 
 
-    {{#if IsTest}}
-    <script src="http://localhost:35729/livereload.js"></script>
-    {{/if}}
 </body>
 </html>
