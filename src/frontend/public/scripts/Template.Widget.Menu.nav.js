@@ -42,7 +42,6 @@ define([
                    var $panelMenu = jQuery('#panelMenu');
                    var $panelMenuList = jQuery($panelMenu).find('div.ui-menuBase:first');
                    var $panelMenuToggle = jQuery('div.ui-mainMenuToggle');
-
                    var panelMenuHide = function (cb) {
                        $sitePage.show();
                        $panelMenu.hide('slide', function () {
@@ -72,32 +71,38 @@ define([
                            panelMenuShow(cb);
                        }
                    };
-
                    var loadTemplate = function (State) {
 
                        var templUrl = State.hash;
 
+                       console.log("removing page content");
+
                        $siteContent.empty();
+
+                       console.log("geting html page content for " + templUrl);
 
                        // ask for the template
                        jQuery.ajax({
                            url: templUrl,
                            type: "GET",
                            dataType: "html",
+                           cache: true,
                        })
                        .done(function (data, textStatus, jqXHR) {
 
                            var templatePartialCssFiles = "{{#each CssFiles}}<link href='{{this}}' rel='Stylesheet' type='text/css' />{{/each}}";
-                           var templatePartialJsFiles = "";
-                           var template = Handlebars.compile(data + templatePartialCssFiles + templatePartialJsFiles);
+                           var template = Handlebars.compile(data + templatePartialCssFiles);
                            var templateContext = {};
 
+
+                           console.log("geting page model content for " + templUrl + 'index.handlebars.json');
 
                            // ask for the template context
                            jQuery.ajax({
                                url: templUrl + 'index.handlebars.json',
                                type: "GET",
                                dataType: "json",
+                               cache: false,    // view model MUST NOT be chached
                            })
                            .done(function (dataJson, textStatusJson, jqXHRJson) {
 
@@ -109,19 +114,27 @@ define([
 
                                var html = template(jQuery.extend({}, dataJson, templateContext));
 
+                               console.log("append html content");
+
                                $siteContent.html(html);
 
-                               if (dataJson.ViewEntryPoint && dataJson.ViewEntryPoint !== null)
-                               {
+                               console.log("check ViewEntryPoint");
+
+                               if (dataJson.ViewEntryPoint && dataJson.ViewEntryPoint !== null) {
+
+                                   console.log("requiring ViewEntryPoint");
+
                                    require(
-                                       //{
-                                       //// requirejs cachea los scripts por nombre
-                                       //// mediante bust=State.url prevenimos
-                                       //// que cache tome como cacheado un script que se llame igual en otra vista o carpeta
-                                       //// 
-                                       //urlArgs: "bust=" + 
-                                       //},
-                                       [State.url + dataJson.ViewEntryPoint],
+                                       /*
+                                       1.- require will cache ViewEntryPoints
+                                       2.- forcing views to execute viewEntryPoint."main" previously loaded
+                                       3.- using urlArgs=bust+ (new Date()).getTime() is not an potion
+                                            as far as would load every script again and again
+                                       4.- best solution is to add .getTime() to viewEntryPoint url.
+                                           This way viewEntryPoint will always be overriden to the last script loaded
+                                           Bu keeps caching viewEntrypoint dependencies
+                                       */
+                                       [dataJson.ViewEntryPoint + "?_=" + (new Date()).getTime()],
                                        function (VsixMvcAppResult) {
                                            VsixMvcAppResult.View.main();
                                        },
@@ -130,9 +143,14 @@ define([
                                        });
                                }
 
-
                            })
                            .fail(function (jqXHR, textStatus, errorThrown) {
+
+                               console.error(new Error("Error getting page model", {
+                                   jqXHR: jqXHR,
+                                   textStatus: textStatus,
+                                   errorThrown: errorThrown
+                               }));
 
                                // specific template context fail to load. 
                                // try transform with basic template context
