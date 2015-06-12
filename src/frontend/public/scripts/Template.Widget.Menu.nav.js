@@ -211,10 +211,14 @@ define([
                            };
 
                            if ($panelMenuToggle.is(':visible')) {
-                               panelMenuHide(setTimeout(function () {
+                               panelMenuHide(function () {
                                    templGetFunc();
-                               },
-                               500));
+                               });
+
+                               //panelMenuHide(setTimeout(function () {
+                               //    templGetFunc();
+                               //},
+                               //500));
                            }
                            else {
                                templGetFunc();

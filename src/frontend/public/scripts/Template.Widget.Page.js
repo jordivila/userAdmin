@@ -52,18 +52,23 @@ function ($, jqUI, nav, VsixMvcAppResult) {
 
             var dfd = jQuery.Deferred();
 
-            require(['bower_components/jquery-ui/ui/minified/i18n/jquery.ui.datepicker-' + self.options.cultureDatePicker + '.min'],
-                function (d) {
+            if (self.options.cultureDatePicker !== 'en') {
+                require(['bower_components/jquery-ui/ui/minified/i18n/jquery.ui.datepicker-' + self.options.cultureDatePicker + '.min'],
+                    function (d) {
 
-                    jQuery.datepicker.setDefaults(jQuery.datepicker.regional[self.options.cultureDatePicker]);
+                        jQuery.datepicker.setDefaults(jQuery.datepicker.regional[self.options.cultureDatePicker]);
 
-                    dfd.resolve();
+                        dfd.resolve();
 
-                }, function (err) {
+                    }, function (err) {
 
-                    dfd.reject("Error loading datepicker culture");
+                        dfd.reject("Error loading datepicker culture");
 
-                });
+                    });
+            }
+            else {
+                dfd.resolve();
+            }
 
             return dfd.promise();
 
