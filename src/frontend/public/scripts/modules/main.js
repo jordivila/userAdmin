@@ -2,9 +2,12 @@
 define(
 [
     'require',
+    'json', //requirejs plugin to load json data
+    'text', //requirejs plugin to load text data
     'jquery',
     'domReady',
-    'jqueryui',
+    //'jqueryui',
+    '/scripts/modules/jquery.ui.custom.bundle.js',
     'history',
     'handlebars',
     '/scripts/url/urlHelper.js',
@@ -21,7 +24,7 @@ define(
     '/scripts/Template.App.Globalize.Init.js',
     '/scripts/Template.App.Page.Init.js',
 ],
-function (req, $, domReady, jqUI, hist, handl, url, a, b, c, d, e, f, g, h, i, j, VsixMvcAppResult) {
+function (req, $, domReady, jqUI, hist, handl, url, a, b, c, d, e, f, g, h, i, j, k,l, VsixMvcAppResult) {
 
     return VsixMvcAppResult;
 

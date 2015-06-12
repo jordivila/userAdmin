@@ -339,10 +339,6 @@ function (VsixMvcAppResult) {
                      }
                      else {
 
-                         console.log("productSave");
-                         console.log(dataItem.FormData.SomeDate);
-
-
                          // Simulate saving data
                          dataItem.EditData.SomeBoolean = dataItem.FormData.SomeBoolean;
                          dataItem.EditData.SomeBooleanNullable = dataItem.FormData.SomeBooleanNullable;

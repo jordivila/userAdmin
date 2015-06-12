@@ -200,6 +200,10 @@
                     baseUrl: "./",
                     dir: "src/frontend/public-build",
                     modules: [
+
+                        {
+                            name: "scripts/modules/jquery.ui.custom.bundle",
+                        },
                         {
                             name: "scripts/modules/main",
                         },
@@ -211,6 +215,7 @@
                                     'jquery',
                                     'domReady',
                                     'jqueryui',
+                                    '/scripts/modules/jquery.ui.custom.bundle.js',
                                     'history',
                                     'handlebars',
                                     '/scripts/url/urlHelper.js',
@@ -227,6 +232,9 @@
                                     '/scripts/Template.App.Globalize.Init.js',
                                     '/scripts/Template.App.Page.Init.js',
                             ]
+                        },
+                        {
+                            name: "scripts/modules/glob",
                         }
 
                     ],
@@ -241,10 +249,12 @@
                     paths: {
 
                         jquery: "../bower_components/jquery/jquery.min",
-                        jqueryui: "../bower_components/jquery-ui/ui/minified/jquery-ui.custom.min",
+                        //jqueryui: "../bower_components/jquery-ui/ui/minified/jquery-ui.custom.min",
+                        jqueryui: "scripts/modules/jquery.ui.custom.bundle",
                         domReady: "../bower_components/requirejs-domready/domReady",
                         handlebars: "../bower_components/handlebars/handlebars.min",
                         history: '../bower_components/history.js/scripts/bundled/html5/jquery.history',
+                        bower:'../bower_components/',
 
                         /**************************************************************
                                     Globalize dependencies paths begin
