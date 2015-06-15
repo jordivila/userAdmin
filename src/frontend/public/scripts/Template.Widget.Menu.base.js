@@ -15,7 +15,7 @@ define(["jquery", "jqueryui", "scripts/Template.Widget.Base"],
 
                    this._super();
 
-                   jQuery(this.element).addClass('ui-state-default');
+                   //jQuery(this.element).addClass('ui-state-default');
                },
                destroy: function () {
 

@@ -19,9 +19,9 @@
 
 <div class="ui-themeSelector">
     <div class="ui-themeSelector-messages"></div>
-    <div class="ui-themeSelector-container ui-state-default">
+    <div class="ui-themeSelector-container">
         <h3>Select your preferred theme</h3>
-        <ul class="ui-themeSelector-list ui-menuTree ui-state-default ui-menuList ui-widget-content ui-corner-all" style="overflow: hidden;">
+        <ul class="ui-themeSelector-list ui-menuTree ui-menuList ui-widget-content ui-corner-all" style="overflow: hidden;">
             {{#each itemList}}
             <li class="ui-menuList-item ui-widget-content ui-corner-all ui-state-default" data-theme-id="{{this.name}}">
                 <img src="/public/images/jQueryUIThemes/{{this.icon}}" alt="{{this.name}}" title="{{this.name}}" />
