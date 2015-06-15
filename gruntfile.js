@@ -2,7 +2,7 @@
 
     var gruntOptions = {
         pkg: grunt.file.readJSON('package.json'),
-        cdnFolder: 'src/frontend/public/cdn',
+        cdnFolder: 'src/frontend/public-build/cdn',
         env: {
             dev: {
                 NODE_ENV: 'dev'
@@ -49,13 +49,21 @@
             },
         },
         uglify: {
-            options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
-            },
-            dist: {
-                files: {
+            //options: {
+            //    banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+            //},
+            //dist: {
+            //    files: {
 
-                }
+            //    }
+            //}
+            my_target: {
+                files: [{
+                    expand: true,
+                    //cwd: 'src/js',
+                    src: 'src/frontend/public-build/**/*.js',
+                    //dest: 'dest/js'
+                }]
             }
         },
         cssmin: {
@@ -105,14 +113,7 @@
                     'src/test/qunit/**/*.js',
                     'src/test/mocha/**/*.js',
 
-                    //'!src/frontend/public/scripts/modules/**/*',
-                    //'!src/frontend/build/**/*.*',
-
-                    '!src/frontend/app.build.js',
                     '!src/frontend/public-build/**/*.*',
-
-                    '!src/frontend/public/scripts/libs/**/*.*',
-                    '!src/frontend/public/cdn/**/*.*',
                     '!src/frontend/bower_components/**/*',
                     '!src/test/qunit/libs/**/*.js',
             ],
@@ -349,14 +350,14 @@
 
             //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
             //    I prefer not to use this min.css generated until 'bugs' are fixed
-            tasks2Run.push('env:prod', 'jshint:files', /*'bump',*/ 'clean', 'concat', 'uglify' /*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/, 'requirejs');
+            tasks2Run.push('env:prod', 'jshint:files', /*'bump',*/ 'clean'/*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/, 'requirejs', 'concat', 'uglify');
         }
         else {
 
             requireConfig('none', true, true);
 
 
-            tasks2Run.push('jshint:files', 'bump', 'clean', 'concat', 'requirejs');
+            tasks2Run.push('jshint:files', 'bump', 'clean', 'requirejs', 'concat'/*, 'uglify'*/);
         }
 
         grunt.task.run(tasks2Run);

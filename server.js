@@ -1,4 +1,4 @@
-﻿(function(module) {
+﻿(function (module) {
 
     'user strict';
 
@@ -18,7 +18,7 @@
     var exphbs = require('express-handlebars');
     var thisPackage = require('./package.json');
 
-    
+
 
 
     var authController = require('./src/backend/controllers/auth');
@@ -35,12 +35,12 @@
 
     app.set('root', __dirname + '/src/frontend/public-build/');
     app.set('bower_components', __dirname + '/src/frontend/bower_components/');
-    app.set('views', __dirname + '/src/frontend/public/views/');
+    app.set('views', __dirname + (process.env.NODE_ENV === 'production' ? '/src/frontend/public-build/views/' : '/src/frontend/public/views/'));
     app.set('port', config.get('port'));
 
 
     app.use(cookieParser(config.get('encryptKeyForCookieParser')));
-    
+
     app.use(favicon(app.get('root') + 'favicon.ico'));
     app.use(bodyParser.urlencoded({
         extended: true
@@ -75,7 +75,7 @@
 
 
 
-        
+
 
         //begin -> set public static
         app.use('/public/scripts', express.static(app.get('root') + 'scripts', {
@@ -148,7 +148,7 @@
 
 
 
-    
+
 
 
 
