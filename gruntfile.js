@@ -49,20 +49,10 @@
             },
         },
         uglify: {
-            //options: {
-            //    banner: '/*! <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy") %> */\n'
-            //},
-            //dist: {
-            //    files: {
-
-            //    }
-            //}
             my_target: {
                 files: [{
                     expand: true,
-                    //cwd: 'src/js',
                     src: 'src/frontend/public-build/**/*.js',
-                    //dest: 'dest/js'
                 }]
             }
         },
@@ -85,11 +75,9 @@
                 options: {
                     timeout: 4000,
                     reporter: 'spec',
-                    //captureFile: 'results.txt', // Optionally capture the reporter output to a file
                     quiet: false, // Optionally suppress output to standard out (defaults to false)
                     clearRequireCache: false, // Optionally clear the require cache before running tests (defaults to false),
                     bail: true, // bail after first test failure
-                    //NODE_ENV: 'test'
                 },
                 src: ['src/test/mocha/dev/**/*.js', '!src/test/mocha/dev/libs/**/*.js']
             },
@@ -97,11 +85,9 @@
                 options: {
                     timeout: 4000,
                     reporter: 'spec',
-                    //captureFile: 'results.txt', // Optionally capture the reporter output to a file
                     quiet: false, // Optionally suppress output to standard out (defaults to false)
                     clearRequireCache: false, // Optionally clear the require cache before running tests (defaults to false),
                     bail: true, // bail after first test failure
-                    //NODE_ENV: 'test'
                 },
                 src: ['src/test/mocha/prod/**/*.js', '!src/test/mocha/prod/libs/**/*.js']
             }
@@ -118,7 +104,6 @@
                     '!src/test/qunit/libs/**/*.js',
             ],
             options: {
-                //jshintrc: ".jshintrc",
                 globals: {
                     jQuery: true,
                     console: true,
@@ -144,13 +129,10 @@
                 globalReplace: false
             }
         },
-        // Grunt express - our webserver
-        // https://github.com/blai/grunt-express
         express: {
             testQunit: {
                 options: {
                     script: './server.js',
-                    //node_env: 'test',
                     spawn: false, //Must have for reload
                     port: 3000 //,
                 },
@@ -158,18 +140,14 @@
             testLiveReload: {
                 options: {
                     script: './server.js',
-                    //node_env: 'dev',
                     port: 3001 //,
                 },
             }
         },
-
-        // grunt-watch will monitor the projects files
-        // https://github.com/gruntjs/grunt-contrib-watch
         watch: {
             test: {
                 files: ['<%= jshint.files %>'],
-                tasks: ['env:test', 'jshint:files', /*'bump',*/ 'mochaTest:test', 'express:testQunit', 'qunit']
+                tasks: ['env:test', 'jshint:files', 'mochaTest:test', 'express:testQunit', 'qunit']
             },
             preCompile: {
                 files: ['<%= jshint.files %>', '<%= concat.ui_css.src %>'],
@@ -244,18 +222,10 @@
                         }
 
                     ],
-
-
-                    //fileExclusionRegExp: /^\.|bower_components|build|examples|test/, // https://regex101.com/#javascript -> 
-
-
-                    //Set config for finding 'jqueryui'. The path is relative
-                    //to the location of require-jquery.js.
                     waitSeconds: 0,
                     paths: {
 
                         jquery: "../bower_components/jquery/jquery.min",
-                        //jqueryui: "../bower_components/jquery-ui/ui/minified/jquery-ui.custom.min",
                         jqueryui: "scripts/modules/jquery.ui.custom.bundle",
                         domReady: "../bower_components/requirejs-domready/domReady",
                         handlebars: "../bower_components/handlebars/handlebars.min",
@@ -332,9 +302,6 @@
 
 
 
-    //grunt.registerTask('preCompile', ['jshint:files', 'bump', 'clean', 'concat']);
-
-
 
     grunt.registerTask('i18nCheck', 'checks i18n files', function () {
 
@@ -361,7 +328,7 @@
                     keysLength = keysLengthCurrent;
                 }
 
-                if (!(keysLength === keysLengthCurrent)) {
+                if (keysLength != keysLengthCurrent) {
                     isValid = false;
                 }
             }
@@ -420,7 +387,7 @@
             var summary = "";
 
             listNotFoundKeys().forEach(function (item) {
-                summary += item.locale + "->" + item.key + "\n";
+                summary += item.locale + config.i18n.extension + " file is missing key: '" + item.key + "'\n";
             });
              
             grunt.fail.warn('Locale files have missing keys. Read below summary for details...\n\n' + summary + "\n");
@@ -476,8 +443,6 @@
 
         grunt.task.run('env:dev', 'preCompile', 'express:testLiveReload', 'open', 'watch');
     });
-
-
     grunt.registerTask('default', ['env:test', 'preCompile', 'express:testLiveReload', 'open', 'watch']);
 
 };
