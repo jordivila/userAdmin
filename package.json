@@ -1,6 +1,6 @@
 {
   "name": "userAdmin",
-  "version": "0.0.7131",
+  "version": "0.0.7147",
   "description": "userAdmin",
   "private": true,
   "author": {
@@ -28,6 +28,7 @@
     "grunt-express-server": "0.5.1",
     "grunt-mocha-test": "0.12.4",
     "grunt-open": "0.2.3",
+    "grunt-sort-json": "0.0.5",
     "mocha": "2.2.4",
     "rjs-build-analysis": "0.0.3"
   },

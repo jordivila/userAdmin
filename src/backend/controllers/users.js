@@ -78,7 +78,7 @@
 
                                     } else {
                                         //send token via email
-                                        return cb(new ErrorHandledModel(i18n.__("Not implemented")));
+                                        return cb(new ErrorHandledModel(i18n.__("GeneralTexts.NotImplemented")));
                                     }
 
                                 });
@@ -131,7 +131,7 @@
                                     };
                                 } else {
                                     //send token via email
-                                    return cb(new ErrorHandledModel(i18n.__("Not implemented")));
+                                    return cb(new ErrorHandledModel(i18n.__("GeneralTexts.NotImplemented")));
                                 }
 
 
@@ -196,7 +196,7 @@
                                             token,
                                             function (err, mail) {
                                                 if (err) return cb(err);
-                                                // return cb(new ErrorHandledModel(i18n.__("Not implemented")));
+                                                // return cb(new ErrorHandledModel(i18n.__("GeneralTexts.NotImplemented")));
 
                                                 return cb(null,
                                                     new DataResultModel(
@@ -222,7 +222,7 @@
 
         tokenTempController.getByGuid(tokenGuid, function (err, token) {
             if (err) return cb(err);
-            if (!token) return cb(new ErrorHandledModel(i18n.__("AccountResourcesTexts.CantAccessYourAccount_TokenExpired")));
+            if (!token) return cb(new ErrorHandledModel(i18n.__("AccountResources.CantAccessYourAccount_TokenExpired")));
 
             var userId = JSON.parse(token.jsonObject).userId;
 
@@ -238,7 +238,7 @@
                     tokenTempController.deleteByGuid(tokenGuid, function (err, tokenDeleteResult) {
                         if (err) return cb(err);
 
-                        return cb(null, new DataResultModel(true, i18n.__("AccountResourcesTexts.AccountActivated"), {}));
+                        return cb(null, new DataResultModel(true, i18n.__("AccountResources.AccountActivated"), {}));
                     });
                 });
             });

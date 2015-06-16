@@ -193,7 +193,12 @@
                 path: 'http://localhost:<%= express.testLiveReload.options.port %>/'
             }
         },
-
+        sortJSON: {
+            src: [
+                'src/backend/libs/locales/es.json',
+                'src/backend/libs/locales/en.json',
+            ]
+        },
         requirejs: {
             compile: {
                 options: {
@@ -255,7 +260,7 @@
                         domReady: "../bower_components/requirejs-domready/domReady",
                         handlebars: "../bower_components/handlebars/handlebars.min",
                         history: '../bower_components/history.js/scripts/bundled/html5/jquery.history',
-                        bower:'../bower_components/',
+                        bower: '../bower_components/',
 
                         /**************************************************************
                                     Globalize dependencies paths begin
@@ -317,6 +322,7 @@
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-sort-json');
     grunt.loadNpmTasks('grunt-express-server');
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-env');
@@ -329,6 +335,98 @@
     //grunt.registerTask('preCompile', ['jshint:files', 'bump', 'clean', 'concat']);
 
 
+
+    grunt.registerTask('i18nCheck', 'checks i18n files', function () {
+
+        var config = grunt.file.readJSON('./src/backend/libs/config.json');
+        var files = function () {
+            var result = [];
+            for (var i in config.i18n.locales) {
+                var path = config.i18n.directory + '/' + config.i18n.locales[i] + config.i18n.extension;
+                var localeFile = grunt.file.readJSON(path);
+                result.push({ locale: config.i18n.locales[i], json: localeFile });
+            }
+            return result;
+        }();
+        var checkKeysLength = function () {
+
+            var isValid = true;
+            var keysLength = null;
+
+            for (var i = 0; i < files.length; i++) {
+                var localeFile = files[i];
+                var keysLengthCurrent = Object.keys(localeFile.json).length;
+
+                if (keysLength === null) {
+                    keysLength = keysLengthCurrent;
+                }
+
+                if (!(keysLength === keysLengthCurrent)) {
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+
+        };
+        var listNotFoundKeys = function () {
+
+            var maxLengthFile = function () {
+
+                var result = null;
+
+                files.forEach(function (f) {
+
+                    if (result === null) {
+                        result = f;
+                    }
+
+                    if (Object.keys(f.json).length > Object.keys(result.json).length) {
+                        result = f;
+                    }
+
+                });
+
+                return result;
+
+            }();
+
+            // compare with first element
+            // as far as first element is the default
+
+            var list = [];
+
+            files.forEach(function (file, fileIndex, fileTravObject) {
+
+                Object.keys(maxLengthFile.json).forEach(function (fileKey, fileKeyIndex, fileKeyTravObject) {
+
+                    if ((Object.keys(file.json).indexOf(fileKey)) == -1) {
+                        list.push({ locale: file.locale, key: fileKey });
+                    }
+
+                });
+
+            });
+
+            return list;
+
+        };
+
+        if (checkKeysLength() === true) {
+            return true;
+        }
+        else {
+
+            var summary = "";
+
+            listNotFoundKeys().forEach(function (item) {
+                summary += item.locale + "->" + item.key + "\n";
+            });
+             
+            grunt.fail.warn('Locale files have missing keys. Read below summary for details...\n\n' + summary + "\n");
+        }
+
+    });
     grunt.registerTask('preCompile', 'Compile css, js & resources', function (isDeploy) {
         // parameters are passed when grunt is run using -> grunt preCompile:deploy
 
@@ -350,14 +448,14 @@
 
             //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
             //    I prefer not to use this min.css generated until 'bugs' are fixed
-            tasks2Run.push('env:prod', 'jshint:files', /*'bump',*/ 'clean'/*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/, 'requirejs', 'concat', 'uglify');
+            tasks2Run.push('env:prod', 'i18nCheck', 'jshint:files', /*'bump',*/ 'clean'/*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/, 'requirejs', 'concat', 'uglify');
         }
         else {
 
             requireConfig('none', true, true);
 
 
-            tasks2Run.push('jshint:files', 'bump', 'clean', 'requirejs', 'concat'/*, 'uglify'*/);
+            tasks2Run.push('jshint:files', 'i18nCheck', 'bump', 'clean', 'sortJSON', 'requirejs', 'concat'/*, 'uglify'*/);
         }
 
         grunt.task.run(tasks2Run);

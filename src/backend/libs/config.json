@@ -13,7 +13,7 @@
     },
     "i18n": {
         "directory": "./src/backend/libs/locales",
-        "locales": [ "es", "en" ],
+        "locales": [ "es", "en"],
         "defaultLocale": "es",
         "prefLocale": "es",
         "cookieName": "locale",

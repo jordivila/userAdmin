@@ -82,7 +82,7 @@
                     },
                     {
                         //url: "/globalize/",
-                        text: i18n.__("Globalize"),
+                        text: "Globalize",
                         childs: [
                             {
                                 url: "/globalize/serverside/",

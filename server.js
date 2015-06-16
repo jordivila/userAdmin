@@ -73,10 +73,6 @@
             testsController.initTestEnvironment(app);
         }
 
-
-
-
-
         //begin -> set public static
         app.use('/public/scripts', express.static(app.get('root') + 'scripts', {
             maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
@@ -94,10 +90,6 @@
             maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
         }));
         //end -> set public static content folders
-
-
-
-
 
         routingHandler.setRoutes(app, log, authController);
 
@@ -123,7 +115,6 @@
             process.exit(1);
         });
 
-
         console.log("//Start listening");
 
         app.listen(app.get('port'), function () {
@@ -135,23 +126,8 @@
             log.info('Express server listening on port ' + app.get('port'));
             log.info("********************************************************************");
 
-
-
         });
 
-
-
     });
-
-
-
-
-
-
-
-
-
-
-
 
 })(module);

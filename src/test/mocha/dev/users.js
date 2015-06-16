@@ -43,8 +43,6 @@
             return false;
         }
         
-
-        
         describe('Register process', function () {
             
             it('no invalid emails allowed', function (done) {
@@ -107,7 +105,7 @@
                     userController.confirmEmail(global, createdUser.data.tokenId, function (err, confirmResult) {
                         assert.equal(err, null, err === null ? '' : err.message);
                         assert.equal(createdUser.isValid, true);
-                        assert.equal(resultHasMessage(i18n.__("AccountResourcesTexts.AccountActivated"), confirmResult.messages), true);
+                        assert.equal(resultHasMessage(i18n.__("AccountResources.AccountActivated"), confirmResult.messages), true);
                         done();
                     });
                 });
@@ -116,7 +114,7 @@
             it('confirm user email with invalid token not allowed', function (done) {
                 userController.confirmEmail(global, 'unexistingTokenId', function (err, confirmResult) {
                     assert.equal(err instanceof ErrorHandled, true, "error should be instanceOf ErrorHandled");
-                    assert.equal(err.message, i18n.__("AccountResourcesTexts.CantAccessYourAccount_TokenExpired"));
+                    assert.equal(err.message, i18n.__("AccountResources.CantAccessYourAccount_TokenExpired"));
                     done();
                 });
             });
@@ -274,7 +272,7 @@
                     userController.confirmEmail(global, createdUser.data.tokenId, function (err, confirmResult) {
                         assert.equal(err, null, err === null ? '' : err.message);
                         assert.equal(createdUser.isValid, true);
-                        assert.equal(resultHasMessage(i18n.__("AccountResourcesTexts.AccountActivated"), confirmResult.messages), true);
+                        assert.equal(resultHasMessage(i18n.__("AccountResources.AccountActivated"), confirmResult.messages), true);
                         
                         authController.basicCredentialsCheck(
                             global,
@@ -289,9 +287,6 @@
                 });
             });
         });
-
-
-
 
     });
 })();

@@ -93,7 +93,7 @@
 
             //send token via email
 
-            return cb(new ErrorHandledModel(i18n.__("Not implemented")));
+            return cb(new ErrorHandledModel(i18n.__("GeneralTexts.NotImplemented")));
         }
 
         return cb(null, resultData);
