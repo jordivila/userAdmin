@@ -1,6 +1,6 @@
 {
   "name": "userAdmin",
-  "version": "0.0.7159",
+  "version": "0.0.7234",
   "description": "userAdmin",
   "private": true,
   "author": {
@@ -51,7 +51,7 @@
     "node-uuid": "1.4.3",
     "passport": "0.2.1",
     "passport-http": "0.2.2",
-    "requirejs": "^2.1.18",
+    "requirejs": "2.1.18",
     "sendgrid": "1.7.0",
     "serve-favicon": "2.2.0",
     "validator": "3.39.0",

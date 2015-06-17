@@ -179,6 +179,15 @@ define([
 
                    };
 
+                   Handlebars.registerHelper('__', function (context, options) {
+
+                       if (Object.keys(options.data.root.i18nTexts).indexOf(context) > -1) {
+                           return options.data.root.i18nTexts[context];
+                       }
+                       else {
+                           return context;
+                       }
+                   });
 
 
                    History.Adapter.bind(window, 'statechange', function () { // Note: We are using statechange instead of popstate

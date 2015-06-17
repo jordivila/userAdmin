@@ -39,6 +39,8 @@ Dev Words
 Next things to keep an eye
 
 - [Deploy to Azure button](http://blog.stevenedouard.com/continuous-delivery-azure-websites-atlassian/ "Deploy to Azure button")
+- [10 tips performance](https://engineering.linkedin.com/nodejs/blazing-fast-nodejs-10-performance-tips-linkedin-mobile "10 tips performance")
+- [making dashboard faster](https://engineering.gosquared.com/making-dashboard-faster "making dashboard faster")
 
 
 Utils

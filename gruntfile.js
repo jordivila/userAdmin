@@ -422,7 +422,7 @@
             requireConfig('none', true, true);
 
 
-            tasks2Run.push('jshint:files', 'i18nCheck', 'bump', 'clean', 'sortJSON', 'requirejs', 'concat'/*, 'uglify'*/);
+            tasks2Run.push('jshint:files', 'bump', 'clean', 'sortJSON', 'requirejs', 'concat'/*, 'uglify'*/);
         }
 
         grunt.task.run(tasks2Run);

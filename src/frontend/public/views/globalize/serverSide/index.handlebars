@@ -1,14 +1,14 @@
 <div id="demo">
-    <h2>Demo output</h2>
-    <p>Now: <span id="date">{{TheDate}}</span></p>
-    <p>A number: <span id="number">{{TheNumber}}</span></p>
-    <p>A currency: <span id="currency">{{TheCurrency}}</span></p>
+    <h2>{{{__ "Views.Globalize.DemoOutput"}}}</h2>
+    <p>{{{__ "Views.Globalize.Now"}}}: <span id="date">{{TheDate}}</span></p>
+    <p>{{{__ "Views.Globalize.ANumber"}}}: <span id="number">{{TheNumber}}</span></p>
+    <p>{{{__ "Views.Globalize.ACurrency"}}}: <span id="currency">{{TheCurrency}}</span></p>
     <p>Plural form of <span id="plural-number">{{ThePlural}}</span> is <span id="plural-form"></span></p>
-    <p>Messages:</p>
+    <p>{{{__ "Views.Globalize.Messages"}}}:</p>
     <ul>
         {{#each TheMessages}}
         <li><span>{{this}}</span></li>
         {{/each}}
     </ul>
-    <p>Something happened: <span id="relative-time">{{TheTimeAgo}}</span></p>
+    <p>{{{__ "Views.Globalize.SomethingHappened"}}}: <span id="relative-time">{{TheTimeAgo}}</span></p>
 </div>
