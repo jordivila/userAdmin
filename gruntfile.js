@@ -389,10 +389,39 @@
             listNotFoundKeys().forEach(function (item) {
                 summary += item.locale + config.i18n.extension + " file is missing key: '" + item.key + "'\n";
             });
-             
+
             grunt.fail.warn('Locale files have missing keys. Read below summary for details...\n\n' + summary + "\n");
         }
 
+    });
+    grunt.registerTask('globCldrData', 'Copying cldr-data folder from npm source iunto bower folder', function () {
+
+        var done = this.async();
+        var bowerDirectory = grunt.file.readJSON('.bowerrc').directory;
+        var folderCldrData = "cldr-data";
+        var cldrDownloader = require("cldr-data-downloader");
+
+        if (grunt.file.exists(bowerDirectory, folderCldrData, "state.json")) {
+            done();
+        }
+        else {
+
+            grunt.log.writeln("Loading globalize cldr-data...");
+
+            cldrDownloader(
+              "http://www.unicode.org/Public/cldr/26/json.zip",
+              bowerDirectory + "/cldr-data",
+              function (error) {
+                  if (error) {
+                      grunt.fail.fatal(error);
+                      done(false);
+                  }
+                  else {
+                      done();
+                  }
+              }
+            );
+        }
     });
     grunt.registerTask('preCompile', 'Compile css, js & resources', function (isDeploy) {
         // parameters are passed when grunt is run using -> grunt preCompile:deploy
@@ -415,14 +444,14 @@
 
             //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
             //    I prefer not to use this min.css generated until 'bugs' are fixed
-            tasks2Run.push('env:prod', 'i18nCheck', 'jshint:files', /*'bump',*/ 'clean'/*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/, 'requirejs', 'concat', 'uglify');
+            tasks2Run.push('env:prod', 'globCldrData', 'i18nCheck', 'jshint:files', /*'bump',*/ 'clean'/*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/, 'requirejs', 'concat', 'uglify');
         }
         else {
 
             requireConfig('none', true, true);
 
 
-            tasks2Run.push('jshint:files', 'bump', 'clean', 'sortJSON', 'requirejs', 'concat'/*, 'uglify'*/);
+            tasks2Run.push('jshint:files', 'globCldrData', 'bump', 'clean', 'sortJSON', 'requirejs', 'concat'/*, 'uglify'*/);
         }
 
         grunt.task.run(tasks2Run);

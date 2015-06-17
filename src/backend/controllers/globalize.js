@@ -6,12 +6,12 @@
 
     var markdown = require("markdown").markdown;
     var GenericViewController = require('./classes/genericView');
-    var cldrDownloader = require("cldr-data-downloader");
+    //var cldrDownloader = require("cldr-data-downloader");
     var Globalize = require("globalize");
     var config = require("../libs/config");
     var util = require("../libs/commonFunctions");
     var fs = require('fs');
-    var bowerSrc = JSON.parse(fs.readFileSync(__dirname + "../../../../.bowerrc", 'utf8'));
+    //var bowerSrc = JSON.parse(fs.readFileSync(__dirname + "../../../../.bowerrc", 'utf8'));
 
 
     function GlobalizeController() {
@@ -20,20 +20,6 @@
     GlobalizeController.prototype = new GenericViewController();
     GlobalizeController.prototype.initCldrData = function (cb) {
 
-        cldrDownloader(
-          "http://www.unicode.org/Public/cldr/26/json.zip",
-          "./" + bowerSrc.directory + "/cldr-data",
-          function (error) {
-
-
-
-              if (error) {
-                  console.error("Whops", error.message);
-              }
-
-
-              // Before we can use Globalize, we need to feed it on the appropriate I18n content (Unicode CLDR). 
-              //Read Requirements on Getting Started on the root's README.md for more information.
               Globalize.load(
                   require("cldr-data/main/es/ca-gregorian"),
                   require("cldr-data/main/es/currencies"),
@@ -76,12 +62,7 @@
                   },
               });
 
-
-              cb(error);
-          }
-        );
-
-
+              cb();
     };
     GlobalizeController.prototype.viewIndexModel = function (req, cb) {
 
