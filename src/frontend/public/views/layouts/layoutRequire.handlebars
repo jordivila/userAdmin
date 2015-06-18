@@ -4,9 +4,9 @@
     <meta name="viewport" content="initial-scale=1.0" />
     <title>{{Title}}</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <link id="jQueryUITheme" href="//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/{{Theme}}/jquery-ui.css" rel="Stylesheet" type="text/css" />
-    <link href="/public/cdn/{{Package.name}}.{{Package.version}}.ui.css" rel="Stylesheet" type="text/css" />
-    {{#each CssFiles}}
+    <link id="jQueryUITheme" href="//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/{{theme}}/jquery-ui.css" rel="Stylesheet" type="text/css" />
+    <link href="/public/cdn/{{package.name}}.{{package.version}}.ui.css" rel="Stylesheet" type="text/css" />
+    {{#each cssFiles}}
     <link href="{{this}}" rel="Stylesheet" type="text/css" />
     {{/each}}
 </head>
@@ -23,7 +23,7 @@
         <div class="ui-site-version">
             <div>Copyright © 2012 Company Co.</div>
             <div>All rights reserved</div>
-            <div>v. - {{Package.version}}</div>
+            <div>v. - {{package.version}}</div>
         </div>
     </div>
 
@@ -37,7 +37,7 @@
                     <div class="ui-helper-clearfix"></div>
                 </div>
                 <div class="ui-site-nameBox">
-                    <a href="/">{{DomainName}}</a>
+                    <a href="/">{{domainName}}</a>
                 </div>
             </div>
             <div class="ui-helper-clearfix"></div>
@@ -105,7 +105,7 @@
             return false;
         }
     </script>-->
-    {{#if IsTest}}
+    {{#if isTest}}
     <script src="http://localhost:35729/livereload.js"></script>
     {{/if}}
     <script src="/public/bower_components/requirejs/require.js"></script>
@@ -114,7 +114,7 @@
         requirejs.config({
             //Set config for finding 'jqueryui'. The path is relative
             //to the location of require-jquery.js.
-            urlArgs: "bust={{Package.version}}",
+            urlArgs: "bust={{package.version}}",
             waitSeconds: 0,
             baseUrl: "/public",
             paths: {
@@ -160,17 +160,12 @@
         ],
         function (req, VsixMvcAppResult) {
 
-            VsixMvcAppResult.LayoutModel = {
-                appVersion : "{{Package.version}}",
-                cultureGlobalization : "{{Globalization.cultureGlobalization}}",
-                cultureDatePicker : "{{Globalization.cultureDatePicker}}",
-            };
-
             jQuery(document).ready(function(){
 
+                VsixMvcAppResult.Widgets.PageOptions.appVersion = "{{package.version}}";
                 VsixMvcAppResult.Widgets.PageOptions.selector = "body";
-                VsixMvcAppResult.Widgets.PageOptions.cultureGlobalization = '{{Globalization.cultureGlobalization}}';
-                VsixMvcAppResult.Widgets.PageOptions.cultureDatePicker = '{{Globalization.cultureDatePicker}}';
+                VsixMvcAppResult.Widgets.PageOptions.cultureGlobalization = '{{globalization.cultureGlobalization}}';
+                VsixMvcAppResult.Widgets.PageOptions.cultureDatePicker = '{{globalization.cultureDatePicker}}';
                 VsixMvcAppResult.Widgets.PageOptions.onInit(function () {
                     jQuery("body").removeClass("ui-helper-hidden");
 
@@ -187,10 +182,11 @@
                     {{/if}}
 
                     });
-                        VsixMvcAppResult.Widgets.PageOptions.Init();
 
-                    });
+                    VsixMvcAppResult.Widgets.PageOptions.Init();
+
                 });
+            });
     </script>
 
 

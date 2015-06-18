@@ -4,11 +4,11 @@
 
            var VsixMvcAppResult = {};
 
-           VsixMvcAppResult.LayoutModel = {
-               appVersion: null,
-               cultureGlobalization: null,
-               cultureDatePicker: null,
-           };
+           //VsixMvcAppResult.LayoutModel = {
+           //    appVersion: null,
+           //    cultureGlobalization: null,
+           //    cultureDatePicker: null,
+           //};
 
            VsixMvcAppResult.Utils = {
 

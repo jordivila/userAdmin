@@ -20,9 +20,9 @@
 
         req.viewModel = util.extend(req.viewModel, require(viewModelPath));
 
-        //req.viewModel.JsFiles
-        for (var i = 0; i < req.viewModel.JsFiles.length; i++) {
-            req.viewModel.JsFiles[i] = req.viewModel.JsFiles[i].replace('{{Package.name}}', req.viewModel.Package.name).replace('{{Package.version}}', req.viewModel.Package.version);
+        //req.viewModel.jsFiles
+        for (var i = 0; i < req.viewModel.jsFiles.length; i++) {
+            req.viewModel.jsFiles[i] = req.viewModel.jsFiles[i].replace('{{package.name}}', req.viewModel.package.name).replace('{{package.version}}', req.viewModel.package.version);
         }
 
 
@@ -38,7 +38,7 @@
     };
     GenericView.prototype.viewIndex = function (app, req, res, next) {
 
-        if (req.viewModel.IsSEORequest) {
+        if (req.viewModel.isSEORequest) {
 
             this.viewIndexModel(req, function (err, result) {
 

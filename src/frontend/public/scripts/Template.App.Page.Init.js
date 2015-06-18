@@ -5,6 +5,7 @@ define([
 function (wPage, VsixMvcAppResult) {
 
            VsixMvcAppResult.Widgets.PageOptions = {
+               appVersion: null,
                selector: null,
                cultureGlobalization: null,
                cultureDatePicker: null,

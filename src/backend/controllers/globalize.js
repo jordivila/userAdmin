@@ -6,12 +6,10 @@
 
     var markdown = require("markdown").markdown;
     var GenericViewController = require('./classes/genericView');
-    //var cldrDownloader = require("cldr-data-downloader");
     var Globalize = require("globalize");
     var config = require("../libs/config");
     var util = require("../libs/commonFunctions");
     var fs = require('fs');
-    //var bowerSrc = JSON.parse(fs.readFileSync(__dirname + "../../../../.bowerrc", 'utf8'));
 
 
     function GlobalizeController() {
@@ -68,7 +66,7 @@
 
 
         var like;
-        var currentCulture = req.viewModel.Globalization.cultureGlobalization;
+        var currentCulture = req.viewModel.globalization.cultureGlobalization;
 
 
         Globalize.locale(currentCulture);

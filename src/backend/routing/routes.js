@@ -77,7 +77,7 @@
 
             baseController.setViewModelBase(req);
 
-            if (req.viewModel.IsSEORequest) {
+            if (req.viewModel.isSEORequest) {
                 res.status(404);
                 res.render("errors/404/index.handlebars", req.viewModel);
             }
@@ -116,7 +116,7 @@
                 baseController.setViewModelBase(req);
             }
 
-            if (req.viewModel.IsSEORequest) {
+            if (req.viewModel.isSEORequest) {
                 res.render("errors/500/index.handlebars", req.viewModel);
             }
             else {

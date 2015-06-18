@@ -1,50 +1,55 @@
-define(["jquery", "scripts/Template.App.Init", "scripts/url/UrlHelper"],
-       function ($, VsixMvcAppResult) {
+define([
+    "jquery",
+    "scripts/Template.App.Init",
+    "scripts/url/UrlHelper",
+    "scripts/Template.App.Page.Init"
+],
+    function ($, VsixMvcAppResult) {
 
 
-           jQuery(document).ready(function () {
-               jQuery.ajaxSetup({
-                   type: "GET",
-                   contentType: "application/json; charset=utf-8",
-                   dataType: "json",
-                   beforeSend: function (xhr, settings) {
+        jQuery(document).ready(function () {
+            jQuery.ajaxSetup({
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                beforeSend: function (xhr, settings) {
 
-                       var urlHelper = new UrlHelper(settings.url);
+                    var urlHelper = new UrlHelper(settings.url);
 
-                       if (urlHelper.hostname == window.location.hostname) {
-                           settings.url = new UrlHelper(settings.url).paramSet("appVersion", VsixMvcAppResult.LayoutModel.appVersion).href;
-                           settings.url = new UrlHelper(settings.url).paramSet("seoRequest", false).href;
-                       }
-                   }
-               });
-           });
+                    if (urlHelper.hostname == window.location.hostname) {
+                        settings.url = new UrlHelper(settings.url).paramSet("appVersion", VsixMvcAppResult.Widgets.PageOptions.appVersion).href;
+                        settings.url = new UrlHelper(settings.url).paramSet("seoRequest", false).href;
+                    }
+                }
+            });
+        });
 
-           VsixMvcAppResult.Ajax = {};
+        VsixMvcAppResult.Ajax = {};
 
-           VsixMvcAppResult.Ajax.onOkKoComplete = function (opts, onOK, onKO, onComplete) {
+        VsixMvcAppResult.Ajax.onOkKoComplete = function (opts, onOK, onKO, onComplete) {
 
-               var jqxhr = jQuery.ajax(opts)
-                                   .done(function (data, textStatus, jqXHR) {
-                                       onOK(data);
-                                   })
-                                   .fail(function (jqXHR, textStatus, errorThrown) {
-                                       onKO(jqXHR);
-                                   })
-                                   .always(function (jqXHR, textStatus, errorThrown) {
-                                       onComplete();
-                                   });
+            var jqxhr = jQuery.ajax(opts)
+                                .done(function (data, textStatus, jqXHR) {
+                                    onOK(data);
+                                })
+                                .fail(function (jqXHR, textStatus, errorThrown) {
+                                    onKO(jqXHR);
+                                })
+                                .always(function (jqXHR, textStatus, errorThrown) {
+                                    onComplete();
+                                });
 
-               return jqxhr;
-           };
+            return jqxhr;
+        };
 
-           VsixMvcAppResult.Ajax.UserMenu = function (onOK, onKO, onComplete) {
-               VsixMvcAppResult.Ajax.onOkKoComplete({
-                   url: "/api/user/menu",
-                   type: "GET",
-                   data: {},
-                   cache: false
-               }, onOK, onKO, onComplete);
-           };
+        VsixMvcAppResult.Ajax.UserMenu = function (onOK, onKO, onComplete) {
+            VsixMvcAppResult.Ajax.onOkKoComplete({
+                url: "/api/user/menu",
+                type: "GET",
+                data: {},
+                cache: false
+            }, onOK, onKO, onComplete);
+        };
 
-           return VsixMvcAppResult;
-       });
+        return VsixMvcAppResult;
+    });

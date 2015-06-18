@@ -24,7 +24,7 @@
                 var m = util.extend(req.viewModel, require(modelTemplate));
 
                 //do render     
-                if (m.IsSEORequest) {
+                if (m.isSEORequest) {
                     //render SEO friendly layout + template
                     res.render(req.params[0] + '/index.handlebars', m);
                 }

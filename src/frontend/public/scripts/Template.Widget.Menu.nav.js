@@ -90,7 +90,7 @@ define([
                        })
                        .done(function (data, textStatus, jqXHR) {
 
-                           var templatePartialCssFiles = "{{#each CssFiles}}<link href='{{this}}' rel='Stylesheet' type='text/css' />{{/each}}";
+                           var templatePartialCssFiles = "{{#each cssFiles}}<link href='{{this}}' rel='Stylesheet' type='text/css' />{{/each}}";
                            var template = Handlebars.compile(data + templatePartialCssFiles);
                            var templateContext = {};
 
