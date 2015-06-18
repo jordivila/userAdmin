@@ -2,18 +2,17 @@ define([
     "jquery",
     "jqueryui",
     "handlebars",
-    "history",
     "scripts/Template.App.Ajax.Init",
     "scripts/Template.Widget.Menu.slides"],
-       function ($, jqUI, Handlebars, hist, VsixMvcAppResult) {
+       function ($, jqUI, Handlebars, VsixMvcAppResult, wSlides) {
 
 
            jQuery.widget("ui.menuNav", jQuery.ui.widgetBase, {
                options: {
-                   texts: {
-                       loadingTmpl: "Loading template",
-                       errLoadingTmpl: "Error loading template"
-                   }
+                   //texts: {
+                   //    loadingTmpl: "Loading template",
+                   //    errLoadingTmpl: "Error loading template"
+                   //}
                },
                _create: function () {
                    this._super();
@@ -33,12 +32,13 @@ define([
                        .find("div.userActiviyErrMsg:first")
                        .html(msg);
                },
+               
                _initMenuNav: function () {
 
                    //TODO: load async Menu based on user identity
                    var self = this;
                    var $sitePage = jQuery('div.ui-sitePage:first');
-                   var $siteContent = jQuery('div.ui-siteContent:first');
+                   
                    var $panelMenu = jQuery('#panelMenu');
                    var $panelMenuList = jQuery($panelMenu).find('div.ui-menuBase:first');
                    var $panelMenuToggle = jQuery('div.ui-mainMenuToggle');
@@ -71,137 +71,7 @@ define([
                            panelMenuShow(cb);
                        }
                    };
-                   var loadTemplate = function (State) {
-
-                       var templUrl = State.hash;
-
-                       console.log("removing page content");
-
-                       $siteContent.empty();
-
-                       console.log("geting html page content for " + templUrl);
-
-                       // ask for the template
-                       jQuery.ajax({
-                           url: templUrl,
-                           type: "GET",
-                           dataType: "html",
-                           cache: true,
-                       })
-                       .done(function (data, textStatus, jqXHR) {
-
-                           var templatePartialCssFiles = "{{#each cssFiles}}<link href='{{this}}' rel='Stylesheet' type='text/css' />{{/each}}";
-                           var template = Handlebars.compile(data + templatePartialCssFiles);
-                           var templateContext = {};
-
-
-                           console.log("geting page model content for " + templUrl + 'index.handlebars.json');
-
-                           // ask for the template context
-                           jQuery.ajax({
-                               url: templUrl + 'index.handlebars.json',
-                               type: "GET",
-                               dataType: "json",
-                               cache: false,    // view model MUST NOT be chached
-                           })
-                           .done(function (dataJson, textStatusJson, jqXHRJson) {
-
-                               if (dataJson.Title) {
-                                   jQuery('body')
-                                       .find('h1:first')
-                                           .html(dataJson.Title);
-                               }
-
-                               var html = template(jQuery.extend({}, dataJson, templateContext));
-
-                               console.log("append html content");
-
-                               $siteContent.html(html);
-
-                               console.log("check ViewEntryPoint");
-
-                               if (dataJson.ViewEntryPoint && dataJson.ViewEntryPoint !== null) {
-
-                                   console.log("requiring ViewEntryPoint");
-
-                                   require(
-                                       /*
-                                       1.- require will cache ViewEntryPoints
-                                       2.- forcing views to execute viewEntryPoint."main" previously loaded
-                                       3.- using urlArgs=bust+ (new Date()).getTime() is not an potion
-                                            as far as would load every script again and again
-                                       4.- best solution is to add .getTime() to viewEntryPoint url.
-                                           This way viewEntryPoint will always be overriden to the last script loaded
-                                           Bu keeps caching viewEntrypoint dependencies
-                                       */
-                                       [dataJson.ViewEntryPoint + "?_=" + (new Date()).getTime()],
-                                       function (VsixMvcAppResult) {
-                                           VsixMvcAppResult.View.main();
-                                       },
-                                       function (errRequiring) {
-                                           console.error(errRequiring);
-                                       });
-                               }
-
-                           })
-                           .fail(function (jqXHR, textStatus, errorThrown) {
-
-                               console.error(new Error("Error getting page model", {
-                                   jqXHR: jqXHR,
-                                   textStatus: textStatus,
-                                   errorThrown: errorThrown
-                               }));
-
-                               // specific template context fail to load. 
-                               // try transform with basic template context
-                               var html = template(templateContext);
-                               $siteContent.html(html);
-                           })
-                           .always(function () {
-                               self.progressHide();
-                           });
-
-                       })
-                       .fail(function (jqXHR, textStatus, errorThrown) {
-
-                           console.error("Error lading template '{0}' ->".format(templUrl), {
-                               jqXHR: jqXHR,
-                               textStatus: textStatus,
-                               errorThrown: errorThrown
-                           });
-
-                           $siteContent.html('<div class="ui-state-error ui-site-templateInfo">' + self.options.texts.errLoadingTmpl + ': {0} - {1} - {2} </div>'.format(jqXHR.status, textStatus, errorThrown));
-
-                       })
-                       .always(function () {
-                           self.progressHide();
-                       });
-
-                   };
-
-                   Handlebars.registerHelper('__', function (context, options) {
-
-                       if (Object.keys(options.data.root.i18nTexts).indexOf(context) > -1) {
-                           return options.data.root.i18nTexts[context];
-                       }
-                       else {
-                           return context;
-                       }
-                   });
-
-
-                   History.Adapter.bind(window, 'statechange', function () { // Note: We are using statechange instead of popstate
-
-                       self.progressShow(self.options.loadingTmpl);
-
-                       // Log the State
-                       var State = History.getState(); // Note: We are using History.getState() instead of event.state
-                       History.log('statechange:', State.data, State.title, State.url);
-
-
-                       loadTemplate(State);
-                   });
-
+                   
 
 
 
@@ -211,23 +81,13 @@ define([
                        selected: function (e, templ) {
 
                            var templGetFunc = function () {
-
-                               var templUrl = templ.url;
-
-                               History.pushState(null, null, templUrl);
-
-                               //loadTemplate(templUrl);
+                               self._trigger('selected', null, templ);
                            };
 
                            if ($panelMenuToggle.is(':visible')) {
                                panelMenuHide(function () {
                                    templGetFunc();
                                });
-
-                               //panelMenuHide(setTimeout(function () {
-                               //    templGetFunc();
-                               //},
-                               //500));
                            }
                            else {
                                templGetFunc();

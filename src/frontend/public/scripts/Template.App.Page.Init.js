@@ -16,7 +16,6 @@ function (wPage, VsixMvcAppResult) {
                Init: function () {
                    var self = this;
                    jQuery(this.selector).page({
-                       cultureGlobalization: this.cultureGlobalization,
                        cultureDatePicker: this.cultureDatePicker,
                        initComplete: function () {
 

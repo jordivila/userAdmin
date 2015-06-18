@@ -4,12 +4,6 @@
 
            var VsixMvcAppResult = {};
 
-           //VsixMvcAppResult.LayoutModel = {
-           //    appVersion: null,
-           //    cultureGlobalization: null,
-           //    cultureDatePicker: null,
-           //};
-
            VsixMvcAppResult.Utils = {
 
                getCookie: function (cname) {

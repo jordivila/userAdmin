@@ -12,15 +12,15 @@ This website template is in beta. I'm using Nodejs & Mongodb to build a website 
 Objectives
 
 1. Lightweight application 
-2. SPA application and SEO support 
-3. Internationalization support at client & server 
-4. 
+2. SPA application with SEO support 
+3. Automated testing and continuous integration
+4. Client/server cross platform -> node.js & native mobile appliactions
+5. Client/server module application with dependency loader
+6. Client/server internationalization support 
 
 Task List
  
-1. Globalize at client & server side
-2. i18n Texts at client & server side
-3. Use Google & Facebook & github passport authentication
+1. Use Google & Facebook & github passport authentication
 
 SEO Tools
 
@@ -47,4 +47,3 @@ Utils
 
 - [http://markdownpad.com/](http://markdownpad.com/ "http://markdownpad.com/")
 - [https://regex101.com/](https://regex101.com/ "https://regex101.com/")
-
