@@ -26,6 +26,7 @@
     "requirejs-domready": "2.0.1",
     "requirejs-plugins": "1.0.3",
     "requirejs-text": "2.0.14",
-    "components-font-awesome": "4.3.0"
+    "components-font-awesome": "4.3.0",
+    "p-promise": "~0.5.0"
   }
 }

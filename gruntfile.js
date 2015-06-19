@@ -187,9 +187,22 @@
 
                         {
                             name: "scripts/modules/jquery.ui.custom.bundle",
+                            exclude: [
+
+                            ]
                         },
                         {
                             name: "scripts/modules/main",
+                            exclude: [
+                                 //"bower/jquery-ui/ui/minified/jquery.ui.core.min",
+                                 //"bower/jquery-ui/ui/minified/jquery.ui.widget.min",
+                                 //"bower/jquery-ui/ui/minified/jquery.ui.datepicker.min",
+                                 //"bower/jquery-ui/ui/minified/jquery.ui.button.min",
+                                 //"bower/jquery-ui/ui/minified/jquery.ui.effect.min",
+                                 //"bower/jquery-ui/ui/minified/jquery.ui.effect-drop.min",
+                                 //"bower/jquery-ui/ui/minified/jquery.ui.effect-slide.min",
+                                 //"scripts/modules/jquery.ui.custom.bundle.js",
+                            ]
                         },
                         {
                             name: "scripts/modules/crud",
@@ -219,6 +232,10 @@
                         },
                         {
                             name: "scripts/modules/glob",
+                            exclude: [
+                                "bower/requirejs-text/text",
+                                "bower/requirejs-plugins/src/json",
+                            ]
                         }
 
                     ],
@@ -231,6 +248,7 @@
                         handlebars: "../bower_components/handlebars/handlebars.min",
                         history: '../bower_components/history.js/scripts/bundled/html5/jquery.history',
                         bower: '../bower_components/',
+                        pPromises: '../bower_components/p-promise/p.min',
 
                         /**************************************************************
                                     Globalize dependencies paths begin
@@ -261,17 +279,28 @@
 
                     done: function (done, output) {
 
-                        //var duplicates = require('rjs-build-analysis').duplicates(output);
 
-                        //if (Object.keys(duplicates).length > 0) {
-                        //    grunt.log.subhead('Duplicates found in requirejs build:');
-                        //    for (var key in duplicates) {
-                        //        grunt.log.error(duplicates[key] + ": " + key);
-                        //    }
-                        //    return done(new Error('r.js built duplicate modules, please check the excludes option.'));
-                        //} else {
-                        //    grunt.log.success("No duplicates found!");
-                        //}
+                        /*
+                        Analyse your r.js build output for potential mistakes.
+                        */
+
+                        var duplicates = require('rjs-build-analysis').duplicates(output);
+
+                        if (Object.keys(duplicates).length > 0) {
+                            grunt.log.subhead('Duplicates found in requirejs build:');
+                            for (var key in duplicates) {
+                                grunt.log.error(duplicates[key] + ": " + key);
+                            }
+
+                            // rjs-build-analysis-> seems not to work very well
+                            // It finds as duplicates some files that modules need.
+                            // I keep this code for warning messages only
+                            // that's why I comment the next line 
+                            //return done(new Error('r.js built duplicate modules, please check the excludes option.'));
+
+                        } else {
+                            grunt.log.success("No duplicates found!");
+                        }
 
                         done();
                     }

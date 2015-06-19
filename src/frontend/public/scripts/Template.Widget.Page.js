@@ -8,8 +8,6 @@ define([
 ],
 function ($, jqUI, Handlebars, hist, nav, VsixMvcAppResult) {
 
-
-
     jQuery.widget("ui.page", jQuery.ui.widgetBase, {
         options: {
             cultureDatePicker: null,
@@ -73,6 +71,9 @@ function ($, jqUI, Handlebars, hist, nav, VsixMvcAppResult) {
             var dfd = jQuery.Deferred();
 
             if (self.options.cultureDatePicker !== 'en') {
+
+                dfd.notify("Loading calendar...");
+
                 require(['bower_components/jquery-ui/ui/minified/i18n/jquery.ui.datepicker-' + self.options.cultureDatePicker + '.min'],
                     function (d) {
 
@@ -91,7 +92,6 @@ function ($, jqUI, Handlebars, hist, nav, VsixMvcAppResult) {
             }
 
             return dfd.promise();
-
         },
         historyInit: function () {
 
@@ -153,70 +153,41 @@ function ($, jqUI, Handlebars, hist, nav, VsixMvcAppResult) {
 
             $siteContent.empty();
 
-            var viewHtml = jQuery.ajax({
-                url: templUrl,
-                type: "GET",
-                dataType: "html",
-                cache: true,
-            });
-            var viewModel = jQuery.ajax({
-                url: templUrl + 'index.handlebars.json',
-                type: "GET",
-                dataType: "json",
-                cache: false,    // view model MUST NOT be chached
-            });
+            VsixMvcAppResult.Ajax.View(templUrl, function (err, data) {
 
-            $.when(viewHtml, viewModel)
-             .done(function (viewHtmlRes, viewModelRes) {
+                if (err !== null) {
+                    console.error(new Error("Error loading view data", arguments));
+                    dfd.reject("Error getting view data");
+                }
+                else {
 
-                 var html = viewHtmlRes[0] + "{{#each cssFiles}}<link href='{{this}}' rel='Stylesheet' type='text/css' />{{/each}}";
-                 var model = viewModelRes[0];
-                 var template = Handlebars.compile(html);
-                 var templateContext = {};
-                 var handlebarTemplate = template(jQuery.extend({}, model, templateContext));
+                    var html = data[0] + "{{#each cssFiles}}<link href='{{this}}' rel='Stylesheet' type='text/css' />{{/each}}";
+                    var model = data[1];
+                    var hasEntry = data[2];
+                    var template = Handlebars.compile(html);
+                    var templateContext = {};
+                    var handlebarTemplate = template(jQuery.extend({}, model, templateContext));
 
-                 if (model.Title) {
-                     jQuery('body')
-                         .find('h1:first')
-                             .html(model.Title);
-                 }
+                    if (model.Title) {
+                        jQuery('body')
+                            .find('h1:first')
+                                .html(model.Title);
+                    }
 
 
-                 $siteContent.html(handlebarTemplate);
+                    $siteContent.html(handlebarTemplate);
 
 
-                 if (model.ViewEntryPoint && model.ViewEntryPoint !== null) {
+                    if (hasEntry) {
 
-                     dfd.notify("requiring ViewEntryPoint");
+                        VsixMvcAppResult.View.main();
 
-                     require(
-                         /*
-                         1.- require will cache ViewEntryPoints
-                         2.- forcing views to execute viewEntryPoint."main" previously loaded
-                         3.- using urlArgs=bust+ (new Date()).getTime() is not an potion
-                              as far as would load every script again and again
-                         4.- best solution is to add .getTime() to viewEntryPoint url.
-                             This way viewEntryPoint will always be overriden to the last script loaded
-                             Bu keeps caching viewEntrypoint dependencies
-                         */
-                         [model.ViewEntryPoint + "?_=" + (new Date()).getTime()],
-                         function (VsixMvcAppResult) {
-                             VsixMvcAppResult.View.main();
-
-                             dfd.resolve();
-                         },
-                         function (errRequiring) {
-                             console.error(errRequiring);
-                             dfd.reject("Error getting page view entry point");
-                         });
-                 }
-                 else {
-                     dfd.resolve();
-                 }
-             })
-            .fail(function () {
-                console.error(new Error("Error view data", arguments));
-                dfd.reject("Error getting view data");
+                        dfd.resolve();
+                    }
+                    else {
+                        dfd.resolve();
+                    }
+                }
             });
 
             return dfd.promise();

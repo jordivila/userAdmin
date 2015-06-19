@@ -4,9 +4,10 @@ define(["jquery", "jqueryui", "scripts/Template.App.Init", "scripts/Template.App
        VsixMvcAppResult.View = {
            main: function () {
 
-               VsixMvcAppResult.Ajax.UserMenu(
-                   function (data, textStatus, jqXHR) {
+               VsixMvcAppResult.Ajax.UserMenu(function (err, data) {
 
+                   if (err === null)
+                   {
                        jQuery('div.ui-menuSlidesSample:first')
                            .menuSlides({
                                dataBound: function (e) {
@@ -17,13 +18,9 @@ define(["jquery", "jqueryui", "scripts/Template.App.Init", "scripts/Template.App
                                }
                            })
                            .menuSlides('bind', data);
-                   },
-                   function (jqXHR, textStatus, errorThrown) {
+                   }
 
-                   },
-                   function (jqXHR, textStatus, errorThrown) {
-
-                   });
+               });
 
            }
        };

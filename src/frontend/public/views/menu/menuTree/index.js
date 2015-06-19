@@ -4,26 +4,22 @@ define(["jquery", "jqueryui", "scripts/Template.App.Init", "scripts/Template.App
        VsixMvcAppResult.View = {
            main: function () {
 
-               VsixMvcAppResult.Ajax.UserMenu(
-                   function (data, textStatus, jqXHR) {
+               VsixMvcAppResult.Ajax.UserMenu(function (err, data) {
 
+                   if (err === null) {
                        jQuery('ul.ui-menuTreeSample:first')
-                           .menuTree({
-                               dataBound: function (e) {
-                                   jQuery(this).hide().removeClass('ui-helper-hidden').show('blind');
-                               },
-                               selected: function (e, liData) {
-                                   console.log(liData);
-                               }
-                           })
-                           .menuTree('bind', data);
-                   },
-                   function (jqXHR, textStatus, errorThrown) {
+                            .menuTree({
+                                dataBound: function (e) {
+                                    jQuery(this).hide().removeClass('ui-helper-hidden').show('blind');
+                                },
+                                selected: function (e, liData) {
+                                    console.log(liData);
+                                }
+                            })
+                            .menuTree('bind', data);
+                   }
 
-                   },
-                   function (jqXHR, textStatus, errorThrown) {
-
-                   });
+               });
            }
        };
 

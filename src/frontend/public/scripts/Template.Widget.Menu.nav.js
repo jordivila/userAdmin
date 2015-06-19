@@ -1,18 +1,13 @@
 define([
     "jquery",
     "jqueryui",
-    "handlebars",
     "scripts/Template.App.Ajax.Init",
     "scripts/Template.Widget.Menu.slides"],
-       function ($, jqUI, Handlebars, VsixMvcAppResult, wSlides) {
-
+       function ($, jqUI, VsixMvcAppResult, wSlides) {
 
            jQuery.widget("ui.menuNav", jQuery.ui.widgetBase, {
                options: {
-                   //texts: {
-                   //    loadingTmpl: "Loading template",
-                   //    errLoadingTmpl: "Error loading template"
-                   //}
+
                },
                _create: function () {
                    this._super();
@@ -32,13 +27,11 @@ define([
                        .find("div.userActiviyErrMsg:first")
                        .html(msg);
                },
-               
                _initMenuNav: function () {
 
                    //TODO: load async Menu based on user identity
                    var self = this;
                    var $sitePage = jQuery('div.ui-sitePage:first');
-                   
                    var $panelMenu = jQuery('#panelMenu');
                    var $panelMenuList = jQuery($panelMenu).find('div.ui-menuBase:first');
                    var $panelMenuToggle = jQuery('div.ui-mainMenuToggle');
@@ -75,7 +68,6 @@ define([
 
 
 
-                   $panelMenu.hide();
 
                    $panelMenuList.menuSlides({
                        selected: function (e, templ) {
@@ -119,16 +111,18 @@ define([
                    /* End Ensure panel animations */
 
 
-                   VsixMvcAppResult.Ajax.UserMenu(
-                       function (data, textStatus, jqXHR) {
-                           $panelMenuList.menuSlides('bind', data);
-                       },
-                       function (jqXHR, textStatus, errorThrown) {
+                   VsixMvcAppResult.Ajax.UserMenu(function (err, data) {
+
+                       if (err !== null) {
                            self._errMsgSet($panelMenu, VsixMvcAppResult.Resources.unExpectedError);
-                       },
-                       function () {
-                           self._trigger('complete', null, null);
-                       });
+                       }
+                       else {
+                           $panelMenuList.menuSlides('bind', data);
+                       }
+
+                       self._trigger('complete', null, null);
+                   });
+
                },
                _initMenuSelected: function ($widgetMenuList) {
 

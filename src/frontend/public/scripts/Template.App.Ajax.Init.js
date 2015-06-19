@@ -2,9 +2,10 @@ define([
     "jquery",
     "scripts/Template.App.Init",
     "scripts/url/UrlHelper",
-    "scripts/Template.App.Page.Init"
+    "scripts/Template.App.Page.Init",
+    "pPromises",
 ],
-    function ($, VsixMvcAppResult) {
+    function ($, VsixMvcAppResult, urlHelper, pInit, P) {
 
 
         jQuery(document).ready(function () {
@@ -26,29 +27,81 @@ define([
 
         VsixMvcAppResult.Ajax = {};
 
-        VsixMvcAppResult.Ajax.onOkKoComplete = function (opts, onOK, onKO, onComplete) {
-
-            var jqxhr = jQuery.ajax(opts)
-                                .done(function (data, textStatus, jqXHR) {
-                                    onOK(data);
-                                })
-                                .fail(function (jqXHR, textStatus, errorThrown) {
-                                    onKO(jqXHR);
-                                })
-                                .always(function (jqXHR, textStatus, errorThrown) {
-                                    onComplete();
-                                });
-
-            return jqxhr;
-        };
-
-        VsixMvcAppResult.Ajax.UserMenu = function (onOK, onKO, onComplete) {
-            VsixMvcAppResult.Ajax.onOkKoComplete({
+        VsixMvcAppResult.Ajax.UserMenu = function (cbErrFirst) {
+            return P(jQuery.ajax({
                 url: "/api/user/menu",
                 type: "GET",
                 data: {},
                 cache: false
-            }, onOK, onKO, onComplete);
+            })).nodeify(function (error, value) {
+                cbErrFirst(error, value);
+            });
+        };
+
+        VsixMvcAppResult.Ajax.ViewHtml = function (templUrl) {
+            return jQuery.ajax({
+                url: templUrl,
+                type: "GET",
+                dataType: "html",
+                cache: true,
+            });
+        };
+
+        VsixMvcAppResult.Ajax.ViewModel = function (templUrl) {
+            return jQuery.ajax({
+                url: templUrl + 'index.handlebars.json',
+                type: "GET",
+                dataType: "json",
+                cache: false,    // view model MUST NOT be chached
+            });
+        };
+
+        VsixMvcAppResult.Ajax.View = function (templUrl, cbErrFirst) {
+            return P.all([
+                VsixMvcAppResult.Ajax.ViewHtml(templUrl),
+                VsixMvcAppResult.Ajax.ViewModel(templUrl),
+            ]).nodeify(function (e, data) {
+
+                if (e !== null) {
+                    cbErrFirst(e, data);
+                }
+                else {
+
+                    var model = data[1];
+                    var hasEntry = function(){
+                    
+                        return model.ViewEntryPoint && model.ViewEntryPoint !== null;
+
+                    };
+                    data.push({ hasEntry: hasEntry() });
+
+                    if (hasEntry()) {
+
+                        require(
+                            /*
+                            1.- require will cache ViewEntryPoints
+                            2.- forcing views to execute viewEntryPoint."main" previously loaded
+                            3.- using urlArgs=bust+ (new Date()).getTime() is not an potion
+                                 as far as would load every script again and again
+                            4.- best solution is to add .getTime() to viewEntryPoint url.
+                                This way viewEntryPoint will always be overriden to the last script loaded
+                                Bu keeps caching viewEntrypoint dependencies
+                            */
+                            [model.ViewEntryPoint + "?_=" + (new Date()).getTime()],
+                            function (VsixMvcAppResult) {
+                                cbErrFirst(e, data);
+                            },
+                            function (errRequiring) {
+                                cbErrFirst(errRequiring, data);
+                            });
+                    }
+                    else {
+                        cbErrFirst(e, data);
+                    }
+
+
+                }
+            });
         };
 
         return VsixMvcAppResult;
