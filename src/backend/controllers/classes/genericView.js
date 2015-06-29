@@ -20,11 +20,10 @@
 
         req.viewModel = util.extend(req.viewModel, require(viewModelPath));
 
-        //req.viewModel.jsFiles
-        for (var i = 0; i < req.viewModel.jsFiles.length; i++) {
-            req.viewModel.jsFiles[i] = req.viewModel.jsFiles[i].replace('{{package.name}}', req.viewModel.package.name).replace('{{package.version}}', req.viewModel.package.version);
+        if (req.viewModel.Title)
+        {
+            req.viewModel.Title = req.i18n.__(req.viewModel.Title);
         }
-
 
         req.viewInfo = {
             viewPath: viewPath,
