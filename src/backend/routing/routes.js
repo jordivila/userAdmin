@@ -10,16 +10,12 @@
     var DataResult = require('../models/dataResult');
     var ErrorHandled = require('../models/errorHandled.js');
     var testsController = require('../controllers/tests');
-    var usersController = require('../controllers/users');
     var LanguagesController = require('../controllers/languages');
     var ThemesController = require('../controllers/themes');
     var BaseController = require('../controllers/classes/base');
 
-
     var routerApiUser = require('./routesApiUser');
     var routerViews = require('./routesViews');
-    var routerViewsCustom = require('./routesViewsCustom');
-
 
     var languagesController = new LanguagesController();
     var themesController = new ThemesController();
@@ -44,7 +40,6 @@
         });
 
         routerViews.setRoutes(app);
-        routerViewsCustom.setRoutes(app);
         routerApiUser.setRoutes(app, log, authController);
         
 

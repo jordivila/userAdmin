@@ -4,8 +4,8 @@ define([
     "scripts/Template.App.Init",
 
     "scripts/modules/crud",
-    "/uicontrols/crud/crudSamplesCustomerData.js",
-    "/uicontrols/crud/crudSamplesCustomerDefaultOptions.js",
+    "/crud/crudCommon/crudSamplesCustomerData.js",
+    "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
 
 ],
    function ($, jqUI, clientApp) {

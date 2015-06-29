@@ -113,11 +113,11 @@
                                 text: "Menu",
                                 childs: [
                                     {
-                                        url: "/uicontrols/menu/menuTree/",
+                                        url: "/menu/menuTree/",
                                         text: "Menu Tree"
                                     },
                                     {
-                                        url: "/uicontrols/menu/menuSlides/",
+                                        url: "/menu/menuSlides/",
                                         text: "Menu Slides"
                                     },
                                 ]
@@ -126,27 +126,27 @@
                                 text: "Grid widget",
                                 childs: [
                                     {
-                                        url: "/uicontrols/crud/crudGridSimple/",
+                                        url: "/crud/crudGridSimple/",
                                         text: "Basic Grid"
                                     },
                                     {
-                                        url: "/uicontrols/crud/crudGridSearch/",
+                                        url: "/crud/crudGridSearch/",
                                         text: "Search & paginate"
                                     },
                                     {
-                                        url: "/uicontrols/crud/crudGridSearchDirect/",
+                                        url: "/crud/crudGridSearchDirect/",
                                         text: "Search filter on top"
                                     },
                                     {
-                                        url: "/uicontrols/crud/crudGridPagination/",
+                                        url: "/crud/crudGridPagination/",
                                         text: "Pagination config"
                                     },
                                     {
-                                        url: "/uicontrols/crud/crudScrollable/",
+                                        url: "/crud/crudScrollable/",
                                         text: "Scrollable"
                                     },
                                     {
-                                        url: "/uicontrols/crud/crudExpand/",
+                                        url: "/crud/crudExpand/",
                                         text: "Expand grid & resize"
                                     },
                                 ],
@@ -155,11 +155,11 @@
                                 text: "Crud widget",
                                 childs: [
                                     {
-                                        url: "/uicontrols/crud/crudFormSimple/",
+                                        url: "/crud/crudFormSimple/",
                                         text: "CRUD Simple form"
                                     },
                                     {
-                                        url: "/uicontrols/crud/crudFormExtended/",
+                                        url: "/crud/crudFormExtended/",
                                         text: "CRUD Extended"
                                     },
                                 ],

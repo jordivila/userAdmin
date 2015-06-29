@@ -1,4 +1,4 @@
 {
-    "Title": "Menu tree sample",
+    "Title": "Views.Menu.MenuTree.Title",
     "ViewEntryPoint": "./index.js"
 }

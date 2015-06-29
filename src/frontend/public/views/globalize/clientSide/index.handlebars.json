@@ -1,4 +1,4 @@
 {
-    "Title": "Client side - Globalize Hello World (plain javascript)",
+    "Title": "Views.Globalize.ClientSide.Title",
     "ViewEntryPoint": "./index.js"
 }

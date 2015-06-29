@@ -7,12 +7,14 @@
     var ThemesController = require('../controllers/themes');
     var GlobalizeController = require('../controllers/globalize');
     var BaseController = require('../controllers/classes/base');
+    var GenericViewController = require('../controllers/classes/genericView');
 
     var languagesController = new LanguagesController();
     var homeController = new HomeController();
     var themesController = new ThemesController();
     var globalizeController = new GlobalizeController();
     var baseController = new BaseController();
+    var genericViewController = new GenericViewController();
 
     function registerCommonVerbs(app, route, controller) {
 
@@ -78,7 +80,24 @@
         registerCommonVerbs(app, "themes", themesController);
         registerCommonVerbs(app, "globalize/serverside", globalizeController);
         registerCommonVerbs(app, "globalize/clientside", globalizeController);
-
+        registerCommonVerbs(app, "menu/menuTree", genericViewController);
+        registerCommonVerbs(app, "menu/menuSlides", genericViewController);
+        registerCommonVerbs(app, "crud/crudCommon", baseController);
+        registerCommonVerbs(app, "crud/crudGridSimple", genericViewController);
+        registerCommonVerbs(app, "crud/crudGridSearch", genericViewController);
+        registerCommonVerbs(app, "crud/crudGridSearchDirect", genericViewController);
+        registerCommonVerbs(app, "crud/crudGridPagination", genericViewController);
+        registerCommonVerbs(app, "crud/crudScrollable", genericViewController);
+        registerCommonVerbs(app, "crud/crudExpand", genericViewController);
+        registerCommonVerbs(app, "crud/crudFormSimple", genericViewController);
+        registerCommonVerbs(app, "crud/crudFormExtended", genericViewController);
+        
+        
+        
+        
+        
+        
+        
     };
 
 })(module);

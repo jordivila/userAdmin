@@ -484,7 +484,7 @@
 
             requireConfig('none', true, true);
 
-            tasks2Run.push('jshint:files', 'globCldrData', 'bump', 'clean', 'sortJSON', 'requirejs', 'concat' /*,'cssmin', 'uglify'*/);
+            tasks2Run.push('jshint:files', 'i18nCheck', 'globCldrData', 'bump', 'clean', 'sortJSON', 'requirejs', 'concat' /*,'cssmin', 'uglify'*/);
         }
 
         grunt.task.run(tasks2Run);

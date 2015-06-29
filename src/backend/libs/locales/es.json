@@ -34,10 +34,14 @@
     "UserAdminTexts.UserNotFound": "Usuario no encontrado",
     "Views.Globalize.ACurrency": "Un importe monetario",
     "Views.Globalize.ANumber": "Un número",
+    "Views.Globalize.ClientSide.Title": "'Hola mundo' de Globalize desde el cliente",
     "Views.Globalize.DemoOutput": "Resultado de la demo",
     "Views.Globalize.Messages": "Mensajes",
     "Views.Globalize.Now": "Fecha actual",
+    "Views.Globalize.ServerSide.Title": "'Hola Mundo' de Globalize desde el servidor",
     "Views.Globalize.SomethingHappened": "Algo ha ocurrido",
     "Views.Languages.SelectPreferredLang": "Selecciona tu idioma preferido",
-    "Views.Languages.SelectPreferredTheme": "Selecciona tu tema preferido"
+    "Views.Languages.SelectPreferredTheme": "Selecciona tu tema preferido",
+    "Views.Menu.MenuSlides.Title": "Ejemplo de 'menu slides'",
+    "Views.Menu.MenuTree.Title": "Ejemplo de 'menu tree'"
 }
