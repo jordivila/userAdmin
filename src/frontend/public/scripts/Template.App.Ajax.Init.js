@@ -5,7 +5,7 @@ define([
     "scripts/Template.App.Page.Init",
     "pPromises",
 ],
-    function ($, VsixMvcAppResult, urlHelper, pInit, P) {
+    function ($, clientApp, urlHelper, pInit, P) {
 
 
         jQuery(document).ready(function () {
@@ -18,16 +18,16 @@ define([
                     var urlHelper = new UrlHelper(settings.url);
 
                     if (urlHelper.hostname == window.location.hostname) {
-                        settings.url = new UrlHelper(settings.url).paramSet("appVersion", VsixMvcAppResult.Widgets.PageOptions.appVersion).href;
+                        settings.url = new UrlHelper(settings.url).paramSet("appVersion", clientApp.Widgets.PageOptions.appVersion).href;
                         settings.url = new UrlHelper(settings.url).paramSet("seoRequest", false).href;
                     }
                 }
             });
         });
 
-        VsixMvcAppResult.Ajax = {};
+        clientApp.Ajax = {};
 
-        VsixMvcAppResult.Ajax.UserMenu = function (cbErrFirst) {
+        clientApp.Ajax.UserMenu = function (cbErrFirst) {
             return P(jQuery.ajax({
                 url: "/api/user/menu",
                 type: "GET",
@@ -38,7 +38,7 @@ define([
             });
         };
 
-        VsixMvcAppResult.Ajax.ViewHtml = function (templUrl) {
+        clientApp.Ajax.ViewHtml = function (templUrl) {
             return jQuery.ajax({
                 url: templUrl,
                 type: "GET",
@@ -47,7 +47,7 @@ define([
             });
         };
 
-        VsixMvcAppResult.Ajax.ViewModel = function (templUrl) {
+        clientApp.Ajax.ViewModel = function (templUrl) {
             return jQuery.ajax({
                 url: templUrl + 'index.handlebars.json',
                 type: "GET",
@@ -56,10 +56,10 @@ define([
             });
         };
 
-        VsixMvcAppResult.Ajax.View = function (templUrl, cbErrFirst) {
+        clientApp.Ajax.View = function (templUrl, cbErrFirst) {
             return P.all([
-                VsixMvcAppResult.Ajax.ViewHtml(templUrl),
-                VsixMvcAppResult.Ajax.ViewModel(templUrl),
+                clientApp.Ajax.ViewHtml(templUrl),
+                clientApp.Ajax.ViewModel(templUrl),
             ]).nodeify(function (e, data) {
 
                 if (e !== null) {
@@ -88,7 +88,7 @@ define([
                                 Bu keeps caching viewEntrypoint dependencies
                             */
                             [model.ViewEntryPoint + "?_=" + (new Date()).getTime()],
-                            function (VsixMvcAppResult) {
+                            function (clientApp) {
                                 cbErrFirst(e, data);
                             },
                             function (errRequiring) {
@@ -104,5 +104,5 @@ define([
             });
         };
 
-        return VsixMvcAppResult;
+        return clientApp;
     });

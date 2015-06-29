@@ -1,7 +1,7 @@
 ﻿define(["jquery", "jqueryui", "scripts/Template.App.Init", "scripts/Template.Widget.ItemPicker"],
-   function ($, jqUI, VsixMvcAppResult) {
+   function ($, jqUI, clientApp) {
 
-       VsixMvcAppResult.View = {
+       clientApp.View = {
            main: function () {
 
 
@@ -28,6 +28,6 @@
            }
        };
 
-       return VsixMvcAppResult;
+       return clientApp;
 
    });

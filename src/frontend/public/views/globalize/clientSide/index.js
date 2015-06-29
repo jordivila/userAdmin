@@ -1,12 +1,12 @@
 ﻿define([
     "scripts/Template.App.Init",
 ],
-function (VsixMvcAppResult) {
+function (clientApp) {
 
-    VsixMvcAppResult.View = {
+    clientApp.View = {
         main: function () {
 
-            VsixMvcAppResult.Globalizer.get()
+            clientApp.Globalizer.get()
              .done(function (Globalize) {
 
                  jQuery("#date").html(Globalize.formatDate(new Date(), {
@@ -42,5 +42,5 @@ function (VsixMvcAppResult) {
         }
     };
 
-    return VsixMvcAppResult;
+    return clientApp;
 });

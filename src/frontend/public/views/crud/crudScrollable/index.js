@@ -9,9 +9,9 @@ define([
     "/uicontrols/crud/crudSamplesCustomerDefaultOptions.js",
 
 ],
-   function ($, jqUI, VsixMvcAppResult) {
+   function ($, jqUI, clientApp) {
 
-       VsixMvcAppResult.View = {
+       clientApp.View = {
            main: function () {
 
                var customerOptions = jQuery.extend({}, crudCustomerDefaultOptions(), {
@@ -33,6 +33,6 @@ define([
            }
        };
 
-       return VsixMvcAppResult;
+       return clientApp;
 
    });

@@ -1,10 +1,10 @@
 define(["jquery", "jqueryui", "scripts/Template.App.Init", "scripts/Template.App.Ajax.Init", "scripts/Template.Widget.Menu.tree"],
-   function ($, jqUI, VsixMvcAppResult) {
+   function ($, jqUI, clientApp) {
 
-       VsixMvcAppResult.View = {
+       clientApp.View = {
            main: function () {
 
-               VsixMvcAppResult.Ajax.UserMenu(function (err, data) {
+               clientApp.Ajax.UserMenu(function (err, data) {
 
                    if (err === null) {
                        jQuery('ul.ui-menuTreeSample:first')
@@ -23,6 +23,6 @@ define(["jquery", "jqueryui", "scripts/Template.App.Init", "scripts/Template.App
            }
        };
 
-       return VsixMvcAppResult;
+       return clientApp;
 
    });

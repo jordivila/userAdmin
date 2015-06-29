@@ -1,10 +1,10 @@
 define(["jquery", "jqueryui", "scripts/Template.App.Init", "scripts/Template.App.Ajax.Init", "scripts/Template.Widget.Menu.slides"],
-   function ($, jqUI, VsixMvcAppResult) {
+   function ($, jqUI, clientApp) {
 
-       VsixMvcAppResult.View = {
+       clientApp.View = {
            main: function () {
 
-               VsixMvcAppResult.Ajax.UserMenu(function (err, data) {
+               clientApp.Ajax.UserMenu(function (err, data) {
 
                    if (err === null)
                    {
@@ -25,6 +25,6 @@ define(["jquery", "jqueryui", "scripts/Template.App.Init", "scripts/Template.App
            }
        };
 
-       return VsixMvcAppResult;
+       return clientApp;
 
    });

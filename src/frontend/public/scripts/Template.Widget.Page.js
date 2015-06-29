@@ -6,7 +6,7 @@ define([
     "scripts/Template.Widget.Menu.nav",
     "scripts/Template.App.Globalize.Init"
 ],
-function ($, jqUI, Handlebars, hist, nav, VsixMvcAppResult) {
+function ($, jqUI, Handlebars, hist, nav, clientApp) {
 
     jQuery.widget("ui.page", jQuery.ui.widgetBase, {
         options: {
@@ -153,7 +153,7 @@ function ($, jqUI, Handlebars, hist, nav, VsixMvcAppResult) {
 
             $siteContent.empty();
 
-            VsixMvcAppResult.Ajax.View(templUrl, function (err, data) {
+            clientApp.Ajax.View(templUrl, function (err, data) {
 
                 if (err !== null) {
                     console.error(new Error("Error loading view data", arguments));
@@ -180,7 +180,7 @@ function ($, jqUI, Handlebars, hist, nav, VsixMvcAppResult) {
 
                     if (hasEntry) {
 
-                        VsixMvcAppResult.View.main();
+                        clientApp.View.main();
 
                         dfd.resolve();
                     }

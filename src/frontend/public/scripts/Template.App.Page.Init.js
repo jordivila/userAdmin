@@ -2,9 +2,9 @@ define([
     "scripts/Template.Widget.Page",
     "scripts/Template.App.Widgets.Init.js"
 ],
-function (wPage, VsixMvcAppResult) {
+function (wPage, clientApp) {
 
-           VsixMvcAppResult.Widgets.PageOptions = {
+           clientApp.Widgets.PageOptions = {
                appVersion: null,
                selector: null,
                cultureGlobalization: null,
@@ -27,6 +27,6 @@ function (wPage, VsixMvcAppResult) {
                }
            };
 
-           return VsixMvcAppResult;
+           return clientApp;
 
        });

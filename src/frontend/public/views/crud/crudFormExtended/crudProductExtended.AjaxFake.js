@@ -1,7 +1,7 @@
 define([
     "scripts/Template.App.Init",
 ],
-function (VsixMvcAppResult) {
+function (clientApp) {
 
 
     var productAjax = {
@@ -311,7 +311,7 @@ function (VsixMvcAppResult) {
 
                 var dfd = jQuery.Deferred();
 
-                VsixMvcAppResult.Globalizer.get()
+                clientApp.Globalizer.get()
                  .done(function (Globalize) {
 
 

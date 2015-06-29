@@ -2,9 +2,9 @@
        function () {
 
 
-           var VsixMvcAppResult = {};
+           var clientApp = {};
 
-           VsixMvcAppResult.Utils = {
+           clientApp.Utils = {
 
                getCookie: function (cname) {
                    var name = cname + "=";
@@ -19,6 +19,6 @@
 
            };
 
-           return VsixMvcAppResult;
+           return clientApp;
 
        });

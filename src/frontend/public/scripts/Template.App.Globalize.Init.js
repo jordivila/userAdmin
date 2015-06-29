@@ -1,20 +1,20 @@
 ﻿define([
     "jquery",
     "scripts/Template.App.Init",
-], function ($, VsixMvcAppResult) {
+], function ($, clientApp) {
 
-    VsixMvcAppResult.Globalizer = {
+    clientApp.Globalizer = {
         instance: null,
         get: function (currentCulture) {
 
             var dfd = jQuery.Deferred();
 
-            if (VsixMvcAppResult.Globalizer.instance === null) {
+            if (clientApp.Globalizer.instance === null) {
 
                 if (currentCulture !== undefined) {
                     // argument passed and not undefined
                 } else {
-                    currentCulture = VsixMvcAppResult.Utils.getCookie("locale");
+                    currentCulture = clientApp.Utils.getCookie("locale");
                 }
 
                 require([
@@ -64,17 +64,17 @@
 
 
                     Globalize.locale(currentCulture);
-                    VsixMvcAppResult.Globalizer.instance = Globalize;
+                    clientApp.Globalizer.instance = Globalize;
 
 
-                    dfd.resolve(VsixMvcAppResult.Globalizer.instance);
+                    dfd.resolve(clientApp.Globalizer.instance);
 
                 });
 
             }
             else {
 
-                dfd.resolve(VsixMvcAppResult.Globalizer.instance);
+                dfd.resolve(clientApp.Globalizer.instance);
 
             }
 
@@ -83,6 +83,6 @@
         }
     };
 
-    return VsixMvcAppResult;
+    return clientApp;
 
 });

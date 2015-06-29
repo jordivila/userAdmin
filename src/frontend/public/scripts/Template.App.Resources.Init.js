@@ -1,7 +1,7 @@
 ﻿define(["scripts/Template.App.Init"],
-       function (VsixMvcAppResult) {
+       function (clientApp) {
 
-           VsixMvcAppResult.Resources = {
+           clientApp.Resources = {
                accept: "Aceptar",
                cancel: "Cancelar",
                clickToPickDate: "Click aqui para seleccionar una fecha",
@@ -22,5 +22,5 @@
            };
 
 
-           return VsixMvcAppResult;
+           return clientApp;
        });

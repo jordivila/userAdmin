@@ -5,7 +5,7 @@ define([
     "scripts/crud/common.widget.crud",
     "./crudProductExtended.AjaxFake.js"
 ],
-function ($, jqUI, VsixMvcAppResult, wCrud, productAjax) {
+function ($, jqUI, clientApp, wCrud, productAjax) {
 
     jQuery.widget("ui.product", jQuery.ui.crud,
     {
@@ -36,7 +36,7 @@ function ($, jqUI, VsixMvcAppResult, wCrud, productAjax) {
                         break;
                     case "fechaDesde":
 
-                        VsixMvcAppResult.Globalizer.get()
+                        clientApp.Globalizer.get()
                          .done(function (Globalize) {
 
                              $cell.html(dataItem.fechaDesde !== null ? Globalize.formatDate(dataItem.fechaDesde) : '');
@@ -98,7 +98,7 @@ function ($, jqUI, VsixMvcAppResult, wCrud, productAjax) {
             },
             formBind: function (self, dataItem) {
 
-                VsixMvcAppResult.Globalizer.get()
+                clientApp.Globalizer.get()
                  .done(function (Globalize) {
 
                      jQuery(self.element)

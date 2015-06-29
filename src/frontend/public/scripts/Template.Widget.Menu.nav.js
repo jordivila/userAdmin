@@ -3,7 +3,7 @@ define([
     "jqueryui",
     "scripts/Template.App.Ajax.Init",
     "scripts/Template.Widget.Menu.slides"],
-       function ($, jqUI, VsixMvcAppResult, wSlides) {
+       function ($, jqUI, clientApp, wSlides) {
 
            jQuery.widget("ui.menuNav", jQuery.ui.widgetBase, {
                options: {
@@ -111,10 +111,10 @@ define([
                    /* End Ensure panel animations */
 
 
-                   VsixMvcAppResult.Ajax.UserMenu(function (err, data) {
+                   clientApp.Ajax.UserMenu(function (err, data) {
 
                        if (err !== null) {
-                           self._errMsgSet($panelMenu, VsixMvcAppResult.Resources.unExpectedError);
+                           self._errMsgSet($panelMenu, clientApp.Resources.unExpectedError);
                        }
                        else {
                            $panelMenuList.menuSlides('bind', data);

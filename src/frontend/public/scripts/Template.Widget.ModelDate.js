@@ -5,14 +5,14 @@ define([
     "scripts/Template.App.Resources.Init",
     "scripts/Template.App.Init",
 ],
-       function ($, jqUI, wBase, VsixMvcAppResult) {
+       function ($, jqUI, wBase, clientApp) {
 
 
            jQuery.widget("ui.widgetModelItemDate", jQuery.ui.widgetBase,
            {
                options: {
                    value: null,
-                   text: VsixMvcAppResult.Resources.clickToPickDate
+                   text: clientApp.Resources.clickToPickDate
                },
                _create: function () {
                    this._super();
@@ -94,7 +94,7 @@ define([
 
                    var d = jQuery(self.element).datepicker('getDate');
 
-                   VsixMvcAppResult.Globalizer.get()
+                   clientApp.Globalizer.get()
                     .done(function (Globalize) {
 
                         jQuery(self.element)

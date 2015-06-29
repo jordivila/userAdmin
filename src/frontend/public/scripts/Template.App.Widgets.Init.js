@@ -1,8 +1,8 @@
 ﻿define(["scripts/Template.App.Init"],
-       function (VsixMvcAppResult) {
+       function (clientApp) {
 
-           VsixMvcAppResult.Widgets = {};
+           clientApp.Widgets = {};
 
-           return VsixMvcAppResult;
+           return clientApp;
 
        });

@@ -158,22 +158,22 @@
         ['require',
          'scripts/modules/main',
         ],
-        function (req, VsixMvcAppResult) {
+        function (req, clientApp) {
 
             jQuery(document).ready(function(){
 
-                VsixMvcAppResult.Widgets.PageOptions.appVersion = "{{package.version}}";
-                VsixMvcAppResult.Widgets.PageOptions.selector = "body";
-                VsixMvcAppResult.Widgets.PageOptions.cultureGlobalization = '{{globalization.cultureGlobalization}}';
-                VsixMvcAppResult.Widgets.PageOptions.cultureDatePicker = '{{globalization.cultureDatePicker}}';
-                VsixMvcAppResult.Widgets.PageOptions.onInit(function () {
+                clientApp.Widgets.PageOptions.appVersion = "{{package.version}}";
+                clientApp.Widgets.PageOptions.selector = "body";
+                clientApp.Widgets.PageOptions.cultureGlobalization = '{{globalization.cultureGlobalization}}';
+                clientApp.Widgets.PageOptions.cultureDatePicker = '{{globalization.cultureDatePicker}}';
+                clientApp.Widgets.PageOptions.onInit(function () {
                     jQuery("body").removeClass("ui-helper-hidden");
 
                     {{#if ViewEntryPoint}}
 
                     require(['{{ViewEntryPoint}}'],
-                            function (VsixMvcAppResult) {
-                                VsixMvcAppResult.View.main();
+                            function (clientApp) {
+                                clientApp.View.main();
                             },
                             function (errRequiring) {
                                 console.error(errRequiring);
@@ -183,7 +183,7 @@
 
                     });
 
-                    VsixMvcAppResult.Widgets.PageOptions.Init();
+                    clientApp.Widgets.PageOptions.Init();
 
                 });
             });
