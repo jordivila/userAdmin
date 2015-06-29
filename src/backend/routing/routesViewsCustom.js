@@ -17,7 +17,7 @@
 
             if (req.params[1] === '') {
 
-                //get template json config -> jsFiles, CssFiles, controllerInterface, etc
+                //get template json config -> viewEntryPoint, CssFiles, controllerInterface, etc
                 var modelTemplate = utilsNode.format(app.get('views') + '/%s/index.handlebars.json', req.params[0]);
 
                 //extend common layout model with template config

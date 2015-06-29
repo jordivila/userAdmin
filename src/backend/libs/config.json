@@ -17,7 +17,8 @@
         "defaultLocale": "es",
         "prefLocale": "es",
         "cookieName": "locale",
-        "extension": ".json"
+        "extension": ".json",
+        "devMode":  false
     },
     "domainInfo": {
         "domainName": "localhost:3001",
