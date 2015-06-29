@@ -49,12 +49,19 @@
             },
         },
         uglify: {
-            my_target: {
+            public_build_js: {
                 files: [{
                     expand: true,
-                    src: 'src/frontend/public-build/**/*.js',
+                    src: ['src/frontend/public-build/**/*.js'],
+                }]
+            },
+            requirejs: {
+                files: [{
+                    expand: true,
+                    src: ['src/frontend/bower_components/requirejs/**/*.js'],
                 }]
             }
+
         },
         cssmin: {
             target: {
@@ -471,16 +478,13 @@
 
             requireConfig('uglify', false, false);
 
-            //    by the time I write these lines grunt-contrib-cssmin is removing some media queries at minifying time.
-            //    I prefer not to use this min.css generated until 'bugs' are fixed
-            tasks2Run.push('env:prod', 'globCldrData', 'i18nCheck', 'jshint:files', /*'bump',*/ 'clean'/*, 'cssmin'*/, 'mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/, 'requirejs', 'concat', 'uglify');
+            tasks2Run.push('env:prod', 'globCldrData', 'i18nCheck', 'jshint:files', /*'bump',*/ 'clean','mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/, 'requirejs', 'concat', 'cssmin', 'uglify');
         }
         else {
 
             requireConfig('none', true, true);
 
-
-            tasks2Run.push('jshint:files', 'globCldrData', 'bump', 'clean', 'sortJSON', 'requirejs', 'concat'/*, 'uglify'*/);
+            tasks2Run.push('jshint:files', 'globCldrData', 'bump', 'clean', 'sortJSON', 'requirejs', 'concat' /*,'cssmin', 'uglify'*/);
         }
 
         grunt.task.run(tasks2Run);
