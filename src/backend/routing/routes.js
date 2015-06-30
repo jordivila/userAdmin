@@ -33,7 +33,7 @@
 
             // do not setViewModelBase here
             // otherwise viewModelBase will be set
-            // event when requesting jpg, bmp, pdf, etc
+            // even when requesting jpg, bmp, pdf, etc
             //baseController.setViewModelBase(req);
 
             next();
