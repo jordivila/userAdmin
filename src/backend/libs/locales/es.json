@@ -36,6 +36,14 @@
     "Views.Globalize.ANumber": "Un número",
     "Views.Globalize.ClientSide.Title": "'Hola mundo' de Globalize desde el cliente",
     "Views.Globalize.DemoOutput": "Resultado de la demo",
+    "Views.Globalize.Like": [
+        "{0, plural, offset:1",
+        "     =0 {Se el primero en darle a 'me gusta'}",
+        "     =1 {Te gusta esto}",
+        "    one {A ti y a alguien mas os gusta esto}",
+        "  other {A ti y a # más os gusta esto}",
+        "}"
+    ],
     "Views.Globalize.Messages": "Mensajes",
     "Views.Globalize.Now": "Fecha actual",
     "Views.Globalize.ServerSide.Title": "'Hola Mundo' de Globalize desde el servidor",

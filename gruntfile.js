@@ -430,7 +430,7 @@
         }
 
     });
-    grunt.registerTask('globCldrData', 'Copying cldr-data folder from npm source iunto bower folder', function () {
+    grunt.registerTask('globCldrData', 'Copying cldr-data folder from npm source into bower folder', function () {
 
         var done = this.async();
         var bowerDirectory = grunt.file.readJSON('.bowerrc').directory;

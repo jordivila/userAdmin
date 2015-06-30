@@ -25,7 +25,7 @@ function (clientApp) {
                  jQuery("#plural-form").html(Globalize.plural(12345.6789));
 
                  // Use Globalize to format a message with plural inflection.
-                 like = Globalize.messageFormatter("like");
+                 like = Globalize.messageFormatter("Views.Globalize.Like");
                  jQuery("#message-0").html(like(0));
                  jQuery("#message-1").html(like(1));
                  jQuery("#message-2").html(like(2));

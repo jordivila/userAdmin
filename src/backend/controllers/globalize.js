@@ -4,12 +4,12 @@
 
     module.exports = GlobalizeController;
 
-    var markdown = require("markdown").markdown;
+    //var markdown = require("markdown").markdown;
     var GenericViewController = require('./classes/genericView');
     var Globalize = require("globalize");
-    var config = require("../libs/config");
-    var util = require("../libs/commonFunctions");
-    var fs = require('fs');
+    //var config = require("../libs/config");
+    //var util = require("../libs/commonFunctions");
+    //var fs = require('fs');
 
 
     function GlobalizeController() {
@@ -75,34 +75,35 @@
 
 
 
-        // Use Globalize to format dates.
-        console.log(globInstance.formatDate(new Date(), { datetime: "medium" }));
+        //// Use Globalize to format dates.
+        //console.log(globInstance.formatDate(new Date(), { datetime: "medium" }));
 
-        // Use Globalize to format numbers.
-        console.log(globInstance.formatNumber(12345.6789));
+        //// Use Globalize to format numbers.
+        //console.log(globInstance.formatNumber(12345.6789));
 
-        // Use Globalize to format currencies.
-        console.log(globInstance.formatCurrency(69900, "USD"));
+        //// Use Globalize to format currencies.
+        //console.log(globInstance.formatCurrency(69900, "USD"));
 
-        // Use Globalize to get the plural form of a numeric value.
-        console.log(globInstance.plural(12345.6789));
+        //// Use Globalize to get the plural form of a numeric value.
+        //console.log(globInstance.plural(12345.6789));
 
         // Use Globalize to format a message with plural inflection.
         like = globInstance.messageFormatter("like");
-        console.log(like(0));
-        console.log(like(1));
-        console.log(like(2));
-        console.log(like(3));
 
-        // do the same in other way
-        console.log(globInstance.formatMessage("like", [0]));
-        console.log(globInstance.formatMessage("like", [1]));
-        console.log(globInstance.formatMessage("like", [2]));
-        console.log(globInstance.formatMessage("like", [3]));
+        //console.log(like(0));
+        //console.log(like(1));
+        //console.log(like(2));
+        //console.log(like(3));
+
+        //// do the same in other way
+        //console.log(globInstance.formatMessage("like", [0]));
+        //console.log(globInstance.formatMessage("like", [1]));
+        //console.log(globInstance.formatMessage("like", [2]));
+        //console.log(globInstance.formatMessage("like", [3]));
 
 
-        // Use Globalize to format relative time.
-        console.log(globInstance.formatRelativeTime(-35, "second"));
+        //// Use Globalize to format relative time.
+        //console.log(globInstance.formatRelativeTime(-35, "second"));
 
         cb(null, {
             TheDate: globInstance.formatDate(new Date(), { datetime: "medium" }),

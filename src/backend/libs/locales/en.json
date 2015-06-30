@@ -36,6 +36,14 @@
     "Views.Globalize.ANumber": "A number",
     "Views.Globalize.ClientSide.Title": "Client side - Globalize Hello World",
     "Views.Globalize.DemoOutput": "Demo output",
+    "Views.Globalize.Like": [
+        "{0, plural, offset:1",
+        "     =0 {Be the first to like this}",
+        "     =1 {You liked this}",
+        "    one {You and someone else liked this}",
+        "  other {You and # others liked this}",
+        "}"
+    ],
     "Views.Globalize.Messages": "Messages",
     "Views.Globalize.Now": "Now",
     "Views.Globalize.ServerSide.Title": "Server side - Globalize Hello World",
