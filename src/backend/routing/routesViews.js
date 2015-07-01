@@ -74,6 +74,20 @@
             );
             res.end();
         });
+        app.get('/public/locales/:localeId/clientMessages.json', [
+            function (req, res, next) {
+
+                //-> I dont really need param "localeId" as far as i18n library sets automatically
+                var pLocale = req.params.localeId;
+                //
+
+                //var result = {};
+                //result[req.i18n.locale] = req.i18n.locales[req.i18n.locale];
+                //res.json(result);
+
+                res.json(req.i18n.locales[req.i18n.locale]);
+            }
+        ]);
 
         registerCommonVerbs(app, "home", homeController);
         registerCommonVerbs(app, "languages", languagesController);

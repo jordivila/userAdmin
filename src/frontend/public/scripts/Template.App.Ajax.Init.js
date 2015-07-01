@@ -68,14 +68,11 @@ define([
                 else {
 
                     var model = data[1];
-                    var hasEntry = function(){
-                    
-                        return model.ViewEntryPoint && model.ViewEntryPoint !== null;
+                    var hasEntry = (model.ViewEntryPoint && model.ViewEntryPoint !== null);
 
-                    };
-                    data.push({ hasEntry: hasEntry() });
+                    data.push(hasEntry);
 
-                    if (hasEntry()) {
+                    if (hasEntry) {
 
                         require(
                             /*
@@ -102,6 +99,61 @@ define([
 
                 }
             });
+        };
+
+        clientApp.Ajax.I18nDatepicker = function (currentCulture) {
+
+            return jQuery.ajax({
+                url: '/public/bower_components/jquery-ui/ui/minified/i18n/jquery.ui.datepicker-' + currentCulture + '.min.js',
+                type: "GET",
+                dataType: "script",
+                cache: true
+            });
+        };
+
+        clientApp.Ajax.I18nAppMessages = function (currentCulture) {
+
+            return jQuery.ajax({
+                url: "/public/locales/" + currentCulture + "/clientMessages.json",
+                type: "GET",
+                dataType: "json",
+                cache: true
+            });
+        };
+
+        clientApp.Ajax.I18nData = function (currentCulture, cbErrFirst) {
+
+            var a = [];
+
+            if (currentCulture !== 'en') {
+                a.push(clientApp.Ajax.I18nDatepicker(currentCulture));
+            }
+            else {
+                // simulate as far as datepicker is not needed for english
+                var fakeDatepickerI18n = function () {
+                    var dfd = jQuery.Deferred();
+                    dfd.resolve(null);
+                    return dfd.promise();
+                };
+
+                a.push(fakeDatepickerI18n());
+            }
+
+            a.push(clientApp.Ajax.I18nAppMessages(currentCulture));
+
+            return P.all(a).nodeify(function (e, data) {
+                if (e !== null) {
+                    cbErrFirst(e, data);
+                }
+                else {
+
+                    cbErrFirst(null, {
+                        I18nDatepicker: data[0],
+                        I18nTexts: data[1]
+                    });
+                }
+            });
+
         };
 
         return clientApp;

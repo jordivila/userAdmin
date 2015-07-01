@@ -232,7 +232,7 @@
                                     "/scripts/Template.App.Init.js",
                                     "/scripts/Template.App.Ajax.Init.js",
                                     "/scripts/Template.App.Widgets.Init.js",
-                                    "/scripts/Template.App.Resources.Init.js",
+                                    "/scripts/Template.App.I18n.Init.js",
                                     '/scripts/Template.App.Globalize.Init.js',
                                     '/scripts/Template.App.Page.Init.js',
                             ]

@@ -75,37 +75,6 @@
         testsController.initTestEnvironment(app);
     }
 
-    //begin -> set public static
-    app.use('/public/scripts', express.static(app.get('root') + 'scripts', {
-        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-    }));
-    app.use('/public/bower_components', express.static(app.get('bower_components'), {
-        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-    }));
-    app.use('/public/cdn', express.static(app.get('root') + 'cdn', {
-        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-    }));
-    app.use('/public/fonts', express.static(app.get('bower_components') + 'components-font-awesome/fonts', {
-        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-    }));
-    app.use('/public/images', express.static(app.get('root') + 'images', {
-        maxAge: process.env.NODE_ENV === 'production' ? 86400000 : 0
-    }));
-    app.get('/public/locales/:localeId/clientMessages.json', [
-        function (req, res, next) {
-
-            //-> I dont really need param "localeId" as far as i18n library sets automatically
-            var pLocale = req.params.localeId;
-            //
-
-            var result = {};
-            result[req.i18n.locale] = req.i18n.locales[req.i18n.locale];
-            res.json(result);
-        }
-    ]);
-
-
-    //end -> set public static content folders
 
     routingHandler.setRoutes(app, log, authController);
 

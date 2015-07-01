@@ -2,7 +2,7 @@ define([
     "jquery",
     "jqueryui",
     "scripts/Template.Widget.Base",
-    "scripts/Template.App.Resources.Init",
+    "scripts/Template.App.I18n.Init",
     "scripts/Template.App.Init",
 ],
        function ($, jqUI, wBase, clientApp) {
@@ -12,7 +12,6 @@ define([
            {
                options: {
                    value: null,
-                   text: clientApp.Resources.clickToPickDate
                },
                _create: function () {
                    this._super();
@@ -47,7 +46,7 @@ define([
                                                .find('div.ui-state-error')
                                                    .hide()
                                                .end()
-                                               .append('<div class="ui-widgetModelItemDate-text"><a href="javascript:void(0);">' + self.options.text + '</a></div>')
+                                               .append('<div class="ui-widgetModelItemDate-text"><a href="javascript:void(0);">' + clientApp.i18n.texts.get("Template.Widget.ModelDate.clickToPickDate") + '</a></div>')
 
                            //.append('<div class="ui-state-error"><span class="ui-icon ui-icon-circle-close"></span></div>')
                            ;

@@ -73,96 +73,106 @@
 
                 res.json([
                     {
-                        url: "/user/logon/",
-                        text: i18n.__("AccountResources.LogOn"),
-                    },
-                    {
                         url: "/home/",
                         text: i18n.__("GeneralTexts.Home")
                     },
                     {
-                        //url: "/globalize/",
-                        text: "Globalize",
-                        childs: [
-                            {
-                                url: "/globalize/serverside/",
-                                text: "Server side"
-                            },
-                            {
-                                url: "/globalize/clientside/",
-                                text: "Client side"
-                            },
-                        ]
+                        url: "/user/logon/",
+                        text: i18n.__("AccountResources.LogOn"),
                     },
                     {
                         url: "/about/",
                         text: i18n.__("GeneralTexts.About")
                     },
                     {
-                        url: "/languages/",
-                        text: i18n.__("GeneralTexts.Languages")
+                        text: "Preferences",
+                        childs: [
+                                {
+                                    url: "/languages/",
+                                    text: i18n.__("GeneralTexts.Languages")
+                                },
+                                {
+                                    url: "/themes/",
+                                    text: i18n.__("GeneralTexts.SiteThemes")
+                                },
+                        ]
                     },
                     {
-                        url: "/themes/",
-                        text: i18n.__("GeneralTexts.SiteThemes")
-                    },
-                    {
-                        text: "UI Controls",
+                        text: "Dev samples",
                         childs: [
                             {
-                                text: "Menu",
+                                //url: "/globalize/",
+                                text: "Globalize",
                                 childs: [
                                     {
-                                        url: "/menu/menuTree/",
-                                        text: "Menu Tree"
+                                        url: "/globalize/serverside/",
+                                        text: "Server side"
                                     },
                                     {
-                                        url: "/menu/menuSlides/",
-                                        text: "Menu Slides"
+                                        url: "/globalize/clientside/",
+                                        text: "Client side"
                                     },
                                 ]
                             },
                             {
-                                text: "Grid widget",
+                                text: "UI Controls",
                                 childs: [
                                     {
-                                        url: "/crud/crudGridSimple/",
-                                        text: "Basic Grid"
+                                        text: "Menu",
+                                        childs: [
+                                            {
+                                                url: "/menu/menuTree/",
+                                                text: "Menu Tree"
+                                            },
+                                            {
+                                                url: "/menu/menuSlides/",
+                                                text: "Menu Slides"
+                                            },
+                                        ]
                                     },
                                     {
-                                        url: "/crud/crudGridSearch/",
-                                        text: "Search & paginate"
+                                        text: "Grid widget",
+                                        childs: [
+                                            {
+                                                url: "/crud/crudGridSimple/",
+                                                text: "Basic Grid"
+                                            },
+                                            {
+                                                url: "/crud/crudGridSearch/",
+                                                text: "Search & paginate"
+                                            },
+                                            {
+                                                url: "/crud/crudGridSearchDirect/",
+                                                text: "Search filter on top"
+                                            },
+                                            {
+                                                url: "/crud/crudGridPagination/",
+                                                text: "Pagination config"
+                                            },
+                                            {
+                                                url: "/crud/crudScrollable/",
+                                                text: "Scrollable"
+                                            },
+                                            {
+                                                url: "/crud/crudExpand/",
+                                                text: "Expand grid & resize"
+                                            },
+                                        ],
                                     },
                                     {
-                                        url: "/crud/crudGridSearchDirect/",
-                                        text: "Search filter on top"
+                                        text: "Crud widget",
+                                        childs: [
+                                            {
+                                                url: "/crud/crudFormSimple/",
+                                                text: "CRUD Simple form"
+                                            },
+                                            {
+                                                url: "/crud/crudFormExtended/",
+                                                text: "CRUD Extended"
+                                            },
+                                        ],
                                     },
-                                    {
-                                        url: "/crud/crudGridPagination/",
-                                        text: "Pagination config"
-                                    },
-                                    {
-                                        url: "/crud/crudScrollable/",
-                                        text: "Scrollable"
-                                    },
-                                    {
-                                        url: "/crud/crudExpand/",
-                                        text: "Expand grid & resize"
-                                    },
-                                ],
-                            },
-                            {
-                                text: "Crud widget",
-                                childs: [
-                                    {
-                                        url: "/crud/crudFormSimple/",
-                                        text: "CRUD Simple form"
-                                    },
-                                    {
-                                        url: "/crud/crudFormExtended/",
-                                        text: "CRUD Extended"
-                                    },
-                                ],
+                                ]
                             },
                         ]
                     },

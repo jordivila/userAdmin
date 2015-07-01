@@ -2,8 +2,9 @@ define([
     "jquery",
     "jqueryui",
     "scripts/Template.App.Ajax.Init",
-    "scripts/Template.Widget.Menu.slides"],
-       function ($, jqUI, clientApp, wSlides) {
+    "scripts/Template.Widget.Menu.slides",
+    "scripts/Template.App.I18n.Init", ],
+       function ($, jqUI, clientApp, wSlides,cliI18n) {
 
            jQuery.widget("ui.menuNav", jQuery.ui.widgetBase, {
                options: {
@@ -114,7 +115,7 @@ define([
                    clientApp.Ajax.UserMenu(function (err, data) {
 
                        if (err !== null) {
-                           self._errMsgSet($panelMenu, clientApp.Resources.unExpectedError);
+                           self._errMsgSet($panelMenu, clientApp.i18n.texts.get("Views.Layout.UnExpectedError"));
                        }
                        else {
                            $panelMenuList.menuSlides('bind', data);

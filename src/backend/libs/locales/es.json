@@ -30,6 +30,8 @@
     "GeneralTexts.Languages": "Idiomas",
     "GeneralTexts.NotImplemented": "Not implemented",
     "GeneralTexts.SiteThemes": "Apariencia",
+    "Template.Widget.Menu.Slides.Back": "Atrás",
+    "Template.Widget.ModelDate.clickToPickDate": "Click aqui para seleccionar una fecha",
     "UserAdminTexts.DuplicateEmail": "Ya existe un nombre de usuario para este email. Por favor, entra una dirección de correo distinta",
     "UserAdminTexts.UserNotFound": "Usuario no encontrado",
     "Views.Globalize.ACurrency": "Un importe monetario",
@@ -50,6 +52,7 @@
     "Views.Globalize.SomethingHappened": "Algo ha ocurrido",
     "Views.Languages.SelectPreferredLang": "Selecciona tu idioma preferido",
     "Views.Languages.SelectPreferredTheme": "Selecciona tu tema preferido",
+    "Views.Layout.UnExpectedError": "Ha ocurrido un error no controlado",
     "Views.Menu.MenuSlides.Title": "Ejemplo de 'menu slides'",
     "Views.Menu.MenuTree.Title": "Ejemplo de 'menu tree'"
 }

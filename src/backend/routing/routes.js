@@ -16,6 +16,7 @@
 
     var routerApiUser = require('./routesApiUser');
     var routerViews = require('./routesViews');
+    var routerStatics = require('./routesStatics');
 
     var languagesController = new LanguagesController();
     var themesController = new ThemesController();
@@ -40,6 +41,7 @@
         });
 
         routerViews.setRoutes(app);
+        routerStatics.setRoutes(app);
         routerApiUser.setRoutes(app, log, authController);
         
 

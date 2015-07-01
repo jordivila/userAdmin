@@ -9,7 +9,7 @@
 .ui-sitePage .ui-site-nameBox{font-size:1em;padding:1em;margin:0em;}
 .ui-sitePage .ui-site-title {margin:0em 0em 0em 0em;padding:1em; text-align:center;}
 .ui-sitePage .ui-site-title * {}
-.ui-sitePage .ui-site-title h1{font-size: 1em;margin:0em;font-weight:normal;}
+.ui-sitePage .ui-site-title h1{font-size: 1em;margin:0em;/*font-weight:normal;*/}
 .ui-sitePage .ui-siteContent  {background-image:none;width:100%;margin:0 auto 0 auto;}
 .ui-sitePage .ui-site-templateInfo {padding:2em;}
 /* header */

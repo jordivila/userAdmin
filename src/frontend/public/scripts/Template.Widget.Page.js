@@ -4,16 +4,20 @@ define([
     "handlebars",
     "history",
     "scripts/Template.Widget.Menu.nav",
-    "scripts/Template.App.Globalize.Init"
+    "scripts/Template.App.Globalize.Init",
+    "scripts/Template.App.I18n.Init",
+    "pPromises",
 ],
-function ($, jqUI, Handlebars, hist, nav, clientApp) {
+function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P) {
 
     jQuery.widget("ui.page", jQuery.ui.widgetBase, {
         options: {
             cultureDatePicker: null,
             texts: {
                 loadingTmpl: "Loading template",
-                errLoadingTmpl: "Error loading template"
+                loadingI18n: "Loading i18n data",
+                errLoadingTmpl: "Error loading template",
+                errLoadingI18nData: "Unhandled error getting data. Unable to continue loading site."
             },
         },
         _init: function () {
@@ -22,25 +26,49 @@ function ($, jqUI, Handlebars, hist, nav, clientApp) {
 
             this._super();
 
-            self.datepickerInit()
-                .done(function () {
-                    self.historyInit()
-                        .done(function () {
-                            self.handlebarsInit()
-                                .done(function () {
-                                    self.menuNavInit();
-                                })
-                                .fail(function (eMsg) {
-                                    self.errorDisplay(eMsg);
-                                });
-                        })
-                        .fail(function (eMsg) {
-                            self.errorDisplay(eMsg);
-                        });
-                })
-                .fail(function (eMsg) {
-                    self.errorDisplay(eMsg);
-                });
+
+
+            var a = [
+                self.i18nDataInit(),
+                self.historyInit(),
+                self.handlebarsInit(),
+
+            ];
+
+            P.all(a).nodeify(function (e, data) {
+                if (e !== null) {
+                    console.log(e);
+                    self.errorDisplay(e);
+                }
+                else {
+
+
+                    self.menuNavInit();
+
+                }
+            });
+
+
+
+            //self.i18nDataInit()
+            //    .done(function () {
+            //        self.historyInit()
+            //            .done(function () {
+            //                self.handlebarsInit()
+            //                    .done(function () {
+            //                        self.menuNavInit();
+            //                    })
+            //                    .fail(function (eMsg) {
+            //                        self.errorDisplay(eMsg);
+            //                    });
+            //            })
+            //            .fail(function (eMsg) {
+            //                self.errorDisplay(eMsg);
+            //            });
+            //    })
+            //    .fail(function (eMsg) {
+            //        self.errorDisplay(eMsg);
+            //    });
 
         },
         _create: function () {
@@ -50,6 +78,34 @@ function ($, jqUI, Handlebars, hist, nav, clientApp) {
 
             this._super();
 
+        },
+        i18nDataInit: function () {
+
+            var self = this;
+            var dfd = jQuery.Deferred();
+            var currentCulture = clientApp.Utils.getCookie("locale");
+
+            dfd.notify(self.options.texts.loadingI18n);
+
+            clientApp.Ajax.I18nData(currentCulture, function (err, data) {
+
+                if (err !== null) {
+                    console.error(err);
+                    dfd.reject(self.options.texts.errLoadingI18nData);
+                }
+                else {
+
+                    if (data.I18nDatepicker !== null) {
+                        jQuery.datepicker.setDefaults(jQuery.datepicker.regional[self.options.cultureDatePicker]);
+                    }
+
+                    clientApp.i18n.texts.data = data.I18nTexts;
+
+                    dfd.resolve();
+                }
+            });
+
+            return dfd.promise();
         },
         menuNavInit: function () {
 
@@ -63,35 +119,6 @@ function ($, jqUI, Handlebars, hist, nav, clientApp) {
                     History.pushState(null, null, ui.url);
                 }
             });
-        },
-        datepickerInit: function () {
-
-            var self = this;
-
-            var dfd = jQuery.Deferred();
-
-            if (self.options.cultureDatePicker !== 'en') {
-
-                dfd.notify("Loading calendar...");
-
-                require(['bower_components/jquery-ui/ui/minified/i18n/jquery.ui.datepicker-' + self.options.cultureDatePicker + '.min'],
-                    function (d) {
-
-                        jQuery.datepicker.setDefaults(jQuery.datepicker.regional[self.options.cultureDatePicker]);
-
-                        dfd.resolve();
-
-                    }, function (err) {
-
-                        dfd.reject("Error loading datepicker culture");
-
-                    });
-            }
-            else {
-                dfd.resolve();
-            }
-
-            return dfd.promise();
         },
         historyInit: function () {
 
@@ -156,8 +183,15 @@ function ($, jqUI, Handlebars, hist, nav, clientApp) {
             clientApp.Ajax.View(templUrl, function (err, data) {
 
                 if (err !== null) {
-                    console.error(new Error("Error loading view data", arguments));
-                    dfd.reject("Error getting view data");
+
+                    console.error(err);
+
+                    dfd.reject("{0}: {1} - error - {2}".format(
+                         self.options.texts.errLoadingTmpl,
+                         err.status ? err.status : '',
+                         err.statusText ? err.statusText : ''
+                        ));
+
                 }
                 else {
 
@@ -174,9 +208,7 @@ function ($, jqUI, Handlebars, hist, nav, clientApp) {
                                 .html(model.Title);
                     }
 
-
                     $siteContent.html(handlebarTemplate);
-
 
                     if (hasEntry) {
 

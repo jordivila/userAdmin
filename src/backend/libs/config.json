@@ -9,16 +9,16 @@
     "encryptKeyForCookieParser": "someEncriptiongKey",
     "themes": {
         "cookieName": "theme",
-        "default": "redmond"
+        "default": "flick"
     },
     "i18n": {
         "directory": "./src/backend/libs/locales",
-        "locales": [ "es", "en"],
+        "locales": [ "es", "en" ],
         "defaultLocale": "es",
         "prefLocale": "es",
         "cookieName": "locale",
         "extension": ".json",
-        "devMode":  false
+        "devMode": false
     },
     "domainInfo": {
         "domainName": "localhost:3001",
@@ -30,5 +30,10 @@
             "password": "someFakeUserPassword"
         },
         "supportEmailAddress": "supportaccount@fakedomainname.com"
+    },
+    "clientApp": {
+        "cache": { 
+            "maxAgeDefault": 86400000
+        }
     }
 }

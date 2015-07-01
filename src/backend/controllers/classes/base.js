@@ -37,9 +37,9 @@
             cssFiles: [
                 //"/public/views/home/home.css",
             ],
-            jsFiles: [
+            //jsFiles: [
                 //"/public/views/home/home.js",
-            ],
+            //],
         };
 
         req.viewModel = m;

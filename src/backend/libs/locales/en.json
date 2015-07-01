@@ -30,6 +30,8 @@
     "GeneralTexts.Languages": "Languages",
     "GeneralTexts.NotImplemented": "Not implemented",
     "GeneralTexts.SiteThemes": "Themes",
+    "Template.Widget.Menu.Slides.Back": "Back",
+    "Template.Widget.ModelDate.clickToPickDate": "Click here to pick a date",
     "UserAdminTexts.DuplicateEmail": "A user already exists for the given email address",
     "UserAdminTexts.UserNotFound": "User not found",
     "Views.Globalize.ACurrency": "A currency",
@@ -50,6 +52,7 @@
     "Views.Globalize.SomethingHappened": "Something happened",
     "Views.Languages.SelectPreferredLang": "Select your preferred language",
     "Views.Languages.SelectPreferredTheme": "Select your preferred theme",
+    "Views.Layout.UnExpectedError": "Unexpected error ocurred",
     "Views.Menu.MenuSlides.Title": "Menu slides sample",
     "Views.Menu.MenuTree.Title": "Menu tree sample"
 }

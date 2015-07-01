@@ -1,14 +1,16 @@
-define(["jquery", "jqueryui", "scripts/Template.Widget.Menu.base"],
-       function ($, jqUI) {
+define([
+    "jquery",
+    "jqueryui",
+    "scripts/Template.Widget.Menu.base",
+    "scripts/Template.App.I18n.Init",
+],
+       function ($, jqUI, mBase, clientApp) {
 
 
            jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
                options: {
                    //slidesOpened: [], //http://bugs.jqueryui.com/ticket/8645
                    slidesOpened: null, //since jQuery.ui 1.9 array options are static. So initialized them on create event,
-                   texts: {
-                       back: "Back"
-                   }
                },
                _create: function () {
 
@@ -16,7 +18,7 @@ define(["jquery", "jqueryui", "scripts/Template.Widget.Menu.base"],
 
                    this.options.slidesOpened = [];
 
-                   jQuery(this.element).prepend('<div class="ui-menuSlide-backButton ui-helper-hidden ui-state-default"><span class="ui-icon ui-icon-triangle-1-w"></span><span>' + this.options.texts.back + '</span><div class="ui-helper-clearfix"></div></div>');
+                   jQuery(this.element).prepend('<div class="ui-menuSlide-backButton ui-helper-hidden ui-state-default"><span class="ui-icon ui-icon-triangle-1-w"></span><span>' + clientApp.i18n.texts.get("Template.Widget.Menu.Slides.Back") + '</span><div class="ui-helper-clearfix"></div></div>');
 
                },
                _init: function () {
