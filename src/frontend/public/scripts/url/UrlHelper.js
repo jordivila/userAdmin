@@ -1,7 +1,27 @@
 ﻿function UrlHelper(strURI) {
-    return this.bind(strURI);
-}
 
+    /*
+    IE bug fix ->
+        1.- usefull browsers just need "return this.bind(strURI)" to work fine.
+        2.- but IE returns empty string when strURI is a relative Url
+        3.- luckily IE at least returns href completed when using relative Url
+        4.- so, in order to fix just bind again using href value of the first try
+    */
+
+    return this.bind(this.bind(strURI).href);
+
+
+    /*
+        if(browser==IE)
+        {
+            return this.bind(this.bind(strURI).href);
+        }
+        else
+        {
+            return this.bind(strURI);
+        }
+    */
+}
 
 UrlHelper.prototype.bind = function (strURI) {
 

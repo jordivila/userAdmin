@@ -35,6 +35,8 @@
             currenciesController.initRequest(req, res);
 
 
+            console.log(req.url);
+
             // do not setViewModelBase here
             // otherwise viewModelBase will be set
             // even when requesting jpg, bmp, pdf, etc
