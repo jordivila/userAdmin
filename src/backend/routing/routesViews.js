@@ -3,6 +3,7 @@
     "use strict";
 
     var LanguagesController = require('../controllers/languages');
+    var CurrenciesController = require('../controllers/currencies');
     var HomeController = require('../controllers/home');
     var ThemesController = require('../controllers/themes');
     var GlobalizeController = require('../controllers/globalize');
@@ -10,6 +11,7 @@
     var GenericViewController = require('../controllers/classes/genericView');
 
     var languagesController = new LanguagesController();
+    var currenciesController = new CurrenciesController();
     var homeController = new HomeController();
     var themesController = new ThemesController();
     var globalizeController = new GlobalizeController();
@@ -91,6 +93,7 @@
 
         registerCommonVerbs(app, "home", homeController);
         registerCommonVerbs(app, "languages", languagesController);
+        registerCommonVerbs(app, "currencies", currenciesController);
         registerCommonVerbs(app, "themes", themesController);
         registerCommonVerbs(app, "globalize/serverside", globalizeController);
         registerCommonVerbs(app, "globalize/clientside", globalizeController);

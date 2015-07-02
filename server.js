@@ -5,7 +5,6 @@
     var express = require('express');
     var favicon = require('serve-favicon');
     var methodOverride = require('method-override');
-    var path = require('path');
     var compression = require('compression');
     var passport = require('passport');
     var bodyParser = require('body-parser');
@@ -16,13 +15,8 @@
     var i18n = require('i18n-2');
     var util = require('util');
     var exphbs = require('express-handlebars');
-    //var thisPackage = require('./package.json');
     var authController = require('./src/backend/controllers/auth');
-    //var usersController = require('./src/backend/controllers/users');
     var testsController = require('./src/backend/controllers/tests');
-    //var languagesController = require('./src/backend/controllers/languages');
-    //var themesController = require('./src/backend/controllers/themes');
-    //var ErrorHandled = require('./src/backend/models/errorHandled');
     var routingHandler = require('./src/backend/routing/routes');
     var GlobalizeController = require('./src/backend/controllers/globalize');
     var app = express();

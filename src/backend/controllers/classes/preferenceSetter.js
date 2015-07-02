@@ -58,6 +58,16 @@
 
     };
 
+    PreferenceSetter.prototype.overrideRequest = function (newValue, req, res) {
+
+        if (req.cookies[this.cookieName]) {
+            req.cookies[this.cookieName] = newValue;
+        }
+
+        this.setCookieClientAccess(res, this.cookieName, this.cookieValueGet(req));
+
+    };
+
     PreferenceSetter.prototype.viewIndexModel = function (req, cb) {
 
         this.getAll(req, function (err, getAllResult) {

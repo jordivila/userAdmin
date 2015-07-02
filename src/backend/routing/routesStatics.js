@@ -19,22 +19,47 @@
         var isTest = config.get('IsTestEnv');
         var cacheMaxAge = (!isTest) ? config.get('clientApp:cachemaxAgeDefault') : 0;
 
-        app.use('/public/scripts', express.static(app.get('root') + 'scripts', {
-            maxAge: cacheMaxAge
-        }));
-        app.use('/public/bower_components', express.static(app.get('bower_components'), {
-            maxAge: cacheMaxAge
-        }));
-        app.use('/public/cdn', express.static(app.get('root') + 'cdn', {
-            maxAge: cacheMaxAge
-        }));
-        app.use('/public/fonts', express.static(app.get('bower_components') + 'components-font-awesome/fonts', {
-            maxAge: cacheMaxAge
-        }));
-        app.use('/public/images', express.static(app.get('root') + 'images', {
-            maxAge: cacheMaxAge
-        }));
-        
+        //if (isTest) {
+        //    app.use('/public/scripts', express.static(app.get('root') + 'scripts', {
+        //        maxAge: cacheMaxAge
+        //    }));
+
+        //    app.use('/scripts', express.static(app.get('root') + 'scripts', {
+        //        maxAge: cacheMaxAge
+        //    }));
+        //    app.use('/public/bower_components', express.static(app.get('bower_components'), {
+        //        maxAge: cacheMaxAge
+        //    }));
+        //    app.use('/public/bower', express.static(app.get('bower_components'), {
+        //        maxAge: cacheMaxAge
+        //    }));
+        //    app.use('/public/cdn', express.static(app.get('root') + 'cdn', {
+        //        maxAge: cacheMaxAge
+        //    }));
+        //    app.use('/public/fonts', express.static(app.get('bower_components') + 'components-font-awesome/fonts', {
+        //        maxAge: cacheMaxAge
+        //    }));
+        //    app.use('/public/images', express.static(app.get('root') + 'images', {
+        //        maxAge: cacheMaxAge
+        //    }));
+        //}
+        //else {
+            app.use('/public/scripts', express.static(app.get('root') + 'scripts', {
+                maxAge: cacheMaxAge
+            }));
+            app.use('/public/bower_components', express.static(app.get('bower_components'), {
+                maxAge: cacheMaxAge
+            }));
+            app.use('/public/cdn', express.static(app.get('root') + 'cdn', {
+                maxAge: cacheMaxAge
+            }));
+            app.use('/public/fonts', express.static(app.get('bower_components') + 'components-font-awesome/fonts', {
+                maxAge: cacheMaxAge
+            }));
+            app.use('/public/images', express.static(app.get('root') + 'images', {
+                maxAge: cacheMaxAge
+            }));
+        //}
     };
 
 })(module);

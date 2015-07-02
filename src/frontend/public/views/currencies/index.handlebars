@@ -1,0 +1,31 @@
+<style type="text/css">
+    .ui-currencySelector-container {
+        padding: 1em;
+        background-image: none !important;
+    }
+
+    .ui-currencySelector-container ul.ui-currencySelector-list {
+        border-width: 0;
+    }
+</style>
+
+<div class="ui-currencySelector">
+
+    <div class="ui-currencySelector-messages"></div>
+    <div class="ui-currencySelector-container ">
+        <h3>{{{__ "Views.Languages.SelectPreferredCurrency"}}}</h3>
+        <ul class="ui-currencySelector-list ui-menuTree ui-menuList ui-widget-content ui-corner-all" style="overflow: hidden;">
+            {{#each itemList}}
+            <li class="ui-menuList-item ui-widget-content ui-corner-all"
+                data-currency-id="{{this.id}}">
+                <div class="ui-menuList-itemLink {{#if this.selected }} ui-state-active {{else}} ui-state-default {{/if}}">
+                    <span class="ui-menuList-link">{{this.name}}</span>
+                    <div class="ui-helper-clearfix"></div>
+                </div>
+            </li>
+            {{/each}}
+        </ul>
+    </div>
+</div>
+
+

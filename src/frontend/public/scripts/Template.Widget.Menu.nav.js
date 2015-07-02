@@ -8,10 +8,15 @@ define([
 
            jQuery.widget("ui.menuNav", jQuery.ui.widgetBase, {
                options: {
-
+                   texts: {
+                       errLoadingMenuData: null
+                   }
                },
                _create: function () {
                    this._super();
+
+                   this.options.texts.errLoadingMenuData = clientApp.i18n.texts.get("Template.Widget.Menu.nav.errLoadingMenuData");
+
                },
                _init: function () {
 
@@ -115,7 +120,7 @@ define([
                    clientApp.Ajax.UserMenu(function (err, data) {
 
                        if (err !== null) {
-                           self._errMsgSet($panelMenu, clientApp.i18n.texts.get("Views.Layout.UnExpectedError"));
+                           self._errMsgSet($panelMenu, self.options.texts.errLoadingMenuData);
                        }
                        else {
                            $panelMenuList.menuSlides('bind', data);

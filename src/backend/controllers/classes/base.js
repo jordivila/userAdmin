@@ -23,7 +23,7 @@
                 version: pkg.version
             },
             isTest: config.get('IsTestEnv'),
-            theme: req.cookies[config.get('themes:cookieName')] ? req.cookies[config.get('themes:cookieName')] : config.get('themes:default'),
+            theme: req.cookies[config.get('clientApp:themes:cookieName')] ? req.cookies[config.get('clientApp:themes:cookieName')] : config.get('clientApp:themes:default'),
             globalization: {
                 cultureGlobalization: req.i18n.locale,
                 cultureDatePicker: req.i18n.locale,

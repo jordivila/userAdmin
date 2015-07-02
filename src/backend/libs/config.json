@@ -7,10 +7,6 @@
         "uri": "mongodb://localhost:27017/testAPI3"
     },
     "encryptKeyForCookieParser": "someEncriptiongKey",
-    "themes": {
-        "cookieName": "theme",
-        "default": "flick"
-    },
     "i18n": {
         "directory": "./src/backend/libs/locales",
         "locales": [ "es", "en" ],
@@ -32,8 +28,17 @@
         "supportEmailAddress": "supportaccount@fakedomainname.com"
     },
     "clientApp": {
-        "cache": { 
+        "cache": {
             "maxAgeDefault": 86400000
+        },
+        "themes": {
+            "cookieName": "theme",
+            "default": "flick"
+        },
+        "money": {
+            "currencies": [ "USD", "EUR" ],
+            "default": "EUR",
+            "cookieName": "curId"
         }
     }
 }

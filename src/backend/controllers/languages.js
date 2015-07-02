@@ -36,7 +36,15 @@
     };
     LangController.prototype.initRequest = function (req, res) {
         req.i18n.setLocaleFromCookie();
-        PreferenceSetter.prototype.initRequest.call(this, req, res);
+
+
+        if (config.get('i18n:locales').indexOf(this.cookieValueGet(req)) > -1) {
+            PreferenceSetter.prototype.initRequest.call(this, req, res);
+        }
+        else {
+            PreferenceSetter.prototype.overrideRequest.call(this, this.defaultValueGet(), req, res);
+        }
+
     };
     LangController.prototype.cookieName = config.get('i18n:cookieName');
     LangController.prototype.cookieValueGet = function (req) {
@@ -44,8 +52,12 @@
             return req.cookies[this.cookieName];
         }
         else {
-            return config.get('i18n:locales')[0];
+            return this.defaultValueGet();
         }
     };
+    LangController.prototype.defaultValueGet = function (req) {
+        return config.get('i18n:locales')[0];
+    };
+
 
 })(module);

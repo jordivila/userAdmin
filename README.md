@@ -44,7 +44,9 @@ Next things to keep an eye
 - [making dashboard faster](https://engineering.gosquared.com/making-dashboard-faster "making dashboard faster")
 - [FreeCodeCamp.com](https://github.com/FreeCodeCamp/freecodecamp "freecodecamp.com")
 
+Check web site online
 
+- [powermapper](http://try.powermapper.com/ "try.powermapper.com")
 
 Utils
 

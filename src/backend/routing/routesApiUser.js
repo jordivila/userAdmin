@@ -69,8 +69,6 @@
 
                 var i18n = req.i18n;
 
-
-
                 res.json([
                     {
                         url: "/home/",
@@ -85,7 +83,7 @@
                         text: i18n.__("GeneralTexts.About")
                     },
                     {
-                        text: "Preferences",
+                        text: i18n.__("GeneralTexts.Settings"),
                         childs: [
                                 {
                                     url: "/languages/",
@@ -95,6 +93,11 @@
                                     url: "/themes/",
                                     text: i18n.__("GeneralTexts.SiteThemes")
                                 },
+                                {
+                                    url: "/currencies/",
+                                    text: i18n.__("GeneralTexts.Currencies")
+                                },
+
                         ]
                     },
                     {

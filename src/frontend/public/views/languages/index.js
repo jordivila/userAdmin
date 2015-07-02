@@ -8,8 +8,8 @@
                    messageBoxSelector: 'div.ui-languageSelector-messages:first',
                    itemsSelector: 'ul.ui-languageSelector-list:first > li',
                    itemsAttrId: 'data-language-id',
-                   itemApllyingMsg: 'Aplicando idioma...',
-                   itemApllyingFailUnhandledMsg: 'Error no controlado aplicando el idioma',
+                   itemApllyingMsg: clientApp.i18n.texts.get("Views.Layout.ApplyingChanges"),
+                   itemApllyingFailUnhandledMsg: clientApp.i18n.texts.get("Views.Layout.ApplyingChangesError"),
                    itemServerPut: function (itemId) {
                        return jQuery.ajax({
                            url: "/languages/",

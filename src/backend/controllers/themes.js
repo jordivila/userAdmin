@@ -139,13 +139,13 @@
         cb(null, this.data);
 
     };
-    ThemeController.prototype.cookieName = config.get('themes:cookieName');
+    ThemeController.prototype.cookieName = config.get('clientApp:themes:cookieName');
     ThemeController.prototype.cookieValueGet = function (req) {
         if (req.cookies[this.cookieName]) {
             return req.cookies[this.cookieName];
         }
         else {
-            return config.get('themes:default');
+            return config.get('clientApp:themes:default');
         }
     };
 

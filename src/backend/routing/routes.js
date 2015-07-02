@@ -11,6 +11,7 @@
     var ErrorHandled = require('../models/errorHandled.js');
     var testsController = require('../controllers/tests');
     var LanguagesController = require('../controllers/languages');
+    var CurrenciesController = require('../controllers/currencies');
     var ThemesController = require('../controllers/themes');
     var BaseController = require('../controllers/classes/base');
 
@@ -19,6 +20,7 @@
     var routerStatics = require('./routesStatics');
 
     var languagesController = new LanguagesController();
+    var currenciesController = new CurrenciesController();
     var themesController = new ThemesController();
     var baseController = new BaseController();
 
@@ -30,6 +32,7 @@
 
             languagesController.initRequest(req, res);
             themesController.initRequest(req, res);
+            currenciesController.initRequest(req, res);
 
 
             // do not setViewModelBase here
