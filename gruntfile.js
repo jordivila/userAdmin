@@ -256,6 +256,7 @@
                         history: '../bower_components/history.js/scripts/bundled/html5/jquery.history',
                         bower: '../bower_components/',
                         pPromises: '../bower_components/p-promise/p.min',
+                        crossLayer: '../../crossLayer',
 
                         /**************************************************************
                                     Globalize dependencies paths begin

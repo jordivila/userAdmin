@@ -2,10 +2,10 @@
 
     /*
     IE bug fix ->
-        1.- usefull browsers just need "return this.bind(strURI)" to work fine.
-        2.- but IE returns empty string when strURI is a relative Url
-        3.- luckily IE at least returns href completed when using relative Url
-        4.- so, in order to fix just bind again using href value of the first try
+        1.- most browsers just need "return this.bind(strURI)" to work fine.
+        2.- IE sets 'this.hostname' as an empty string when strURI is a relative Url like '/home'
+        3.- At least IE returns href completed when using relative Url
+        4.- Thus, just need to re-bind using this.href value of the first try
     */
 
     return this.bind(this.bind(strURI).href);

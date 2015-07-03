@@ -21,6 +21,8 @@ Objectives
 Task List
  
 1. Use Google & Facebook & github passport authentication
+2. Cross layer for constants like 'appVersion' or 'seoRequest', cookie names or even i18n texts
+3. Remove i18n lib from backend & use a custom method to get i18n text values using Globalize.Messages previously loaded on server start event
 
 SEO Tools
 

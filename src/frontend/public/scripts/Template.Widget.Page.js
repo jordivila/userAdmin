@@ -7,8 +7,9 @@ define([
     "scripts/Template.App.Globalize.Init",
     "scripts/Template.App.I18n.Init",
     "pPromises",
+    "crossLayer/config"
 ],
-function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P) {
+function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
 
     jQuery.widget("ui.page", jQuery.ui.widgetBase, {
         options: {
@@ -83,7 +84,7 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P) {
 
             var self = this;
             var dfd = jQuery.Deferred();
-            var currentCulture = clientApp.Utils.getCookie("locale");
+            var currentCulture = clientApp.Utils.getCookie(crossLayer.cookies.i18nLocale);
 
             dfd.notify(self.options.texts.loadingI18n);
 

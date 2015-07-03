@@ -4,8 +4,9 @@ define([
     "scripts/url/UrlHelper",
     "scripts/Template.App.Page.Init",
     "pPromises",
+    "crossLayer/config"
 ],
-    function ($, clientApp, urlHelper, pInit, P) {
+    function ($, clientApp, urlHelper, pInit, P, crossLayer) {
 
 
         jQuery(document).ready(function () {
@@ -18,8 +19,15 @@ define([
                     var urlHelper = new UrlHelper(settings.url);
 
                     if (urlHelper.hostname == window.location.hostname) {
-                        settings.url = new UrlHelper(settings.url).paramSet("appVersion", clientApp.Widgets.PageOptions.appVersion).href;
-                        settings.url = new UrlHelper(settings.url).paramSet("seoRequest", false).href;
+                        settings.url = urlHelper
+                                        .bind(settings.url)
+                                        .paramSet(
+                                            crossLayer.queryParams.appVersion,
+                                            clientApp.Widgets.PageOptions.appVersion).href;
+
+                        settings.url = urlHelper
+                                        .bind(settings.url)
+                                        .paramSet(crossLayer.queryParams.seoRequest, false).href;
                     }
                 }
             });

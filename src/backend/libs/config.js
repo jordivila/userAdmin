@@ -1,4 +1,5 @@
 ﻿var nconf = require('nconf');
+var crossLayer = require('../../crossLayer/config');
 var folder = 'src/backend/libs/';
 
 // 
@@ -13,6 +14,9 @@ nconf.argv()
 nconf.set('port', process.env.PORT || nconf.get('port'));
 nconf.set('mongoose:uri', (process.env.CUSTOMCONNSTR_MONGOLAB_URI || nconf.get('mongoose:uri')));
 nconf.set('IsTestEnv', (nconf.get('NODE_ENV') === 'test') || (nconf.get('NODE_ENV') === 'dev'));
+
+// override i18n:cookieName and use crossLayer.cookies.i18nLocale
+nconf.set('i18n:cookieName', crossLayer.cookies.i18nLocale);
 
 
 if (nconf.get('NODE_ENV') === 'test')

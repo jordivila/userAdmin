@@ -2,7 +2,8 @@
     "jquery",
     "scripts/Template.App.Init",
     "scripts/Template.App.I18n.Init",
-], function ($, clientApp, cI18n) {
+    "crossLayer/config"
+], function ($, clientApp, cI18n, crossLayer) {
 
     clientApp.Globalizer = {
         instance: null,
@@ -10,7 +11,7 @@
 
             var dfd = jQuery.Deferred();
 
-            var currentCulture = clientApp.Utils.getCookie("locale");
+            var currentCulture = clientApp.Utils.getCookie(crossLayer.cookies.i18nLocale);
 
             if (clientApp.Globalizer.instance === null) {
 

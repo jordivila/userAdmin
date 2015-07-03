@@ -11,6 +11,7 @@
     var path = require('path');
     var fs = require('fs');
     var utilExtensions = require('../libs/commonFunctions');
+    var CurrencyController = require('./currencies');
 
 
     function GlobalizeController() {
@@ -53,9 +54,9 @@
     };
     GlobalizeController.prototype.viewIndexModel = function (req, cb) {
 
-
         var like;
         var currentCulture = req.viewModel.globalization.cultureGlobalization;
+        var currentCurrency = req.viewModel.globalization.currency;
 
 
         Globalize.locale(currentCulture);
@@ -67,7 +68,7 @@
         cb(null, {
             TheDate: globInstance.formatDate(new Date(), { datetime: "medium" }),
             TheNumber: globInstance.formatNumber(12345.6789),
-            TheCurrency: globInstance.formatCurrency(69900, "USD"),
+            TheCurrency: globInstance.formatCurrency(69900, currentCurrency),
             ThePlural: globInstance.plural(12345.6789),
             TheTimeAgo: globInstance.formatRelativeTime(-35, "second"),
             TheMessages: [like(0), like(1), like(2), like(3)]

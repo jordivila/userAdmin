@@ -1,13 +1,16 @@
 ﻿define([
     "scripts/Template.App.Init",
+    "crossLayer/config"
 ],
-function (clientApp) {
+function (clientApp, crossLayer) {
 
     clientApp.View = {
         main: function () {
 
             clientApp.Globalizer.get()
              .done(function (Globalize) {
+
+                 var currency = clientApp.Utils.getCookie(crossLayer.cookies.currency);
 
                  jQuery("#date").html(Globalize.formatDate(new Date(), {
                      datetime: "medium"
@@ -18,7 +21,7 @@ function (clientApp) {
                  jQuery("#number").html(number(12345.6789));
 
                  // Use Globalize to format currencies.
-                 jQuery("#currency").html(Globalize.formatCurrency(69900, "EUR"));
+                 jQuery("#currency").html(Globalize.formatCurrency(69900, currency));
 
                  // Use Globalize to get the plural form of a numeric value.
                  jQuery("#plural-number").html(number(12345.6789));

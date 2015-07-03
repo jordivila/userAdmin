@@ -42,22 +42,11 @@
             PreferenceSetter.prototype.initRequest.call(this, req, res);
         }
         else {
-            PreferenceSetter.prototype.overrideRequest.call(this, this.defaultValueGet(), req, res);
+            PreferenceSetter.prototype.overrideRequest.call(this, this.defaultValue, req, res);
         }
 
     };
     LangController.prototype.cookieName = config.get('i18n:cookieName');
-    LangController.prototype.cookieValueGet = function (req) {
-        if (req.cookies[this.cookieName]) {
-            return req.cookies[this.cookieName];
-        }
-        else {
-            return this.defaultValueGet();
-        }
-    };
-    LangController.prototype.defaultValueGet = function (req) {
-        return config.get('i18n:locales')[0];
-    };
-
+    LangController.prototype.defaultValue = config.get('i18n:locales')[0];
 
 })(module);

@@ -6,6 +6,7 @@
 
     var config = require('../libs/config');
     var PreferenceSetter = require('./classes/preferenceSetter.js');
+    var crossLayer = require('../../crossLayer/config');
 
     function ThemeController() {
         PreferenceSetter.apply(this, arguments);
@@ -139,14 +140,7 @@
         cb(null, this.data);
 
     };
-    ThemeController.prototype.cookieName = config.get('clientApp:themes:cookieName');
-    ThemeController.prototype.cookieValueGet = function (req) {
-        if (req.cookies[this.cookieName]) {
-            return req.cookies[this.cookieName];
-        }
-        else {
-            return config.get('clientApp:themes:default');
-        }
-    };
+    ThemeController.prototype.cookieName = crossLayer.cookies.theme;
+    ThemeController.prototype.defaultValue = config.get('clientApp:themes:default');
 
 })(module);

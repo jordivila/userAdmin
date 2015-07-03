@@ -19,9 +19,15 @@
     PreferenceSetter.prototype = new GenericViewController();
 
     PreferenceSetter.prototype.cookieName = '';
+    PreferenceSetter.prototype.defaultValue = '';
 
     PreferenceSetter.prototype.cookieValueGet = function (req) {
-        return req.cookies[this.cookieName];
+        if (req.cookies[this.cookieName]) {
+            return req.cookies[this.cookieName];
+        }
+        else {
+            return this.defaultValue;
+        }
     };
 
     PreferenceSetter.prototype.Data = function (value) {

@@ -1,4 +1,4 @@
-﻿(function (module) {
+﻿(function(module) {
 
     "use strict";
 
@@ -14,14 +14,13 @@
     }
 
     GenericView.prototype = new BaseController();
-    GenericView.prototype.setViewInfo = function (app, req, route) {
+    GenericView.prototype.setViewInfo = function(app, req, route) {
         var viewPath = route + '/index.handlebars';
         var viewModelPath = app.get('views') + '/' + viewPath + '.json';
 
         req.viewModel = util.extend(req.viewModel, require(viewModelPath));
 
-        if (req.viewModel.Title)
-        {
+        if (req.viewModel.Title) {
             req.viewModel.Title = req.i18n.__(req.viewModel.Title);
         }
 
@@ -30,16 +29,16 @@
             viewModelPath: viewModelPath
         };
     };
-    GenericView.prototype.viewIndexModel = function (req, cb) {
+    GenericView.prototype.viewIndexModel = function(req, cb) {
 
         cb(null, {});
 
     };
-    GenericView.prototype.viewIndex = function (app, req, res, next) {
+    GenericView.prototype.viewIndex = function(app, req, res, next) {
 
         if (req.viewModel.isSEORequest) {
 
-            this.viewIndexModel(req, function (err, result) {
+            this.viewIndexModel(req, function(err, result) {
 
                 if (err) {
                     return next(err);
@@ -48,8 +47,7 @@
                 res.render(req.viewInfo.viewPath, util.extend(req.viewModel, result));
             });
 
-        }
-        else {
+        } else {
 
             res.sendFile(req.viewInfo.viewPath, {
                 root: app.get('views')
@@ -58,18 +56,18 @@
         }
 
     };
-    GenericView.prototype.viewIndexJson = function (app, req, res, next) {
+    GenericView.prototype.viewIndexJson = function(app, req, res, next) {
 
         //var getTexts = this.viewI18nTextsCacheGet;
         var self = this;
 
-        this.viewIndexModel(req, function (err, result) {
+        this.viewIndexModel(req, function(err, result) {
 
             if (err) {
                 return next(err);
             }
 
-            self.viewI18nTextsCacheGet(app, req, function (errTexts, i18nTexts) {
+            self.viewI18nTextsCacheGet(app, req, function(errTexts, i18nTexts) {
 
                 if (errTexts) {
                     return next(errTexts);
@@ -85,23 +83,22 @@
 
     };
     GenericView.viewI18nTextsCacheKeys = []; // static !!!
-    GenericView.viewI18nTextsCacheValues = {};// static !!!
-    GenericView.prototype.viewI18nTextsCacheGet = function (app, req, cb) {
+    GenericView.viewI18nTextsCacheValues = {}; // static !!!
+    GenericView.prototype.viewI18nTextsCacheGet = function(app, req, cb) {
 
         var self = this;
         var cacheKey = req.i18n.locale + req.viewInfo.viewPath;
-        var sendTexts = function () {
+        var sendTexts = function() {
             cb(null, GenericView.viewI18nTextsCacheValues[cacheKey]);
         };
 
         if (GenericView.viewI18nTextsCacheKeys.indexOf(cacheKey) == -1) {
 
-            self.viewI18nTextsCacheBuild(app, req, function (err, texts) {
+            self.viewI18nTextsCacheBuild(app, req, function(err, texts) {
 
                 if (err) {
                     cb(err);
-                }
-                else {
+                } else {
 
                     GenericView.viewI18nTextsCacheKeys.push(cacheKey);
                     GenericView.viewI18nTextsCacheValues[cacheKey] = texts;
@@ -109,13 +106,12 @@
                     sendTexts();
                 }
             });
-        }
-        else {
+        } else {
 
             sendTexts();
         }
     };
-    GenericView.prototype.viewI18nTextsCacheBuild = function (app, req, cb) {
+    GenericView.prototype.viewI18nTextsCacheBuild = function(app, req, cb) {
         /*
             Find i18n resources in handlebars templates -> {{{__ "someI18nTextKey"}}}
             And add them to json model requests
@@ -126,7 +122,9 @@
         var viewPath = app.get('views') + req.viewInfo.viewPath;
 
         // 2.- read view  contents
-        fs.readFile(viewPath, { encoding: 'utf8' }, function (err, data) {
+        fs.readFile(viewPath, {
+            encoding: 'utf8'
+        }, function(err, data) {
 
             if (err) return cb(err);
 
@@ -156,8 +154,7 @@
 
                     cb(null, i18nTexts);
 
-                }
-                else {
+                } else {
                     cb(null, {});
                 }
 

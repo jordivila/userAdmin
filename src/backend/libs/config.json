@@ -32,13 +32,11 @@
             "maxAgeDefault": 86400000
         },
         "themes": {
-            "cookieName": "theme",
             "default": "flick"
         },
         "money": {
             "currencies": [ "USD", "EUR" ],
-            "default": "EUR",
-            "cookieName": "curId"
+            "default": "EUR"
         }
     }
 }
