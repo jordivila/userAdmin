@@ -253,10 +253,11 @@
                         jqueryui: "scripts/modules/jquery.ui.custom.bundle",
                         domReady: "../bower_components/requirejs-domready/domReady",
                         handlebars: "../bower_components/handlebars/handlebars.min",
-                        history: '../bower_components/history.js/scripts/bundled/html5/jquery.history',
+                        history: '../bower_components/history.js/scripts/bundled/html4+html5/jquery.history',
                         bower: '../bower_components/',
                         pPromises: '../bower_components/p-promise/p.min',
                         crossLayer: '../../crossLayer',
+                        es5shim: '../bower_components/es5-shim',
 
                         /**************************************************************
                                     Globalize dependencies paths begin

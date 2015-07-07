@@ -105,6 +105,10 @@
             return false;
         }
     </script>-->
+
+
+
+
     {{#if isTest}}
     <script src="http://localhost:35729/livereload.js"></script>
     {{/if}}
@@ -125,6 +129,8 @@
                 handlebars: "bower_components/handlebars/handlebars.min",
                 history: 'bower_components/history.js/scripts/bundled/html5/jquery.history',
                 pPromises: 'bower_components/p-promise/p.min',
+                es5Shim: 'bower_components/es5-shim',
+                respond: 'bower_components/respond/dest/respond.src',
                 /**************************************************************
                             Globalize dependencies paths begin
                 **************************************************************/
@@ -149,37 +155,40 @@
                 'history': {
                     deps: ["jquery"]
                 },
+                'respond': { 
+                    deps: ['jquery'] 
+                },
             }
         });
     </script>
     <script>
 
-        require(
-        ['require',
-         'scripts/modules/main',
-        ],
-        function (req, clientApp) {
+        var loadMainModule = function () {
 
-            jQuery(document).ready(function(){
+            require(
+            ['scripts/modules/main'],
+            function (clientApp) {
 
-                clientApp.Widgets.PageOptions.appVersion = "{{package.version}}";
-                clientApp.Widgets.PageOptions.selector = "body";
-                clientApp.Widgets.PageOptions.cultureGlobalization = '{{globalization.cultureGlobalization}}';
-                clientApp.Widgets.PageOptions.cultureDatePicker = '{{globalization.cultureDatePicker}}';
-                clientApp.Widgets.PageOptions.onInit(function () {
-                    jQuery("body").removeClass("ui-helper-hidden");
+                jQuery(document).ready(function () {
 
-                    {{#if ViewEntryPoint}}
+                    clientApp.Widgets.PageOptions.appVersion = "{{package.version}}";
+                    clientApp.Widgets.PageOptions.selector = "body";
+                    clientApp.Widgets.PageOptions.cultureGlobalization = '{{globalization.cultureGlobalization}}';
+                    clientApp.Widgets.PageOptions.cultureDatePicker = '{{globalization.cultureDatePicker}}';
+                    clientApp.Widgets.PageOptions.onInit(function () {
+                        jQuery("body").removeClass("ui-helper-hidden");
 
-                    require(['{{ViewEntryPoint}}'],
-                            function (clientApp) {
-                                clientApp.View.main();
-                            },
-                            function (errRequiring) {
-                                console.error(errRequiring);
-                            });
+                        {{#if ViewEntryPoint}}
 
-                    {{/if}}
+                        require(['{{ViewEntryPoint}}'],
+                                function (clientApp) {
+                                    clientApp.View.main();
+                                },
+                                function (errRequiring) {
+                                    console.error(errRequiring);
+                                });
+
+                        {{/if}}
 
                     });
 
@@ -187,6 +196,23 @@
 
                 });
             });
+
+        };
+
+
+        if (!Object.keys) {
+            require(['scripts/modules/es5Shim'], function (es5Shim) {
+                require(['respond'], function(respond){
+                    loadMainModule();
+                });
+            });
+        }
+        else {
+            loadMainModule();
+        }
+
+
+
     </script>
 
 

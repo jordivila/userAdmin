@@ -64,10 +64,13 @@ define([
             });
         };
 
-        clientApp.Ajax.View = function (templUrl, cbErrFirst) {
+        clientApp.Ajax.View = function (historyState, cbErrFirst) {
+
+            console.log(historyState);
+
             return P.all([
-                clientApp.Ajax.ViewHtml(templUrl),
-                clientApp.Ajax.ViewModel(templUrl),
+                clientApp.Ajax.ViewHtml(historyState.cleanUrl),
+                clientApp.Ajax.ViewModel(historyState.cleanUrl)
             ]).nodeify(function (e, data) {
 
                 if (e !== null) {
@@ -82,6 +85,8 @@ define([
 
                     if (hasEntry) {
 
+                        var viewEntryPointScript = historyState.cleanUrl + model.ViewEntryPoint + "?_=" + (new Date()).getTime();
+
                         require(
                             /*
                             1.- require will cache ViewEntryPoints
@@ -92,7 +97,7 @@ define([
                                 This way viewEntryPoint will always be overriden to the last script loaded
                                 Bu keeps caching viewEntrypoint dependencies
                             */
-                            [model.ViewEntryPoint + "?_=" + (new Date()).getTime()],
+                            [viewEntryPointScript],
                             function (clientApp) {
                                 cbErrFirst(e, data);
                             },

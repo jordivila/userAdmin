@@ -1,7 +1,6 @@
 ﻿
 define(
 [
-    'require',
     'json', //requirejs plugin to load json data
     'text', //requirejs plugin to load text data
     'jquery',
@@ -24,7 +23,7 @@ define(
     '/scripts/Template.App.Globalize.Init.js',
     '/scripts/Template.App.Page.Init.js',
 ],
-function (req, $, domReady, jqUI, hist, handl, url, a, b, c, d, e, f, g, h, i, j, k,l, clientApp) {
+function ($, domReady, jqUI, hist, handl, url, a, b, c, d, e, f, g, h, i, j, k,l, clientApp) {
 
     return clientApp;
 

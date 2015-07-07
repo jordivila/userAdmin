@@ -12,6 +12,6 @@ var productGridModelGet = function () {
             {
                 key: "fechaDesde",
                 displayName: "Fecha alta"
-            },
+            }
     ];
 };

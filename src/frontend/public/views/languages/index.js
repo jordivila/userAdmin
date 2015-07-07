@@ -19,7 +19,8 @@
                        });
                    },
                    itemServerPutOk: function (result) {
-                       location.reload();
+                       //location.reload();
+                       location.href = "/languages/";
                    },
                });
 

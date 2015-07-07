@@ -1,16 +1,18 @@
 ﻿var crudCustomerDefaultOptions = function () {
 
-    return {
-        filterModel: [{
-            id: "nombre",
-            displayName: "Nombre / Razón Social",
-            input: { value: "" },
-        }, {
-            id: "dni",
-            displayName: "Nº Documento",
-            input: { value: "" },
-        }],
-
+    var r = {
+        filterModel: [
+            {
+                id: "nombre",
+                displayName: "Nombre / Razón Social",
+                input: { value: "" },
+            },
+            {
+                id: "dni",
+                displayName: "Nº Documento",
+                input: { value: "" }
+            }
+        ],
         gridCustomOptions: {
             //example: see code below
             //onSelect: function (e, dataItem) {
@@ -27,7 +29,7 @@
             {
                 key: "NumDocumento",
                 displayName: "NIF"
-            },
+            }
         ],
         gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
 
@@ -51,6 +53,8 @@
 
         },
     };
+
+    return r;
 };
 
 
@@ -89,7 +93,7 @@ var crudCustomerDefaultFormOptions = function () {
                     id: "fechaNacimiento",
                     displayName: "Fecha nacimiento",
                     input: { type: "date", value: "" },
-                },
+                }
             ];
         }(),
         formBind: function (self, dataItem) {

@@ -46,6 +46,6 @@ var productFormModelGet = function () {
                 return jQuery(parent).find('span.SomeCustomValue').html(dataItem);
             }
         },
-    },
+    }
     ];
 };

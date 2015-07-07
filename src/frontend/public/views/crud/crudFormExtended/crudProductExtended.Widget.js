@@ -3,9 +3,12 @@ define([
     "jqueryui",
     "scripts/Template.App.Init",
     "scripts/crud/common.widget.crud",
-    "./crudProductExtended.AjaxFake.js"
+    "./crudProductExtended.AjaxFake.js",
+    "./crudProductExtended.FormModel.js",
+    "./crudProductExtended.GridModel.js",
+    "./crudProductExtended.FilterModel.js"
 ],
-function ($, jqUI, clientApp, wCrud, productAjax) {
+function ($, jqUI, clientApp, wCrud, productAjax, pFormGet) {
 
     jQuery.widget("ui.product", jQuery.ui.crud,
     {
