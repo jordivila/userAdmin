@@ -165,16 +165,6 @@
         ['scripts/modules/main'],
         function (clientApp) {
 
-
-            if (!Object.keys) {
-                require(['scripts/modules/es5Shim'], function (es5Shim) {
-                    loadMainModule();
-                });
-            }
-            else {
-                loadMainModule();
-            }
-
             var loadMainModule = function () {
 
                 jQuery(document).ready(function () {
@@ -204,7 +194,18 @@
 
                 });
 
+            };
+
+
+            if (!Object.keys) {
+                require(['scripts/modules/es5Shim'], function (es5Shim) {
+                    loadMainModule();
+                });
             }
+            else {
+                loadMainModule();
+            }
+
         });
 
 
