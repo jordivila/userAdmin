@@ -159,11 +159,23 @@
     </script>
     <script>
 
-        var loadMainModule = function () {
 
-            require(
-            ['scripts/modules/main'],
-            function (clientApp) {
+
+        require(
+        ['scripts/modules/main'],
+        function (clientApp) {
+
+
+            if (!Object.keys) {
+                require(['scripts/modules/es5Shim'], function (es5Shim) {
+                    loadMainModule();
+                });
+            }
+            else {
+                loadMainModule();
+            }
+
+            var loadMainModule = function () {
 
                 jQuery(document).ready(function () {
 
@@ -191,19 +203,13 @@
                     clientApp.Widgets.PageOptions.Init();
 
                 });
-            });
 
-        };
+            }
+        });
 
 
-        if (!Object.keys) {
-            require(['scripts/modules/es5Shim'], function (es5Shim) {
-                loadMainModule();
-            });
-        }
-        else {
-            loadMainModule();
-        }
+
+
 
 
 

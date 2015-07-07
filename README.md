@@ -18,6 +18,14 @@ Objectives
 5. Client/server module application with dependency loader
 6. Client/server internationalization support 
 
+Browser Support
+
+1. Chrome: (Current - 1) or Current
+2. Firefox: (Current - 1) or Current
+3. Safari: 5.1+
+4. Opera: 12.1x, (Current - 1) or Current
+5. IE 8 (using ES5 polyfill), IE9+
+
 Task List
  
 1. Use Google & Facebook & github passport authentication

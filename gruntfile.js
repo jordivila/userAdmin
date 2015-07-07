@@ -238,6 +238,12 @@
                             ]
                         },
                         {
+                            name: "scripts/modules/es5Shim",
+                            exclude: [
+                                'jquery',
+                            ]
+                        },
+                        {
                             name: "scripts/modules/glob",
                             exclude: [
                                 "bower/requirejs-text/text",
@@ -258,7 +264,7 @@
                         pPromises: '../bower_components/p-promise/p.min',
                         crossLayer: '../../crossLayer',
                         es5shim: '../bower_components/es5-shim',
-
+                        respond: '../bower_components/respond/dest/respond.src',
                         /**************************************************************
                                     Globalize dependencies paths begin
                         **************************************************************/
@@ -282,6 +288,9 @@
                         },
                         'history': {
                             deps: ["jquery"]
+                        },
+                        'respond': {
+                            deps: ['jquery']
                         },
                     },
 
