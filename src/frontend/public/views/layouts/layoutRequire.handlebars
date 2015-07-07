@@ -105,10 +105,6 @@
             return false;
         }
     </script>-->
-
-
-
-
     {{#if isTest}}
     <script src="http://localhost:35729/livereload.js"></script>
     {{/if}}
@@ -155,8 +151,8 @@
                 'history': {
                     deps: ["jquery"]
                 },
-                'respond': { 
-                    deps: ['jquery'] 
+                'respond': {
+                    deps: ['jquery']
                 },
             }
         });
@@ -202,9 +198,7 @@
 
         if (!Object.keys) {
             require(['scripts/modules/es5Shim'], function (es5Shim) {
-                require(['respond'], function(respond){
-                    loadMainModule();
-                });
+                loadMainModule();
             });
         }
         else {
