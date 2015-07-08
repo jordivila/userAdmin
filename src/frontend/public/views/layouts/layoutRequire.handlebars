@@ -15,7 +15,7 @@
     <link href="{{this}}" rel="Stylesheet" type="text/css" />
     {{/each}}
 </head>
-<body>
+<body class="ui-display-table">
 
     <div id="panelMain" class="ui-pageHolder ui-widget ui-widget-content ui-helper-hidden">
 
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div id="panelPage" class="ui-sitePage ">
+        <div id="panelPage" class="ui-sitePage ui-display-table">
 
             <div data-widget="userActivity">
                 <div class="ui-site-header ui-widget-content ui-corner-all ui-state-highlight">
@@ -85,7 +85,7 @@
 
     </div>
 
-    <div id="progressFeedBack" class="ui-progress-feedback ui-widget-overlay">
+    <div id="panelProgress" class="ui-progress-feedback ui-widget-overlay">
         <div class="ui-widget ui-widget-content ui-state-active "><i class="fa fa-refresh fa-spin"></i>Please wait while loading</div>
     </div>
 
@@ -98,7 +98,12 @@
         var globals = {
             package: {{{ jsonHelper  package }}} ,
             globalization : {{{ jsonHelper globalization }}},
-        viewEntryPoint : {{#if ViewEntryPoint}} {{{ jsonHelper ViewEntryPoint }}} {{else}} undefined  {{/if}}
+            viewEntryPoint : {{#if ViewEntryPoint}} {{{ jsonHelper ViewEntryPoint }}} {{else}} undefined  {{/if}},
+            domIds:{
+                panelMain: '#panelMain',
+                panelMenu: '#panelMenu',
+                panelProgress: '#panelProgress'
+            }
         };
 
     </script>

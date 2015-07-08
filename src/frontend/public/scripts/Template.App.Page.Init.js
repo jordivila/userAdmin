@@ -55,13 +55,12 @@ function (clientApp) {
     var loadMainModule = function () {
 
         jQuery(document).ready(function () {
-            jQuery("#panelMain").page({
+            jQuery(globals.domIds.panelMain).page({
                 cultureDatePicker: globals.globalization.cultureDatePicker,
                 initComplete: function () {
 
-                    jQuery("#panelMain").removeClass("ui-helper-hidden");
-                    jQuery("#progressFeedBack").addClass("ui-helper-hidden");
-
+                    jQuery(globals.domIds.panelMain).removeClass("ui-helper-hidden").addClass('ui-display-table');
+                    jQuery(globals.domIds.panelProgress).addClass("ui-helper-hidden");
 
                     if (globals.viewEntryPoint) {
                         require([globals.viewEntryPoint],

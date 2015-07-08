@@ -1,6 +1,3 @@
-
-var progressBoxSelector = "#progressFeedBack";
-
 define(["jquery", "jqueryui", "scripts/Template.ExtendPrototypes"],
        function ($, jqUI) {
 
@@ -139,28 +136,11 @@ define(["jquery", "jqueryui", "scripts/Template.ExtendPrototypes"],
                },
 
 
-               //progressInit: function () {
-
-               //    // only one progressFeedback per page
-               //    var self = this;
-
-               //    if (jQuery(progressBoxSelector).length === 0) {
-               //        jQuery('body').prepend('<div id="progressFeedBack" class="ui-progress-feedback ui-widget-overlay"><div class="ui-widget ui-widget-content ui-state-active ">Please wait while loading</div></div>');
-
-               //        /*
-               //        // these lines do not work on mobile
-               //        jQuery(document)
-               //            .click(function (e) {
-               //                jQuery(progressBoxSelector).find('div:first').css('top', (e.clientY + 20));
-               //            });
-               //        */
-               //    }
-               //},
                progressShow: function (msg) {
 
                    console.log("Info->" + msg);
 
-                   var $p = jQuery(progressBoxSelector);
+                   var $p = jQuery(globals.domIds.panelProgress);
 
                    $p
                    .addClass('ui-front')
@@ -170,7 +150,7 @@ define(["jquery", "jqueryui", "scripts/Template.ExtendPrototypes"],
                    .show();
                },
                progressHide: function () {
-                   jQuery(progressBoxSelector).removeClass('ui-front').hide();
+                   jQuery(globals.domIds.panelProgress).removeClass('ui-front').hide();
                },
 
                errorInit: function (parent) {

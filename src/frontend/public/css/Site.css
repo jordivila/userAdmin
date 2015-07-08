@@ -1,6 +1,6 @@
-﻿.ui-pageHolder {height:100%;width:100%;border:0;}
-
-.ui-pageHolder .ui-sitePage{display:table; width:100%;height:100%; margin:0 auto 0 auto;
+﻿.ui-display-table {display:table;}
+.ui-pageHolder {height:100%;width:100%;border:0;}
+.ui-pageHolder .ui-sitePage{width:100%;height:100%; margin:0 auto 0 auto;
              /*DO NOT Remove position:relative -> child position:absolute content will take this as parent relative */
              position:relative;
              /*DO NOT Remove position:relative*/
