@@ -59,7 +59,7 @@ function (clientApp) {
                 cultureDatePicker: globals.globalization.cultureDatePicker,
                 initComplete: function () {
 
-                    jQuery(globals.domIds.panelMain).removeClass("ui-helper-hidden").addClass('ui-display-table');
+                    jQuery(globals.domIds.panelMain).addClass('ui-display-table').removeClass("ui-helper-hidden");
                     jQuery(globals.domIds.panelProgress).addClass("ui-helper-hidden");
 
                     if (globals.viewEntryPoint) {
