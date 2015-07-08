@@ -1,32 +1,91 @@
-define([
-    "scripts/Template.Widget.Page",
-    "scripts/Template.App.Widgets.Init.js"
-],
-function (wPage, clientApp) {
 
-           clientApp.Widgets.PageOptions = {
-               appVersion: null,
-               selector: null,
-               cultureGlobalization: null,
-               cultureDatePicker: null,
-               _initCallbacks: [],
-               onInit: function (callBack) {
-                   this._initCallbacks.push(callBack);
-               },
-               Init: function () {
-                   var self = this;
-                   jQuery(this.selector).page({
-                       cultureDatePicker: this.cultureDatePicker,
-                       initComplete: function () {
+/***************************
+REQUIREJS CONFIG
+****************************/
+requirejs.config({
+    urlArgs: "bust=" + globals.package.version,
+    waitSeconds: 0,
+    baseUrl: "/public",
+    paths: {
+        jquery: "bower_components/jquery/jquery.min",
+        jqueryui: "scripts/modules/jquery.ui.custom.bundle",
+        domReady: "bower_components/requirejs-domready/domReady",
+        handlebars: "bower_components/handlebars/handlebars.min",
+        history: 'bower_components/history.js/scripts/bundled/html5/jquery.history',
+        pPromises: 'bower_components/p-promise/p.min',
+        es5Shim: 'bower_components/es5-shim',
+        respond: 'bower_components/respond/dest/respond.src',
+        /**************************************************************
+                    Globalize dependencies paths begin
+        **************************************************************/
+        cldr: "bower_components/cldrjs/dist/cldr",
+        // Unicode CLDR JSON data.
+        "cldr-data": "bower_components/cldr-data",
+        // require.js plugin we'll use to fetch CLDR JSON content.
+        json: "bower_components/requirejs-plugins/src/json",
+        // text is json's dependency.
+        text: "bower_components/requirejs-text/text",
+        // Globalize.
+        globalize: "bower_components/globalize/dist/globalize"
+        /**************************************************************
+                    Globalize dependencies paths end
+        **************************************************************/
+    },
+    shim: {
+        'jqueryui': {
+            deps: ["jquery"]
+        },
+        'history': {
+            deps: ["jquery"]
+        },
+        'respond': {
+            deps: ['jquery']
+        },
+    }
+});
 
-                           for (var i = 0; i < self._initCallbacks.length; i++) {
-                               self._initCallbacks[i]();
-                           }
-                       }
-                   });
-               }
-           };
+/**********************************************
+LAYOUT ENTRY POINT
+***********************************************/
 
-           return clientApp;
+require(
+['scripts/modules/main'],
+function (clientApp) {
 
-       });
+    var loadMainModule = function () {
+
+        jQuery(document).ready(function () {
+            jQuery("#panelMain").page({
+                cultureDatePicker: globals.globalization.cultureDatePicker,
+                initComplete: function () {
+
+                    jQuery("#panelMain").removeClass("ui-helper-hidden");
+                    jQuery("#progressFeedBack").addClass("ui-helper-hidden");
+
+
+                    if (globals.viewEntryPoint) {
+                        require([globals.viewEntryPoint],
+                            function (clientApp) {
+                                clientApp.View.main();
+                            },
+                            function (errRequiring) {
+                                console.error(errRequiring);
+                            });
+                    }
+                }
+            });
+        });
+    };
+
+
+
+    if (!(Modernizr.es5array && Modernizr.es5object)) {
+        require(['scripts/modules/es5Shim'], function (es5Shim) {
+            loadMainModule();
+        });
+    }
+    else {
+        loadMainModule();
+    }
+
+});

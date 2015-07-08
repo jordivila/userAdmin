@@ -5,7 +5,7 @@
 ],
 function (es5Shim, respond) {
 
-    require(['bower/es5-shim/es5-sham.min'], function () {
+    require(['es5Shim/es5-sham.min'], function () {
 
 
     });

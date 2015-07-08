@@ -4,219 +4,104 @@
     <meta name="viewport" content="initial-scale=1.0" />
     <title>{{Title}}</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <style type="text/css">
+        .ui-helper-hidden {
+            display: none;
+        }
+    </style>
     <link id="jQueryUITheme" href="//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/{{theme}}/jquery-ui.min.css" rel="Stylesheet" type="text/css" />
     <link href="/public/cdn/{{package.name}}.{{package.version}}.ui.css" rel="Stylesheet" type="text/css" />
     {{#each cssFiles}}
     <link href="{{this}}" rel="Stylesheet" type="text/css" />
     {{/each}}
 </head>
-<body class="ui-widget ui-widget-content ui-helper-hidden">
+<body>
 
-    <div id="panelMenu" class="ui-mainMenu ui-state-default">
-        <div class="ui-mainMenuToggle">
-            <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
-            <div class="ui-mainMenuToggle-text">Menu</div>
-        </div>
-        <div class="ui-helper-clearfix"></div>
-        <div class="ui-menuBase ui-state-default"></div>
-        <div class="ui-helper-clearfix"></div>
-        <div class="ui-site-version">
-            <div>Copyright © 2012 Company Co.</div>
-            <div>All rights reserved</div>
-            <div>v. - {{package.version}}</div>
-        </div>
-    </div>
+    <div id="panelMain" class="ui-pageHolder ui-widget ui-widget-content ui-helper-hidden">
 
-    <div class="ui-sitePage">
-
-        <div data-widget="userActivity">
-            <div class="ui-site-header ui-widget-content ui-corner-all ui-state-highlight">
-                <div class="ui-mainMenuToggle">
-                    <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
-                    <div class="ui-mainMenuToggle-text">Menu</div>
-                    <div class="ui-helper-clearfix"></div>
-                </div>
-                <div class="ui-site-nameBox">
-                    <a href="/">{{domainName}}</a>
-                </div>
+        <div id="panelMenu" class="ui-mainMenu ui-state-default">
+            <div class="ui-mainMenuToggle">
+                <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
+                <div class="ui-mainMenuToggle-text">Menu</div>
             </div>
             <div class="ui-helper-clearfix"></div>
-        </div>
-        <div class="ui-helper-clearfix"></div>
-
-        <div class="ui-site-title ui-widget-header">
-            <h1>{{Title}}</h1>
-        </div>
-
-        <!--Breadcrumb begin-->
-        {{#if this.Breadcrumb }}
-        <div class="ui-breadcrumb">
-            <div class="ui-widget-content ui-corner-all ui-state-default">
-                <ul>
-                    {{#each Breadcrumb}}
-                    <li>
-                        {{#if this.url }}
-                        <span class="ui-icon ui-icon-play"></span>
-                        {{/if}}
-                        <a href="{{this.url}}">{{this.title}}</a>
-                    </li>
-                    {{/each}}
-                </ul>
-                <div class="ui-helper-clearfix"></div>
+            <div class="ui-menuBase ui-state-default"></div>
+            <div class="ui-helper-clearfix"></div>
+            <div class="ui-site-version">
+                <div>Copyright © 2012 Company Co.</div>
+                <div>All rights reserved</div>
+                <div>v. - {{package.version}}</div>
             </div>
         </div>
-        <br />
-        {{/if}}
-        <!--Breadcrumb end-->
 
-        <div class="ui-siteContent">
-            {{#if body}}
-            {{{body}}}
+        <div id="panelPage" class="ui-sitePage ">
+
+            <div data-widget="userActivity">
+                <div class="ui-site-header ui-widget-content ui-corner-all ui-state-highlight">
+                    <div class="ui-mainMenuToggle">
+                        <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
+                        <div class="ui-mainMenuToggle-text">Menu</div>
+                        <div class="ui-helper-clearfix"></div>
+                    </div>
+                    <div class="ui-site-nameBox">
+                        <a href="/">{{domainName}}</a>
+                    </div>
+                </div>
+                <div class="ui-helper-clearfix"></div>
+            </div>
+            <div class="ui-helper-clearfix"></div>
+
+            <div class="ui-site-title ui-widget-header">
+                <h1>{{Title}}</h1>
+            </div>
+
+            <!--Breadcrumb begin-->
+            {{#if this.Breadcrumb }}
+            <div class="ui-breadcrumb">
+                <div class="ui-widget-content ui-corner-all ui-state-default">
+                    <ul>
+                        {{#each Breadcrumb}}
+                        <li>
+                            {{#if this.url }}
+                            <span class="ui-icon ui-icon-play"></span>
+                            {{/if}}
+                            <a href="{{this.url}}">{{this.title}}</a>
+                        </li>
+                        {{/each}}
+                    </ul>
+                    <div class="ui-helper-clearfix"></div>
+                </div>
+            </div>
+            <br />
             {{/if}}
+            <!--Breadcrumb end-->
+
+            <div class="ui-siteContent">
+                {{#if body}}
+                {{{body}}}
+                {{/if}}
+            </div>
         </div>
+
+    </div>
+
+    <div id="progressFeedBack" class="ui-progress-feedback ui-widget-overlay">
+        <div class="ui-widget ui-widget-content ui-state-active "><i class="fa fa-refresh fa-spin"></i>Please wait while loading</div>
     </div>
 
 
-
-
-
-
-
-
-    <!--<script>
-        var sendErrorToServer = function(message, url, linenumber) {
-            if (window.XMLHttpRequest) {
-                var xhr = new XMLHttpRequest();
-                var scripturl = '/api/log/clienterror';
-                var log = linenumber + message + url;
-                xhr.open('POST', scripturl);
-                xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
-                xhr.send(log);
-            }
-            return true;
-        }
-
-        window.onerror = function(message, url, linenumber) {
-
-            var send = sendErrorToServer(message, url, linenumber);
-
-            // return true  == supress errors
-            // return false == execution of the built-in error handler
-            return false;
-        }
-    </script>-->
     {{#if isTest}}
     <script src="http://localhost:35729/livereload.js"></script>
     {{/if}}
-    <script src="/public/bower_components/requirejs/require.js"></script>
     <script>
 
-        requirejs.config({
-            //Set config for finding 'jqueryui'. The path is relative
-            //to the location of require-jquery.js.
-            urlArgs: "bust={{package.version}}",
-            waitSeconds: 0,
-            baseUrl: "/public",
-            paths: {
-                jquery: "bower_components/jquery/jquery.min",
-                //jqueryui: "bower_components/jquery-ui/ui/minified/jquery-ui.custom.min",
-                jqueryui: "scripts/modules/jquery.ui.custom.bundle",
-                domReady: "bower_components/requirejs-domready/domReady",
-                handlebars: "bower_components/handlebars/handlebars.min",
-                history: 'bower_components/history.js/scripts/bundled/html5/jquery.history',
-                pPromises: 'bower_components/p-promise/p.min',
-                es5Shim: 'bower_components/es5-shim',
-                respond: 'bower_components/respond/dest/respond.src',
-                /**************************************************************
-                            Globalize dependencies paths begin
-                **************************************************************/
-                cldr: "bower_components/cldrjs/dist/cldr",
-                // Unicode CLDR JSON data.
-                "cldr-data": "bower_components/cldr-data",
-                // require.js plugin we'll use to fetch CLDR JSON content.
-                json: "bower_components/requirejs-plugins/src/json",
-                // text is json's dependency.
-                text: "bower_components/requirejs-text/text",
-                // Globalize.
-                globalize: "bower_components/globalize/dist/globalize"
-                /**************************************************************
-                            Globalize dependencies paths end
-                **************************************************************/
-
-            },
-            shim: {
-                'jqueryui': {
-                    deps: ["jquery"]
-                },
-                'history': {
-                    deps: ["jquery"]
-                },
-                'respond': {
-                    deps: ['jquery']
-                },
-            }
-        });
-    </script>
-    <script>
-
-
-
-        require(
-        ['scripts/modules/main'],
-        function (clientApp) {
-
-            var loadMainModule = function () {
-
-                jQuery(document).ready(function () {
-
-                    clientApp.Widgets.PageOptions.appVersion = "{{package.version}}";
-                    clientApp.Widgets.PageOptions.selector = "body";
-                    clientApp.Widgets.PageOptions.cultureGlobalization = '{{globalization.cultureGlobalization}}';
-                    clientApp.Widgets.PageOptions.cultureDatePicker = '{{globalization.cultureDatePicker}}';
-                    clientApp.Widgets.PageOptions.onInit(function () {
-                        jQuery("body").removeClass("ui-helper-hidden");
-
-                        {{#if ViewEntryPoint}}
-
-                        require(['{{ViewEntryPoint}}'],
-                                function (clientApp) {
-                                    clientApp.View.main();
-                                },
-                                function (errRequiring) {
-                                    console.error(errRequiring);
-                                });
-
-                        {{/if}}
-
-                    });
-
-                    clientApp.Widgets.PageOptions.Init();
-
-                });
-
-            };
-
-
-            if (!Object.keys) {
-                require(['scripts/modules/es5Shim'], function (es5Shim) {
-                    loadMainModule();
-                });
-            }
-            else {
-                loadMainModule();
-            }
-
-        });
-
-
-
-
-
-
+        var globals = {
+            package: {{{ jsonHelper  package }}} ,
+            globalization : {{{ jsonHelper globalization }}},
+        viewEntryPoint : {{#if ViewEntryPoint}} {{{ jsonHelper ViewEntryPoint }}} {{else}} undefined  {{/if}}
+        };
 
     </script>
-
-
-
+    <script data-main="/public/scripts/Template.App.Page.Init.js" src="/public/bower_components/requirejs/require.js"></script>
 </body>
 </html>

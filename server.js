@@ -42,7 +42,10 @@
 
     app.engine('handlebars', exphbs({
         layoutsDir: app.get('views') + 'layouts/',
-        defaultLayout: 'layoutRequire'
+        defaultLayout: 'layoutRequire',
+        helpers: {
+            jsonHelper: function (context) { return JSON.stringify(context); },
+        }
     }));
     app.set('view engine', 'handlebars');
 

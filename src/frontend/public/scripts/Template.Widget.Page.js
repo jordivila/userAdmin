@@ -38,14 +38,10 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
 
             P.all(a).nodeify(function (e, data) {
                 if (e !== null) {
-                    console.log(e);
                     self.errorDisplay(e);
                 }
                 else {
-
-
                     self.menuNavInit();
-
                 }
             });
 
@@ -117,9 +113,6 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
                     self._trigger('initComplete', null, null);
                 },
                 selected: function (e, ui) {
-
-                    console.log("history puchs state !!!!!!!!!!!!!!!!");
-
                     History.pushState(null, null, ui.url);
                 }
             });
@@ -131,18 +124,17 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
 
             History.Adapter.bind(window, 'statechange', function () { // Note: We are using statechange instead of popstate
 
-                console.log("history bind state !!!!!!!!!!!!!!!!");
+                
 
                 var state = History.getState(); // Note: We are using History.getState() instead of event.state
 
-                console.log("history bind state 1 !!!!!!!!!!!!!!!!");
+                
 
                 History.debug('statechange:', state.data, state.title, state.url);
 
-                console.log("state !!!!!");
-                console.log(state);
+                
 
-                console.log("history bind state 2 !!!!!!!!!!!!!!!!");
+                
 
                 self.handlebarsLoadTemplate(state)
                         .progress(function (msg) {
@@ -170,12 +162,6 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
             Handlebars.registerHelper('__', function (context, options) {
                 // register i18n helper function
 
-                console.log("Handle bars register helper !!!!!");
-
-                console.log(options.data.root.i18nTexts);
-                console.log(context);
-
-
                 if (Object.keys(options.data.root.i18nTexts).indexOf(context) > -1) {
                     return options.data.root.i18nTexts[context];
                 }
@@ -201,7 +187,7 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
 
             $siteContent.empty();
 
-            console.log("handlebarsLoadTemplate !!!!!!!!!!!!!!!!");
+            
 
             clientApp.Ajax.View(state, function (err, data) {
 
@@ -233,11 +219,11 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
 
                     $siteContent.html(handlebarTemplate);
 
-                    console.log(data);
+                    
 
                     if (hasEntry) {
 
-                        console.log(clientApp);
+                        
 
                         clientApp.View.main();
 

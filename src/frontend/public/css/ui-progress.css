@@ -1,2 +1,2 @@
-﻿.ui-progress-feedback {display:none; background: none;opacity: 1;filter: Alpha(Opacity=100);}
+﻿.ui-progress-feedback {background: none;opacity: 1;filter: Alpha(Opacity=100);}
 .ui-progress-feedback .ui-widget {top:50%;text-align:center;padding:2em 0 2em 0;position:relative;width:80%;margin:0 auto 0 auto;}

@@ -23,7 +23,7 @@ define(["jquery", "jqueryui", "scripts/Template.ExtendPrototypes"],
                    jQuery(this.element).addClass(this.namespace + '-' + this.widgetName);
 
 
-                   this.progressInit();
+                   //this.progressInit();
 
                    //this.log(this.element);
                    //this.log(this.namespace + "." + this.widgetName + " -> create");
@@ -139,23 +139,23 @@ define(["jquery", "jqueryui", "scripts/Template.ExtendPrototypes"],
                },
 
 
-               progressInit: function () {
+               //progressInit: function () {
 
-                   // only one progressFeedback per page
-                   var self = this;
+               //    // only one progressFeedback per page
+               //    var self = this;
 
-                   if (jQuery(progressBoxSelector).length === 0) {
-                       jQuery('body').prepend('<div id="progressFeedBack" class="ui-progress-feedback ui-widget-overlay"><div class="ui-widget ui-widget-content ui-state-active ">Please wait while loading</div></div>');
+               //    if (jQuery(progressBoxSelector).length === 0) {
+               //        jQuery('body').prepend('<div id="progressFeedBack" class="ui-progress-feedback ui-widget-overlay"><div class="ui-widget ui-widget-content ui-state-active ">Please wait while loading</div></div>');
 
-                       /*
-                       // these lines do not work on mobile
-                       jQuery(document)
-                           .click(function (e) {
-                               jQuery(progressBoxSelector).find('div:first').css('top', (e.clientY + 20));
-                           });
-                       */
-                   }
-               },
+               //        /*
+               //        // these lines do not work on mobile
+               //        jQuery(document)
+               //            .click(function (e) {
+               //                jQuery(progressBoxSelector).find('div:first').css('top', (e.clientY + 20));
+               //            });
+               //        */
+               //    }
+               //},
                progressShow: function (msg) {
 
                    console.log("Info->" + msg);
@@ -197,7 +197,7 @@ define(["jquery", "jqueryui", "scripts/Template.ExtendPrototypes"],
                },
                errorDisplay: function (msg, cb) {
 
-                   console.log("Error->" + msg);
+                   console.error("Error->" + msg);
 
                    jQuery(this.options.errorDOMId)
                            .addClass('ui-state-error')

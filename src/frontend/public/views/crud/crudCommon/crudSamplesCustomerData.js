@@ -78,7 +78,7 @@
                 }
             }
 
-            console.log(dataResult);
+            
 
             setTimeout(function () { dfd.resolve(dataResult); }, customerAjax.ajax._fakeDelay);
 

@@ -1,5 +1,4 @@
-﻿
-define(
+﻿define(
 [
     'json', //requirejs plugin to load json data
     'text', //requirejs plugin to load text data
@@ -9,6 +8,7 @@ define(
     '/scripts/modules/jquery.ui.custom.bundle.js',
     'history',
     'handlebars',
+    "/scripts/modules/modernizr.customBuild.js",
     '/scripts/url/urlHelper.js',
     '/scripts/Template.ExtendPrototypes.js',
     '/scripts/Template.Widget.Base.js',
@@ -21,9 +21,8 @@ define(
     "/scripts/Template.App.Widgets.Init.js",
     "/scripts/Template.App.I18n.Init.js",
     '/scripts/Template.App.Globalize.Init.js',
-    '/scripts/Template.App.Page.Init.js',
 ],
-function ($, domReady, jqUI, hist, handl, url, a, b, c, d, e, f, g, h, i, j, k,l, clientApp) {
+function ($, domReady, jqUI, hist, handl, Modernizr, url, a, b, c, d, e, f, g, h, i, j, k,clientApp) {
 
     return clientApp;
 

@@ -2,12 +2,10 @@ define([
     "jquery",
     "scripts/Template.App.Init",
     "scripts/url/UrlHelper",
-    "scripts/Template.App.Page.Init",
     "pPromises",
     "crossLayer/config"
 ],
-    function ($, clientApp, urlHelper, pInit, P, crossLayer) {
-
+    function ($, clientApp, urlHelper, P, crossLayer) {
 
         jQuery(document).ready(function () {
             jQuery.ajaxSetup({
@@ -23,7 +21,7 @@ define([
                                         .bind(settings.url)
                                         .paramSet(
                                             crossLayer.queryParams.appVersion,
-                                            clientApp.Widgets.PageOptions.appVersion).href;
+                                            globals.package.version).href;
 
                         settings.url = urlHelper
                                         .bind(settings.url)
@@ -65,8 +63,6 @@ define([
         };
 
         clientApp.Ajax.View = function (historyState, cbErrFirst) {
-
-            console.log(historyState);
 
             return P.all([
                 clientApp.Ajax.ViewHtml(historyState.cleanUrl),
