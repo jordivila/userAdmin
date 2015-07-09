@@ -144,7 +144,7 @@ define(["jquery", "jqueryui", "scripts/Template.ExtendPrototypes"],
 
                    $p
                    .addClass('ui-front')
-                   .find('div:first')
+                   .find('span:first')
                        .html(msg)
                    .end()
                    .show();

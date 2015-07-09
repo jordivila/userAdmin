@@ -187,7 +187,7 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
 
             $siteContent.empty();
 
-            
+            dfd.notify(self.options.texts.loadingTmpl);
 
             clientApp.Ajax.View(state, function (err, data) {
 
@@ -200,7 +200,6 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
                          err.status ? err.status : '',
                          err.statusText ? err.statusText : ''
                         ));
-
                 }
                 else {
 
@@ -219,11 +218,7 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
 
                     $siteContent.html(handlebarTemplate);
 
-                    
-
                     if (hasEntry) {
-
-                        
 
                         clientApp.View.main();
 
