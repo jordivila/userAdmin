@@ -11,6 +11,7 @@ define([
                options: {
                    //slidesOpened: [], //http://bugs.jqueryui.com/ticket/8645
                    slidesOpened: null, //since jQuery.ui 1.9 array options are static. So initialized them on create event,
+                   animationsOn: false
                },
                _create: function () {
 
@@ -74,18 +75,36 @@ define([
                _animatePanel: function ($hidingList, $showingList, forward, cb) {
 
                    if (forward) {
-                       $hidingList.hide('drop', function () {
-                           $showingList.show('slide', function () {
-                               cb();
+                       if (this.options.animationsOn) {
+                           $hidingList.hide('drop', function () {
+                               $showingList.show('slide', function () {
+                                   cb();
+                               });
                            });
-                       });
+                       }
+                       else {
+                           $hidingList.fadeOut(200, function () {
+                               $showingList.fadeIn(function () {
+                                   cb();
+                               });
+                           });
+                       }
                    }
                    else {
-                       $hidingList.hide('drop', function () {
-                           $showingList.show('slide', function () {
-                               cb();
+                       if (this.options.animationsOn) {
+                           $hidingList.hide('drop', function () {
+                               $showingList.show('slide', function () {
+                                   cb();
+                               });
                            });
-                       });
+                       }
+                       else {
+                           $hidingList.fadeOut(200, function () {
+                               $showingList.fadeIn(function () {
+                                   cb();
+                               });
+                           });
+                       }
                    }
 
                },
