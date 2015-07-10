@@ -33,8 +33,8 @@ define(["jquery", "jqueryui", "scripts/Template.ExtendPrototypes"],
                    this.allowCollapse();
 
 
-                   //this.log(this.element);
-                   this.log("{0}.{1}->Init->{2}".format(this.namespace, this.widgetName, jQuery(this.element)[0].className));
+
+                   //this.log("{0}.{1}->Init->{2}".format(this.namespace, this.widgetName, jQuery(this.element)[0].className));
 
                    var widgetName = this.namespace + '.' + this.widgetName;
                    var dataWidgetInitialized = widgetName + ".IsInitialized";

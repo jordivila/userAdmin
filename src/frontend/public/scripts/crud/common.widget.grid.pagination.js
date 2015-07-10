@@ -1,5 +1,9 @@
-define(["jquery", "jqueryui", "scripts/Template.Widget.Base"],
-       function ($, jqUI) {
+define([
+    "jquery",
+    "jqueryui",
+    "scripts/Template.App.I18n.Init",
+    "scripts/Template.Widget.Base"],
+       function ($, jqUI, clientApp) {
 
            jQuery.widget("ui.gridPagination", jQuery.ui.widgetBase,
            {
@@ -11,8 +15,8 @@ define(["jquery", "jqueryui", "scripts/Template.Widget.Base"],
                    pageSize: 10,
 
                    texts: {
-                       showingData: "Showing {0}-{1} of {2}",
-                       showXPerPage: "per page"
+                       showingData: clientApp.i18n.texts.get("Template.Widget.Crud.Showing_From_To_Of"),
+                       showXPerPage: clientApp.i18n.texts.get("Template.Widget.Crud.PerPage")
                    }
                },
                _create: function () {

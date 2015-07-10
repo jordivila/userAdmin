@@ -1,7 +1,8 @@
 define([
     "scripts/Template.App.Init",
+    "scripts/Template.App.I18n.Init",
 ],
-function (clientApp) {
+function (clientApp, clientAppI18n) {
 
 
     var productAjax = {
@@ -26,7 +27,7 @@ function (clientApp) {
                         nombre: "person {0}".format(i),
                         productId: (i.toString() + "").padIndex(4, '0'),
                         productType: "PRSP1",
-                        productTypeDesc: "Prestamo garantia personal-1",
+                        productTypeDesc: clientApp.i18n.texts.get("Views.Crud.CrudFormExtended.PersonalGuaranteeLoan"),
                     });
                 }
 
@@ -43,7 +44,7 @@ function (clientApp) {
                     nombre: "person {0}".format(i),
                     productId: i,
                     productType: "PRSP1",
-                    productTypeDesc: "Prestamo garantia personal-1",
+                    productTypeDesc: clientApp.i18n.texts.get("Views.Crud.CrudFormExtended.PersonalGuaranteeLoan"),
                 });
 
 
@@ -58,7 +59,7 @@ function (clientApp) {
                     var d = new Date();
 
                     productAjax.ajax._fakeDataEdit.push({
-                        SomeString: "alguna cadena asdjhaskd -> {0}".format(i),
+                        SomeString: "{0} -> {1}".format(clientApp.i18n.texts.get("Views.Crud.CrudFormExtended.SomeString"),i),
                         SomeDate: new Date(Math.abs(d - (i * 1000 * 60 * 60 * 24))),
                         SomeFloat: i,
                         SomeBoolean: i % 2 === true,
@@ -319,22 +320,22 @@ function (clientApp) {
                      var modelErrors = [];
 
                      if (dataItem.FormData.SomeStringFromList === "") {
-                         modelErrors.push({ key: "SomeStringFromList", value: ["este es un campo requerido"] });
+                         modelErrors.push({ key: "SomeStringFromList", value: [clientApp.i18n.texts.get("Views.Crud.FieldRequired")] });
                      }
 
                      if (dataItem.FormData.SomeDate === "") {
-                         modelErrors.push({ key: "SomeDate", value: ["este es un campo requerido"] });
+                         modelErrors.push({ key: "SomeDate", value: [clientApp.i18n.texts.get("Views.Crud.FieldRequired")] });
                      }
 
                      if (isNaN(dataItem.FormData.SomeFloat)) {
-                         modelErrors.push({ key: "SomeFloat", value: ["Se esperaba un número"] });
+                         modelErrors.push({ key: "SomeFloat", value: [clientApp.i18n.texts.get("Views.Crud.FieldNumericRequired")] });
                      }
 
                      if (modelErrors.length > 0) {
                          dataResult = {
                              Data: { ModelState: modelErrors },
                              IsValid: false,
-                             Message: "Existen errores en el formulario",
+                             Message: clientApp.i18n.texts.get("Views.Crud.FormErrorsExist"),
                          };
                      }
                      else {
@@ -355,7 +356,7 @@ function (clientApp) {
                          dataResult = {
                              Data: dataItem,
                              IsValid: true,
-                             Message: "Producto guardado",
+                             Message: clientApp.i18n.texts.get("Views.Crud.ProductSaved"),
                              MessageType: 0,
                          };
                      }

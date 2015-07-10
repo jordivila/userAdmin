@@ -1,5 +1,6 @@
 define(["jquery",
         "jqueryui",
+        "scripts/Template.App.I18n.Init",
         "scripts/crud/common.widget.crud.base",
         "scripts/crud/common.widget.crud.grid",
         "scripts/crud/common.widget.crud.filter",
@@ -7,7 +8,7 @@ define(["jquery",
         "scripts/crud/common.widget.grid.pagination",
         "scripts/crud/common.widget.fieldItem",
 ],
-function ($, jqUI) {
+function ($, jqUI, clientApp) {
 
 
     jQuery.widget("ui.crud", jQuery.ui.crudBase,
@@ -24,10 +25,10 @@ function ($, jqUI) {
             },
 
             texts: {
-                gridSearchNotifyBeginMsg: "Searching...",
-                gridSearchNotifyFailMsg: "Unhandled Error searching...",
-                gridSearchEditNotifyBeginMsg: "Searching item for edit...",
-                gridSearchEditNotifyFailMsg: "Unhandled Error searching item for edit...",
+                gridSearchNotifyBeginMsg: clientApp.i18n.texts.get("Template.Widget.Crud.Searching"),
+                gridSearchNotifyFailMsg: clientApp.i18n.texts.get("Template.Widget.Crud.UnhandledErrorSearchingData"),
+                gridSearchEditNotifyBeginMsg: clientApp.i18n.texts.get("Template.Widget.Crud.SearchItemForEdit"),
+                gridSearchEditNotifyFailMsg: clientApp.i18n.texts.get("Template.Widget.Crud.UnhandledErrorSearchingForEdit"),
             },
 
             formDOMId: null,
@@ -416,7 +417,7 @@ function ($, jqUI) {
 
             var defaultButtons = this.options.gridButtonsGet(this, [{
                 id: "search",
-                text: "Buscar",
+                text: clientApp.i18n.texts.get("Template.Widget.Crud.Search"),
                 cssClass: "ui-crud-search",
                 icon: "ui-icon-search",
                 click: function (self) {

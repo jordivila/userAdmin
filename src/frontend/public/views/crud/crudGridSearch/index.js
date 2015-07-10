@@ -2,34 +2,25 @@
     "jquery",
     "jqueryui",
     "scripts/Template.App.Init",
-
-
     "scripts/modules/crud",
     "/crud/crudCommon/crudSamplesCustomerData.js",
     "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
-
 ],
-   function ($, jqUI, clientApp) {
+function ($, jqUI, clientApp, crudModule, customerAjax, crudOptions) {
 
-       clientApp.View = {
-           main: function () {
+    clientApp.View = {
+        main: function () {
 
-               jQuery('body')
-                   .find('h1:first')
-                       .html('Crud widget - Grid search & paginate')
-                   .end()
-                   .find('div.ui-customerCrud:first')
-                       .crud(crudCustomerDefaultOptions())
+            jQuery('body')
+                .find('div.ui-customerCrud:first')
+                    .crud(crudOptions.crudCustomerDefaultOptions())
+                    .hide()
+                    .removeClass('ui-helper-hidden')
+                    .fadeIn()
+                .end();
+        }
+    };
 
-                       .hide()
-                       .removeClass('ui-helper-hidden')
-                       .fadeIn()
-                   .end();
+    return clientApp;
 
-
-           }
-       };
-
-       return clientApp;
-
-   });
+});

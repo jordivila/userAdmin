@@ -9,27 +9,22 @@ define([
     "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
 
 ],
-   function ($, jqUI, clientApp) {
+   function ($, jqUI, clientApp, crudModule, customerAjax, crudDefaultOptions) {
 
        clientApp.View = {
            main: function () {
 
-               var customerOptions = jQuery.extend({}, crudCustomerDefaultOptions(), {
+               var customerOptions = jQuery.extend({}, crudDefaultOptions.crudCustomerDefaultOptions(), {
                    gridFilterVisibleAlways: true,
                });
 
                jQuery('body')
-                   .find('h1:first')
-                       .html('Crud widget - Grid scrollable (javascript)')
-                   .end()
                    .find('div.ui-customerCrud:first')
                        .crud(customerOptions)
-
                        .hide()
                        .removeClass('ui-helper-hidden')
                        .fadeIn()
                    .end();
-
            }
        };
 

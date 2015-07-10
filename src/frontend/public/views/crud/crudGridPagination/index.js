@@ -2,21 +2,18 @@
     "jquery",
     "jqueryui",
     "scripts/Template.App.Init",
-
-
     "scripts/modules/crud",
     "/crud/crudCommon/crudSamplesCustomerData.js",
     "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
-
 ],
-   function ($, jqUI, clientApp) {
+   function ($, jqUI, clientApp, crudModule, customerAjax, crudDefaultOptions) {
 
        clientApp.View = {
            main: function () {
 
                var crudOptions = jQuery.extend(
                    {},
-                   crudCustomerDefaultOptions(),
+                   crudDefaultOptions.crudCustomerDefaultOptions(),
                    {
                        gridPagerInit: function () {
                            return {
@@ -37,12 +34,8 @@
                    });
 
                jQuery('body')
-                   .find('h1:first')
-                       .html('Crud widget - Grid pagination config')
-                   .end()
                    .find('div.ui-customerCrud:first')
                        .crud(crudOptions)
-
                        .hide()
                        .removeClass('ui-helper-hidden')
                        .fadeIn()

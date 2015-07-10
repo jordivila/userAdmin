@@ -1,7 +1,6 @@
 ﻿define([],
        function () {
 
-
            var clientApp = {};
 
            clientApp.Utils = {
@@ -15,6 +14,16 @@
                        if (c.indexOf(name) === 0) return c.substring(name.length, c.length);
                    }
                    return "";
+               },
+
+               htmlEncode: function (html) {
+                   return document.createElement('a').appendChild(
+                       document.createTextNode(html)).parentNode.innerHTML;
+               },
+
+               htmlDecode: function (html) {
+                   var a = document.createElement('a'); a.innerHTML = html;
+                   return a.textContent;
                }
 
            };

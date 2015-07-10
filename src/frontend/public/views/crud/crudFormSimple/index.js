@@ -8,19 +8,16 @@ define([
     "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
 
 ],
-   function ($, jqUI, clientApp) {
+   function ($, jqUI, clientApp, crudModule, customerAjax, crudDefaultOptions) {
 
        clientApp.View = {
            main: function () {
 
-               var customerOptions = jQuery.extend({}, crudCustomerDefaultFormOptions(), {
+               var customerOptions = jQuery.extend({}, crudDefaultOptions.crudCustomerDefaultFormOptions(), {
                    gridFilterVisibleAlways: true,
                });
 
                jQuery('body')
-                   .find('h1:first')
-                       .html('Crud - Simple form')
-                   .end()
                    .find('div.ui-customerCrud:first')
                        .crud(customerOptions)
                        .hide()

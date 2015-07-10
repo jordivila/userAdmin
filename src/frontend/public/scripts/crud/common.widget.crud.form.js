@@ -1,5 +1,9 @@
-﻿define(["jquery", "jqueryui", "scripts/crud/common.widget.crud.base"],
-       function ($, jqUI) {
+﻿define([
+    "jquery",
+    "jqueryui",
+    "scripts/Template.App.I18n.Init",
+    "scripts/crud/common.widget.crud.base"],
+       function ($, jqUI, clientApp) {
 
            jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
            {
@@ -13,11 +17,11 @@
                    },
 
                    texts: {
-                       buttonCancelText: "Cancel",
-                       buttonSaveText: "Save changes",
-                       UnhandledBindingError: "Unhandled error ocurred binding form data",
-                       SaveBeginText: "Saving data...",
-                       SavingErrorUnhandled: "Unhandled error ocurred saving data"
+                       buttonCancelText: clientApp.i18n.texts.get("Template.Widget.Crud.Cancel"),
+                       buttonSaveText: clientApp.i18n.texts.get("Template.Widget.Crud.SaveChanges"),
+                       UnhandledBindingError: clientApp.i18n.texts.get("Template.Widget.Crud.UnhandledErrorBindingFormData"),
+                       SaveBeginText: clientApp.i18n.texts.get("Template.Widget.Crud.SavingData"),
+                       SavingErrorUnhandled: clientApp.i18n.texts.get("Template.Widget.Crud.UnhandledErrorSavingFormData")
                    }
                },
                _create: function () {

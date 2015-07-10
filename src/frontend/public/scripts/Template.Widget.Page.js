@@ -18,7 +18,8 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
                 loadingTmpl: "Loading template",
                 loadingI18n: "Loading i18n data",
                 errLoadingTmpl: "Error loading template",
-                errLoadingI18nData: "Unhandled error getting data. Unable to continue loading site."
+                errLoadingI18nData: "Unhandled error getting data. Unable to continue loading site.",
+                errInModule: "The module loaded has thrown an unhandled exception"
             },
         },
         _init: function () {
@@ -124,17 +125,17 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
 
             History.Adapter.bind(window, 'statechange', function () { // Note: We are using statechange instead of popstate
 
-                
+
 
                 var state = History.getState(); // Note: We are using History.getState() instead of event.state
 
-                
+
 
                 History.debug('statechange:', state.data, state.title, state.url);
 
-                
 
-                
+
+
 
                 self.handlebarsLoadTemplate(state)
                         .progress(function (msg) {
@@ -220,9 +221,14 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
 
                     if (hasEntry) {
 
-                        clientApp.View.main();
-
-                        dfd.resolve();
+                        try {
+                            clientApp.View.main();
+                            dfd.resolve();
+                        }
+                        catch (e) {
+                            console.error(e);
+                            dfd.reject(self.options.texts.errInModule);
+                        }
                     }
                     else {
                         dfd.resolve();

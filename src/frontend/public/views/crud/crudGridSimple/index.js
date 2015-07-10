@@ -9,17 +9,14 @@
     "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
 
 ],
-   function ($, jqUI, clientApp) {
+   function ($, jqUI, clientApp, crudModule, customerAjax, crudOptions) {
 
        clientApp.View = {
            main: function () {
 
                jQuery('body')
-                   .find('h1:first')
-                       .html('Crud widget - Readonly basic grid')
-                   .end()
                    .find('div.ui-customerCrud:first')
-                       .crud(crudCustomerDefaultOptions())
+                       .crud(crudOptions.crudCustomerDefaultOptions())
                        .crud('gridButtonsVisible', false)
                        .crud('gridPagerVisible', false)
                        .crud('gridSearch')
@@ -28,7 +25,6 @@
                        .removeClass('ui-helper-hidden')
                        .fadeIn()
                    .end();
-
            }
        };
 

@@ -2,13 +2,14 @@ define([
     "jquery",
     "jqueryui",
     "scripts/Template.App.Init",
+    "scripts/Template.App.I18n.Init",
     "scripts/crud/common.widget.crud",
     "./crudProductExtended.AjaxFake.js",
     "./crudProductExtended.FormModel.js",
     "./crudProductExtended.GridModel.js",
     "./crudProductExtended.FilterModel.js"
 ],
-function ($, jqUI, clientApp, wCrud, productAjax, pFormGet) {
+function ($, jqUI, clientApp, clientAppI18n, wCrud, productAjax, productFormModelGet, productGridModelGet, productFilterModelGet) {
 
     jQuery.widget("ui.product", jQuery.ui.crud,
     {
@@ -20,7 +21,7 @@ function ($, jqUI, clientApp, wCrud, productAjax, pFormGet) {
             gridButtonsGet: function (crudWidget, defaultButtons) {
                 for (var i = 0; i < defaultButtons.length; i++) {
                     if (defaultButtons[i].id == "search") {
-                        defaultButtons[i].text = "Buscar productos";
+                        defaultButtons[i].text = clientApp.i18n.texts.get("Views.Crud.SearchProducts");
                     }
                 }
                 return defaultButtons;
@@ -54,47 +55,18 @@ function ($, jqUI, clientApp, wCrud, productAjax, pFormGet) {
 
                 var tBasicInfo = '' +
                     '<div class="ui-productCrud-form-searchOutput">' +
-                        '<h3 class="ui-state-default">Información básica</h3>' +
-                        '<div data-fielditem="productId" data-fielditem-name="Num. Producto"></div>' +
-                        '<div data-fielditem="productTypeDesc" data-fielditem-name="Producto"></div>' +
-                        '<div data-fielditem="nombre" data-fielditem-name="Nombre/Razón Social"></div>' +
-                        '<div data-fielditem="fechaDesde" data-fielditem-name="Fecha desde"></div>' +
-                        '<div data-fielditem="fechaHasta" data-fielditem-name="Fecha hasta"></div>' +
+                        '<h3 class="ui-state-default">' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.BasicInfo")) + '</h3>' +
+                        '<div data-fielditem="productId" data-fielditem-name="' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductNum")) + '"></div>' +
+                        '<div data-fielditem="productTypeDesc" data-fielditem-name="' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductTypeDescColumn")) + '"></div>' +
+                        '<div data-fielditem="nombre" data-fielditem-name="' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.Name_BussinesName")) + '"></div>' +
+                        '<div data-fielditem="fechaDesde" data-fielditem-name="' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DateFrom")) + '"></div>' +
+                        '<div data-fielditem="fechaHasta" data-fielditem-name="' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DateTo")) + '"></div>' +
                     '</div>' +
                     '<div class="ui-productCrud-form-type">' +
-                        '<h3 class="ui-state-default">Información detallada del préstamo</h3>' +
+                        '<h3 class="ui-state-default">' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DetailInfo")) + '</h3>' +
                     '</div>';
 
                 jQuery($parent).prepend(tBasicInfo);
-
-
-                //jQuery(crudWidget.options.formDOMId)
-                //    .append(tBasicInfo)
-                //    .fieldItem();
-
-
-                //jQuery(crudWidget.options.formDOMId)
-                //    .crudForm(jQuery.extend({}, formOptions,
-                //        {
-                //            formModel: crudWidget.options.formModel,
-                //            formButtonsGet: crudWidget.options.formButtonsGet,
-                //            formBind: crudWidget.options.formBind,
-                //            formValueGet: crudWidget.options.formValueGet,
-                //            formSaveMethod: crudWidget.options.formSaveMethod
-                //        }));
-
-                //jQuery(crudWidget.options.formDOMId)
-                //    .find('div.ui-crudForm-modelBinding:first')
-                //        .widgetModel({
-                //            modelItems: crudWidget.options.formModel,
-                //            errorsCleared: function () {
-                //                crudWidget.errorHide();
-                //            }
-                //        })
-                //    .end();
-
-
-
             },
             formButtonsGet: function (self, defaultButtons) {
                 return defaultButtons;

@@ -9,12 +9,12 @@ define([
     "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
 
 ],
-   function ($, jqUI, clientApp) {
+   function ($, jqUI, clientApp, crudModule, customerAjax, crudDefaultOptions) {
 
        clientApp.View = {
            main: function () {
 
-               var customerOptions = jQuery.extend({}, crudCustomerDefaultOptions(), {
+               var customerOptions = jQuery.extend({}, crudDefaultOptions.crudCustomerDefaultOptions(), {
                    gridPagerInit: function () {
                        return {
                            pageSize: 30,
@@ -23,9 +23,6 @@ define([
                });
 
                jQuery('body')
-                   .find('h1:first')
-                       .html('Crud widget - Grid expands to window height & resize')
-                   .end()
                    .find('div.ui-customerCrud:first')
                        .crud(customerOptions)
 

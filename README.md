@@ -16,7 +16,8 @@ Objectives
 3. Automated testing and continuous integration
 4. Client/server cross platform -> node.js & native mobile appliactions
 5. Client/server module application with dependency loader
-6. Client/server internationalization support 
+6. Client/server internationalization & multi language support 
+
 
 Browser Support
 

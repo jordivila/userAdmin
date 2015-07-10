@@ -1,17 +1,25 @@
-var productGridModelGet = function () { 
+define([
+    "scripts/Template.App.I18n.Init",
+],
+function (clientApp) {
 
-    return [
-            {
-                key: "productId",
-                displayName: "Nº"
-            },
-            {
-                key: "productTypeDesc",
-                displayName: "Producto"
-            },
-            {
-                key: "fechaDesde",
-                displayName: "Fecha alta"
-            }
-    ];
-};
+    var productGridModelGet = function () {
+
+        return [
+                {
+                    key: "productId",
+                    displayName: clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductNum")
+                },
+                {
+                    key: "productTypeDesc",
+                    displayName: clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductTypeDescColumn")
+                },
+                {
+                    key: "fechaDesde",
+                    displayName: clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductDateAddedColumn")
+                }
+        ];
+    };
+
+    return productGridModelGet;
+});

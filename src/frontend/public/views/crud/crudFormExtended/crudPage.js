@@ -4,9 +4,11 @@ define([
     "jqueryui",
     "scripts/Template.Widget.Base",
     "scripts/crud/common.widget.crud",
-    "./crudProductExtended.Widget.js"
+    "./crudProductExtended.Widget.js",
+    "scripts/Template.App.I18n.Init",
+    "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
 ],
-function ($, jqUI) {
+function ($, jqUI, wBase, crudBase, crudExtendedWidget, clientApp, crudDefaultOptions) {
 
 
     jQuery.widget("ui.crudExtendedSample", jQuery.ui.widgetBase,
@@ -28,7 +30,7 @@ function ($, jqUI) {
 
             var self = this;
 
-            var customerOptions = jQuery.extend({}, crudCustomerDefaultOptions(), {
+            var customerOptions = jQuery.extend({}, crudDefaultOptions.crudCustomerDefaultOptions(), {
                 gridFilterVisibleAlways: true,
                 gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
 
@@ -46,7 +48,7 @@ function ($, jqUI) {
                 gridFilterButtonsInit: function (widgetFilter, defaultButtons) {
                     defaultButtons.unshift({
                         id: "cancel",
-                        text: "Volver al filtro de productos",
+                        text: clientApp.i18n.texts.get("Views.Crud.CrudFormExtended.BackToProducts"),
                         cssClass: "ui-cancel-button",
                         icon: "ui-icon-circle-arrow-w",
                         click: function () {

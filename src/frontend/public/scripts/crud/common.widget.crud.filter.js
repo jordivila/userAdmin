@@ -1,10 +1,11 @@
 ﻿define([
     "jquery",
     "jqueryui",
+    "scripts/Template.App.I18n.Init",
     "scripts/crud/common.widget.crud.base",
     "scripts/Template.Widget.Model"
 ],
-       function ($, jqUI) {
+       function ($, jqUI, clientApp) {
 
            jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
            {
@@ -19,8 +20,8 @@
                    gridFilterVisibleAlways: false,
 
                    texts: {
-                       buttonCancelText: "Cancel",
-                       buttonSearchText: "Search",
+                       buttonCancelText: clientApp.i18n.texts.get("Template.Widget.Crud.Cancel"),
+                       buttonSearchText: clientApp.i18n.texts.get("Template.Widget.Crud.Search"),
                    }
                },
                _create: function () {
