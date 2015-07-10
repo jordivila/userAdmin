@@ -46,6 +46,13 @@ function ($, jqUI, wBase, crudBase, crudExtendedWidget, clientApp, crudDefaultOp
                     }
                 },
                 gridFilterButtonsInit: function (widgetFilter, defaultButtons) {
+
+                    for (var i = 0; i < defaultButtons.length; i++) {
+                        if (defaultButtons[i].id == "filter") {
+                            defaultButtons[i].text = clientApp.i18n.texts.get("Views.Crud.SearchCustomers");
+                        }
+                    }
+
                     defaultButtons.unshift({
                         id: "cancel",
                         text: clientApp.i18n.texts.get("Views.Crud.CrudFormExtended.BackToProducts"),

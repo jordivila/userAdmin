@@ -56,6 +56,8 @@
     "Views.Crud.CrudExtended.BasicInfo": "Basic info",
     "Views.Crud.CrudExtended.ClickToFilterByCustomer": "Click to filter by customer",
     "Views.Crud.CrudExtended.CustomValue": "Custom value",
+    "Views.Crud.CrudExtended.DateFrom": "Date from",
+    "Views.Crud.CrudExtended.DateTo": "Date to",
     "Views.Crud.CrudExtended.DetailInfo": "Loan details",
     "Views.Crud.CrudExtended.FirstValue": "First value",
     "Views.Crud.CrudExtended.ListOfString": "List of strings",
@@ -116,8 +118,5 @@
     "Views.Layout.ApplyingChangesError": "Unhandled error applying changes",
     "Views.Layout.UnExpectedError": "Unexpected error ocurred",
     "Views.Menu.MenuSlides.Title": "Menu slides sample",
-    "Views.Menu.MenuTree.Title": "Menu tree sample",
-    "Views.Crud.CrudExtended.DateFrom": "Date from",
-    "Views.Crud.CrudExtended.DateTo": "Date to",
-
+    "Views.Menu.MenuTree.Title": "Menu tree sample"
 }

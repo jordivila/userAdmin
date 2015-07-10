@@ -15,6 +15,16 @@ function ($, jqUI, clientApp, clientAppI18n, wCrud, productAjax, productFormMode
     {
         options: {
             filterModel: productFilterModelGet(this),
+            gridFilterButtonsInit: function (widgetFilter, defaultButtons) {
+
+                for (var i = 0; i < defaultButtons.length; i++) {
+                    if (defaultButtons[i].id == "filter") {
+                        defaultButtons[i].text = clientApp.i18n.texts.get("Views.Crud.SearchProducts");
+                    }
+                }
+
+                return defaultButtons;
+            },
             gridFilterVisibleAlways: true,
             gridSearchMethod: productAjax.ajax.productSearch,
             gridSearchForEditMethod: productAjax.ajax.productSearchForEdit,
