@@ -80,11 +80,11 @@ function ($, jqUI, Handlebars, hist, nav, P, crossLayer, clientApp) {
 
             var self = this;
             var dfd = jQuery.Deferred();
-            var currentCulture = clientApp.Utils.getCookie(crossLayer.cookies.i18nLocale);
+            var currentCulture = clientApp.utils.getCookie(crossLayer.cookies.i18nLocale);
 
             dfd.notify(self.options.texts.loadingI18n);
 
-            clientApp.Ajax.I18nData(currentCulture, function (err, data) {
+            clientApp.ajax.I18nData(currentCulture, function (err, data) {
 
                 if (err !== null) {
                     console.error(err);
@@ -97,7 +97,7 @@ function ($, jqUI, Handlebars, hist, nav, P, crossLayer, clientApp) {
                     }
 
                     clientApp.i18n.texts.data = data.I18nTexts;
-                    clientApp.Globalizer.i18nTexts = data.I18nTexts;
+                    clientApp.globalizer.i18nTexts = data.I18nTexts;
 
                     dfd.resolve();
                 }
@@ -191,7 +191,7 @@ function ($, jqUI, Handlebars, hist, nav, P, crossLayer, clientApp) {
 
             dfd.notify(self.options.texts.loadingTmpl);
 
-            clientApp.Ajax.View(state, function (err, data) {
+            clientApp.ajax.View(state, function (err, data) {
 
                 if (err !== null) {
 

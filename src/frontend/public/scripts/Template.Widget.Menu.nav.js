@@ -117,7 +117,7 @@ function ($, jqUI, clientApp, wSlides) {
             /* End Ensure panel animations */
 
 
-            clientApp.Ajax.UserMenu(function (err, data) {
+            clientApp.ajax.UserMenu(function (err, data) {
 
                 if (err !== null) {
                     self._errMsgSet($panelMenu, self.options.texts.errLoadingMenuData);

@@ -9,20 +9,15 @@ function (CacheControl, Utils, Ajax, I18NTexts, GlobalizeHelper) {
 
     var clientApp = {};
 
-    clientApp.Ajax = new Ajax();
+    clientApp.ajax = new Ajax();
     clientApp.cache = new CacheControl();
-    clientApp.Utils = new Utils();
-
-
+    clientApp.utils = new Utils();
     clientApp.i18n = {
         texts: new I18NTexts(),
         images: {}
     };
-
-    clientApp.Globalizer = new GlobalizeHelper();
-
-    clientApp.Widgets = {};
-
+    clientApp.globalizer = new GlobalizeHelper();
+    clientApp.widgets = {};
     return clientApp;
 
 });

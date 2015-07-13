@@ -49,7 +49,7 @@ function ($, jqUI, clientApp, wCrud, productAjax, productFormModelGet, productGr
                         break;
                     case "fechaDesde":
 
-                        clientApp.Globalizer.get()
+                        clientApp.globalizer.get()
                          .done(function (Globalize) {
 
                              $cell.html(dataItem.fechaDesde !== null ? Globalize.formatDate(dataItem.fechaDesde) : '');
@@ -64,15 +64,15 @@ function ($, jqUI, clientApp, wCrud, productAjax, productFormModelGet, productGr
 
                 var tBasicInfo = '' +
                     '<div class="ui-productCrud-form-searchOutput">' +
-                        '<h3 class="ui-state-default">' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.BasicInfo")) + '</h3>' +
-                        '<div data-fielditem="productId" data-fielditem-name="' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductNum")) + '"></div>' +
-                        '<div data-fielditem="productTypeDesc" data-fielditem-name="' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductTypeDescColumn")) + '"></div>' +
-                        '<div data-fielditem="nombre" data-fielditem-name="' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.Name_BussinesName")) + '"></div>' +
-                        '<div data-fielditem="fechaDesde" data-fielditem-name="' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DateFrom")) + '"></div>' +
-                        '<div data-fielditem="fechaHasta" data-fielditem-name="' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DateTo")) + '"></div>' +
+                        '<h3 class="ui-state-default">' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.BasicInfo")) + '</h3>' +
+                        '<div data-fielditem="productId" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductNum")) + '"></div>' +
+                        '<div data-fielditem="productTypeDesc" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductTypeDescColumn")) + '"></div>' +
+                        '<div data-fielditem="nombre" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.Name_BussinesName")) + '"></div>' +
+                        '<div data-fielditem="fechaDesde" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DateFrom")) + '"></div>' +
+                        '<div data-fielditem="fechaHasta" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DateTo")) + '"></div>' +
                     '</div>' +
                     '<div class="ui-productCrud-form-type">' +
-                        '<h3 class="ui-state-default">' + clientApp.Utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DetailInfo")) + '</h3>' +
+                        '<h3 class="ui-state-default">' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DetailInfo")) + '</h3>' +
                     '</div>';
 
                 jQuery($parent).prepend(tBasicInfo);
@@ -82,7 +82,7 @@ function ($, jqUI, clientApp, wCrud, productAjax, productFormModelGet, productGr
             },
             formBind: function (self, dataItem) {
 
-                clientApp.Globalizer.get()
+                clientApp.globalizer.get()
                  .done(function (Globalize) {
 
                      jQuery(self.element)

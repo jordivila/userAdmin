@@ -92,7 +92,7 @@ define([
 
                    var d = jQuery(self.element).datepicker('getDate');
 
-                   clientApp.Globalizer.get()
+                   clientApp.globalizer.get()
                     .done(function (Globalize) {
 
                         jQuery(self.element)

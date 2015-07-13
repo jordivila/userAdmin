@@ -4,7 +4,7 @@ define(["jquery", "jqueryui", "scripts/Template.App.Init", "scripts/Template.App
        clientApp.View = {
            main: function () {
 
-               clientApp.Ajax.UserMenu(function (err, data) {
+               clientApp.ajax.UserMenu(function (err, data) {
 
                    if (err === null) {
                        jQuery('ul.ui-menuTreeSample:first')

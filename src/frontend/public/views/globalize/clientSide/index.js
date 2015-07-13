@@ -17,14 +17,14 @@ function (clientApp, crossLayer) {
             console.log(clientApp);
 
 
-            clientApp.Globalizer.get()
+            clientApp.globalizer.get()
              .done(function (Globalize) {
 
                  console.log("clientAppIII");
                  console.log(clientApp);
 
 
-                 var currency = clientApp.Utils.getCookie(crossLayer.cookies.currency);
+                 var currency = clientApp.utils.getCookie(crossLayer.cookies.currency);
 
                  jQuery("#date").html(Globalize.formatDate(new Date(), {
                      datetime: "medium"

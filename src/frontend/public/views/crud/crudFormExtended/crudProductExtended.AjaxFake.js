@@ -135,7 +135,7 @@ function (clientApp) {
 
                 var dfd = jQuery.Deferred();
 
-                clientApp.Globalizer.get()
+                clientApp.globalizer.get()
                  .done(function (Globalize) {
 
 
