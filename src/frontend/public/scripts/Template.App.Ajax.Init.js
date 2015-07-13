@@ -1,13 +1,17 @@
 define([
     "jquery",
-    "scripts/Template.App.Init",
     "scripts/url/UrlHelper",
     "pPromises",
     "crossLayer/config"
 ],
-    function ($, clientApp, urlHelper, P, crossLayer) {
+    function ($, urlHelper, P, crossLayer) {
 
-        jQuery(document).ready(function () {
+        function Ajax() {
+            this.setDefaults();
+        }
+
+        Ajax.prototype.setDefaults = function () {
+            //jQuery(document).ready(function () {
             jQuery.ajaxSetup({
                 type: "GET",
                 contentType: "application/json; charset=utf-8",
@@ -29,11 +33,10 @@ define([
                     }
                 }
             });
-        });
+            //});
+        };
 
-        clientApp.Ajax = {};
-
-        clientApp.Ajax.UserMenu = function (cbErrFirst) {
+        Ajax.prototype.UserMenu = function (cbErrFirst) {
             return P(jQuery.ajax({
                 url: "/api/user/menu",
                 type: "GET",
@@ -44,7 +47,7 @@ define([
             });
         };
 
-        clientApp.Ajax.ViewHtml = function (templUrl) {
+        Ajax.prototype.ViewHtml = function (templUrl) {
             return jQuery.ajax({
                 url: templUrl,
                 type: "GET",
@@ -53,7 +56,7 @@ define([
             });
         };
 
-        clientApp.Ajax.ViewModel = function (templUrl) {
+        Ajax.prototype.ViewModel = function (templUrl) {
             return jQuery.ajax({
                 url: templUrl + 'index.handlebars.json',
                 type: "GET",
@@ -62,11 +65,13 @@ define([
             });
         };
 
-        clientApp.Ajax.View = function (historyState, cbErrFirst) {
+        Ajax.prototype.View = function (historyState, cbErrFirst) {
+
+            var self = this;
 
             return P.all([
-                clientApp.Ajax.ViewHtml(historyState.cleanUrl),
-                clientApp.Ajax.ViewModel(historyState.cleanUrl)
+                self.ViewHtml(historyState.cleanUrl),
+                self.ViewModel(historyState.cleanUrl)
             ]).nodeify(function (e, data) {
 
                 if (e !== null) {
@@ -76,12 +81,13 @@ define([
 
                     var model = data[1];
                     var hasEntry = (model.ViewEntryPoint && model.ViewEntryPoint !== null);
+                    var viewEntryPointScript = null;
 
                     data.push(hasEntry);
 
                     if (hasEntry) {
 
-                        var viewEntryPointScript = historyState.cleanUrl + model.ViewEntryPoint + "?_=" + (new Date()).getTime();
+                        viewEntryPointScript = historyState.cleanUrl + model.ViewEntryPoint + "?_=" + (new Date()).getTime();
 
                         require(
                             /*
@@ -102,15 +108,13 @@ define([
                             });
                     }
                     else {
-                        cbErrFirst(e, data);
+                        cbErrFirst(null, data);
                     }
-
-
                 }
             });
         };
 
-        clientApp.Ajax.I18nDatepicker = function (currentCulture) {
+        Ajax.prototype.I18nDatepicker = function (currentCulture) {
 
             return jQuery.ajax({
                 url: '/public/bower_components/jquery-ui/ui/minified/i18n/jquery.ui.datepicker-' + currentCulture + '.min.js',
@@ -120,7 +124,7 @@ define([
             });
         };
 
-        clientApp.Ajax.I18nAppMessages = function (currentCulture) {
+        Ajax.prototype.I18nAppMessages = function (currentCulture) {
 
             return jQuery.ajax({
                 url: "/public/locales/" + currentCulture + "/clientMessages.json",
@@ -130,12 +134,12 @@ define([
             });
         };
 
-        clientApp.Ajax.I18nData = function (currentCulture, cbErrFirst) {
+        Ajax.prototype.I18nData = function (currentCulture, cbErrFirst) {
 
             var a = [];
 
             if (currentCulture !== 'en') {
-                a.push(clientApp.Ajax.I18nDatepicker(currentCulture));
+                a.push(this.I18nDatepicker(currentCulture));
             }
             else {
                 // simulate as far as datepicker is not needed for english
@@ -148,7 +152,7 @@ define([
                 a.push(fakeDatepickerI18n());
             }
 
-            a.push(clientApp.Ajax.I18nAppMessages(currentCulture));
+            a.push(this.I18nAppMessages(currentCulture));
 
             return P.all(a).nodeify(function (e, data) {
                 if (e !== null) {
@@ -165,5 +169,5 @@ define([
 
         };
 
-        return clientApp;
+        return Ajax;
     });

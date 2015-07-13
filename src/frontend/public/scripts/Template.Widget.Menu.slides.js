@@ -2,7 +2,7 @@ define([
     "jquery",
     "jqueryui",
     "scripts/Template.Widget.Menu.base",
-    "scripts/Template.App.I18n.Init",
+    "scripts/Template.App.Init",
 ],
        function ($, jqUI, mBase, clientApp) {
 

@@ -1,8 +1,7 @@
 define([
     "scripts/Template.App.Init",
-    "scripts/Template.App.I18n.Init",
 ],
-function (clientApp, clientAppI18n) {
+function (clientApp) {
 
 
     var productAjax = {

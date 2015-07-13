@@ -17,12 +17,12 @@
     '/scripts/Template.Widget.Menu.nav.js',
     '/scripts/Template.Widget.Page.js',
     "/scripts/Template.App.Init.js",
-    "/scripts/Template.App.Ajax.Init.js",
-    "/scripts/Template.App.Widgets.Init.js",
-    "/scripts/Template.App.I18n.Init.js",
-    '/scripts/Template.App.Globalize.Init.js',
+    //"/scripts/Template.App.Ajax.Init.js",
+    //"/scripts/Template.App.I18n.Init.js",
+    //'/scripts/Template.App.Globalize.Init.js',
 ],
-function ($, domReady, jqUI, hist, handl, Modernizr, url, a, b, c, d, e, f, g, h, i, j, k,clientApp) {
+function (json, text, $, domReady, jqUI, hist, handl, Modernizr, url, a, b, c, d, e, f, clientApp) {
+
 
     return clientApp;
 

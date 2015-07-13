@@ -5,7 +5,7 @@ define([
     "scripts/Template.Widget.Base",
     "scripts/crud/common.widget.crud",
     "./crudProductExtended.Widget.js",
-    "scripts/Template.App.I18n.Init",
+    "scripts/Template.App.Init",
     "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
 ],
 function ($, jqUI, wBase, crudBase, crudExtendedWidget, clientApp, crudDefaultOptions) {

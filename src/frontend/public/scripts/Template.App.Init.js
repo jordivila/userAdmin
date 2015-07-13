@@ -1,33 +1,28 @@
-﻿define([],
-       function () {
+﻿define([
+    'scripts/Template.App.Cache.Init',
+    'scripts/Template.App.Utils.Init',
+    'scripts/Template.App.Ajax.Init',
+    'scripts/Template.App.I18n.Init',
+    'scripts/Template.App.Globalize.Init',
+],
+function (CacheControl, Utils, Ajax, I18NTexts, GlobalizeHelper) {
 
-           var clientApp = {};
+    var clientApp = {};
 
-           clientApp.Utils = {
+    clientApp.Ajax = new Ajax();
+    clientApp.cache = new CacheControl();
+    clientApp.Utils = new Utils();
 
-               getCookie: function (cname) {
-                   var name = cname + "=";
-                   var ca = document.cookie.split(';');
-                   for (var i = 0; i < ca.length; i++) {
-                       var c = ca[i];
-                       while (c.charAt(0) == ' ') c = c.substring(1);
-                       if (c.indexOf(name) === 0) return c.substring(name.length, c.length);
-                   }
-                   return "";
-               },
 
-               htmlEncode: function (html) {
-                   return document.createElement('a').appendChild(
-                       document.createTextNode(html)).parentNode.innerHTML;
-               },
+    clientApp.i18n = {
+        texts: new I18NTexts(),
+        images: {}
+    };
 
-               htmlDecode: function (html) {
-                   var a = document.createElement('a'); a.innerHTML = html;
-                   return a.textContent;
-               }
+    clientApp.Globalizer = new GlobalizeHelper();
 
-           };
+    clientApp.Widgets = {};
 
-           return clientApp;
+    return clientApp;
 
-       });
+});

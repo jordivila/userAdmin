@@ -1,5 +1,5 @@
 ﻿define([
-    "scripts/Template.App.I18n.Init"
+    "scripts/Template.App.Init"
 ],
     function (clientApp) {
 

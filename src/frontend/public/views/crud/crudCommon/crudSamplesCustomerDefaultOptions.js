@@ -1,5 +1,5 @@
 ﻿define([
-    "scripts/Template.App.I18n.Init",
+    "scripts/Template.App.Init",
     "./crudSamplesCustomerData.js",
 ],
     function (clientApp, customerAjax) {
@@ -96,7 +96,7 @@
                         },
                         {
                             id: "fechaNacimiento",
-                            displayName: clientApp.i18n.texts.get("Views.Crud.Birtdate"),
+                            displayName: clientApp.i18n.texts.get("Views.Crud.Birthdate"),
                             input: { type: "date", value: "" },
                         }
                     ];

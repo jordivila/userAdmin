@@ -1,70 +1,75 @@
 ﻿define([
     "jquery",
-    "scripts/Template.App.Init",
-    "scripts/Template.App.I18n.Init",
-    "crossLayer/config"
-], function ($, clientApp, cI18n, crossLayer) {
-
-    clientApp.Globalizer = {
-        instance: null,
-        get: function () {
-
-            var dfd = jQuery.Deferred();
-
-            var currentCulture = clientApp.Utils.getCookie(crossLayer.cookies.i18nLocale);
-
-            if (clientApp.Globalizer.instance === null) {
+    "crossLayer/config",
+    "scripts/Template.App.Utils.Init"
+], function ($, crossLayer, Utils) {
 
 
-                require([
-                    "scripts/modules/glob",
+    function GlobalizeHelper() {
 
-                    "json!cldr-data/main/" + currentCulture + "/ca-gregorian.json",
-                    "json!cldr-data/main/" + currentCulture + "/currencies.json",
-                    "json!cldr-data/main/" + currentCulture + "/dateFields.json",
-                    "json!cldr-data/main/" + currentCulture + "/numbers.json",
-                ], function (Globalize, enGregorian, enCurrencies, enDateFields, enNumbers) {
+    }
 
+    GlobalizeHelper.prototype.instance = null;
+    GlobalizeHelper.prototype.i18nTexts = null;
+    GlobalizeHelper.prototype.get = function () {
 
-                    // At this point, we have Globalize loaded. But, before we can use it, we need to feed it on the appropriate I18n content (Unicode CLDR). Read Requirements on Getting Started on the root's README.md for more information.
-                    Globalize.load(
-                        enCurrencies,
-                        enDateFields,
-                        enGregorian,
-                        enNumbers
-                    );
+        var dfd = jQuery.Deferred();
+        var self = this;
+
+        var currentCulture = new Utils().getCookie(crossLayer.cookies.i18nLocale);
+
+        if (self.instance === null) {
 
 
-                    // Uncomment these lines for a standalone sample
-                    // This messages are actually setted at layout initialization
+            require([
+                "scripts/modules/glob",
+
+                "json!cldr-data/main/" + currentCulture + "/ca-gregorian.json",
+                "json!cldr-data/main/" + currentCulture + "/currencies.json",
+                "json!cldr-data/main/" + currentCulture + "/dateFields.json",
+                "json!cldr-data/main/" + currentCulture + "/numbers.json",
+            ], function (Globalize, enGregorian, enCurrencies, enDateFields, enNumbers) {
 
 
-                    var messages = {};
-                    messages[currentCulture] = clientApp.i18n.texts.data;
-                    
+                // At this point, we have Globalize loaded. But, before we can use it, we need to feed it on the appropriate I18n content (Unicode CLDR). Read Requirements on Getting Started on the root's README.md for more information.
+                Globalize.load(
+                    enCurrencies,
+                    enDateFields,
+                    enGregorian,
+                    enNumbers
+                );
 
 
-                    Globalize.loadMessages(messages);
-                    Globalize.locale(currentCulture);
-                    clientApp.Globalizer.instance = Globalize;
+                // Uncomment these lines for a standalone sample
+                // This messages are actually setted at layout initialization
 
 
-                    dfd.resolve(clientApp.Globalizer.instance);
+                var messages = {};
+                messages[currentCulture] = self.i18nTexts;// clientApp.i18n.texts.data;
 
-                });
 
-            }
-            else {
 
-                dfd.resolve(clientApp.Globalizer.instance);
+                Globalize.loadMessages(messages);
+                Globalize.locale(currentCulture);
 
-            }
+                self.instance = Globalize;
 
-            return dfd.promise();
+
+                dfd.resolve(self.instance);
+
+            });
 
         }
+        else {
+
+            dfd.resolve(self.instance);
+
+        }
+
+        return dfd.promise();
+
     };
 
-    return clientApp;
+    return GlobalizeHelper;
 
 });

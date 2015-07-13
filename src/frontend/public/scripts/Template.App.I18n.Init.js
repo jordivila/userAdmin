@@ -1,20 +1,21 @@
-﻿define(["scripts/Template.App.Init"],
-       function (clientApp) {
+﻿define([],
+       function () {
 
-           clientApp.i18n = {
-               texts: {
-                   data: null,
-                   get: function (key) {
-                       if (clientApp.i18n.texts.data[key]) {
-                           return clientApp.i18n.texts.data[key];
-                       }
-                       else {
-                           return key;
-                       }
-                   }
+           function I18NTexts() {
+
+           }
+
+           I18NTexts.prototype.data = null;
+
+           I18NTexts.prototype.get = function (key) {
+               if (this.data[key]) {
+                   return this.data[key];
+               }
+               else {
+                   return key;
                }
            };
 
-           return clientApp;
+           return I18NTexts;
 
        });

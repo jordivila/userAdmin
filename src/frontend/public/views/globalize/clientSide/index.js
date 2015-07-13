@@ -5,16 +5,24 @@
 function (clientApp, crossLayer) {
 
     
+    console.log("clientApp");
+    console.log(clientApp);
     
 
 
     clientApp.View = {
         main: function () {
 
+            console.log("clientAppII");
+            console.log(clientApp);
+
+
             clientApp.Globalizer.get()
              .done(function (Globalize) {
 
-                 
+                 console.log("clientAppIII");
+                 console.log(clientApp);
+
 
                  var currency = clientApp.Utils.getCookie(crossLayer.cookies.currency);
 

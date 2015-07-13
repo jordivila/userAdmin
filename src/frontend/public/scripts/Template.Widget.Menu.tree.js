@@ -1,122 +1,126 @@
-define(["jquery", "jqueryui", "scripts/Template.Widget.Menu.base"],
-       function ($, jqUI) {
+define([
+    "jquery",
+    "jqueryui",
+    "scripts/Template.Widget.Menu.base"
+],
+function ($, jqUI) {
 
 
-           jQuery.widget("ui.menuTree", jQuery.ui.menuBase, {
-               options: {
+    jQuery.widget("ui.menuTree", jQuery.ui.menuBase, {
+        options: {
 
-               },
-               _create: function () {
+        },
+        _create: function () {
 
-                   this._super();
+            this._super();
 
-               },
-               _init: function () {
+        },
+        _init: function () {
 
-                   this._super();
+            this._super();
 
-               },
-               destroy: function () {
+        },
+        destroy: function () {
 
-                   this._super();
-               },
-               openNode: function ($lisOpen) {
-                   if ($lisOpen) {
-                       $lisOpen.each(function () {
-                           jQuery(this)
-                           //.removeClass('ui-state-default')
-                           .children('ul')
-                               .addClass('ui-state-active')
-                               .show('blind')
-                           .end()
-                           .find('div.ui-menuList-itemLink:first')
-                               .addClass('ui-state-active')
-                               .find('div.ui-menuList-toggle')
-                                   .addClass('ui-state-active')
-                                   .removeClass('ui-icon-triangle-1-e')
-                                   .addClass('ui-icon ui-icon-triangle-1-s')
-                               .end()
-                           .end();
-                       });
-                   }
-               },
-               closeNode: function ($lisClose) {
+            this._super();
+        },
+        openNode: function ($lisOpen) {
+            if ($lisOpen) {
+                $lisOpen.each(function () {
+                    jQuery(this)
+                    //.removeClass('ui-state-default')
+                    .children('ul')
+                        .addClass('ui-state-active')
+                        .show('blind')
+                    .end()
+                    .find('div.ui-menuList-itemLink:first')
+                        .addClass('ui-state-active')
+                        .find('div.ui-menuList-toggle')
+                            .addClass('ui-state-active')
+                            .removeClass('ui-icon-triangle-1-e')
+                            .addClass('ui-icon ui-icon-triangle-1-s')
+                        .end()
+                    .end();
+                });
+            }
+        },
+        closeNode: function ($lisClose) {
 
-                   if ($lisClose) {
-                       $lisClose
-                           //.addClass('ui-state-default')
-                           .children('ul')
-                               .hide('blind')
-                               .removeClass('ui-state-active')
-                           .end()
-                           .find('div.ui-menuList-itemLink:first')
-                               .removeClass('ui-state-active')
-                               .find('div.ui-menuList-toggle')
-                                   .removeClass('ui-state-active')
-                                   .addClass('ui-icon ui-icon-triangle-1-e')
-                                   .removeClass('ui-icon-triangle-1-s')
-                               .end()
-                           .end();
+            if ($lisClose) {
+                $lisClose
+                    //.addClass('ui-state-default')
+                    .children('ul')
+                        .hide('blind')
+                        .removeClass('ui-state-active')
+                    .end()
+                    .find('div.ui-menuList-itemLink:first')
+                        .removeClass('ui-state-active')
+                        .find('div.ui-menuList-toggle')
+                            .removeClass('ui-state-active')
+                            .addClass('ui-icon ui-icon-triangle-1-e')
+                            .removeClass('ui-icon-triangle-1-s')
+                        .end()
+                    .end();
 
-                       if ($lisClose.find('li').length > 0) {
-                           this.closeNode($lisClose.find('li'));
-                       }
-                   }
-               },
-               collapseAll: function () {
-                   this.closeNode(jQuery(this.element).find('li'));
-               },
-               _beforeSelected: function () {
-                   jQuery(this.element)
-                       .find('div.ui-menuList-itemLink')
-                           .removeClass('ui-state-highlight')
-                       .end();
-               },
+                if ($lisClose.find('li').length > 0) {
+                    this.closeNode($lisClose.find('li'));
+                }
+            }
+        },
+        collapseAll: function () {
+            this.closeNode(jQuery(this.element).find('li'));
+        },
+        _beforeSelected: function () {
+            jQuery(this.element)
+                .find('div.ui-menuList-itemLink')
+                    .removeClass('ui-state-highlight')
+                .end();
+        },
 
-               _build: function () {
+        _build: function () {
 
-                   var self = this;
-                   var dfd = jQuery.Deferred();
+            var self = this;
+            var dfd = jQuery.Deferred();
 
-                   var menuItemRender = function (IMenuItem) {
-                       var $li = jQuery('<li class="ui-menuList-item ui-widget-content ui-corner-all ui-state-default"></li>');
-
-
-                       $li.html('<div class="ui-menuList-itemLink ui-state-default"><span class="ui-menuList-link">{0}</span><div class="ui-helper-clearfix" /></div>'.format(IMenuItem.text));
-                       $li.data('dataItem', IMenuItem);
-
-                       if (IMenuItem.childs) {
-                           var $ul = jQuery('<ul class="ui-menuList-childs"></ul>');
-
-                           $li.find('div.ui-menuList-itemLink')
-                                   .find('div.ui-helper-clearfix:first')
-                                       .before('<div class="ui-menuList-toggle ui-state-default ui-icon ui-icon-triangle-1-e"></div>')
-                                   .end()
-                              .end();
-
-                           for (var i = 0; i < IMenuItem.childs.length; i++) {
-                               $ul.append(menuItemRender(IMenuItem.childs[i]));
-                           }
-                           $li.append($ul);
-                       }
-
-                       return $li;
-                   };
-
-                   var menuRender = function () {
-                       for (var i = 0; i < self.options.IMenuModel.length; i++) {
-                           jQuery(self.element).append(menuItemRender(self.options.IMenuModel[i]));
-                       }
-
-                       dfd.resolve();
-                   };
-
-                   menuRender();
+            var menuItemRender = function (IMenuItem) {
+                var $li = jQuery('<li class="ui-menuList-item ui-widget-content ui-corner-all ui-state-default"></li>');
 
 
-                   return dfd.promise();
-               },
-           });
+                $li.html('<div class="ui-menuList-itemLink ui-state-default"><span class="ui-menuList-link">{0}</span><div class="ui-helper-clearfix" /></div>'.format(IMenuItem.text));
+                $li.data('dataItem', IMenuItem);
+
+                if (IMenuItem.childs) {
+                    var $ul = jQuery('<ul class="ui-menuList-childs"></ul>');
+
+                    $li.find('div.ui-menuList-itemLink')
+                            .find('div.ui-helper-clearfix:first')
+                                .before('<div class="ui-menuList-toggle ui-state-default ui-icon ui-icon-triangle-1-e"></div>')
+                            .end()
+                        .end();
+
+                    for (var i = 0; i < IMenuItem.childs.length; i++) {
+                        $ul.append(menuItemRender(IMenuItem.childs[i]));
+                    }
+                    $li.append($ul);
+                }
+
+                return $li;
+            };
+
+            var menuRender = function () {
+                for (var i = 0; i < self.options.IMenuModel.length; i++) {
+                    jQuery(self.element).append(menuItemRender(self.options.IMenuModel[i]));
+                }
+
+                dfd.resolve();
+            };
+
+            menuRender();
 
 
-       });
+            return dfd.promise();
+        },
+    });
+
+
+});

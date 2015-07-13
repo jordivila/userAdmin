@@ -4,12 +4,11 @@ define([
     "handlebars",
     "history",
     "scripts/Template.Widget.Menu.nav",
-    "scripts/Template.App.Globalize.Init",
-    "scripts/Template.App.I18n.Init",
     "pPromises",
-    "crossLayer/config"
+    "crossLayer/config",
+    "scripts/Template.App.Init"
 ],
-function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
+function ($, jqUI, Handlebars, hist, nav, P, crossLayer, clientApp) {
 
     jQuery.widget("ui.page", jQuery.ui.widgetBase, {
         options: {
@@ -98,6 +97,7 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
                     }
 
                     clientApp.i18n.texts.data = data.I18nTexts;
+                    clientApp.Globalizer.i18nTexts = data.I18nTexts;
 
                     dfd.resolve();
                 }
@@ -187,6 +187,7 @@ function ($, jqUI, Handlebars, hist, nav, clientApp, cTexts, P, crossLayer) {
             var dfd = jQuery.Deferred();
 
             $siteContent.empty();
+
 
             dfd.notify(self.options.texts.loadingTmpl);
 
