@@ -13,7 +13,7 @@ define([
                    pageSizeShow: true,
                    nPagesInPaginator: 3,
                    pageSize: 10,
-                   infinteScrolling: false,
+                   infiniteScrolling: false,
                    texts: {
                        showingData: clientApp.i18n.texts.get("Template.Widget.Crud.Showing_From_To_Of"),
                        showXPerPage: clientApp.i18n.texts.get("Template.Widget.Crud.PerPage")
@@ -27,19 +27,23 @@ define([
 
                    this._super();
 
-                   this.bind(0, this.options.pageSize, 0);
+                   //this.bind(0, this.options.pageSize, 0);
 
                },
                destroy: function () {
 
                    this._super();
+
+                   jQuery(window).data('infiniteScrollingEventOk', false);
                },
-               _onChange: function (pageIndex) {
+               _onChange: function (pageIndex, pageSize) {
+
+                   pageSize = pageSize || parseInt(jQuery(this.element).find('div.ui-gridPagination-pageSizePicker:first').find('select:first').val());
 
                    this._trigger('change', null,
                        {
                            pageIndex: parseInt(pageIndex),
-                           pageSize: parseInt(jQuery(this.element).find('div.ui-gridPagination-pageSizePicker:first').find('select:first').val())
+                           pageSize: pageSize
                        });
                },
                _buildPage: function (page, currentPage, isNavigationItem, text) {
@@ -130,7 +134,7 @@ define([
                _buildPaginationTotalsShowing: function ($parent, Page, PageSize, TotalRows) {
 
                    var self = this;
-                   
+
                    var $totalRows = function () {
 
                        var str = "<div class='ui-gridPagination-totalRows'>" + self.options.texts.showingData + "</div>";
@@ -211,13 +215,34 @@ define([
 
                    this._buildPaginationTotalsVisibility($totalsBox, $totalRowsShowing, $totalPageSizePicker);
                },
+               _buildInfiniteScroll: function (Page, PageSize, TotalRows, TotalPages) {
+
+                   var self = this;
+
+
+                   if (jQuery(window).data('infiniteScrollingEventOk') !== true)
+                   {
+                       jQuery(window).data('infiniteScrollingEventOk', true);
+
+
+
+                       jQuery(window).scroll(function () {
+                           if (jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
+
+                               //self._onChange(Page + 1, PageSize);
+
+                               console.log("Paginaaaaaaa->{0}----{1}".format(Page + 1, PageSize));
+                           }
+                       });
+
+                   }
+
+               },
                bind: function (pageIndex, pageSize, totalRows) {
 
                    var self = this;
 
                    jQuery(self.element).empty();
-
-                   //try {
 
                    pageSize = pageSize || this.options.pageSize;
 
@@ -227,8 +252,9 @@ define([
                    var TotalPages = ((totalRows / pageSize) | 0) + (((totalRows % pageSize) === 0) ? 0 : 1);
 
 
-                   if (this.options.infinteScrolling === true) {
 
+                   if (this.options.infiniteScrolling === true) {
+                       this._buildInfiniteScroll(Page, PageSize, totalRows, TotalPages);
                    }
                    else {
                        this._buildPagination(Page, PageSize, totalRows, TotalPages);

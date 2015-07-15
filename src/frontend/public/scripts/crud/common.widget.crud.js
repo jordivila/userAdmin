@@ -60,7 +60,8 @@ function ($, jqUI, clientApp) {
                         paginationShow: true,
                         totalRowsShow: true,
                         pageSizeShow: true,
-                    }
+                    },
+                    infiniteScrolling: false
                 };
             },
 

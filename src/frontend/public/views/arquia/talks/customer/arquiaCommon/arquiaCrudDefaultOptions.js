@@ -32,19 +32,18 @@
 
                     switch (columnName) {
                         case "subject":
-                            $cell.html('{0}'.format(dataItem[columnName]));
+                            $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
+                            $cell.find('a')
+                                .click(function () {
+                                    crudGridWidget._trigger('onEdit', null, dataItem);
+                                });
                             break;
                         case "dateLastMessage":
 
                             clientApp.globalizer.get()
                              .done(function (Globalize) {
-
                                  $cell.html(dataItem[columnName] !== null ? Globalize.formatDate(dataItem[columnName]) : '');
-                                 //$cell.html('<span>{0}</span>'.format(dataItem[columnName]));
-
                              });
-
-
                             
                             break;
                         default: break;

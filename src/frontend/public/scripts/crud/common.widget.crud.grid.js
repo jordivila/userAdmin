@@ -66,6 +66,7 @@
 
                 var pagerConfig = jQuery.extend({},
                     {
+                        infiniteScrolling: false,
                         pagerTop: {
                             paginationShow: false,
                             totalRowsShow: false,
@@ -80,6 +81,12 @@
                     this.options.gridPagerInit());
 
 
+                if (pagerConfig.infiniteScrolling === true)
+                {
+                    pagerConfig.pagerTop.infiniteScrolling = true;
+                    pagerConfig.pagerBottom.infiniteScrolling = true;
+                }
+
                 jQuery(self.options.gridPagerDOMId)
                         .first()
                             .gridPagination(jQuery.extend({}, pagerOpts, pagerConfig.pagerTop))
@@ -87,6 +94,7 @@
                         .last()
                             .gridPagination(jQuery.extend({}, pagerOpts, pagerConfig.pagerBottom))
                         .end();
+
             },
             destroy: function () {
 
