@@ -108,6 +108,10 @@
         registerCommonVerbs(app, "crud/crudExpand", genericViewController);
         registerCommonVerbs(app, "crud/crudFormSimple", genericViewController);
         registerCommonVerbs(app, "crud/crudFormExtended", genericViewController);
+
+        registerCommonVerbs(app, "arquia/talks/customer/home", genericViewController);
+        registerCommonVerbs(app, "arquia/talks/customer/arquiaCommon", genericViewController);
+        registerCommonVerbs(app, "arquia/talks/customer/history", genericViewController);
         
         
         

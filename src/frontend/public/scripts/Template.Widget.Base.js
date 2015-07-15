@@ -181,6 +181,7 @@ define(["jquery", "jqueryui", "scripts/Template.ExtendPrototypes"],
 
                    jQuery(this.options.errorDOMId)
                            .addClass('ui-state-error')
+                           .removeClass('ui-helper-hidden') 
                            .html(msg)
                            .fadeTo('slow', 1, function () {
                                if (jQuery.isFunction(cb)) {
@@ -194,6 +195,7 @@ define(["jquery", "jqueryui", "scripts/Template.ExtendPrototypes"],
 
                    jQuery(this.options.errorDOMId)
                        .removeClass('ui-state-error')
+                       .addClass('ui-helper-hidden')
                        .html('')
                        .fadeTo('slow', 0, function () {
                            if (jQuery.isFunction(cb)) {
@@ -205,6 +207,7 @@ define(["jquery", "jqueryui", "scripts/Template.ExtendPrototypes"],
                messageDisplay: function (msg, cb) {
                    jQuery(this.options.messagesDOMId)
                        .addClass('ui-state-highlight')
+                       .removeClass('ui-helper-hidden')
                        .html(msg)
                        .fadeTo('slow', 1, function () {
                            if (jQuery.isFunction(cb)) {
@@ -218,6 +221,7 @@ define(["jquery", "jqueryui", "scripts/Template.ExtendPrototypes"],
 
                    jQuery(this.options.messagesDOMId)
                        .removeClass('ui-state-highlight')
+                       .addClass('ui-helper-hidden')
                        .html('')
                        .fadeTo('slow', 0, function () {
                            if (jQuery.isFunction(cb)) {

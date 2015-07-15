@@ -12,6 +12,6 @@ input[type=text], input[type=password], input[type=email], select {padding:0.5em
 input[type=checkbox].ui-widget-content { border:0px solid transparent !important; }
 input[type='radio'] {height:1em;width:1em;}
 body{padding:0em;background-image:none !important;}
-html, body {height:100%;display:table;width:100%;}
+html, body {height:100%;/*display:table;*/width:100%;}
 h1 {text-align:center;}
 * { outline:transparent solid 0em;-webkit-tap-highlight-color:  rgba(255, 255, 255, 0); }

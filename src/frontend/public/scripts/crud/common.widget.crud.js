@@ -237,7 +237,7 @@ function ($, jqUI, clientApp) {
         },
         _templateGet: function (gridFilterClass, gridButtonsClass, gridControlClass, formControlClass) {
 
-            var template = '<div class="ui-crud-messages ui-state-default ui-helper-hidden"></div>' +
+            var template = '<div class="ui-crud-messages ui-state-default"></div>' +
                             '<div class="{0}"></div>' +
                             '<div class="{1} ui-ribbonButtons  ui-state-default"></div>' +
                             '<div class="{2}"></div>' +

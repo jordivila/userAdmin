@@ -79,6 +79,10 @@
                         text: i18n.__("AccountResources.LogOn"),
                     },
                     {
+                        url: "/arquia/talks/customer/home/",
+                        text: i18n.__("Arquia.Talks.MenuTitle")
+                    },
+                    {
                         url: "/about/",
                         text: i18n.__("GeneralTexts.About")
                     },
@@ -97,7 +101,6 @@
                                     url: "/currencies/",
                                     text: i18n.__("GeneralTexts.Currencies")
                                 },
-
                         ]
                     },
                     {

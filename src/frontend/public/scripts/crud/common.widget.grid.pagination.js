@@ -13,7 +13,7 @@ define([
                    pageSizeShow: true,
                    nPagesInPaginator: 3,
                    pageSize: 10,
-
+                   infinteScrolling: false,
                    texts: {
                        showingData: clientApp.i18n.texts.get("Template.Widget.Crud.Showing_From_To_Of"),
                        showXPerPage: clientApp.i18n.texts.get("Template.Widget.Crud.PerPage")
@@ -29,7 +29,8 @@ define([
 
                    this.bind(0, this.options.pageSize, 0);
 
-               }, destroy: function () {
+               },
+               destroy: function () {
 
                    this._super();
                },
@@ -70,7 +71,7 @@ define([
                },
                _getNPagesInPaginator: function (nPagesInPaginators) {
 
-                   var defaultNPages = 4;
+                   var defaultNPages = 2;
 
                    if (isNaN(nPagesInPaginators)) {
                        return defaultNPages;
@@ -84,7 +85,7 @@ define([
                        }
                    }
                },
-               _buildPagination: function (Page, PageSize, TotalRows, TotalPages) {
+               _buildPaginationNumbers: function (Page, PageSize, TotalRows, TotalPages) {
 
                    var self = this;
 
@@ -122,6 +123,94 @@ define([
                    }
 
                },
+               _buildPaginationTotals: function ($parent) {
+                   jQuery($parent).append("<div class='ui-gridPagination-totals ui-state-default'></div>");
+                   return jQuery($parent).find('div.ui-gridPagination-totals:first');
+               },
+               _buildPaginationTotalsShowing: function ($parent, Page, PageSize, TotalRows) {
+
+                   var self = this;
+                   
+                   var $totalRows = function () {
+
+                       var str = "<div class='ui-gridPagination-totalRows'>" + self.options.texts.showingData + "</div>";
+
+                       return str.format(((Page * PageSize) + 1), (((Page + 1) * PageSize)), TotalRows);
+
+                   }();
+
+                   $parent.append($totalRows);
+
+                   return jQuery($parent).find('div.ui-gridPagination-totalRows:first');
+               },
+               _buildPaginationSizePicker: function ($parent, PageSize) {
+
+                   var self = this;
+
+                   $parent
+                           .append("<div class='ui-gridPagination-pageSizePicker'><select></select> " + self.options.texts.showXPerPage + "</div>"
+                               .format(PageSize));
+
+                   var strOptions = '';
+
+                   for (var iPageSize = 10; iPageSize < 60; (iPageSize += 10)) {
+                       strOptions += "<option value='{0}'>{0}</option>".format(iPageSize);
+                   }
+
+
+                   var $select = $parent
+                                   .find('div.ui-gridPagination-pageSizePicker')
+                                       .find('select');
+
+                   $select.append(strOptions);
+
+                   if ($select.find('option[value="{0}"]'.format(PageSize)).length === 0) {
+                       $select.prepend('<option value="{0}">{0}</option>'.format(PageSize));
+                   }
+
+                   $select
+                       .val(PageSize)
+                       .change(function () {
+                           self._onChange(0);
+                       });
+
+                   return $select;
+               },
+               _buildPaginationTotalsVisibility: function ($totalsBox, $totalRowsShowing, $totalPageSizePicker) {
+
+                   if ((this.options.totalRowsShow === false) && (this.options.pageSizeShow === false)) {
+
+                       $totalsBox
+                        .hide()
+                        .parents('div.{0}-{1}:first'.format(this.namespace, this.widgetName))
+                            .addClass('ui-helper-hidden');
+                   }
+                   else {
+                       if (this.options.totalRowsShow === false) {
+                           jQuery($totalRowsShowing).hide();
+                       }
+
+                       if (this.options.pageSizeShow === false) {
+                           jQuery($totalPageSizePicker).hide();
+                       }
+                   }
+
+               },
+               _buildPagination: function (Page, PageSize, TotalRows, TotalPages) {
+
+                   if (this.options.paginationShow === true) {
+                       this._buildPaginationNumbers(Page, PageSize, TotalRows, TotalPages);
+                   }
+
+
+                   var $totalsBox = this._buildPaginationTotals(jQuery(this.element));
+                   var $totalRowsShowing = this._buildPaginationTotalsShowing($totalsBox, Page, PageSize, TotalRows);
+                   var $totalPageSizePicker = this._buildPaginationSizePicker($totalsBox, PageSize);
+
+                   $totalsBox.append('<div class="ui-helper-clearfix" />');
+
+                   this._buildPaginationTotalsVisibility($totalsBox, $totalRowsShowing, $totalPageSizePicker);
+               },
                bind: function (pageIndex, pageSize, totalRows) {
 
                    var self = this;
@@ -138,92 +227,12 @@ define([
                    var TotalPages = ((totalRows / pageSize) | 0) + (((totalRows % pageSize) === 0) ? 0 : 1);
 
 
-                   if (this.options.paginationShow === true) {
-
-                       self._buildPagination(Page, PageSize, TotalRows, TotalPages);
-                   }
-
-
-
-
-
-
-
-                   // Building totals
-
-                   var $totalsBox = null;
-
-                   jQuery(self.element)
-                       .append("<div class='ui-gridPagination-totals ui-state-default'></div>")
-                       .find('div.ui-gridPagination-totals:first')
-                       .each(function () {
-                           $totalsBox = jQuery(this);
-                       });
-
-
-                   //Showing results begin...
-
-                   $totalsBox
-                           .append(function () {
-
-                               var str = "<div class='ui-gridPagination-totalRows'>" + self.options.texts.showingData + "</div>";
-
-                               return str.format(((Page * PageSize) + 1), (((Page + 1) * PageSize)), TotalRows);
-
-                           });
-
-
-
-                   //Showing pagesize begin...
-                   $totalsBox
-                           .append("<div class='ui-gridPagination-pageSizePicker'><select></select> " + self.options.texts.showXPerPage + "</div>"
-                               .format(PageSize));
-
-
-
-                   var strOptions = '';
-
-                   for (var iPageSize = 10; iPageSize < 60; (iPageSize += 10)) {
-                       strOptions += "<option value='{0}'>{0}</option>".format(iPageSize);
-                   }
-
-
-                   var $select = $totalsBox
-                                   .find('div.ui-gridPagination-pageSizePicker')
-                                       .find('select');
-
-                   $select.append(strOptions);
-
-                   if ($select.find('option[value="{0}"]'.format(PageSize)).length === 0) {
-                       $select.prepend('<option value="{0}">{0}</option>'.format(PageSize));
-                   }
-
-                   $select
-                       .val(PageSize)
-                       .change(function () {
-                           self._onChange(0);
-                       });
-
-                   $totalsBox.append('<div class="ui-helper-clearfix" />');
-
-                   if ((this.options.totalRowsShow === false) && (this.options.pageSizeShow === false)) {
-                       jQuery(this.element)
-                           .find('div.ui-gridPagination-totals:first')
-                               .hide()
-                           .parents('div.{0}-{1}:first'.format(this.namespace, this.widgetName))
-                               .addClass('ui-helper-hidden');
+                   if (this.options.infinteScrolling === true) {
 
                    }
                    else {
-                       if (this.options.totalRowsShow === false) {
-                           jQuery(this.element).find('div.ui-gridPagination-totalRows:first').hide();
-                       }
-
-                       if (this.options.pageSizeShow === false) {
-                           jQuery(this.element).find('div.ui-gridPagination-pageSizePicker:first').hide();
-                       }
+                       this._buildPagination(Page, PageSize, totalRows, TotalPages);
                    }
-
                }
            });
 
