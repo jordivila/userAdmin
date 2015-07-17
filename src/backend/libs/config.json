@@ -28,7 +28,7 @@
         "supportEmailAddress": "supportaccount@fakedomainname.com"
     },
     "clientApp": {
-        "preCompile": false,
+        "usePreCompiled": false,
         "cache": {
             "maxAgeDefault": 86400000
         },

@@ -103,6 +103,7 @@
             files: ['gruntfile.js',
                     'server.js',
                     'src/**/*.js',
+                    'src/**/*.json',
                     'src/test/qunit/**/*.js',
                     'src/test/mocha/**/*.js',
 
@@ -501,7 +502,7 @@
 
             var config = grunt.file.readJSON('src/backend/libs/config.json');
 
-            if (config.clientApp.preCompile === true)
+            if (config.clientApp.usePreCompiled === true)
             {
                 tasks2Run.push('requirejs');
             }

@@ -30,11 +30,6 @@
         UserValidator.validatePasswordStrength(req, newPassword, function (err, resultValidation) {
             if (err) return cb(err);
 
-
-            console.log(new ErrorHandledModel(i18n.__("AccountResources.NewPasswordConfirmError")).toDataResult());
-
-
-
             if (newPassword != confirmNewPassword)
                 return cb(new ErrorHandledModel(i18n.__("AccountResources.NewPasswordConfirmError")));
 

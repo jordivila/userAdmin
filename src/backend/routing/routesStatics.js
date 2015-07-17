@@ -18,10 +18,10 @@
 
         var isTest = config.get('IsTestEnv');
         var cacheMaxAge = (!isTest) ? config.get('clientApp:cachemaxAgeDefault') : 0;
-        var preCompile = config.get('clientApp:preCompile');
+        var usePreCompiled = config.get('clientApp:usePreCompiled');
 
 
-        if (preCompile === false) {
+        if (usePreCompiled === false) {
 
             app.use('/scripts', express.static(app.get('root') + 'scripts', {
                 maxAge: cacheMaxAge
