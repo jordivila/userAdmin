@@ -152,9 +152,6 @@ function ($, jqUI, clientApp) {
                 },
                 change: function (e, filter) {
                     self.options.gridFilterObject = filter;
-
-                    console.log(self.options.gridPagerInit().pageSize);
-
                     self.errorHide();
                     jQuery(self.options.gridDOMId).crudGrid('emptyData');
                     self._search();

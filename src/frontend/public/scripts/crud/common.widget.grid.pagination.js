@@ -33,6 +33,7 @@ define([
                    this._super();
 
                    jQuery(window).data('infiniteScrollingEventOk', false);
+                   jQuery(window).unbind('scroll');
                },
                _onChange: function (pageIndex, pageSize) {
                    pageSize = pageSize || parseInt(jQuery(this.element).find('div.ui-gridPagination-pageSizePicker:first').find('select:first').val());
@@ -219,10 +220,7 @@ define([
                    var bindScroll = function () {
                        jQuery(window).scroll(function () {
                            if (jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
-
                                self._onChange(Page + 1, PageSize);
-
-                               console.log("Paginaaaaaaa->{0}----{1}".format(Page + 1, PageSize));
                            }
                        });
                    };
@@ -245,14 +243,7 @@ define([
 
                    jQuery(self.element).empty();
 
-                   console.log("On pre binding");
-                   console.log(arguments);
-
                    pageSize = pageSize || this.options.pageSize;
-
-                   console.log("On binding");
-                   console.log(arguments);
-
 
                    var Page = parseInt(pageIndex);
                    var PageSize = parseInt(pageSize);
