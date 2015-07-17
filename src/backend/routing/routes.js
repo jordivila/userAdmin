@@ -7,8 +7,8 @@
     var i18n = require('i18n-2');
     var util = require('../libs/commonFunctions');
     var utilsNode = require('util');
-    var DataResult = require('../models/dataResult');
-    var ErrorHandled = require('../models/errorHandled.js');
+    var DataResult = require('../../crossLayer/models/dataResult');
+    var ErrorHandled = require('../../crossLayer/models/errorHandled');
     var testsController = require('../controllers/tests');
     var LanguagesController = require('../controllers/languages');
     var CurrenciesController = require('../controllers/currencies');

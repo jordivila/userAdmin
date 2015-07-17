@@ -27,8 +27,6 @@ define([
 
                    this._super();
 
-                   //this.bind(0, this.options.pageSize, 0);
-
                },
                destroy: function () {
 
@@ -37,7 +35,6 @@ define([
                    jQuery(window).data('infiniteScrollingEventOk', false);
                },
                _onChange: function (pageIndex, pageSize) {
-
                    pageSize = pageSize || parseInt(jQuery(this.element).find('div.ui-gridPagination-pageSizePicker:first').find('select:first').val());
 
                    this._trigger('change', null,
@@ -219,22 +216,26 @@ define([
 
                    var self = this;
 
-
-                   if (jQuery(window).data('infiniteScrollingEventOk') !== true)
-                   {
-                       jQuery(window).data('infiniteScrollingEventOk', true);
-
-
-
+                   var bindScroll = function () {
                        jQuery(window).scroll(function () {
                            if (jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
 
-                               //self._onChange(Page + 1, PageSize);
+                               self._onChange(Page + 1, PageSize);
 
                                console.log("Paginaaaaaaa->{0}----{1}".format(Page + 1, PageSize));
                            }
                        });
+                   };
 
+                   if (jQuery(window).data('infiniteScrollingEventOk') !== true) {
+                       jQuery(window).data('infiniteScrollingEventOk', true);
+                       bindScroll();
+                   }
+                   else {
+                       jQuery(window).unbind('scroll');
+                       if ((Page * PageSize) < TotalRows) {
+                           bindScroll();
+                       }
                    }
 
                },
@@ -244,14 +245,19 @@ define([
 
                    jQuery(self.element).empty();
 
+                   console.log("On pre binding");
+                   console.log(arguments);
+
                    pageSize = pageSize || this.options.pageSize;
+
+                   console.log("On binding");
+                   console.log(arguments);
+
 
                    var Page = parseInt(pageIndex);
                    var PageSize = parseInt(pageSize);
                    var TotalRows = parseInt(totalRows);
                    var TotalPages = ((totalRows / pageSize) | 0) + (((totalRows % pageSize) === 0) ? 0 : 1);
-
-
 
                    if (this.options.infiniteScrolling === true) {
                        this._buildInfiniteScroll(Page, PageSize, totalRows, TotalPages);

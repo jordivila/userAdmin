@@ -11,9 +11,15 @@ define([
            {
                options: {
                    value: null,
+                   text: null
                },
                _create: function () {
                    this._super();
+
+                   if (this.options.text === null)
+                   {
+                       this.options.text = clientApp.i18n.texts.get("Template.Widget.ModelDate.clickToPickDate");
+                   }
                },
                _init: function () {
 
@@ -36,8 +42,6 @@ define([
                                }
                            });
 
-
-
                        if (jQuery(this.element).attr('data-isWrapped') === undefined) {
                            jQuery(this.element).wrap('<div class="ui-widgetModelItemDate ui-helper-clearfix"></div>')
                                                .parents('div.ui-widgetModelItemDate:first')
@@ -45,7 +49,7 @@ define([
                                                .find('div.ui-state-error')
                                                    .hide()
                                                .end()
-                                               .append('<div class="ui-widgetModelItemDate-text"><a href="javascript:void(0);">' + clientApp.i18n.texts.get("Template.Widget.ModelDate.clickToPickDate") + '</a></div>')
+                                               .append('<div class="ui-widgetModelItemDate-text"><a href="javascript:void(0);">' + self.options.text + '</a></div>')
 
                            //.append('<div class="ui-state-error"><span class="ui-icon ui-icon-circle-close"></span></div>')
                            ;

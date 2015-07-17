@@ -7,7 +7,7 @@
 
 
     var validator = require('validator');
-    var ErrorHandled = require('../models/errorHandled');
+    var ErrorHandled = require('../../crossLayer/models/errorHandled');
 
     function validatePasswordStrength(req, password, cb) {
 

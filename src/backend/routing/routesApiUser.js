@@ -156,6 +156,10 @@
                                                 text: "Pagination config"
                                             },
                                             {
+                                                url: "/crud/crudGridPaginationLazyLoading/",
+                                                text: "Lazy loading pagination"
+                                            },
+                                            {
                                                 url: "/crud/crudScrollable/",
                                                 text: "Scrollable"
                                             },

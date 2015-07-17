@@ -97,7 +97,7 @@ function ($, jqUI, clientApp, wCrud, productAjax, productFormModelGet, productGr
                              .end()
                              .find('div[data-fieldItem="fechaHasta"]').html(dataItem.fechaHasta !== null ? Globalize.formatDate(dataItem.fechaHasta) : '')
                              .end();
-
+                      
                  });
 
             },

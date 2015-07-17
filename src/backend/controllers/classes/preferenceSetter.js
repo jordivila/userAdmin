@@ -6,7 +6,7 @@
 
     var util = require('../../libs/commonFunctions');
     var config = require('../../libs/config');
-    var DataResultModel = require('../../models/dataResult');
+    var DataResultModel = require('../../../crossLayer/models/dataResult');
     var GenericViewController = require('./genericView');
 
     function PreferenceSetter(cookieName, defaultValue) {

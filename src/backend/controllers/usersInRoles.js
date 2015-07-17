@@ -6,9 +6,9 @@
 
     var log = require('../libs/log')(module);
     var validator = require('validator');
-    var ErrorHandledModel = require('../models/errorHandled');
+    var ErrorHandledModel = require('../../crossLayer/models/errorHandled');
     var UsersInRoleModel = require('../models/usersInRoles');
-    var DataResultModel = require('../models/dataResult');
+    var DataResultModel = require('../../crossLayer/models/dataResult');
     var rolesController = require('./usersRoles');
     var usersController = require('./users');
 

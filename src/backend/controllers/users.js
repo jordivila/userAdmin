@@ -14,8 +14,8 @@
     var util = require('util');
     var validator = require('validator');
     var UserModel = require('../models/users');
-    var DataResultModel = require('../models/dataResult');
-    var ErrorHandledModel = require('../models/errorHandled');
+    var DataResultModel = require('../../crossLayer/models/dataResult');
+    var ErrorHandledModel = require('../../crossLayer/models/errorHandled');
     var UserValidator = require('../models/users.validate.client');
     var usersInRolesController = require('./usersInRoles');
     var mailingController = require('./mailing');
@@ -29,6 +29,11 @@
 
         UserValidator.validatePasswordStrength(req, newPassword, function (err, resultValidation) {
             if (err) return cb(err);
+
+
+            console.log(new ErrorHandledModel(i18n.__("AccountResources.NewPasswordConfirmError")).toDataResult());
+
+
 
             if (newPassword != confirmNewPassword)
                 return cb(new ErrorHandledModel(i18n.__("AccountResources.NewPasswordConfirmError")));

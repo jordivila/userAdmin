@@ -494,7 +494,17 @@
 
             requireConfig('none', true, true);
 
-            tasks2Run.push('jshint:files', 'i18nCheck', 'globCldrData', 'bump', 'clean', 'sortJSON', 'requirejs', 'concat' /*,'cssmin', 'uglify'*/);
+            tasks2Run.push('jshint:files', 'i18nCheck', 'globCldrData', 'bump', 'clean', 'sortJSON', 'concat' /*,'cssmin', 'uglify'*/);
+
+            
+
+
+            var config = grunt.file.readJSON('src/backend/libs/config.json');
+
+            if (config.clientApp.preCompile === true)
+            {
+                tasks2Run.push('requirejs');
+            }
         }
 
         grunt.task.run(tasks2Run);

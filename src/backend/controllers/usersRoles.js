@@ -11,8 +11,8 @@
     var validator = require('validator');
     var RoleModel = require('../models/usersRoles');
     var RoleValidator = require('../models/usersRoles.validate.client');
-    var DataResultModel = require('../models/dataResult');
-    var ErrorHandledModel = require('../models/errorHandled');
+    var DataResultModel = require('../../crossLayer/models/dataResult');
+    var ErrorHandledModel = require('../../crossLayer/models/errorHandled');
 
     function create(req, i18n, cb) {
 

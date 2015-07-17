@@ -82,7 +82,7 @@
                        jQuery(this.element)
                            .data('lastBoundItem', dataItem)
                            .find('div.ui-crudForm-modelBinding:first')
-                               .widgetModel('bindValue', dataItem.EditData)
+                               .widgetModel('bindValue', dataItem.editData)
                            .end();
 
                        this.options.formBind(this, dataItem);
@@ -124,20 +124,24 @@
                        jQuery.when(self.options.formSaveMethod(viewModel))
                        .then(
                                function (result, statusText, jqXHR) {
-                                   if (result.IsValid) {
-                                       self._trigger('messagedisplayAutoHide', null, result.Message, 50);
-                                       self._trigger('change', null, result.Data);
-                                       self.bind(result.Data);
+
+
+                                   console.log(result);
+
+                                   if (result.isValid) {
+                                       self._trigger('messagedisplayAutoHide', null, result.messages[0], 50);
+                                       self._trigger('change', null, result.data);
+                                       self.bind(result.data);
                                        dfd.resolve();
                                    }
                                    else {
-                                       if (result.Data) {
+                                       if (result.data) {
 
                                            jQuery(self.element)
                                                .find('div.ui-crudForm-modelBinding:first')
-                                               .widgetModel('bindErrors', result.Data.ModelState);
+                                               .widgetModel('bindErrors', result.data.ModelState);
                                        }
-                                       dfd.reject(result.Message);
+                                       dfd.reject(result.messages[0]);
                                    }
                                },
                                function (jqXHR, textStatus, errorThrown) {
@@ -152,7 +156,7 @@
                _formValueGet: function () {
                    var dataItem = jQuery(this.element).data('lastBoundItem');
                    var formData = jQuery(this.element).find('div.ui-crudForm-modelBinding:first').widgetModel('valAsObject');
-                   var result = jQuery.extend({}, dataItem, { FormData: formData });
+                   var result = jQuery.extend({}, dataItem, { formData: formData });
                    return this.options.formValueGet(this, result);
                }
 

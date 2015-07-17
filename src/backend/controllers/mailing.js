@@ -9,8 +9,8 @@
 
 
     var util = require('util');
-    var DataResultModel = require('../models/dataResult');
-    var ErrorHandledModel = require('../models/errorHandled');
+    var DataResultModel = require('../../crossLayer/models/dataResult');
+    var ErrorHandledModel = require('../../crossLayer/models/errorHandled');
     var MailMessage = require('../models/mailMessage');
     var config = require('../libs/config');
 

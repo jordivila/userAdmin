@@ -87,12 +87,14 @@
                     pagerConfig.pagerBottom.infiniteScrolling = true;
                 }
 
+                pagerConfig = jQuery.extend({}, pagerOpts, pagerConfig);
+
                 jQuery(self.options.gridPagerDOMId)
                         .first()
-                            .gridPagination(jQuery.extend({}, pagerOpts, pagerConfig.pagerTop))
+                            .gridPagination(jQuery.extend({}, pagerConfig, pagerConfig.pagerTop))
                         .end()
                         .last()
-                            .gridPagination(jQuery.extend({}, pagerOpts, pagerConfig.pagerBottom))
+                            .gridPagination(jQuery.extend({}, pagerConfig, pagerConfig.pagerBottom))
                         .end();
 
             },
@@ -101,8 +103,11 @@
                 this._super();
 
             },
+            emptyData: function () {
+                jQuery(this.options.gridBodyDOMId).empty();
+                this._buildEmptyDataRow();
+            },
             bind: function (data) {
-
                 try {
                     this._bindRows(data);
                     this._bindPagination(data);
@@ -178,15 +183,22 @@
 
                 var self = this;
 
-                jQuery(self.options.gridBodyDOMId).empty();
+                var pagerOptions = this.options.gridPagerInit();
 
-                if (data.Data.length > 0) {
+                if (data.data.length > 0) {
 
-                    for (var i = 0; i < data.Data.length; i++) {
-                        var dataItem = data.Data[i];
+                    if (pagerOptions.infiniteScrolling !== true) {
+                        jQuery(self.options.gridBodyDOMId).empty();
+                    }
+                    else {
+                        jQuery(self.options.gridBodyDOMId).find('div.ui-widgetGrid-emptyRow:first').remove();
+                    }
+
+                    for (var i = 0; i < data.data.length; i++) {
+                        var dataItem = data.data[i];
                         var $row = jQuery('<div class="ui-crudGrid-dataRow ui-widgetGrid-row ui-state-default {1}">{0}</div>'
                                     .format(self._gridRowTemplate(dataItem),
-                                            (i == (data.Data.length - 1) ? 'ui-crudGrid-row-last' : '')));
+                                            (i == (data.data.length - 1) ? 'ui-crudGrid-row-last' : '')));
 
                         for (var j = 0; j < this.options.gridModel.length; j++) {
 
@@ -203,17 +215,23 @@
                     }
                 }
                 else {
-                    var $emtpyRow = '<div class="ui-widgetGrid-emptyRow ui-widgetGrid-column  ui-state-active"><div class="ui-widgetGrid-column-content">{0}</div></div>'
-                                        .format(self.options.texts.emptyRowText);
 
-                    jQuery(self.options.gridBodyDOMId).append($emtpyRow);
+                    if (pagerOptions.infiniteScrolling !== true) {
+                        self._buildEmptyDataRow();
+                    }
+                    else {
+                        // Pager unbind scroll event automatically when no data is present based on Page*PageSize>TotalRows
+                    }
                 }
             },
             _bindPagination: function (data) {
+                jQuery(this.options.gridPagerDOMId).gridPagination('bind', data.page, data.pageSize, data.totalRows);
+            },
+            _buildEmptyDataRow: function () {
+                var $emtpyRow = '<div class="ui-widgetGrid-emptyRow ui-widgetGrid-column  ui-state-active"><div class="ui-widgetGrid-column-content">{0}</div></div>'
+                                    .format(this.options.texts.emptyRowText);
 
-                var self = this;
-
-                jQuery(self.options.gridPagerDOMId).gridPagination('bind', data.Page, data.PageSize, data.TotalRows);
+                jQuery(this.options.gridBodyDOMId).append($emtpyRow);
             }
         });
 

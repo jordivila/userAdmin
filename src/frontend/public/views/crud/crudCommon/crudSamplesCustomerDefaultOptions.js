@@ -33,7 +33,7 @@
                         displayName: clientApp.i18n.texts.get("Views.Crud.Name_BussinesName")
                     },
                     {
-                        key: "NumDocumento",
+                        key: "numDocumento",
                         displayName: clientApp.i18n.texts.get("Views.Crud.IDCard")
                     }
                 ],
@@ -90,7 +90,7 @@
                             input: { value: "" },
                         },
                         {
-                            id: "NumDocumento",
+                            id: "numDocumento",
                             displayName: clientApp.i18n.texts.get("Views.Crud.IDCard"),
                             input: { value: "" },
                         },

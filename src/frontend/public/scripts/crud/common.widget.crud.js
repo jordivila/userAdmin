@@ -37,7 +37,7 @@ function ($, jqUI, clientApp) {
             gridCustomOptions: {},
             gridSearchMethod: null,
             gridFilterInit: function (crudWidget, filterOptions) {
-                jQuery(crudWidget.options.gridFilterDOMId).crudFilter(jQuery.extend({}, filterOptions, { Model: crudWidget.options.filterModel }));
+                jQuery(crudWidget.options.gridFilterDOMId).crudFilter(jQuery.extend({}, filterOptions, { model: crudWidget.options.filterModel }));
             },
             gridModel: [],
             gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
@@ -109,8 +109,8 @@ function ($, jqUI, clientApp) {
                         }
                     },
                     paginated: function (e, pagination) {
-                        self.options.gridFilterObject.Page = pagination.pageIndex;
-                        self.options.gridFilterObject.PageSize = pagination.pageSize;
+                        self.options.gridFilterObject.page = pagination.pageIndex;
+                        self.options.gridFilterObject.pageSize = pagination.pageSize;
 
                         self.errorHide();
                         self._search();
@@ -128,23 +128,23 @@ function ($, jqUI, clientApp) {
 
 
 
-            var crudEmptyDataResult = {
-                Data: [],
-                IsValid: true,
-                Message: null,
-                Page: 0,
-                PageSize: self.options.gridPagerInit().pageSize,
-                SortAscending: false,
-                SortBy: "",
-                TotalRows: 0
-            };
+            //var crudEmptyDataResult = {
+            //    Data: [],
+            //    IsValid: true,
+            //    Message: null,
+            //    Page: 0,
+            //    PageSize: self.options.gridPagerInit().pageSize,
+            //    SortAscending: false,
+            //    SortBy: "",
+            //    TotalRows: 0
+            //};
 
             jQuery(this.options.gridDOMId).crudGrid(gridOptions);
-            jQuery(this.options.gridDOMId).crudGrid('bind', crudEmptyDataResult);
+            jQuery(this.options.gridDOMId).crudGrid('emptyData');
 
             this.options.gridFilterInit(self, {
-                Model: self.options.filterModel,
-                PageSize: self.options.gridPagerInit().pageSize,
+                model: self.options.filterModel,
+                pageSize: self.options.gridPagerInit().pageSize,
                 gridFilterVisibleAlways: self.options.gridFilterVisibleAlways,
                 filterButtonsInit: self.options.gridFilterButtonsInit,
                 errorDisplay: function (e, msg) {
@@ -152,7 +152,11 @@ function ($, jqUI, clientApp) {
                 },
                 change: function (e, filter) {
                     self.options.gridFilterObject = filter;
+
+                    console.log(self.options.gridPagerInit().pageSize);
+
                     self.errorHide();
+                    jQuery(self.options.gridDOMId).crudGrid('emptyData');
                     self._search();
                 },
                 cancel: function () {
@@ -344,12 +348,12 @@ function ($, jqUI, clientApp) {
                 jQuery.when(self.options.gridSearchMethod(self.options.gridFilterObject))
                     .then(
                         function (result, statusText, jqXHR) {
-                            if (result.IsValid) {
-                                jQuery(self.options.gridDOMId).crudGrid('bind', result.Data);
+                            if (result.isValid) {
+                                jQuery(self.options.gridDOMId).crudGrid('bind', result.data);
                                 dfd.resolve();
                             }
                             else {
-                                dfd.reject(result.Message);
+                                dfd.reject(result.messages[0]);
                             }
                         },
                         function (jqXHR, textStatus, errorThrown) {
@@ -393,13 +397,13 @@ function ($, jqUI, clientApp) {
                 jQuery.when(self.options.gridSearchForEditMethod(dataItem))
                         .then(
                             function (result, statusText, jqXHR) {
-                                if (result.IsValid) {
-                                    jQuery(self.options.formDOMId).crudForm('bind', result.Data);
+                                if (result.isValid) {
+                                    jQuery(self.options.formDOMId).crudForm('bind', result.data);
 
                                     dfd.resolve();
                                 }
                                 else {
-                                    dfd.reject(result.Message);
+                                    dfd.reject(result.messages[0]);
                                 }
                             },
                             function (jqXHR, textStatus, errorThrown) {

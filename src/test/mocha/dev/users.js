@@ -11,7 +11,7 @@
     var userController = require(pathToSrc + 'backend/controllers/users');
     var roleController = require(pathToSrc + 'backend/controllers/usersRoles');
     var authController = require(pathToSrc + 'backend/controllers/auth');
-    var ErrorHandled = require(pathToSrc + 'backend/models/errorHandled');
+    var ErrorHandled = require(pathToSrc + 'crossLayer/models/errorHandled');
     
     
     describe('User\'s account', function () {

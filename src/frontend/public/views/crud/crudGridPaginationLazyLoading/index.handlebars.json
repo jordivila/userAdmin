@@ -1,0 +1,4 @@
+{
+    "ViewEntryPoint": "./index.js",
+    "Title":  "Views.Crud.CrudPaginationLazyLoading.Title"
+}

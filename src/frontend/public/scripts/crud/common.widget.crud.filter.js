@@ -10,10 +10,10 @@
            jQuery.widget("ui.crudFilter", jQuery.ui.crudBase,
            {
                options: {
-                   Page: 0,
-                   PageSize: 10,
-                   SortBy: "",
-                   SortAscending: false,
+                   page: 0,
+                   pageSize: 10,
+                   sortBy: "",
+                   sortAscending: false,
                    filterButtonsInit: function (self, defaultButtons) {
                        return defaultButtons;
                    },
@@ -29,7 +29,7 @@
                    this._super();
 
                    jQuery(this.element).widgetModel({
-                       modelItems: this.options.Model
+                       modelItems: this.options.model
                    });
 
                    jQuery(this.element)
@@ -103,11 +103,11 @@
 
                    var model = {
 
-                       Filter: jQuery(this.element).widgetModel('valAsObject'),
-                       Page: 0,
-                       PageSize: this.options.PageSize,
-                       SortBy: this.options.SortBy,
-                       SortAscending: this.options.SortAscending
+                       filter: jQuery(this.element).widgetModel('valAsObject'),
+                       page: 0,
+                       pageSize: this.options.pageSize,
+                       sortBy: this.options.sortBy,
+                       sortAscending: this.options.sortAscending
                    };
 
                    return model;

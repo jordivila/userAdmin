@@ -87,6 +87,8 @@
     "Views.Crud.CrudFormExtended.Title": "Crud - Crud Form extended widget",
     "Views.Crud.CrudFormSimple.Title": "Crud - Basic form",
     "Views.Crud.CrudPagination.Title": "Crud widget - Grid pagination config",
+    "Views.Crud.CrudPaginationLazyLoading.Description": " Grid view infinite scroll pagination (or lazy loading or endless scrolling or autopager or endless pages)",
+    "Views.Crud.CrudPaginationLazyLoading.Title": "Crud widget - infinite scroll",
     "Views.Crud.CrudScrollable.Title": "Crud widget - Grid scrollable",
     "Views.Crud.CrudSearch.Title": "Crud widget - Grid search & paginate",
     "Views.Crud.CrudSearchDirect.Title": "Crud widget - Grid search filter on top",
