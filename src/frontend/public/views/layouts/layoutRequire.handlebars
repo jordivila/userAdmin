@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="viewport" content="initial-scale=1.0" />
-    <title>{{Title}}</title>
+    <title>{{title}}</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <style type="text/css">
         .ui-helper-hidden {
@@ -52,7 +52,7 @@
             <div class="ui-helper-clearfix"></div>
 
             <div class="ui-site-title ui-widget-header">
-                <h1>{{Title}}</h1>
+                <h1>{{title}}</h1>
             </div>
 
             <!--Breadcrumb begin-->
@@ -99,7 +99,7 @@
             crossLayer: {{{ jsonHelper  crossLayer }}},
             package: {{{ jsonHelper  package }}} ,
             globalization : {{{ jsonHelper globalization }}},
-            viewEntryPoint : {{#if ViewEntryPoint}} {{{ jsonHelper ViewEntryPoint }}} {{else}} undefined  {{/if}},
+            viewEntryPoint : {{#if viewEntryPoint}} {{{ jsonHelper viewEntryPoint }}} {{else}} undefined  {{/if}},
             domIds:{
                 panelMain: '#panelMain',
                 panelMenu: '#panelMenu',

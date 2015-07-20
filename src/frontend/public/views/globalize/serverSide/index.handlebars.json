@@ -1,7 +1,7 @@
 {
-    "Title": "Views.Globalize.ServerSide.Title",
+    "title": "Views.Globalize.ServerSide.Title",
     "cssFiles": [
 
     ],
-    "ViewEntryPoint": null
+    "viewEntryPoint": null
 }

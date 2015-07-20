@@ -17,7 +17,7 @@
     Base.prototype.setViewModelBase = function (req) {
 
         var m = {
-            Title: '',
+            title: '',
             domainName: config.get('domainInfo:domainName'),
             "package": {
                 name: pkg.name,

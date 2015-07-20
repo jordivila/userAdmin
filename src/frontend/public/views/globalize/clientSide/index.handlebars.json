@@ -1,4 +1,4 @@
 {
-    "Title": "Views.Globalize.ClientSide.Title",
-    "ViewEntryPoint": "./index.js"
+    "title": "Views.Globalize.ClientSide.Title",
+    "viewEntryPoint": "./index.js"
 }

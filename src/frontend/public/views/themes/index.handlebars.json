@@ -1,4 +1,4 @@
 {
-    "Title": "GeneralTexts.SiteThemes",
-    "ViewEntryPoint": "./index.js"
+    "title": "GeneralTexts.SiteThemes",
+    "viewEntryPoint": "./index.js"
 }

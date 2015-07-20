@@ -212,10 +212,10 @@ function ($, jqUI, Handlebars, hist, nav, P, crossLayer, clientApp) {
                     var templateContext = {};
                     var handlebarTemplate = template(jQuery.extend({}, model, templateContext));
 
-                    if (model.Title) {
+                    if (model.title) {
                         jQuery('body')
                             .find('h1:first')
-                                .html(model.Title);
+                                .html(model.title);
                     }
 
                     $siteContent.html(handlebarTemplate);

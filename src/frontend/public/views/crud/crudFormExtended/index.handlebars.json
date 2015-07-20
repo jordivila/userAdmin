@@ -1,4 +1,4 @@
 {
-    "ViewEntryPoint": "./index.js",
-    "Title":  "Views.Crud.CrudFormExtended.Title"
+    "viewEntryPoint": "./index.js",
+    "title":  "Views.Crud.CrudFormExtended.Title"
 }

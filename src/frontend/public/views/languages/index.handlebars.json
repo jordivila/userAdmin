@@ -1,4 +1,4 @@
 {
-    "Title": "GeneralTexts.Languages",
-    "ViewEntryPoint": "./index.js"
+    "title": "GeneralTexts.Languages",
+    "viewEntryPoint": "./index.js"
 }

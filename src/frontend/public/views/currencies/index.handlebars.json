@@ -1,4 +1,4 @@
 {
-    "Title": "GeneralTexts.Currencies",
-    "ViewEntryPoint": "./index.js"
+    "title": "GeneralTexts.Currencies",
+    "viewEntryPoint": "./index.js"
 }

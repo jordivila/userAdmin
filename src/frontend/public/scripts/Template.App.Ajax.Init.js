@@ -80,14 +80,14 @@ define([
                 else {
 
                     var model = data[1];
-                    var hasEntry = (model.ViewEntryPoint && model.ViewEntryPoint !== null);
+                    var hasEntry = (model.viewEntryPoint && model.viewEntryPoint !== null);
                     var viewEntryPointScript = null;
 
                     data.push(hasEntry);
 
                     if (hasEntry) {
 
-                        viewEntryPointScript = historyState.cleanUrl + model.ViewEntryPoint + "?_=" + (new Date()).getTime();
+                        viewEntryPointScript = historyState.cleanUrl + model.viewEntryPoint + "?_=" + (new Date()).getTime();
 
                         require(
                             /*

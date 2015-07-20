@@ -20,8 +20,8 @@
 
         req.viewModel = util.extend(req.viewModel, require(viewModelPath));
 
-        if (req.viewModel.Title) {
-            req.viewModel.Title = req.i18n.__(req.viewModel.Title);
+        if (req.viewModel.title) {
+            req.viewModel.title = req.i18n.__(req.viewModel.title);
         }
 
         req.viewInfo = {

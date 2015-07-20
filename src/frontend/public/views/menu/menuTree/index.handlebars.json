@@ -1,4 +1,4 @@
 {
-    "Title": "Views.Menu.MenuTree.Title",
-    "ViewEntryPoint": "./index.js"
+    "title": "Views.Menu.MenuTree.Title",
+    "viewEntryPoint": "./index.js"
 }

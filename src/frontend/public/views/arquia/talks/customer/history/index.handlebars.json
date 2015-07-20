@@ -1,4 +1,4 @@
 {
-    "Title": "Arquia talks",
-    "ViewEntryPoint": "./index.js"
+    "title": "Arquia talks",
+    "viewEntryPoint": "./index.js"
 }
