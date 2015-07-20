@@ -43,8 +43,9 @@
                 //"/public/views/home/home.css",
             ],
             //jsFiles: [
-                //"/public/views/home/home.js",
+            //"/public/views/home/home.js",
             //],
+            crossLayer: crossLayer
         };
 
         req.viewModel = m;

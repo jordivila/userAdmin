@@ -96,6 +96,7 @@
     <script>
 
         var globals = {
+            crossLayer: {{{ jsonHelper  crossLayer }}},
             package: {{{ jsonHelper  package }}} ,
             globalization : {{{ jsonHelper globalization }}},
             viewEntryPoint : {{#if ViewEntryPoint}} {{{ jsonHelper ViewEntryPoint }}} {{else}} undefined  {{/if}},
@@ -107,6 +108,6 @@
         };
 
     </script>
-    <script data-main="/public/scripts/Template.App.RequireJs.Init.js" src="/public/bower_components/requirejs/require.js"></script>
+    <script data-main="/public/scripts/Template.App.RequireJs.Init.js?{{crossLayer.queryParams.appVersion}}={{package.version}}" src="/public/bower_components/requirejs/require.js"></script>
 </body>
 </html>

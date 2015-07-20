@@ -3,7 +3,7 @@
 REQUIREJS CONFIG
 ****************************/
 requirejs.config({
-    urlArgs: "bust=" + globals.package.version,
+    urlArgs: globals.crossLayer.queryParams.appVersion + "=" + globals.package.version,
     waitSeconds: 0,
     baseUrl: "/public",
     paths: {
