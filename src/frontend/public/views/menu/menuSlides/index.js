@@ -1,10 +1,10 @@
 define(["jquery", "jqueryui", "scripts/Template.App.Init", "scripts/Template.App.Ajax.Init", "scripts/Template.Widget.Menu.slides"],
    function ($, jqUI, clientApp) {
 
-       clientApp.View = {
+       clientApp.view = {
            main: function () {
 
-               clientApp.ajax.UserMenu(function (err, data) {
+               clientApp.ajax.userMenu(function (err, data) {
 
                    if (err === null)
                    {

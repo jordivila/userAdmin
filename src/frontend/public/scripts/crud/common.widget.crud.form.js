@@ -139,7 +139,7 @@
 
                                            jQuery(self.element)
                                                .find('div.ui-crudForm-modelBinding:first')
-                                               .widgetModel('bindErrors', result.data.ModelState);
+                                               .widgetModel('bindErrors', result.data.modelState);
                                        }
                                        dfd.reject(result.messages[0]);
                                    }

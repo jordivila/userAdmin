@@ -4,7 +4,7 @@ define(["jquery", "jqueryui", "scripts/Template.Widget.Base"],
 
            jQuery.widget("ui.menuBase", jQuery.ui.widgetBase, {
                options: {
-                   IMenuModel: null
+                   iMenuModel: null
                },
                _create: function () {
 
@@ -54,7 +54,7 @@ define(["jquery", "jqueryui", "scripts/Template.Widget.Base"],
                                jQuery(this).children().last().addClass('ui-menuList-item-last');
                            });
 
-                   w._trigger('dataBound', null, { IMenuModel: w.options.IMenuModel });
+                   w._trigger('dataBound', null, { iMenuModel: w.options.iMenuModel });
 
                },
                _beforeSelected: function () {
@@ -73,11 +73,11 @@ define(["jquery", "jqueryui", "scripts/Template.Widget.Base"],
                    dfd.reject("{0}.{1}._build is an abstract method and should be imlpemented in child class".format(this.namespace, this.widgetName));
                    return dfd.promise();
                },
-               bind: function (IMenuModel) {
+               bind: function (iMenuModel) {
 
                    var self = this;
 
-                   /* // IMenuModel sample
+                   /* // iMenuModel sample
                    var k = [{
                        url: null,
                        text: "menu item 1",
@@ -92,7 +92,7 @@ define(["jquery", "jqueryui", "scripts/Template.Widget.Base"],
                    }];
                    */
 
-                   this.options.IMenuModel = IMenuModel;
+                   this.options.iMenuModel = iMenuModel;
                    this._build()
                        .progress(function (status) {
 

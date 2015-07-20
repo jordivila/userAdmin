@@ -151,7 +151,7 @@ function (clientApp, DataResult, DataResultPaginated) {
                      }
 
                      if (modelErrors.length > 0) {
-                         dataResult = new DataResult(false, clientApp.i18n.texts.get("Views.Crud.FormErrorsExist"), { ModelState: modelErrors });
+                         dataResult = new DataResult(false, clientApp.i18n.texts.get("Views.Crud.FormErrorsExist"), { modelState: modelErrors });
                      }
                      else {
 

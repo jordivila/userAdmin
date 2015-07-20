@@ -1,7 +1,7 @@
 ﻿define(["jquery", "jqueryui", "scripts/Template.App.Init", "scripts/Template.Widget.ItemPicker"],
    function ($, jqUI, clientApp) {
 
-       clientApp.View = {
+       clientApp.view = {
            main: function () {
 
                jQuery('div.ui-languageSelector:first').itemPicker({

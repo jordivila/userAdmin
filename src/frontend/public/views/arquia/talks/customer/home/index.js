@@ -6,7 +6,7 @@
 ],
 function ($, jqUI, clientApp, hist) {
 
-    clientApp.View = {
+    clientApp.view = {
         main: function () {
 
             jQuery('div.ui-arquia-talks-wellcome-container:first')

@@ -2,7 +2,7 @@
     "scripts/Template.App.Init",
     "./arquiaCrudFakeData.js",
 ],
-    function (clientApp, customerAjax) {
+    function (clientApp, crudAjaxOpts) {
 
         var crudCustomerDefaultOptions = function () {
 
@@ -17,17 +17,19 @@
                     //    $crudParent.customer('fireCustomEvent', dataItem);
                     //}
                 },
-                gridSearchMethod: customerAjax.ajax.customerSearch,
-                gridModel: [
-                    {
-                        key: "subject",
-                        displayName: clientApp.i18n.texts.get("Arquia.Talks.History.GridColumns.Subject")
-                    },
-                    {
-                        key: "dateLastMessage",
-                        displayName: clientApp.i18n.texts.get("Arquia.Talks.History.GridColumns.Date")
-                    }
-                ],
+                gridSearchMethod: crudAjaxOpts.ajax.gridSearch,
+                gridModel: function () {
+                    return [
+                        {
+                            key: "subject",
+                            displayName: clientApp.i18n.texts.get("Arquia.Talks.History.GridColumns.Subject")
+                        },
+                        {
+                            key: "dateLastMessage",
+                            displayName: clientApp.i18n.texts.get("Arquia.Talks.History.GridColumns.Date")
+                        }
+                    ];
+                }(),
                 gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
 
                     switch (columnName) {
@@ -44,7 +46,7 @@
                              .done(function (Globalize) {
                                  $cell.html(dataItem[columnName] !== null ? Globalize.formatDate(dataItem[columnName]) : '');
                              });
-                            
+
                             break;
                         default: break;
                     }
@@ -68,22 +70,38 @@
 
         var crudCustomerDefaultFormOptions = function () {
             return jQuery.extend({}, crudCustomerDefaultOptions(), {
-                gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
-                    switch (columnName) {
-                        case "nombre":
-                            $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
-                            $cell.find('a')
-                                .click(function () {
-                                    crudGridWidget._trigger('onEdit', null, dataItem);
-                                });
-                            break;
-                        default: break;
-                    }
-                },
-                gridSearchForEditMethod: customerAjax.ajax.customerSearchForEdit,
+                //gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
+                //    switch (columnName) {
+                //        case "nombre":
+                //            $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
+                //            $cell.find('a')
+                //                .click(function () {
+                //                    crudGridWidget._trigger('onEdit', null, dataItem);
+                //                });
+                //            break;
+                //        default: break;
+                //    }
+                //},
+                gridSearchForEditMethod: crudAjaxOpts.ajax.gridSearchForEdit,
 
                 formInit: function (crudWidget, $parent) {
-                    jQuery($parent).prepend('<h3 class="ui-state-default">' + clientApp.i18n.texts.get("Views.Crud.CustomerDetailInfo") + '</h3>');
+
+                    var tBasicInfo = '' +
+                        '<div class="ui-productCrud-form-searchOutput">' +
+                            '<h3 class="ui-state-default">' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.BasicInfo")) + '</h3>' +
+                            '<div data-fielditem="subject" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductNum")) + '"></div>' +
+                            '<div data-fielditem="productTypeDesc" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductTypeDescColumn")) + '"></div>' +
+                            '<div data-fielditem="nombre" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.Name_BussinesName")) + '"></div>' +
+                            '<div data-fielditem="fechaDesde" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DateFrom")) + '"></div>' +
+                            '<div data-fielditem="fechaHasta" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DateTo")) + '"></div>' +
+                        '</div>' +
+                        '<div class="ui-productCrud-form-type">' +
+                            '<h3 class="ui-state-default">' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DetailInfo")) + '</h3>' +
+                        '</div>';
+
+                    jQuery($parent).prepend(tBasicInfo);
+
+
                 },
                 formModel: function () {
                     return [
@@ -108,7 +126,7 @@
                     // automatic model binding is done
                     // you can perform customizations here
                 },
-                formSaveMethod: customerAjax.ajax.customerSave,
+                formSaveMethod: crudAjaxOpts.ajax.formSave,
                 formValueGet: function (self, currentValue) {
                     // automatic model value retriving is done
                     // you can perform value modifications here

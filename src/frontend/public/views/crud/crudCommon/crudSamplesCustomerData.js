@@ -103,7 +103,7 @@
                             false,
                             clientApp.i18n.texts.get("Views.Crud.ErrorExistsInForm"),
                             {
-                                ModelState: modelErrors
+                                modelState: modelErrors
                             });
                     }
                     else {

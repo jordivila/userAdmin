@@ -108,8 +108,8 @@ function ($, jqUI) {
             };
 
             var menuRender = function () {
-                for (var i = 0; i < self.options.IMenuModel.length; i++) {
-                    jQuery(self.element).append(menuItemRender(self.options.IMenuModel[i]));
+                for (var i = 0; i < self.options.iMenuModel.length; i++) {
+                    jQuery(self.element).append(menuItemRender(self.options.iMenuModel[i]));
                 }
 
                 dfd.resolve();

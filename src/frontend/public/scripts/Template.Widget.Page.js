@@ -84,7 +84,7 @@ function ($, jqUI, Handlebars, hist, nav, P, crossLayer, clientApp) {
 
             dfd.notify(self.options.texts.loadingI18n);
 
-            clientApp.ajax.I18nData(currentCulture, function (err, data) {
+            clientApp.ajax.i18nData(currentCulture, function (err, data) {
 
                 if (err !== null) {
                     console.error(err);
@@ -92,7 +92,7 @@ function ($, jqUI, Handlebars, hist, nav, P, crossLayer, clientApp) {
                 }
                 else {
 
-                    if (data.I18nDatepicker !== null) {
+                    if (data.i18nDatepicker !== null) {
                         jQuery.datepicker.setDefaults(jQuery.datepicker.regional[self.options.cultureDatePicker]);
                     }
 
@@ -191,7 +191,7 @@ function ($, jqUI, Handlebars, hist, nav, P, crossLayer, clientApp) {
 
             dfd.notify(self.options.texts.loadingTmpl);
 
-            clientApp.ajax.View(state, function (err, data) {
+            clientApp.ajax.view(state, function (err, data) {
 
                 if (err !== null) {
 
@@ -223,7 +223,7 @@ function ($, jqUI, Handlebars, hist, nav, P, crossLayer, clientApp) {
                     if (hasEntry) {
 
                         try {
-                            clientApp.View.main();
+                            clientApp.view.main();
                             dfd.resolve();
                         }
                         catch (e) {

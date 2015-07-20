@@ -33,7 +33,7 @@
             "maxAgeDefault": 86400000
         },
         "themes": {
-            "default": "flick"
+            "default": "ui-lightness"
         },
         "money": {
             "currencies": [ "USD", "EUR" ],

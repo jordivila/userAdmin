@@ -66,7 +66,7 @@ function (clientApp) {
                     if (globals.viewEntryPoint) {
                         require([globals.viewEntryPoint],
                             function (clientApp) {
-                                clientApp.View.main();
+                                clientApp.view.main();
                             },
                             function (errRequiring) {
                                 console.error(errRequiring);

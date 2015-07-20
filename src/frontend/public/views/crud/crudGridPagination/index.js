@@ -8,7 +8,7 @@
 ],
    function ($, jqUI, clientApp, crudModule, customerAjax, crudDefaultOptions) {
 
-       clientApp.View = {
+       clientApp.view = {
            main: function () {
 
                var crudOptions = jQuery.extend(

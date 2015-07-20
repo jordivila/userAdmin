@@ -6,7 +6,7 @@
 ],
 function ($, jqUI, clientApp) {
 
-    clientApp.View = {
+    clientApp.view = {
         main: function () {
 
             jQuery('div.ui-currencySelector:first').itemPicker({

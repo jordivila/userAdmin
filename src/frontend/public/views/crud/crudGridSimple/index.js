@@ -11,7 +11,7 @@
 ],
    function ($, jqUI, clientApp, crudModule, customerAjax, crudOptions) {
 
-       clientApp.View = {
+       clientApp.view = {
            main: function () {
 
                jQuery('body')

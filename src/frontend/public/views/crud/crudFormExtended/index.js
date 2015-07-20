@@ -16,7 +16,7 @@
 ],
    function ($, jqUI, clientApp) {
 
-       clientApp.View = {
+       clientApp.view = {
            main: function () {
 
                jQuery('body')

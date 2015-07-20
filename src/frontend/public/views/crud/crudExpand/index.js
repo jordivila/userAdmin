@@ -11,7 +11,7 @@ define([
 ],
    function ($, jqUI, clientApp, crudModule, customerAjax, crudDefaultOptions) {
 
-       clientApp.View = {
+       clientApp.view = {
            main: function () {
 
                var customerOptions = jQuery.extend({}, crudDefaultOptions.crudCustomerDefaultOptions(), {

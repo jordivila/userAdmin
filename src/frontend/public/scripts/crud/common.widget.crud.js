@@ -47,6 +47,7 @@ function ($, jqUI, clientApp) {
             gridButtonsGet: function (crudWidget, defaultButtons) {
                 return defaultButtons;
             },
+            gridButtonsVisible: true,
             gridPagerInit: function () {
                 // overrides default pagination mode
                 return {
@@ -293,13 +294,20 @@ function ($, jqUI, clientApp) {
 
             jQuery(self.options.gridDOMId).removeClass('ui-helper-hidden').fadeTo('slow', 1);
 
+
             if (self.options.gridFilterVisibleAlways) {
                 jQuery(self.options.gridFilterDOMId).removeClass('ui-helper-hidden').show();
                 jQuery(self.options.gridButtonsDOMId).hide();
             }
             else {
                 jQuery(self.options.gridFilterDOMId).addClass('ui-helper-hidden');
-                jQuery(self.options.gridButtonsDOMId).show();
+
+                if (this.options.gridButtonsVisible === true) {
+                    jQuery(self.options.gridButtonsDOMId).show();
+                }
+                else {
+                    jQuery(self.options.gridButtonsDOMId).hide();
+                }
             }
         },
         _actionSetFilter: function () {
@@ -448,6 +456,8 @@ function ($, jqUI, clientApp) {
         gridButtonsVisible: function (trueOrFalse) {
 
             var $dom = jQuery(this.element).find('div.ui-crudCrud-gridButtons');
+
+            this.options.gridButtonsVisible = trueOrFalse;
 
             if (trueOrFalse) {
                 $dom.show();

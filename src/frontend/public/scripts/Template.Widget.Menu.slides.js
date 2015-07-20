@@ -200,7 +200,7 @@ define([
 
                    var menuRender = function () {
 
-                       menuLevelRender(self.options.IMenuModel);
+                       menuLevelRender(self.options.iMenuModel);
 
                        dfd.resolve();
                    };
