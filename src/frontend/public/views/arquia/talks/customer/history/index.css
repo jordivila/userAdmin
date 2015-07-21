@@ -1,12 +1,12 @@
 ﻿.ui-arquia-talks-summary-container { background-image: none !important;padding:0em 0.5em 0 0.5em; }
-.ui-arquia-talks-summary-container .ui-arquia-talks-summary-userIcon {font-size:4em; padding:0.2em;float:left;margin:0 0.5em 0.5em 0;}
+.ui-arquia-talks-summary-container .ui-arquia-talks-summary-userIcon {font-size:4em; padding:0.2em;float:left;margin:0 0.5em 0.5em 0;cursor:pointer;}
 .ui-arquia-talks-summary-container ul.ui-arquia-talks-summary-list { border-width: 0; }
 
 
 
 
 .ui-arquia-talks-summary-crud {
-    width:100% !important;
+    width:99% !important;
     overflow:hidden;
     display:block !important;
 }

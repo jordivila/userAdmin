@@ -4,8 +4,9 @@
     'scripts/Template.App.Ajax.Init',
     'scripts/Template.App.I18n.Init',
     'scripts/Template.App.Globalize.Init',
+    'scripts/Template.App.TemplateHelper.Init',
 ],
-function (CacheControl, Utils, Ajax, I18NTexts, GlobalizeHelper) {
+function (CacheControl, Utils, Ajax, I18NTexts, GlobalizeHelper, TemplateHelper) {
 
     var clientApp = {};
 
@@ -18,6 +19,7 @@ function (CacheControl, Utils, Ajax, I18NTexts, GlobalizeHelper) {
     };
     clientApp.globalizer = new GlobalizeHelper();
     clientApp.widgets = {};
+    clientApp.template = new TemplateHelper();
     return clientApp;
 
 });

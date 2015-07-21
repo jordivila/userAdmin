@@ -114,6 +114,7 @@ function ($, jqUI, Handlebars, hist, nav, P, crossLayer, clientApp) {
                     self._trigger('initComplete', null, null);
                 },
                 selected: function (e, ui) {
+                    //clientApp.template.loadByUrl(ui.url);
                     History.pushState(null, null, ui.url);
                 }
             });

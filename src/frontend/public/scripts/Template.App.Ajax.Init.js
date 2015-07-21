@@ -57,8 +57,11 @@ define([
         };
 
         Ajax.prototype.viewModel = function (templUrl) {
+
+            var urlHelper = new UrlHelper(templUrl);
+
             return jQuery.ajax({
-                url: templUrl + 'index.handlebars.json',
+                url: "{0}index.handlebars.json{1}".format(urlHelper.pathname, urlHelper.search),
                 type: "GET",
                 dataType: "json",
                 cache: false,    // view model MUST NOT be chached
@@ -87,7 +90,20 @@ define([
 
                     if (hasEntry) {
 
-                        viewEntryPointScript = historyState.cleanUrl + model.viewEntryPoint + "?_=" + (new Date()).getTime();
+                        console.log("historyState");
+                        console.log(historyState);
+
+                        window.kk = historyState;
+
+                        var urlHelper = new UrlHelper(historyState.cleanUrl);
+                        
+
+                        //viewEntryPointScript = historyState.cleanUrl + model.viewEntryPoint + "?_=" + (new Date()).getTime();
+                        viewEntryPointScript = "{0}{1}{2}?_={3}".format(
+                            urlHelper.origin,  //-> "http://localhost:3001"
+                            urlHelper.pathname, //-> /some/url/route/"
+                            model.viewEntryPoint, //-> index.js
+                            (new Date()).getTime());    //-> 
 
                         require(
                             /*
