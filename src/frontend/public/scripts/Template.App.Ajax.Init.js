@@ -90,15 +90,8 @@ define([
 
                     if (hasEntry) {
 
-                        console.log("historyState");
-                        console.log(historyState);
-
-                        window.kk = historyState;
-
                         var urlHelper = new UrlHelper(historyState.cleanUrl);
                         
-
-                        //viewEntryPointScript = historyState.cleanUrl + model.viewEntryPoint + "?_=" + (new Date()).getTime();
                         viewEntryPointScript = "{0}{1}{2}?_={3}".format(
                             urlHelper.origin,  //-> "http://localhost:3001"
                             urlHelper.pathname, //-> /some/url/route/"

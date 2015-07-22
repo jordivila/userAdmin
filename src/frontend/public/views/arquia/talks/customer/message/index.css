@@ -1,28 +1,41 @@
-﻿.ui-arquia-talks-message-container { background-image: none !important; padding:0em 0.5em 0 0.5em;}
+﻿.ui-arquia-talks-message-container { position:relative;background-image: none !important; padding:0em 0.5em 0 0.5em;border:1px solid blue;}
 .ui-arquia-talks-message-container .ui-arquia-talks-message-userIcon {font-size:4em; padding:0.2em;float:left;margin:0 0.5em 0.5em 0;}
 .ui-arquia-talks-message-container .ui-arquia-talks-message-buttonsBox {text-align:center;margin:2em;}
-.ui-arquia-talks-message-container button {font-size:150% !important;margin:0 auto 0 auto;}
-.ui-arquia-talks-message-container input[type="text"] {width:95%;}
+/*.ui-arquia-talks-message-container button {font-size:150% !important;margin:0 auto 0 auto;}*/
+/*.ui-arquia-talks-message-container input[type="text"] {width:95%;}*/
 .ui-arquia-talks-message-container .ui-arquia-talks-boxError,
-.ui-arquia-talks-message-container .ui-arquia-talks-boxInfo {padding:0.5em;}
-
-
+.ui-arquia-talks-message-container .ui-arquia-talks-boxInfo {padding:0.5em;display:none !important;}
 
 .ui-arquia-talks-message-container .ui-widgetModel .ui-widgetModel-inputLabel {width:0 !important;}
 .ui-arquia-talks-message-container .ui-widgetModel .ui-widgetModel-inputValue {width:98% !important;}
 
 
+.ui-arquia-talks-message-container .ui-arquia-talks-message-window,
+.ui-arquia-talks-message-container .ui-arquia-talks-add-model {width:95%;bottom:0;position:absolute;}
+
+.ui-arquia-talks-message-container .ui-arquia-talks-message-window {border:1px solid red;overflow-y:scroll;margin: 0 0 6em 0;background-color:red;max-height:60%;}
+.ui-arquia-talks-message-container .ui-arquia-talks-message-window .ui-message {clear:both;margin:0.2em 0 0.2em 0;float:left;max-width:50%;padding:0.5em;}
+.ui-arquia-talks-message-container .ui-arquia-talks-message-window .ui-message .ui-message-who {font-size:1.1em;margin:0 0 0.5em 0;}
+.ui-arquia-talks-message-container .ui-arquia-talks-message-window .ui-message .ui-message-text {font-size:1em;margin:0 0 0 0;}
+.ui-arquia-talks-message-container .ui-arquia-talks-message-window .ui-message .ui-message-datePosted {font-size:0.7em;margin: 0.5em 0 0 0;float:right;clear:both;}
+.ui-arquia-talks-message-container .ui-arquia-talks-message-window .ui-message.ui-isCurrentUser {float:right;}
 
 
-.ui-arquia-talks-message-inputBox .block-compose button {padding:0.2em 0.5em 0.2em 0.5em; border:none;background:none;}
-.ui-arquia-talks-message-inputBox .block-compose {display: flex;align-items: flex-end;padding: 0.5em 0.5em 0.5em 0.5em ;max-width: 100%;}
-.ui-arquia-talks-message-inputBox .block-compose .input-container {border-radius: 0.5em;background-color: #fff;min-width: 0;}
-.ui-arquia-talks-message-inputBox .block-compose .input-container .input, 
-.ui-arquia-talks-message-inputBox .block-compose .input-container .input-container {
+
+
+
+
+.ui-arquia-talks-message-container .ui-arquia-talks-add-model{border:1px solid green;clear:both;background-color:green;}
+.ui-arquia-talks-message-container .ui-arquia-talks-add-model .ui-arquia-talks-message-inputBox .block-compose button {padding:0.2em 0.5em 0.2em 0.5em; border:none;background:none;}
+.ui-arquia-talks-message-container .ui-arquia-talks-add-model .ui-arquia-talks-message-inputBox .block-compose {display: flex;align-items: flex-end;padding: 0.5em 0.5em 0.5em 0.5em ;max-width: 100%;}
+.ui-arquia-talks-message-container .ui-arquia-talks-add-model .ui-arquia-talks-message-inputBox .block-compose .input-container {border-radius: 0.5em;background-color: #fff;min-width: 0;}
+.ui-arquia-talks-message-container .ui-arquia-talks-add-model .ui-arquia-talks-message-inputBox .block-compose .input-container .input, 
+.ui-arquia-talks-message-container .ui-arquia-talks-add-model .ui-arquia-talks-message-inputBox .block-compose .input-container .input-container {
     word-wrap: break-word;white-space: pre-wrap;padding:0;min-height: 1em;max-height: 3.6em;overflow-y: auto;overflow-x: hidden;
 }
 
-.ui-arquia-talks-message-inputBox .input, 
-.ui-arquia-talks-message-inputBox .block-compose .input-container {
+.ui-arquia-talks-message-container .ui-arquia-talks-add-model .ui-arquia-talks-message-inputBox .input, 
+.ui-arquia-talks-message-container .ui-arquia-talks-add-model .ui-arquia-talks-message-inputBox .block-compose .input-container {
     user-select: text;line-height: 1.2em;min-height: 1em;border: none;padding: 0.5em 0.5em 0.5em 0.5em;width: 100%;outline: none;
 }
+

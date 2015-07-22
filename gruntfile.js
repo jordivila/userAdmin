@@ -495,7 +495,7 @@
 
             requireConfig('none', true, true);
 
-            tasks2Run.push('jshint:files', 'i18nCheck', 'globCldrData', 'bump', 'clean', 'sortJSON', 'concat' /*,'cssmin', 'uglify'*/);
+            tasks2Run.push('jshint:files', 'clean', 'sortJSON', 'i18nCheck', 'globCldrData', 'bump', 'concat' /*,'cssmin', 'uglify'*/);
 
             
 

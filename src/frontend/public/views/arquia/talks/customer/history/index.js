@@ -40,7 +40,7 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, arquiaUrls) {
                                     $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
                                     $cell.find('a')
                                         .click(function () {
-                                            clientApp.template.loadByUrl('../' + arquiaUrls.message(dataItem.id));
+                                            clientApp.template.loadByUrl('../' + arquiaUrls.message(dataItem.idTalk));
                                         });
                                     break;
                                 case "dateLastMessage":
