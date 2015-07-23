@@ -118,6 +118,9 @@
                         //modelErrors.push({ key: "message", value: [clientApp.i18n.texts.get("Views.Crud.FieldRequired")] });
                     }
 
+
+
+
                     if (modelErrors.length > 0) {
                         dataResult = new DataResult(false, clientApp.i18n.texts.get("Views.Crud.ErrorExistsInForm"), { modelState: modelErrors });
                     }
@@ -126,7 +129,7 @@
                         var newId = crudAjaxOpts.ajax._fakeDataGridMessages.length;
 
                         crudAjaxOpts.ajax._fakeDataGridMessages.push({
-                            idMessage : newId,
+                            idMessage: newId,
                             idTalk: dataItem.idTalk,
                             idPeopleInvolved: 0, // this should be set at server runtime using authentication info
                             message: dataItem.message,
@@ -140,6 +143,7 @@
                         // return result
                         dataResult = new DataResult(true, clientApp.i18n.texts.get("Arquia.Talks.Subject.NewMessageAdded"), dataItem);
                     }
+
 
                     setTimeout(function () { dfd.resolve(dataResult); }, crudAjaxOpts.ajax._fakeDelay);
 

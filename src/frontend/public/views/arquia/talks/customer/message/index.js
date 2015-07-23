@@ -13,8 +13,6 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
         main: function () {
 
             var $mainBox = jQuery('div.ui-arquia-talks-message-container:first');
-            //var $errorsBox = jQuery('div.ui-arquia-talks-boxError:first');
-            //var $infoBox = jQuery('div.ui-arquia-talks-boxInfo:first');
             var $messageWindow = jQuery('div.ui-arquia-talks-message-window:first');
             var $messageModelWidget = function () {
 
@@ -72,6 +70,10 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                                                                             .find('div.ui-arquia-talks-message-inputBox:first')
                                                                                 .find('div[contenteditable]:first');
 
+
+                                                            console.log("parent");
+                                                            console.log(parent);
+
                                                             inputKeyPressInit(parent, $input);
                                                             sendButtonInit(parent, $input);
                                                         },
@@ -98,28 +100,6 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                                             });
 
             }();
-            //var showMessage = function ($box, message) {
-
-            //    $box.html(message)
-            //        .fadeOut(1, function () {
-            //            jQuery(this).removeClass('ui-helper-hidden').fadeIn();
-            //        });
-
-            //};
-            //var showDataResultOK = function (dataResult) {
-            //    dataResult.addMessage(clientApp.i18n.texts.get("Views.Layout.PleaseWaitYouAreBeingRedirected"));
-            //    showMessage($infoBox, dataResult.messages.join('<br/>'));
-            //    console.log(dataResult);
-            //    //clientApp.template.loadByUrl('../messages/' + dataResult.data.editData.id);
-            //};
-            //var showDataResultKO = function (dataResult) {
-            //    showMessage($errorsBox, dataResult.messages.join('<br/>'));
-            //    $messageModelWidget.widgetModel('bindErrors', dataResult.data.modelState);
-            //};
-            //var showUnhandled = function (e) {
-            //    console.error(e);
-            //    showMessage($errorsBox, clientApp.i18n.texts.get("Views.Layout.UnExpectedError"));
-            //};
             var messageSendButtonHide = function ($parent) {
 
                 $parent
@@ -142,12 +122,9 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                     .end();
 
             };
-
-
             var messageScrollMoveToBottom = function () {
                 $messageWindow[0].scrollTop = $messageWindow[0].scrollHeight;
             };
-
             var messageTemplate = function () {
                 return '<div class="ui-message ui-corner-all {0}">' +
                   '<h3 class="ui-message-who">{1}</h3>' +
@@ -156,79 +133,110 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                   '<div class="ui-helper-hidden" data-message-guid="{4}"></div>' +
                 '</div>';
             }();
-
-
             var messageSend = function ($parent, $input) {
-
-
-                // 1.- get data
+                // 1.- get form data
                 var formValue = $messageModelWidget.widgetModel('valAsObject');
-                formValue.idTalk = 0;
-                formValue.messageGuid = clientApp.utils.guid();
-                // 2.- clean input
-                $input.empty();
-                messageSendButtonHide($parent);
-                // 3.- add message to window
-                $messageWindow.append(messageTemplate.format(
-                    'ui-isCurrentUser ui-state-highlight',
-                    'Fermin',
-                    formValue.message,
-                    '<i class="fa fa-clock-o"></i><i class="fa fa-spin fa-refresh"></i>',
-                    formValue.messageGuid));
 
-                // 4.-update scroll
-                messageScrollMoveToBottom();
-                // 5.- send message and setInterval until messageSendData succeeds
+                if (formValue.message.trim() === '') {
+                    // do nothing
+                }
+                else {
+                    formValue.idTalk = 0;
+                    formValue.messageGuid = clientApp.utils.guid();
+                    // 2.- clean input
+                    $input.empty();
+                    messageSendButtonHide($parent);
+                    // 3.- add message to window
+                    $messageWindow.append(messageTemplate.format(
+                        'ui-isCurrentUser ui-state-highlight',
+                        'Fermin',
+                        formValue.message,
+                        '<i class="fa fa-clock-o"></i><i class="fa fa-spin fa-refresh"></i>',
+                        formValue.messageGuid));
+                    // 4.-update scroll
+                    messageScrollMoveToBottom();
+                    // 5.- set focus on input (some browsers like safari do not restore focus on $input after scroll)
+                    $input.focus();
+                    //6.- set message to be send
+                    if (formValue.message.trim().length > 0) {
+                        messagesPending.push([$parent, $input, formValue]);
+                    }
+                }
+            };
+            var messagesPending = [];
+            var messageSendData = function ($parent, $input, formValue, attemptCount) {
 
 
-                if (formValue.message.trim().length > 0) {
+                var $bubble = $messageWindow
+                                .find('div[data-message-guid="' + formValue.messageGuid + '"]:first')
+                                .parents('div.ui-message:first');
 
+
+                var attempMax = 10;
+                var attempTime = 500;//1024 * 5;
+                var attempt = attemptCount < attempMax;
+                var attemptIsLast = (attemptCount + 1 === attempMax);
+                var attemptTryNext = function () {
+
+                    setTimeout(function () {
+                        messageSendData($parent, $input, formValue, attemptCount + 1);
+                    }, attempTime);
+
+                };
+                var attempMarkAsError = function () {
+                    $bubble.addClass('ui-state-error');
+                };
+
+
+                console.log("attempt");
+                console.log(attemptCount + "----" + formValue.messageGuid);
+
+                if (attempt) {
                     P.all([crudAjaxOpts.ajax.messageAdd(formValue)]).nodeify(function (e, data) {
-
-
-                        /*
-                        actualizar el bubble de texto dependiendo del resultado
-                        */
-
-
                         if (e !== null) {
-                            //showUnhandled(e);
-                            console.error(e);
+                            if (attemptIsLast) {
+                                console.error(e);
+                                attempMarkAsError();
+                            }
+                            else {
+                                attemptTryNext();
+                            }
                         }
                         else {
-                            try {
-                                var dataResult = data[0];
 
-                                if (dataResult.isValid === true) {
+                            var dataResult = data[0];
 
-                                    $messageWindow
-                                        .find('div[data-message-guid="' + formValue.messageGuid + '"]:first')
-                                            .parents('div.ui-message:first')
-                                                .find('div.ui-message-datePosted:first')
-                                                    .html(new Date().toDateString())
-                                                .end()
-                                            .end()
-                                        .end();
+                            if (dataResult.isValid === true) {
 
-                                } else {
-                                    //showDataResultKO(dataResult);
-                                }
-                            } catch (eII) {
-                                console.error(eII);
-                                //showUnhandled(eII);
+                                $bubble
+                                    .find('div.ui-message-datePosted:first')
+                                    .html(new Date().toLocaleTimeString());
+
+                            } else {
+                                console.error(new Error(dataResult.message));
+                                attempMarkAsError();
                             }
+
+                            messageSendCheckQueue();
+
                         }
 
                     });
-
                 }
-
-
-
-
-
+                else {
+                    messageSendCheckQueue();
+                }
             };
-
+            var messageSendCheckQueue = function () {
+                if (messagesPending.length > 0) {
+                    var dataItem = messagesPending[0];
+                    messagesPending.shift();
+                    messageSendData(dataItem[0], dataItem[1], dataItem[2], 0);
+                }
+                else {
+                    setTimeout(function () { messageSendCheckQueue(); }, 500);
+                }
+            };
 
 
             var widgetResize = function () {
@@ -237,8 +245,8 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                     return value * (parseFloat(getComputedStyle(document.documentElement).fontSize));
                 }
 
-                $mainBox.height((jQuery(window).height() - convertEmToPixels(8.7)));
-                //$messageWindow.height(jQuery(window).height() - convertEmToPixels(31.7));
+                $mainBox.height((jQuery(window).height() - convertEmToPixels(9.7)));
+                $messageWindow.height((jQuery(window).height() - convertEmToPixels(19)));
             };
 
             jQuery(window)
@@ -258,6 +266,7 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                 .removeClass('ui-helper-hidden');
 
             widgetResize();
+            messageSendCheckQueue();
         }
     };
 

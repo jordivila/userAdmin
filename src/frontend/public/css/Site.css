@@ -42,6 +42,6 @@
     .ui-pageHolder .ui-sitePage .ui-crud  {border-width:0.1em !important;}
 
     .ui-pageHolder .ui-mainMenuToggle {display:none !important;}
-    .ui-pageHolder .ui-mainMenu {position:relative !important;display:block !important;float:left;width:25%;}
+    .ui-pageHolder .ui-mainMenu {position:relative !important;display:block !important;float:left;width:25%;/*prevents scroll appearing even when no necessary*/min-height:99.5%;/**/}
     .ui-pageHolder .ui-mainMenu .ui-menuList .ui-menuSlide-backButton {position:relative;top:0;margin:0 0 0 0;}
 }
