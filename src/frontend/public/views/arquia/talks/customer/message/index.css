@@ -2,45 +2,22 @@
 
 .ui-arquia-talks-message-window {overflow-y:auto;height:90%;width:100%;top:0;margin:0em 0 0 0;position:absolute;}
 .ui-arquia-talks-message-window .ui-message {clear:both;margin:0.2em 0 0.2em 0;float:left;max-width:90%;padding:0.5em;}
-.ui-arquia-talks-message-window .ui-message .ui-message-who {font-size:1.1em;margin:0 0 0.5em 0;}
-.ui-arquia-talks-message-window .ui-message .ui-message-text {font-size:1em;margin:0 0 0 0;}
-.ui-arquia-talks-message-window .ui-message .ui-message-datePosted {font-size:0.7em;margin: 0.5em 0 0 0;float:right;clear:both;}
+.ui-arquia-talks-message-window .ui-message div {float:left;margin:0 0.2em 0 0.2em;}
+.ui-arquia-talks-message-window .ui-message .ui-message-who {font-weight:bold;}
+.ui-arquia-talks-message-window .ui-message .ui-message-text {}
+.ui-arquia-talks-message-window .ui-message .ui-message-datePosted {font-size:0.7em;margin: 0.4em 0 0 0;float:right;clear:both;}
 .ui-arquia-talks-message-window .ui-message.ui-isCurrentUser {float:right;}
 
-.ui-widgetModel {width:100%;bottom:0;position:absolute;}
+.ui-widgetModel {width:100%;bottom:0;position:absolute;display:table;padding:0.5em 0 0.5em 0;}
 .ui-widgetModel .ui-widgetModel-inputLabel {width:0 !important;}
 .ui-widgetModel .ui-widgetModel-inputValue {width: 100% !important;}
 .ui-widgetModel .ui-widgetModelItem {padding:0 0 0 0;margin:0 0 0 0;}
 .ui-widgetModel .ui-widgetModel-content {padding:0 0 0 0 !important;}
-
-
-
-.ui-widgetModel {width:99%;display:table;padding:0.5em 0 0.5em 0;}
-.ui-widgetModel * {}
 .ui-widgetModel .block-compose {display:table-row;}
 .ui-widgetModel .block-compose .table-cell {display:table-cell;padding:1em;vertical-align:bottom;}
 .ui-widgetModel .block-compose .buttons-left {width:2em;}
 .ui-widgetModel .block-compose .input-container {width:100%;}
 .ui-widgetModel .block-compose .buttons-right {width:2em;}
 .ui-widgetModel .block-compose button {padding:0.2em 0.5em 0.2em 0.5em; border:none;background:none;font-size:1.5em;}
-.ui-widgetModel .block-compose .input-container {/*border-radius: 0.5em;background-color: #fff;*//*min-width: 0;*/}
+.ui-widgetModel .block-compose .input-container {}
 .ui-widgetModel .block-compose .input-container .input { word-wrap: break-word;white-space: pre-wrap;padding:1em;min-height: 1em;max-height: 3.6em;overflow-y: auto;overflow-x: hidden;border-radius: 0.5em;background-color: #fff;}
-/*
-.ui-widgetModel .input, 
-.ui-widgetModel .block-compose .input-container {user-select: text;line-height: 1.2em;min-height: 1em;border: none;padding: 0.5em 0em 0.5em 0em;outline: none;}
-*/
-
-/*
-.ui-widgetModel .ui-arquia-talks-message-inputBox .block-compose button {padding:0.2em 0.5em 0.2em 0.5em; border:none;background:none;}
-.ui-widgetModel .ui-arquia-talks-message-inputBox .block-compose {display: flex;align-items: flex-end;padding: 0.5em 0.5em 0.5em 0.5em ;max-width: 100%;}
-.ui-widgetModel .ui-arquia-talks-message-inputBox .block-compose .input-container {border-radius: 0.5em;background-color: #fff;min-width: 0;}
-.ui-widgetModel .ui-arquia-talks-message-inputBox .block-compose .input-container .input, 
-.ui-widgetModel .ui-arquia-talks-message-inputBox .block-compose .input-container .input-container {
-    word-wrap: break-word;white-space: pre-wrap;padding:0;min-height: 1em;max-height: 3.6em;overflow-y: auto;overflow-x: hidden;
-}
-
-.ui-widgetModel .ui-arquia-talks-message-inputBox .input, 
-.ui-widgetModel .ui-arquia-talks-message-inputBox .block-compose .input-container {
-    user-select: text;line-height: 1.2em;min-height: 1em;border: none;padding: 0.5em 0.5em 0.5em 0.5em;width: 100%;outline: none;
-}
-*/

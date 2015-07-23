@@ -70,10 +70,6 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                                                                             .find('div.ui-arquia-talks-message-inputBox:first')
                                                                                 .find('div[contenteditable]:first');
 
-
-                                                            console.log("parent");
-                                                            console.log(parent);
-
                                                             inputKeyPressInit(parent, $input);
                                                             sendButtonInit(parent, $input);
                                                         },
@@ -127,11 +123,12 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
             };
             var messageTemplate = function () {
                 return '<div class="ui-message ui-corner-all {0}">' +
-                  '<h3 class="ui-message-who">{1}</h3>' +
-                  '<div class="ui-message-text">{2}</div>' +
-                  '<div class="ui-message-datePosted">{3}</div>' +
-                  '<div class="ui-helper-hidden" data-message-guid="{4}"></div>' +
-                '</div>';
+                            '<div class="ui-message-who">{1}</div><div>:</div> ' +
+                            '<div class="ui-message-text">{2}</div>' +
+                            '<div class="ui-message-datePosted">{3}</div>' +
+                            '<div class="ui-helper-hidden" data-message-guid="{4}"></div>' +
+                            '<div class="ui-helper-clearfix"></div>' + 
+                        '</div>';
             }();
             var messageSend = function ($parent, $input) {
                 // 1.- get form data
@@ -187,10 +184,6 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                     $bubble.addClass('ui-state-error');
                 };
 
-
-                console.log("attempt");
-                console.log(attemptCount + "----" + formValue.messageGuid);
-
                 if (attempt) {
                     P.all([crudAjaxOpts.ajax.messageAdd(formValue)]).nodeify(function (e, data) {
                         if (e !== null) {
@@ -210,7 +203,7 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
 
                                 $bubble
                                     .find('div.ui-message-datePosted:first')
-                                    .html(new Date().toLocaleTimeString());
+                                    .html(dataResult.data.editData.datePosted.toLocaleString());
 
                             } else {
                                 console.error(new Error(dataResult.message));

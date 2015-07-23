@@ -150,6 +150,52 @@
                     return dfd.promise();
 
                 },
+                messageGetUnread: function () {
+
+
+
+
+
+                    
+
+
+
+
+                    var dfd = jQuery.Deferred();
+                    var dataResult = null;
+                    var modelErrors = [];
+
+                    if (((dataItem.subject.trim() === '') === true)) {
+                        modelErrors.push({ key: "subject", value: [clientApp.i18n.texts.get("Views.Crud.FieldRequired")] });
+                    }
+
+                    if (modelErrors.length > 0) {
+                        dataResult = new DataResult(false, clientApp.i18n.texts.get("Views.Crud.ErrorExistsInForm"), { modelState: modelErrors });
+                    }
+                    else {
+                        // Simulate saving data
+                        var newId = crudAjaxOpts.ajax._fakeDataGridTalks.length;
+                        crudAjaxOpts.ajax._fakeDataGridTalks.push({
+                            id: newId,
+                            subject: dataItem.subject,
+                            dateLastMessage: new Date(),
+                        });
+
+                        // Simulate retrieving data from server
+                        dataItem.editData = crudAjaxOpts.ajax._fakeDataGridTalks[newId];
+                        // Simulate server response
+                        dataItem.formData = undefined;
+                        // return result
+                        dataResult = new DataResult(true, clientApp.i18n.texts.get("Arquia.Talks.Subject.NewSubjectAdded"), dataItem);
+                    }
+
+                    setTimeout(function () { dfd.resolve(dataResult); }, crudAjaxOpts.ajax._fakeDelay);
+
+                    return dfd.promise();
+
+
+                },
+
 
             },
             cache: {
