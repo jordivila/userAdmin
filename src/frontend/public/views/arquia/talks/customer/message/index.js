@@ -123,13 +123,33 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
             };
             var messageTemplate = function () {
                 return '<div class="ui-message ui-corner-all {0}">' +
-                            '<div class="ui-message-who">{1}</div><div>:</div> ' +
+                            '<div class="ui-message-who">{1}</div><div class="ui-message-colon">:</div> ' +
                             '<div class="ui-message-text">{2}</div>' +
                             '<div class="ui-message-datePosted">{3}</div>' +
                             '<div class="ui-helper-hidden" data-message-guid="{4}"></div>' +
-                            '<div class="ui-helper-clearfix"></div>' + 
+                            '<div class="ui-helper-clearfix"></div>' +
                         '</div>';
             }();
+            var messageClassName = function (isEmployee, isCurrentUser) {
+
+                var className = '';
+
+                if (isEmployee) {
+                    className = 'ui-state-default';
+                }
+                else {
+                    className ='ui-isEmployee ui-state-highlight';
+                }
+
+
+                if (isCurrentUser)
+                {
+                    className += ' ui-isCurrentUser';
+                }
+
+
+                return className;
+            };
             var messageSend = function ($parent, $input) {
                 // 1.- get form data
                 var formValue = $messageModelWidget.widgetModel('valAsObject');
@@ -139,17 +159,17 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                 }
                 else {
                     formValue.idTalk = 0;
-                    formValue.messageGuid = clientApp.utils.guid();
+                    formValue.messageClientGuid = clientApp.utils.guid();
                     // 2.- clean input
                     $input.empty();
                     messageSendButtonHide($parent);
                     // 3.- add message to window
                     $messageWindow.append(messageTemplate.format(
-                        'ui-isCurrentUser ui-state-highlight',
-                        'Fermin',
+                        messageClassName(false, true),
+                        '', // no matter name because this is the current user
                         formValue.message,
                         '<i class="fa fa-clock-o"></i><i class="fa fa-spin fa-refresh"></i>',
-                        formValue.messageGuid));
+                        formValue.messageClientGuid));
                     // 4.-update scroll
                     messageScrollMoveToBottom();
                     // 5.- set focus on input (some browsers like safari do not restore focus on $input after scroll)
@@ -165,7 +185,7 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
 
 
                 var $bubble = $messageWindow
-                                .find('div[data-message-guid="' + formValue.messageGuid + '"]:first')
+                                .find('div[data-message-guid="' + formValue.messageClientGuid + '"]:first')
                                 .parents('div.ui-message:first');
 
 
@@ -185,6 +205,7 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                 };
 
                 if (attempt) {
+
                     P.all([crudAjaxOpts.ajax.messageAdd(formValue)]).nodeify(function (e, data) {
                         if (e !== null) {
                             if (attemptIsLast) {
@@ -230,36 +251,73 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                     setTimeout(function () { messageSendCheckQueue(); }, 500);
                 }
             };
+            var messageWidgetResizeInit = function () {
 
+                var widgetResize = function () {
 
-            var widgetResize = function () {
+                    function convertEmToPixels(value) {
+                        return value * (parseFloat(getComputedStyle(document.documentElement).fontSize));
+                    }
 
-                function convertEmToPixels(value) {
-                    return value * (parseFloat(getComputedStyle(document.documentElement).fontSize));
-                }
+                    $mainBox.height((jQuery(window).height() - convertEmToPixels(9.7)));
+                    $messageWindow.height((jQuery(window).height() - convertEmToPixels(19)));
+                };
 
-                $mainBox.height((jQuery(window).height() - convertEmToPixels(9.7)));
-                $messageWindow.height((jQuery(window).height() - convertEmToPixels(19)));
+                jQuery(window)
+                    .resize(function (e, ui) {
+                        widgetResize();
+                    });
+
+                widgetResize();
+
             };
+            var messageWidgetInit = function () {
 
-            jQuery(window)
-                .resize(function (e, ui) {
-                    widgetResize();
+                var idTalk = 1;
+
+                P.all([crudAjaxOpts.ajax.messageGetAll(idTalk)]).nodeify(function (e, data) {
+
+
+                    if (e !== null) {
+                        // ????????????????????
+                    }
+                    else {
+
+                        var dataResultPaginated = data[0];
+
+                        for (var i = 0; i < dataResultPaginated.data.data.length; i++) {
+
+                            $messageWindow.prepend(messageTemplate.format(
+                                messageClassName(dataResultPaginated.data.data[i].whoPosted.isEmployee, dataResultPaginated.data.data[i].whoPosted.isCurrentUser),
+                                dataResultPaginated.data.data[i].whoPosted.isCurrentUser === true ? '' : dataResultPaginated.data.data[i].whoPosted.name,
+                                dataResultPaginated.data.data[i].message,
+                                dataResultPaginated.data.data[i].datePosted.toLocaleString(),
+                                ''));
+                        }
+
+                    }
+
                 });
 
-            $mainBox
-                .find('div.ui-arquia-talks-message-buttonsBox:first')
-                    .find('button:first')
-                        .button()
-                        .click(function () {
 
-                        })
-                    .end()
-                .end()
-                .removeClass('ui-helper-hidden');
+                messageWidgetResizeInit();
 
-            widgetResize();
-            messageSendCheckQueue();
+
+                $mainBox.removeClass('ui-helper-hidden');
+
+
+                messageSendCheckQueue();
+
+
+
+
+
+
+            };
+
+
+
+            messageWidgetInit();
         }
     };
 

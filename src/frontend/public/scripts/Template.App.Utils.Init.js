@@ -41,6 +41,10 @@ define([],
                return uuid;
            };
 
+           Utils.prototype.replaceAll = function (find, replace, string) {
+               return string.replace(new RegExp(find, 'g'), replace);
+           };
+
            return Utils;
 
        });

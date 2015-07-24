@@ -43,6 +43,7 @@
     "GeneralTexts.Language.Spanish": "Español",
     "GeneralTexts.Languages": "Idiomas",
     "GeneralTexts.NotImplemented": "Funcionaliad no implementada",
+    "GeneralTexts.PermissionDenied": "Permiso denegado",
     "GeneralTexts.Settings": "Ajustes",
     "GeneralTexts.SiteThemes": "Apariencia",
     "Template.Widget.Crud.Cancel": "Cancelar",
