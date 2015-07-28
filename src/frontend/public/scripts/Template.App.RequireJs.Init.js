@@ -15,6 +15,7 @@ requirejs.config({
         pPromises: 'bower_components/p-promise/p.min',
         es5Shim: 'bower_components/es5-shim',
         respond: 'bower_components/respond/dest/respond.src',
+        querystring: 'bower_components/querystring/querystring.min',
         crossLayer: 'crossLayer',
         /**************************************************************
                     Globalize dependencies paths begin

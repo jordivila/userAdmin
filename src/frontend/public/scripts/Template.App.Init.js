@@ -20,6 +20,7 @@ function (CacheControl, Utils, Ajax, I18NTexts, GlobalizeHelper, TemplateHelper)
     clientApp.globalizer = new GlobalizeHelper();
     clientApp.widgets = {};
     clientApp.template = new TemplateHelper();
+
     return clientApp;
 
 });

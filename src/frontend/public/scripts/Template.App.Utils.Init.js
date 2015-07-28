@@ -45,6 +45,10 @@ define([],
                return string.replace(new RegExp(find, 'g'), replace);
            };
 
+           Utils.prototype.convertEmToPixels = function (value) {
+               return value * (parseFloat(getComputedStyle(document.documentElement).fontSize));
+           };
+
            return Utils;
 
        });

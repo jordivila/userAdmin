@@ -264,6 +264,7 @@
                         pPromises: '../bower_components/p-promise/p.min',
                         crossLayer: '../../crossLayer',
                         es5shim: '../bower_components/es5-shim',
+                        querystring: '../bower_components/querystring/querystring.min',
                         respond: '../bower_components/respond/dest/respond.src',
                         /**************************************************************
                                     Globalize dependencies paths begin

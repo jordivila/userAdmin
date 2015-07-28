@@ -131,6 +131,39 @@
 
                     setTimeout(function () { crudAjaxOpts.ajax._fakeConversationsPartner(); }, 3000);
                 },
+                _fakeMessagesByidTalkGet: function (idTalk) {
+
+                    var result = [];
+
+                    for (var i = 0; i < crudAjaxOpts.ajax._fakeDataGridMessages.length; i++) {
+                        if (crudAjaxOpts.ajax._fakeDataGridMessages[i].idTalk === idTalk) {
+                            result.push(crudAjaxOpts.ajax._fakeDataGridMessages[i]);
+                        }
+                    }
+
+                    result.sort(function (a, b) {
+                        return parseInt(a.idMessage) - parseInt(b.idMessage);
+                    });
+
+                    return result;
+                },
+                _fakeMessageObjectToViewModel: function (message) {
+
+                    var whoPosted = crudAjaxOpts.ajax._fakeDataGridPeopleFindById(message.idPeople);
+
+                    return {
+                        idMessage: message.idMessage,
+                        idTalk: message.idTalk,
+                        message: message.message,
+                        datePosted: message.datePosted,
+                        whoPosted: {
+                            name: whoPosted.name,
+                            isEmployee: whoPosted.isEmployee,
+                            isCurrentUser: message.idPeople === crudAjaxOpts.ajax._fakeCurrentUser
+                        }
+                    };
+
+                },
 
                 talkSearch: function (filter) {
 
@@ -236,9 +269,7 @@
                         });
 
                         // Simulate retrieving data from server
-                        dataItem.editData = crudAjaxOpts.ajax._fakeDataGridMessages[newId];
-                        // Simulate server response
-                        dataItem.formData = undefined;
+                        dataItem = jQuery.extend({}, crudAjaxOpts.ajax._fakeDataGridMessages[newId], {});
                         // return result
                         dataResult = new DataResult(true, clientApp.i18n.texts.get("Arquia.Talks.Subject.NewMessageAdded"), dataItem);
                     }
@@ -250,8 +281,6 @@
 
                 },
                 messageGetAll: function (idTalk) {
-
-
 
                     // simulate pagination. BUT set pageSize to a huge number
                     // as far as client message page is not indended to be paginated
@@ -265,7 +294,55 @@
                         }
                     };
 
+                    var self = this;
+                    var dfd = jQuery.Deferred();
+                    var dataResult = new DataResultPaginated();
 
+                    // as far as this should be executed at server runtime:
+                    // check first if current request user has permission to see this conversation
+                    // this will be hardcodeed just to make fake easier
+
+                    var hasPermission = true;
+
+                    if (hasPermission) {
+
+                        var messagesByIdTalk = crudAjaxOpts.ajax._fakeMessagesByidTalkGet(idTalk);
+
+                        for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
+                            if (i < messagesByIdTalk.length) {
+                                dataResult.data.data.push(crudAjaxOpts.ajax._fakeMessageObjectToViewModel(messagesByIdTalk[i]));
+                            }
+                        }
+
+                        dataResult.isValid = true;
+                        dataResult.data.totalRows = messagesByIdTalk.length;
+                        dataResult.data.page = filter.page;
+                        dataResult.data.pageSize = filter.pageSize;
+                    }
+                    else {
+
+                        dataResult.isValid = false;
+                        dataResult.message = clientApp.i18n.texts.get("GeneralTexts.PermissionDenied");
+                    }
+
+                    setTimeout(function () { dfd.resolve(dataResult); }, crudAjaxOpts.ajax._fakeDelay);
+
+                    return dfd.promise();
+                },
+                messageGetUnread: function (idTalk, idMessageLastRead) {
+
+                    // simulate pagination. BUT set pageSize to a huge number
+                    // as far as client message page is not indended to be paginated
+                    // at least first version
+
+                    var filter = {
+                        page: 0,
+                        pageSize: 1000,
+                        filter: {
+                            idTalk: idTalk,
+                            idMessageLastRead: idMessageLastRead
+                        }
+                    };
 
                     var self = this;
                     var dfd = jQuery.Deferred();
@@ -281,42 +358,24 @@
 
                     if (hasPermission) {
 
-                        var messagesByidTalkGet = function () {
-
-                            var result = [];
-
-                            for (var i = 0; i < crudAjaxOpts.ajax._fakeDataGridMessages.length; i++) {
-                                if (crudAjaxOpts.ajax._fakeDataGridMessages[i].idTalk === idTalk) {
-                                    result.push(crudAjaxOpts.ajax._fakeDataGridMessages[i]);
-                                }
-                            }
-
-                            result.sort(function (a, b) {
-                                return a.idMessage < b.idMessage;
-                            });
-
-                            return result;
+                        var messagesAlreadyRead = function (arrayItem) {
+                            return arrayItem.idMessage > idMessageLastRead;
                         };
-                        var messagesByIdTalk = messagesByidTalkGet();
+                        var messagesFromOtherUsers = function (arrayItem) {
+
+                            var viewModeledItem = crudAjaxOpts.ajax._fakeMessageObjectToViewModel(arrayItem);
+
+                            return viewModeledItem.whoPosted.isCurrentUser === false;
+                        };
+
+                        var messagesByIdTalk = [];
+                        messagesByIdTalk = crudAjaxOpts.ajax._fakeMessagesByidTalkGet(idTalk);
+                        messagesByIdTalk = messagesByIdTalk.filter(messagesAlreadyRead);
+                        messagesByIdTalk = messagesByIdTalk.filter(messagesFromOtherUsers);
 
                         for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
                             if (i < messagesByIdTalk.length) {
-                                if (messagesByIdTalk[i].idTalk === idTalk) {
-
-                                    var whoPosted = crudAjaxOpts.ajax._fakeDataGridPeopleFindById(messagesByIdTalk[i].idPeople);
-
-                                    dataResult.data.data.push({
-                                        idMessage: messagesByIdTalk[i].idMessage,
-                                        idTalk: messagesByIdTalk[i].idTalk,
-                                        message: messagesByIdTalk[i].message,
-                                        datePosted: messagesByIdTalk[i].datePosted,
-                                        whoPosted: {
-                                            name: whoPosted.name,
-                                            isEmployee: whoPosted.isEmployee,
-                                            isCurrentUser: messagesByIdTalk[i].idPeople === crudAjaxOpts.ajax._fakeCurrentUser
-                                        }
-                                    });
-                                }
+                                dataResult.data.data.push(crudAjaxOpts.ajax._fakeMessageObjectToViewModel(messagesByIdTalk[i]));
                             }
                         }
 

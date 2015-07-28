@@ -35,11 +35,8 @@ define([
 
                var gridControlResize = function () {
 
-                   function convertEmToPixels(value) {
-                       return value * (parseFloat(getComputedStyle(document.documentElement).fontSize));
-                   }
 
-                   $gridControl.height(jQuery(window).height() - convertEmToPixels(11.7));
+                   $gridControl.height(jQuery(window).height() - clientApp.utils.convertEmToPixels(11.7));
                };
 
                jQuery(window)

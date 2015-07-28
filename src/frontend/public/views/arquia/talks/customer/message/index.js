@@ -3,11 +3,12 @@
     "jqueryui",
     "scripts/Template.App.Init",
     "pPromises",
-
+    "scripts/url/UrlHelper",
     "scripts/modules/crud",
+    "scripts/jQuery.Plugins.scrollUtils",
     "/arquia/talks/customer/arquiaCommon/arquiaCrudFakeData.js",
 ],
-function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
+function ($, jqUI, clientApp, P, UrlHelper, crudModule, scrollUtils, crudAjaxOpts) {
 
     clientApp.view = {
         main: function () {
@@ -96,6 +97,17 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                                             });
 
             }();
+            var messageGetIdTalk = function () {
+
+                var idTalk = new UrlHelper().query.parsed.idTalk;
+
+                if (idTalk === undefined) {
+                    console.error(new Error('Argument exception: missing idTalk from query string'));
+                }
+
+                return parseInt(new UrlHelper().query.parsed.idTalk);
+
+            };
             var messageSendButtonHide = function ($parent) {
 
                 $parent
@@ -118,15 +130,13 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                     .end();
 
             };
-            var messageScrollMoveToBottom = function () {
-                $messageWindow[0].scrollTop = $messageWindow[0].scrollHeight;
-            };
             var messageTemplate = function () {
                 return '<div class="ui-message ui-corner-all {0}">' +
                             '<div class="ui-message-who">{1}</div><div class="ui-message-colon">:</div> ' +
                             '<div class="ui-message-text">{2}</div>' +
                             '<div class="ui-message-datePosted">{3}</div>' +
                             '<div class="ui-helper-hidden" data-message-guid="{4}"></div>' +
+                            '<div class="ui-message-idMessage">{5}</div>' +
                             '<div class="ui-helper-clearfix"></div>' +
                         '</div>';
             }();
@@ -138,12 +148,11 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                     className = 'ui-state-default';
                 }
                 else {
-                    className ='ui-isEmployee ui-state-highlight';
+                    className = 'ui-isEmployee ui-state-highlight';
                 }
 
 
-                if (isCurrentUser)
-                {
+                if (isCurrentUser) {
                     className += ' ui-isCurrentUser';
                 }
 
@@ -158,7 +167,7 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                     // do nothing
                 }
                 else {
-                    formValue.idTalk = 0;
+                    formValue.idTalk = messageGetIdTalk();
                     formValue.messageClientGuid = clientApp.utils.guid();
                     // 2.- clean input
                     $input.empty();
@@ -170,8 +179,8 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                         formValue.message,
                         '<i class="fa fa-clock-o"></i><i class="fa fa-spin fa-refresh"></i>',
                         formValue.messageClientGuid));
-                    // 4.-update scroll
-                    messageScrollMoveToBottom();
+                    // 4.-force scroll to bottom as user is writing messages
+                    $messageWindow.scrollToBottom();
                     // 5.- set focus on input (some browsers like safari do not restore focus on $input after scroll)
                     $input.focus();
                     //6.- set message to be send
@@ -224,7 +233,11 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
 
                                 $bubble
                                     .find('div.ui-message-datePosted:first')
-                                    .html(dataResult.data.editData.datePosted.toLocaleString());
+                                        .html(dataResult.data.datePosted.toLocaleString())
+                                    .end()
+                                    .find('div.ui-message-idMessage:first')
+                                        .html(dataResult.data.idMessage)
+                                    .end();
 
                             } else {
                                 console.error(new Error(dataResult.message));
@@ -254,13 +267,8 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
             var messageWidgetResizeInit = function () {
 
                 var widgetResize = function () {
-
-                    function convertEmToPixels(value) {
-                        return value * (parseFloat(getComputedStyle(document.documentElement).fontSize));
-                    }
-
-                    $mainBox.height((jQuery(window).height() - convertEmToPixels(9.7)));
-                    $messageWindow.height((jQuery(window).height() - convertEmToPixels(19)));
+                    $mainBox.height((jQuery(window).height() - clientApp.utils.convertEmToPixels(7.7)));
+                    $messageWindow.height((jQuery(window).height() - clientApp.utils.convertEmToPixels(19)));
                 };
 
                 jQuery(window)
@@ -271,51 +279,89 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts) {
                 widgetResize();
 
             };
-            var messageWidgetInit = function () {
+            var messagesUnreadCheckMiliseconds = 1000;
+            var messagesUnreadCheck = function (idTalk) {
 
-                var idTalk = 1;
+                P.all([crudAjaxOpts.ajax.messageGetUnread(idTalk, messagesUnreadLastIdAppended)]).nodeify(function (e, data) {
 
-                P.all([crudAjaxOpts.ajax.messageGetAll(idTalk)]).nodeify(function (e, data) {
-
+                    setTimeout(function () { messagesUnreadCheck(idTalk); }, messagesUnreadCheckMiliseconds);
 
                     if (e !== null) {
                         // ????????????????????
                     }
                     else {
-
-                        var dataResultPaginated = data[0];
-
-                        for (var i = 0; i < dataResultPaginated.data.data.length; i++) {
-
-                            $messageWindow.prepend(messageTemplate.format(
-                                messageClassName(dataResultPaginated.data.data[i].whoPosted.isEmployee, dataResultPaginated.data.data[i].whoPosted.isCurrentUser),
-                                dataResultPaginated.data.data[i].whoPosted.isCurrentUser === true ? '' : dataResultPaginated.data.data[i].whoPosted.name,
-                                dataResultPaginated.data.data[i].message,
-                                dataResultPaginated.data.data[i].datePosted.toLocaleString(),
-                                ''));
-                        }
-
+                        messagesUnreadAppendDataResult(data[0]);
                     }
 
                 });
 
+            };
+            var messagesUnreadLastIdAppended = 0;
+            var messagesUnreadAppendViewModelItem = function (viewModelItem) {
+
+                $messageWindow.append(messageTemplate.format(
+                    messageClassName(viewModelItem.whoPosted.isEmployee, viewModelItem.whoPosted.isCurrentUser),
+                    viewModelItem.whoPosted.isCurrentUser === true ? '' : viewModelItem.whoPosted.name,
+                    viewModelItem.message,
+                    viewModelItem.datePosted.toLocaleString(),
+                    '',
+                    viewModelItem.idMessage));
+
+            };
+            var messagesUnreadAppendDataResult = function (dataResultPaginated) {
+
+                /*
+                    how it works:
+
+                    1.- detect if scroll is at bottom before adding bubbles to the window
+                    2.- if scroll is NOT at bottom means user has previously scroll to top to read some other bubble
+                    3.- if scroll is at bottom then add bubbles and force scroll to continue at bottom
+                */
+
+                var scrollWasAtBottom = $messageWindow.isScrollNearToBottom(1);
+
+                for (var i = 0; i < dataResultPaginated.data.data.length; i++) {
+                    messagesUnreadAppendViewModelItem(dataResultPaginated.data.data[i]);
+                    messagesUnreadLastIdAppended = dataResultPaginated.data.data[i].idMessage;
+                }
+
+                if (scrollWasAtBottom)
+                {
+                    $messageWindow.scrollToBottom();
+                }
+
+            };
+            var messageWidgetInit = function () {
+
+                var idTalk = messageGetIdTalk();
 
                 messageWidgetResizeInit();
 
+                P.all([crudAjaxOpts.ajax.messageGetAll(idTalk)]).nodeify(function (e, data) {
 
-                $mainBox.removeClass('ui-helper-hidden');
+                    if (e !== null) {
+                        // ????????????????????
+                    }
+                    else {
+                        messagesUnreadAppendDataResult(data[0]);
+                    }
+
+                    $mainBox.removeClass('ui-helper-hidden');
+                    // force scroll to bottom as widget is initiating
+                    $messageWindow.scrollToBottom();
 
 
-                messageSendCheckQueue();
+                    messageSendCheckQueue();
+                    messagesUnreadCheck(idTalk);
 
 
+                    //messageScrollInit();
 
+                });
 
 
 
             };
-
-
 
             messageWidgetInit();
         }

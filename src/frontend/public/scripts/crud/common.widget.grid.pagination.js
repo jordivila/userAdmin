@@ -219,7 +219,30 @@ define([
 
                    var bindScroll = function () {
                        jQuery(window).scroll(function () {
-                           if (jQuery(window).scrollTop() == jQuery(document).height() - jQuery(window).height()) {
+
+
+
+
+                           /*
+                                scroll detect bottom -> http://stackoverflow.com/questions/3898130/how-to-check-if-a-user-has-scrolled-to-the-bottom
+
+                                Use the .scroll() event on window, like this:
+
+                                $(window).scroll(function() {
+                                   if($(window).scrollTop() + $(window).height() == $(document).height()) {
+                                       alert("bottom!");
+                                   }
+                                });
+                                You can test it here, this takes the top scroll of the window, so how much it's scrolled down, adds the height of the visible window and checks if that equals the height of the overall content (document). If you wanted to instead check if the user is near the bottom, it'd look something like this:
+
+                                $(window).scroll(function() {
+                                   if($(window).scrollTop() + $(window).height() > $(document).height() - 100) {
+                                       alert("near bottom!");
+                                   }
+                                });
+                           */
+                           
+                           if ((jQuery(window).scrollTop() + jQuery(window).height()) > (jQuery(document).height() - clientApp.utils.convertEmToPixels(3))) {
                                self._onChange(Page + 1, PageSize);
                            }
                        });

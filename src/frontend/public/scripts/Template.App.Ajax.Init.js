@@ -4,7 +4,7 @@ define([
     "pPromises",
     "crossLayer/config"
 ],
-    function ($, urlHelper, P, crossLayer) {
+    function ($, UrlHelper, P, crossLayer) {
 
         function Ajax() {
             this.setDefaults();
