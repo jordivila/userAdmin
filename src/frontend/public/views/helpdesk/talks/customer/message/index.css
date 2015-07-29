@@ -1,16 +1,16 @@
 ﻿body {overflow:hidden;}
 
-.ui-arquia-talks-message-container { position:relative;background-image: none !important;width:99.5%;overflow:hidden;}
+.ui-helpdesk-talks-message-container { position:relative;background-image: none !important;width:99.5%;overflow:hidden;}
 
-.ui-arquia-talks-message-window {overflow-y:auto;height:90%;width:100%;top:0;margin:0em 0 0 0;position:absolute;}
-.ui-arquia-talks-message-window .ui-message {clear:both;margin:0.2em 0 0.2em 0;float:left;max-width:90%;padding:0.5em;}
-.ui-arquia-talks-message-window .ui-message div {float:left;margin:0 0.2em 0 0.2em;}
-.ui-arquia-talks-message-window .ui-message .ui-message-who {font-weight:normal;}
-.ui-arquia-talks-message-window .ui-message .ui-message-text {font-weight:normal;}
-.ui-arquia-talks-message-window .ui-message .ui-message-idMessage {display:none;}
-.ui-arquia-talks-message-window .ui-message .ui-message-datePosted {font-size:0.7em;margin: 0.4em 0 0 0;float:right;clear:both;}
-.ui-arquia-talks-message-window .ui-message.ui-isEmployee {float:right;}
-.ui-arquia-talks-message-window .ui-message.ui-isCurrentUser .ui-message-colon {display:none;}
+.ui-helpdesk-talks-message-window {overflow-y:auto;height:90%;width:100%;top:0;margin:0em 0 0 0;position:absolute;}
+.ui-helpdesk-talks-message-window .ui-message {clear:both;margin:0.2em 0 0.2em 0;float:left;max-width:90%;padding:0.5em;}
+.ui-helpdesk-talks-message-window .ui-message div {float:left;margin:0 0.2em 0 0.2em;}
+.ui-helpdesk-talks-message-window .ui-message .ui-message-who {font-weight:normal;}
+.ui-helpdesk-talks-message-window .ui-message .ui-message-text {font-weight:normal;}
+.ui-helpdesk-talks-message-window .ui-message .ui-message-idMessage {display:none;}
+.ui-helpdesk-talks-message-window .ui-message .ui-message-datePosted {font-size:0.7em;margin: 0.4em 0 0 0;float:right;clear:both;}
+.ui-helpdesk-talks-message-window .ui-message.ui-isEmployee {float:right;}
+.ui-helpdesk-talks-message-window .ui-message.ui-isCurrentUser .ui-message-colon {display:none;}
 
 .ui-widgetModel {width:100%;bottom:0;position:absolute;display:table;padding:0.5em 0 0.5em 0;}
 .ui-widgetModel .ui-widgetModel-inputLabel {width:0 !important;}

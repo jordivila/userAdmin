@@ -6,15 +6,15 @@
     "scripts/url/UrlHelper",
     "scripts/modules/crud",
     "scripts/jQuery.Plugins.scrollUtils",
-    "/arquia/talks/customer/arquiaCommon/arquiaCrudFakeData.js",
+    "/helpdesk/talks/customer/helpdeskCommon/helpdeskCrudFakeData.js",
 ],
 function ($, jqUI, clientApp, P, UrlHelper, crudModule, scrollUtils, crudAjaxOpts) {
 
     clientApp.view = {
         main: function () {
 
-            var $mainBox = jQuery('div.ui-arquia-talks-message-container:first');
-            var $messageWindow = jQuery('div.ui-arquia-talks-message-window:first');
+            var $mainBox = jQuery('div.ui-helpdesk-talks-message-container:first');
+            var $messageWindow = jQuery('div.ui-helpdesk-talks-message-window:first');
             var $messageModelWidget = function () {
 
                 var sendButtonInit = function ($parent, $input) {
@@ -51,7 +51,7 @@ function ($, jqUI, clientApp, P, UrlHelper, crudModule, scrollUtils, crudAjaxOpt
                     });
                 };
 
-                return jQuery("div.ui-arquia-talks-add-model")
+                return jQuery("div.ui-helpdesk-talks-add-model")
                                             .widgetModel({
                                                 modelItems: [{
                                                     id: "message",
@@ -64,11 +64,11 @@ function ($, jqUI, clientApp, P, UrlHelper, crudModule, scrollUtils, crudAjaxOpt
 
                                                             jQuery(parent)
                                                                 .append(jQuery($mainBox)
-                                                                            .find('div.ui-arquia-talks-message-inputBox-template:first')
+                                                                            .find('div.ui-helpdesk-talks-message-inputBox-template:first')
                                                                             .html());
 
                                                             var $input = jQuery(parent)
-                                                                            .find('div.ui-arquia-talks-message-inputBox:first')
+                                                                            .find('div.ui-helpdesk-talks-message-inputBox:first')
                                                                                 .find('div[contenteditable]:first');
 
                                                             inputKeyPressInit(parent, $input);
@@ -77,7 +77,7 @@ function ($, jqUI, clientApp, P, UrlHelper, crudModule, scrollUtils, crudAjaxOpt
                                                         onItemValue: function (parent) {
 
                                                             return jQuery(parent)
-                                                                    .find('div.ui-arquia-talks-message-inputBox:first')
+                                                                    .find('div.ui-helpdesk-talks-message-inputBox:first')
                                                                         .find('div[contenteditable]:first')
                                                                             .text();
                                                             //.end()

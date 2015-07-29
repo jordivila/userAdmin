@@ -1,0 +1,15 @@
+﻿.ui-helpdesk-talks-summary-container { background-image: none !important;padding:0em 0.5em 0 0.5em; }
+.ui-helpdesk-talks-summary-container .ui-helpdesk-talks-summary-userIcon {font-size:4em; padding:0.2em;float:left;margin:0 0.5em 0.5em 0;cursor:pointer;}
+.ui-helpdesk-talks-summary-container ul.ui-helpdesk-talks-summary-list { border-width: 0; }
+
+
+
+
+.ui-helpdesk-talks-summary-crud {
+    width:99% !important;
+    overflow:hidden;
+    display:block !important;
+}
+
+.ui-helpdesk-talks-summary-crud .ui-crudGrid-subject {width:74.9%;}
+.ui-helpdesk-talks-summary-crud .ui-crudGrid-dateLastMessage {width:24.9%;}

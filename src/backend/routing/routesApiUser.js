@@ -79,8 +79,8 @@
                         text: i18n.__("AccountResources.LogOn"),
                     },
                     {
-                        url: "/arquia/talks/customer/home/",
-                        text: i18n.__("Arquia.Talks.MenuTitle")
+                        url: "/helpdesk/talks/customer/home/",
+                        text: i18n.__("Helpdesk.Talks.MenuTitle")
                     },
                     {
                         url: "/about/",

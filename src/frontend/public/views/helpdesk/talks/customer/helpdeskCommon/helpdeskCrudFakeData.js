@@ -84,7 +84,7 @@
 
                         //create a talk
                         crudAjaxOpts.ajax._fakeDataGridTalks.push({
-                            //subject: "{0} {1}".format(clientApp.i18n.texts.get("Arquia.Talks.History.Message"), i),
+                            //subject: "{0} {1}".format(clientApp.i18n.texts.get("Helpdesk.Talks.History.Message"), i),
                             idTalk: i,
                             subject: "{0} - {1}".format(clientApp.utils.guid(), i),
                         });
@@ -219,7 +219,7 @@
                         // Simulate server response
                         dataItem.formData = undefined;
                         // return result
-                        dataResult = new DataResult(true, clientApp.i18n.texts.get("Arquia.Talks.Subject.NewSubjectAdded"), dataItem);
+                        dataResult = new DataResult(true, clientApp.i18n.texts.get("Helpdesk.Talks.Subject.NewSubjectAdded"), dataItem);
                     }
 
                     setTimeout(function () { dfd.resolve(dataResult); }, crudAjaxOpts.ajax._fakeDelay);
@@ -271,7 +271,7 @@
                         // Simulate retrieving data from server
                         dataItem = jQuery.extend({}, crudAjaxOpts.ajax._fakeDataGridMessages[newId], {});
                         // return result
-                        dataResult = new DataResult(true, clientApp.i18n.texts.get("Arquia.Talks.Subject.NewMessageAdded"), dataItem);
+                        dataResult = new DataResult(true, clientApp.i18n.texts.get("Helpdesk.Talks.Subject.NewMessageAdded"), dataItem);
                     }
 
 

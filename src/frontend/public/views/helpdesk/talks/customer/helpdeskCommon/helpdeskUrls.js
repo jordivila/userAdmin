@@ -2,8 +2,8 @@
 ],
 function () {
 
-    var arquiaUrls = {
-        baseAddress: '/arquia/talks/customer/',
+    var helpdeskUrls = {
+        baseAddress: '/helpdesk/talks/customer/',
         home: 'home',
         subject: function () {
             return 'subject/';
@@ -17,6 +17,6 @@ function () {
     };
 
 
-    return arquiaUrls;
+    return helpdeskUrls;
 
 });

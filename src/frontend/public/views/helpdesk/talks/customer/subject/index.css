@@ -1,0 +1,12 @@
+﻿.ui-helpdesk-talks-subject-container { background-image: none !important; padding:0em 0.5em 0 0.5em;}
+.ui-helpdesk-talks-subject-container .ui-helpdesk-talks-subject-userIcon {font-size:4em; padding:0.2em;float:left;margin:0 0.5em 0.5em 0;}
+.ui-helpdesk-talks-subject-container .ui-helpdesk-talks-subject-buttonsBox {text-align:center;margin:2em;}
+.ui-helpdesk-talks-subject-container button {font-size:150% !important;margin:0 auto 0 auto;}
+.ui-helpdesk-talks-subject-container input[type="text"] {width:95%;}
+.ui-helpdesk-talks-subject-container .ui-helpdesk-talks-boxError,
+.ui-helpdesk-talks-subject-container .ui-helpdesk-talks-boxInfo {padding:0.5em;}
+
+
+
+.ui-helpdesk-talks-subject-container .ui-widgetModel .ui-widgetModel-inputLabel {width:0 !important;}
+.ui-helpdesk-talks-subject-container .ui-widgetModel .ui-widgetModel-inputValue {width:98% !important;}
