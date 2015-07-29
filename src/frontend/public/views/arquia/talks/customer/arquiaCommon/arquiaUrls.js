@@ -3,6 +3,7 @@
 function () {
 
     var arquiaUrls = {
+        baseAddress: '/arquia/talks/customer/',
         home: 'home',
         subject: function () {
             return 'subject/';

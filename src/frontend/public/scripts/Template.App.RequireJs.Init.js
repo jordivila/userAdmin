@@ -11,7 +11,7 @@ requirejs.config({
         jqueryui: "scripts/modules/jquery.ui.custom.bundle",
         domReady: "bower_components/requirejs-domready/domReady",
         handlebars: "bower_components/handlebars/handlebars.min",
-        history: 'bower_components/history.js/scripts/bundled/html5/jquery.history',
+        history: 'bower_components/history.js/scripts/bundled/html4+html5/jquery.history',
         pPromises: 'bower_components/p-promise/p.min',
         es5Shim: 'bower_components/es5-shim',
         respond: 'bower_components/respond/dest/respond.src',

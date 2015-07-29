@@ -3,12 +3,13 @@ define([
     "jqueryui",
     "handlebars",
     "history",
+    
     "scripts/Template.Widget.Menu.nav",
     "pPromises",
     "crossLayer/config",
     "scripts/Template.App.Init"
 ],
-function ($, jqUI, Handlebars, hist, nav, P, crossLayer, clientApp) {
+function ($, jqUI, Handlebars, hist,  nav, P, crossLayer, clientApp) {
 
     jQuery.widget("ui.page", jQuery.ui.widgetBase, {
         options: {

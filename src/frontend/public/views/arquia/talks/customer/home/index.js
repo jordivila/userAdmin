@@ -10,7 +10,8 @@ function ($, jqUI, clientApp, arquiaUrls) {
         main: function () {
 
             var navNext = function () {
-                clientApp.template.loadByUrl('../' + arquiaUrls.history());
+                console.log('{0}{1}'.format(arquiaUrls.baseAddress, arquiaUrls.history()));
+                clientApp.template.loadByUrl('{0}{1}'.format(arquiaUrls.baseAddress, arquiaUrls.history()));
             };
 
             jQuery('div.ui-arquia-talks-wellcome-container:first')

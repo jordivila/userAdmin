@@ -40,7 +40,10 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, arquiaUrls) {
                                     $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
                                     $cell.find('a')
                                         .click(function () {
-                                            clientApp.template.loadByUrl('../' + arquiaUrls.message(dataItem.idTalk));
+                                            clientApp.template.loadByUrl('{0}{1}'.format(arquiaUrls.baseAddress, arquiaUrls.message(dataItem.idTalk)));
+
+                                            
+
                                         });
                                     break;
                                 case "dateLastMessage":
@@ -88,7 +91,7 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, arquiaUrls) {
                     .end()
                     .find('i.ui-arquia-talks-summary-userIcon:first')
                         .click(function () {
-                            clientApp.template.loadByUrl('../' + arquiaUrls.subject());
+                            clientApp.template.loadByUrl('{0}{1}'.format(arquiaUrls.baseAddress, arquiaUrls.subject()));
                         })
                     .end();
             };
