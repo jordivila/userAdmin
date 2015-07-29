@@ -23,10 +23,29 @@ function (querystring) {
         this.host = a.host;
         this.hostname = a.hostname;
         this.href = a.href;
-        this.origin = a.origin;
-        this.pathname = a.pathname;
         this.port = a.port;
         this.protocol = a.protocol;
+        this.origin = a.origin;
+
+        //"http://localhost:3001"
+
+        if (this.origin === undefined)
+        {
+            // IE does not set this property 
+            // The rest of the world does it. 
+
+            this.origin = this.protocol + "//" + this.host;
+        }
+
+        this.pathname = a.pathname;
+
+        if (this.pathname.charAt(0) !== "/")
+        {
+            // IE does not add "/" when creating this property 
+            // The rest of the world does it. 
+            this.pathname = "/" + this.pathname;
+        }
+
         this.search = a.search;
         this.query = {};
         this.query.parsed = querystring.parse(this.search.replace('?', ''));
