@@ -164,7 +164,7 @@
                 _fakeDelay: 1000,
                 _fakeConversationsPartner: function () {
 
-                    var _doConversationsPartner = function () {
+                    var _doConversationsPartner = function (cb) {
 
                         // imitate conversations adding messages as an employee
                         for (var i = 0; i < crudAjaxOpts.ajax._fakeDataGridTalks.length; i++) {
@@ -176,6 +176,8 @@
                                 datePosted: new Date(),
                             });
                         }
+
+                        setTimeout(function () { _doConversationsPartner(); }, 3000);
                     };
 
                     setTimeout(function () { _doConversationsPartner(); }, 3000);
