@@ -1,7 +1,7 @@
 ﻿define([
     "jquery",
     "crossLayer/config",
-    "scripts/Template.App.Utils.Init"
+    "scripts/Template.Class.Utils"
 ], function ($, crossLayer, Utils) {
 
 

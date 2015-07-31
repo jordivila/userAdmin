@@ -1,6 +1,6 @@
 define(["jquery",
         "jqueryui",
-        "scripts/Template.App.Init",
+        "scripts/Template.App.ClientApp",
         "scripts/crud/common.widget.crud.base",
         "scripts/crud/common.widget.crud.grid",
         "scripts/crud/common.widget.crud.filter",

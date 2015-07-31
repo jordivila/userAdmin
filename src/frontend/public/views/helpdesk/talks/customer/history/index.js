@@ -1,7 +1,7 @@
 ﻿define([
     "jquery",
     "jqueryui",
-    "scripts/Template.App.Init",
+    "scripts/Template.App.ClientApp",
 
     "scripts/modules/crud",
     "/helpdesk/talks/customer/helpdeskCommon/helpdeskCrudFakeData.js",
@@ -41,16 +41,20 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskUrls) {
                                     $cell.find('a')
                                         .click(function () {
                                             clientApp.template.loadByUrl('{0}{1}'.format(helpdeskUrls.baseAddress, helpdeskUrls.message(dataItem.idTalk)));
-
-                                            
-
                                         });
                                     break;
                                 case "dateLastMessage":
 
                                     clientApp.globalizer.get()
                                      .done(function (Globalize) {
-                                         $cell.html(dataItem[columnName] !== null ? Globalize.formatDate(dataItem[columnName]) : '');
+
+                                         var strDate = dataItem[columnName] !== null ? Globalize.formatDate(dataItem[columnName]) : '';
+                                         var strUnread = '<div class="ui-text-circle {0}">{1}</div>'.format(
+                                             dataItem.nMessagesUnread > 0 ? 'ui-state-active' : 'ui-helper-invisible',
+                                             dataItem.nMessagesUnread);
+
+                                         $cell.html(strDate + strUnread);
+
                                      });
 
                                     break;

@@ -1,4 +1,4 @@
-define(["jquery", "jqueryui", "scripts/Template.App.Init", "scripts/Template.App.Ajax.Init", "scripts/Template.Widget.Menu.tree"],
+define(["jquery", "jqueryui", "scripts/Template.App.ClientApp", "scripts/Template.Class.Ajax", "scripts/Template.Widget.Menu.tree"],
    function ($, jqUI, clientApp) {
 
        clientApp.view = {

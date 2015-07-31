@@ -1,4 +1,4 @@
-﻿define(["jquery", "jqueryui", "scripts/Template.App.Init", "scripts/Template.Widget.ItemPicker"],
+﻿define(["jquery", "jqueryui", "scripts/Template.App.ClientApp", "scripts/Template.Widget.ItemPicker"],
    function ($, jqUI, clientApp) {
 
        clientApp.view = {

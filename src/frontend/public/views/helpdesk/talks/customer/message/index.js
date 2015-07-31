@@ -1,9 +1,9 @@
 ﻿define([
     "jquery",
     "jqueryui",
-    "scripts/Template.App.Init",
+    "scripts/Template.App.ClientApp",
     "pPromises",
-    "scripts/url/UrlHelper",
+    "scripts/Template.Class.UrlHelper",
     "scripts/modules/crud",
     "scripts/jQuery.Plugins.scrollUtils",
     "/helpdesk/talks/customer/helpdeskCommon/helpdeskCrudFakeData.js",

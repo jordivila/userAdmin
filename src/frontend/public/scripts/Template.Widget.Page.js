@@ -7,7 +7,7 @@ define([
     "scripts/Template.Widget.Menu.nav",
     "pPromises",
     "crossLayer/config",
-    "scripts/Template.App.Init"
+    "scripts/Template.App.ClientApp"
 ],
 function ($, jqUI, Handlebars, hist,  nav, P, crossLayer, clientApp) {
 

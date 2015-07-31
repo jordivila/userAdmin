@@ -1,6 +1,6 @@
 define([
     "jquery",
-    "scripts/url/UrlHelper",
+    "scripts/Template.Class.UrlHelper",
     "pPromises",
     "crossLayer/config"
 ],

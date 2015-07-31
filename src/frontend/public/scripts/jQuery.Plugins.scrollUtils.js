@@ -1,6 +1,6 @@
 define([
     "jquery",
-    "scripts/Template.App.Utils.Init"
+    "scripts/Template.Class.Utils"
 ],
     function ($, Utils) {
 

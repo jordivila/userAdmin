@@ -1,5 +1,5 @@
 ﻿define([
-    "scripts/Template.App.Init",
+    "scripts/Template.App.ClientApp",
     "crossLayer/config"
 ],
 function (clientApp, crossLayer) {

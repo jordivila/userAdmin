@@ -1,5 +1,5 @@
 ﻿define([
-    "scripts/Template.App.Init",
+    "scripts/Template.App.ClientApp",
     "crossLayer/models/dataResult",
     "crossLayer/models/dataResultPaginated"
 ],
@@ -14,6 +14,37 @@
                 _fakeDataGridTalks: null,
                 _fakeDataGridMessages: null,
                 _fakeDataGridPeople: null,
+                //_fakeDataGridPeopleLastRead: [],
+                /*
+                _fakeDataGridPeopleLastReadAdd: function (idTalk, idPeople, idMessage) {
+
+                    var index = null;
+
+                    for (var i = 0; i < crudAjaxOpts.ajax._fakeDataGridPeopleLastRead.length; i++) {
+                        if (crudAjaxOpts.ajax._fakeDataGridPeopleLastRead[i].idTalk === idTalk) {
+                            if (crudAjaxOpts.ajax._fakeDataGridPeopleLastRead[i].idPeople === idPeople) {
+                                index = i;
+                            }
+                        }
+                    }
+
+                    if (index === null) {
+                        // el registro no existe. Lo creamos
+
+                        crudAjaxOpts.ajax._fakeDataGridPeopleLastRead.push({
+                            idTalk: idTalk,
+                            idPeople: idPeople,
+                            idMessage: idMessage,
+                            dateRead: new Date()
+                        });
+                    }
+                    else {
+                        crudAjaxOpts.ajax._fakeDataGridPeopleLastRead[index].idMessage = idMessage;
+                        crudAjaxOpts.ajax._fakeDataGridPeopleLastRead[index].dateRead = new Date();
+                    }
+
+                },
+                */
                 _fakeDataGridPeopleFindById: function (idPeople) {
 
                     var result = null;
@@ -27,7 +58,11 @@
                     return result;
                 },
                 _fakeDataGridPeopleInvolved: null,
+
                 _fakeMessagesGetDateLastMessage: function (idTalk) {
+
+                    // busca dentro del maestro de mensajes cual es el ultimo
+                    // este metodo estara en backend
 
                     var result = null;
 
@@ -80,7 +115,7 @@
                     };
 
 
-                    for (var i = 0; i < 100; i++) {
+                    for (var i = 0; i < 78; i++) {
 
                         //create a talk
                         crudAjaxOpts.ajax._fakeDataGridTalks.push({
@@ -103,13 +138,23 @@
 
                         // add messages to that talk
                         for (var j = 0; j < 10; j++) {
-                            crudAjaxOpts.ajax._fakeDataGridMessages.push({
+
+                            var messageInstance = {
                                 idMessage: crudAjaxOpts.ajax._fakeDataGridMessages.length,
                                 idTalk: i,
                                 idPeople: (j % 2 === 0) ? crudAjaxOpts.ajax._fakeDataGridPeople[0].idPeople : crudAjaxOpts.ajax._fakeDataGridPeople[1].idPeople,
                                 message: clientApp.utils.replaceAll('-', ' ', clientApp.utils.guid()),
                                 datePosted: calcDatePosted(crudAjaxOpts.ajax._fakeDataGridMessages.length)
-                            });
+                            };
+
+                            // add the message
+                            crudAjaxOpts.ajax._fakeDataGridMessages.push(messageInstance);
+
+                            // add message as a read one. As far as the message is written by the current idPeople 
+                            //crudAjaxOpts.ajax._fakeDataGridPeopleLastReadAdd(
+                            //    messageInstance.idTalk,
+                            //    messageInstance.idPeople,
+                            //    messageInstance.idMessage);
                         }
                     }
 
@@ -118,18 +163,22 @@
                 },
                 _fakeDelay: 1000,
                 _fakeConversationsPartner: function () {
-                    // imitate conversations adding messages as an employee
-                    for (var i = 0; i < crudAjaxOpts.ajax._fakeDataGridTalks.length; i++) {
-                        crudAjaxOpts.ajax._fakeDataGridMessages.push({
-                            idMessage: crudAjaxOpts.ajax._fakeDataGridMessages.length,
-                            idTalk: crudAjaxOpts.ajax._fakeDataGridTalks[i].idTalk,
-                            idPeople: 0, // --> employee
-                            message: clientApp.utils.replaceAll('-', ' ', clientApp.utils.guid()),
-                            datePosted: new Date(),
-                        });
-                    }
 
-                    setTimeout(function () { crudAjaxOpts.ajax._fakeConversationsPartner(); }, 3000);
+                    var _doConversationsPartner = function () {
+
+                        // imitate conversations adding messages as an employee
+                        for (var i = 0; i < crudAjaxOpts.ajax._fakeDataGridTalks.length; i++) {
+                            crudAjaxOpts.ajax._fakeDataGridMessages.push({
+                                idMessage: crudAjaxOpts.ajax._fakeDataGridMessages.length,
+                                idTalk: crudAjaxOpts.ajax._fakeDataGridTalks[i].idTalk,
+                                idPeople: 0, // --> employee
+                                message: clientApp.utils.replaceAll('-', ' ', clientApp.utils.guid()),
+                                datePosted: new Date(),
+                            });
+                        }
+                    };
+
+                    setTimeout(function () { _doConversationsPartner(); }, 3000);
                 },
                 _fakeMessagesByidTalkGet: function (idTalk) {
 
@@ -183,7 +232,8 @@
                             dataResult.data.data.push({
                                 idTalk: crudAjaxOpts.ajax._fakeDataGridTalks[i].idTalk,
                                 subject: crudAjaxOpts.ajax._fakeDataGridTalks[i].subject,
-                                dateLastMessage: crudAjaxOpts.ajax._fakeMessagesGetDateLastMessage(crudAjaxOpts.ajax._fakeDataGridTalks[i].idTalk)
+                                dateLastMessage: crudAjaxOpts.ajax._fakeMessagesGetDateLastMessage(crudAjaxOpts.ajax._fakeDataGridTalks[i].idTalk),
+                                nMessagesUnread: i
                             });
                         }
                     }
@@ -244,7 +294,7 @@
 
                     if (((dataItem.message.trim() === '') === true)) {
                         // do not validate
-                        // In case message is empty then fail silently
+                        // In case message is empty then fail silently at backend
                         // as far as client validation should occur before arrive here
 
                         //modelErrors.push({ key: "message", value: [clientApp.i18n.texts.get("Views.Crud.FieldRequired")] });

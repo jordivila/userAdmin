@@ -1,5 +1,5 @@
 ﻿define([
-    "scripts/Template.App.Init",
+    "scripts/Template.App.ClientApp",
     "./crudSamplesCustomerData.js",
 ],
     function (clientApp, customerAjax) {

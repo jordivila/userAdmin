@@ -1,7 +1,7 @@
 ﻿define([
     "jquery",
     "jqueryui",
-    "scripts/Template.App.Init",
+    "scripts/Template.App.ClientApp",
     "/helpdesk/talks/customer/helpdeskCommon/helpdeskUrls.js",
 ],
 function ($, jqUI, clientApp, helpdeskUrls) {
