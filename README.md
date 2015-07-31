@@ -7,7 +7,7 @@
 [![devDependency Status](https://david-dm.org/jordivila/userAdmin/dev-status.svg)](https://david-dm.org/jordivila/userAdmin#info=devDependencies)
 [![Code Climate](https://codeclimate.com/github/jordivila/userAdmin/badges/gpa.svg)](https://codeclimate.com/github/jordivila/userAdmin)
 
-This website template is in beta. I'm using Nodejs & Mongodb to build a website deployable to an azure website in just one click.
+This website template is in beta.
 
 ## Getting Started ##
 
@@ -32,7 +32,8 @@ The easiest way to get started is to clone the repository and then:
 3. Automated testing and continuous integration
 4. Client/server cross platform -> node.js & native mobile appliactions
 5. Client/server module application with dependency loader
-6. Client/server internationalization & multi language support 
+6. Client/server internationalization & multi language support
+7. Deployable to an azure website in just one click 
 
 ## Movie characters  ##
 
