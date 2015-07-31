@@ -25,6 +25,7 @@ function ($, jqUI, clientApp) {
             },
 
             texts: {
+                gridEmptyData: clientApp.i18n.texts.get("Template.Widget.Crud.EmptyResults"),
                 gridSearchNotifyBeginMsg: clientApp.i18n.texts.get("Template.Widget.Crud.Searching"),
                 gridSearchNotifyFailMsg: clientApp.i18n.texts.get("Template.Widget.Crud.UnhandledErrorSearchingData"),
                 gridSearchEditNotifyBeginMsg: clientApp.i18n.texts.get("Template.Widget.Crud.SearchItemForEdit"),

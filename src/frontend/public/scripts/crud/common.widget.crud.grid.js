@@ -36,7 +36,7 @@
                 },
 
                 texts: {
-                    emptyRowText: clientApp.i18n.texts.get("Template.Widget.Crud.EmptyResults"),
+                    gridEmptyData: clientApp.i18n.texts.get("Template.Widget.Crud.EmptyResults"),
                     gridBindingError: clientApp.i18n.texts.get("Template.Widget.Crud.UnhandledErrorBindingGridData")
                 }
             },
@@ -229,7 +229,7 @@
             },
             _buildEmptyDataRow: function () {
                 var $emtpyRow = '<div class="ui-widgetGrid-emptyRow ui-widgetGrid-column  ui-state-active"><div class="ui-widgetGrid-column-content">{0}</div></div>'
-                                    .format(this.options.texts.emptyRowText);
+                                    .format(this.options.texts.gridEmptyData);
 
                 jQuery(this.options.gridBodyDOMId).append($emtpyRow);
             }

@@ -6,7 +6,7 @@
 .ui-helpdesk-talks-message-window .ui-message {clear:both;margin:0.2em 0 0.2em 0;float:left;max-width:90%;padding:0.5em;}
 .ui-helpdesk-talks-message-window .ui-message div {float:left;margin:0 0.2em 0 0.2em;}
 .ui-helpdesk-talks-message-window .ui-message .ui-message-who {font-weight:normal;}
-.ui-helpdesk-talks-message-window .ui-message .ui-message-text {font-weight:normal;}
+.ui-helpdesk-talks-message-window .ui-message .ui-message-text {font-weight:normal;word-break: break-word;}
 .ui-helpdesk-talks-message-window .ui-message .ui-message-idMessage {display:none;}
 .ui-helpdesk-talks-message-window .ui-message .ui-message-datePosted {font-size:0.7em;margin: 0.4em 0 0 0;float:right;clear:both;}
 .ui-helpdesk-talks-message-window .ui-message.ui-isEmployee {float:right;}
@@ -24,5 +24,4 @@
 .ui-widgetModel .block-compose .buttons-right {width:2em;}
 .ui-widgetModel .block-compose button {padding:0.2em 0.5em 0.2em 0.5em; border:none;background:none;font-size:1.5em;}
 .ui-widgetModel .block-compose .input-container {}
-.ui-widgetModel .block-compose .input-container .input { word-wrap: break-word;white-space: pre-wrap;padding:1em;min-height: 1em;max-height: 3.6em;overflow-y: auto;overflow-x: hidden;border-radius: 0.5em;background-color: #fff;}
-    
+.ui-widgetModel .block-compose .input-container .input { word-wrap: break-word;word-break: break-word;white-space: pre-wrap;padding:1em;min-height: 1em;max-height: 3.6em;overflow-y: auto;overflow-x: hidden;border-radius: 0.5em;background-color: #fff;}

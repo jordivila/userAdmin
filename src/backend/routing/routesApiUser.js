@@ -144,6 +144,10 @@
                                                 text: "Basic Grid"
                                             },
                                             {
+                                                url: "/crud/crudGridEmptyMessage/",
+                                                text: "Custom emtpy message"
+                                            },
+                                            {
                                                 url: "/crud/crudGridSearch/",
                                                 text: "Search & paginate"
                                             },

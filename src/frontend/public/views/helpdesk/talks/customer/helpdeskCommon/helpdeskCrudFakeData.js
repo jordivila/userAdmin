@@ -168,6 +168,7 @@
 
                         // imitate conversations adding messages as an employee
                         for (var i = 0; i < crudAjaxOpts.ajax._fakeDataGridTalks.length; i++) {
+
                             crudAjaxOpts.ajax._fakeDataGridMessages.push({
                                 idMessage: crudAjaxOpts.ajax._fakeDataGridMessages.length,
                                 idTalk: crudAjaxOpts.ajax._fakeDataGridTalks[i].idTalk,
@@ -175,9 +176,10 @@
                                 message: clientApp.utils.replaceAll('-', ' ', clientApp.utils.guid()),
                                 datePosted: new Date(),
                             });
+
                         }
 
-                        setTimeout(function () { _doConversationsPartner(); }, 3000);
+                        setTimeout(function () { crudAjaxOpts.ajax._fakeConversationsPartner(); }, 1);
                     };
 
                     setTimeout(function () { _doConversationsPartner(); }, 3000);
@@ -261,9 +263,9 @@
                         // Simulate saving data
                         var newId = crudAjaxOpts.ajax._fakeDataGridTalks.length;
                         crudAjaxOpts.ajax._fakeDataGridTalks.push({
-                            id: newId,
+                            idTalk: newId,
                             subject: dataItem.subject,
-                            dateLastMessage: new Date(),
+                            //dateLastMessage: new Date(),
                         });
 
                         // Simulate retrieving data from server

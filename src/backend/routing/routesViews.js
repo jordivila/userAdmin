@@ -109,6 +109,9 @@
         registerCommonVerbs(app, "crud/crudExpand", genericViewController);
         registerCommonVerbs(app, "crud/crudFormSimple", genericViewController);
         registerCommonVerbs(app, "crud/crudFormExtended", genericViewController);
+        registerCommonVerbs(app, "crud/crudGridEmptyMessage", genericViewController);
+
+        
 
         registerCommonVerbs(app, "helpdesk/talks/customer/home", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/helpdeskCommon", genericViewController);

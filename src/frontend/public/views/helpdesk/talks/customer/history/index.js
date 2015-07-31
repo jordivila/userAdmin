@@ -6,8 +6,9 @@
     "scripts/modules/crud",
     "/helpdesk/talks/customer/helpdeskCommon/helpdeskCrudFakeData.js",
     "/helpdesk/talks/customer/helpdeskCommon/helpdeskUrls.js",
+    "crossLayer/dateHelper"
 ],
-function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskUrls) {
+function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskUrls, dateHelper) {
 
     clientApp.view = {
         main: function () {
@@ -48,19 +49,29 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskUrls) {
                                          break;
                                      case "dateLastMessage":
 
+                                         var dateDescr = function () {
 
-                                              var strDate = dataItem[columnName] !== null ? Globalize.formatDate(dataItem[columnName]) : '';
-                                              var strUnread = '<div class="ui-text-circle {0}">{1}</div>'.format(
-                                                  dataItem.nMessagesUnread > 0 ? 'ui-state-active' : 'ui-helper-invisible',
-                                                  dataItem.nMessagesUnread);
+                                             var diff = dateHelper.getDifferenceDays(new Date(), dataItem[columnName]);
+                                             if (diff === 0) {
+                                                 return Globalize.formatDate(dataItem[columnName], { time: "short" });
+                                             }
+                                             else {
+                                                 return Globalize.formatDate(dataItem[columnName], { date: "short" });
+                                             }
 
-                                              $cell.html(strDate + strUnread);
+                                         };
 
+                                         var strDate = dataItem[columnName] !== null ? dateDescr() : '';
+                                         var strUnread = '<div class="ui-text-circle {0}">{1}</div>'.format(
+                                             dataItem.nMessagesUnread > 0 ? 'ui-state-active' : 'ui-helper-invisible',
+                                             dataItem.nMessagesUnread);
 
+                                         $cell.html(strDate + strUnread);
 
                                          break;
                                      default: break;
                                  }
+
                              },
                              gridButtonsGet: function (self, defaultButtons) {
                                  for (var i = 0; i < defaultButtons.length; i++) {
@@ -77,6 +88,12 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskUrls) {
                                      infiniteScrolling: true
                                  };
                              },
+                             gridCustomOptions: {
+                                 texts: {
+                                     gridEmptyData: clientApp.i18n.texts.get("Helpdesk.Talks.History.EmptyData"),
+                                 },
+                             },
+
                              formInit: function (self, formOptions) {
 
                              },
@@ -103,12 +120,11 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskUrls) {
 
                  });
 
-
             };
 
             setTimeout(function () {
                 initMain();
-            },500);
+            }, 500);
         }
     };
 
