@@ -14,90 +14,96 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskUrls) {
 
             var initMain = function () {
 
-                var crudOptions = function () {
+                clientApp.globalizer.get()
+                 .done(function (Globalize) {
 
-                    var r = {
-                        //filterModel: [
+                     var crudOptions = function () {
 
-                        //],
-                        gridSearchMethod: crudAjaxOpts.ajax.talkSearch,
-                        gridModel: function () {
-                            return [
-                                {
-                                    key: "subject",
-                                    displayName: clientApp.i18n.texts.get("Helpdesk.Talks.History.GridColumns.Subject")
-                                },
-                                {
-                                    key: "dateLastMessage",
-                                    displayName: clientApp.i18n.texts.get("Helpdesk.Talks.History.GridColumns.Date")
-                                }
-                            ];
-                        }(),
-                        gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
+                         var r = {
+                             //filterModel: [
 
-                            switch (columnName) {
-                                case "subject":
-                                    $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
-                                    $cell.find('a')
-                                        .click(function () {
-                                            clientApp.template.loadByUrl('{0}{1}'.format(helpdeskUrls.baseAddress, helpdeskUrls.message(dataItem.idTalk)));
-                                        });
-                                    break;
-                                case "dateLastMessage":
+                             //],
+                             gridSearchMethod: crudAjaxOpts.ajax.talkSearch,
+                             gridModel: function () {
+                                 return [
+                                     {
+                                         key: "subject",
+                                         displayName: clientApp.i18n.texts.get("Helpdesk.Talks.History.GridColumns.Subject")
+                                     },
+                                     {
+                                         key: "dateLastMessage",
+                                         displayName: clientApp.i18n.texts.get("Helpdesk.Talks.History.GridColumns.Date")
+                                     }
+                                 ];
+                             }(),
+                             gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
 
-                                    clientApp.globalizer.get()
-                                     .done(function (Globalize) {
+                                 switch (columnName) {
+                                     case "subject":
+                                         $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
+                                         $cell.find('a')
+                                             .click(function () {
+                                                 clientApp.template.loadByUrl('{0}{1}'.format(helpdeskUrls.baseAddress, helpdeskUrls.message(dataItem.idTalk)));
+                                             });
+                                         break;
+                                     case "dateLastMessage":
 
-                                         var strDate = dataItem[columnName] !== null ? Globalize.formatDate(dataItem[columnName]) : '';
-                                         var strUnread = '<div class="ui-text-circle {0}">{1}</div>'.format(
-                                             dataItem.nMessagesUnread > 0 ? 'ui-state-active' : 'ui-helper-invisible',
-                                             dataItem.nMessagesUnread);
 
-                                         $cell.html(strDate + strUnread);
+                                              var strDate = dataItem[columnName] !== null ? Globalize.formatDate(dataItem[columnName]) : '';
+                                              var strUnread = '<div class="ui-text-circle {0}">{1}</div>'.format(
+                                                  dataItem.nMessagesUnread > 0 ? 'ui-state-active' : 'ui-helper-invisible',
+                                                  dataItem.nMessagesUnread);
 
-                                     });
+                                              $cell.html(strDate + strUnread);
 
-                                    break;
-                                default: break;
-                            }
-                        },
-                        gridButtonsGet: function (self, defaultButtons) {
-                            for (var i = 0; i < defaultButtons.length; i++) {
-                                if (defaultButtons[i].id == "search") {
-                                    defaultButtons[i].text = clientApp.i18n.texts.get("Helpdesk.Talks.History.SearchMessages");
-                                }
-                            }
 
-                            return defaultButtons;
-                        },
-                        gridPagerInit: function () {
-                            return {
-                                pageSize: 50,
-                                infiniteScrolling: true
-                            };
-                        },
-                        formInit: function (self, formOptions) {
 
-                        },
-                    };
+                                         break;
+                                     default: break;
+                                 }
+                             },
+                             gridButtonsGet: function (self, defaultButtons) {
+                                 for (var i = 0; i < defaultButtons.length; i++) {
+                                     if (defaultButtons[i].id == "search") {
+                                         defaultButtons[i].text = clientApp.i18n.texts.get("Helpdesk.Talks.History.SearchMessages");
+                                     }
+                                 }
 
-                    return r;
-                }();
+                                 return defaultButtons;
+                             },
+                             gridPagerInit: function () {
+                                 return {
+                                     pageSize: 50,
+                                     infiniteScrolling: true
+                                 };
+                             },
+                             formInit: function (self, formOptions) {
 
-                jQuery('body')
-                    .find('div.ui-helpdesk-talks-summary-crud:first')
-                        .crud(crudOptions)
-                        .crud('gridButtonsVisible', false)
-                        .crud('gridSearch')
-                        .hide()
-                        .removeClass('ui-helper-hidden')
-                        .fadeIn()
-                    .end()
-                    .find('i.ui-helpdesk-talks-summary-userIcon:first')
-                        .click(function () {
-                            clientApp.template.loadByUrl('{0}{1}'.format(helpdeskUrls.baseAddress, helpdeskUrls.subject()));
-                        })
-                    .end();
+                             },
+                         };
+
+                         return r;
+                     }();
+
+                     jQuery('body')
+                         .find('div.ui-helpdesk-talks-summary-crud:first')
+                             .crud(crudOptions)
+                             .crud('gridButtonsVisible', false)
+                             .crud('gridSearch')
+                             .hide()
+                             .removeClass('ui-helper-hidden')
+                             .fadeIn()
+                         .end()
+                         .find('i.ui-helpdesk-talks-summary-userIcon:first')
+                             .click(function () {
+                                 clientApp.template.loadByUrl('{0}{1}'.format(helpdeskUrls.baseAddress, helpdeskUrls.subject()));
+                             })
+                         .end();
+
+
+                 });
+
+
             };
 
             setTimeout(function () {
