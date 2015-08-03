@@ -4,11 +4,6 @@
     <meta name="viewport" content="initial-scale=1.0" />
     <title>{{title}}</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-    <style type="text/css">
-        .ui-helper-hidden {
-            display: none;
-        }
-    </style>
     <link id="jQueryUITheme" href="//ajax.googleapis.com/ajax/libs/jqueryui/1/themes/{{theme}}/jquery-ui.min.css" rel="Stylesheet" type="text/css" />
     <link href="/public/cdn/{{package.name}}.{{package.version}}.ui.css" rel="Stylesheet" type="text/css" />
     {{#each cssFiles}}
@@ -55,25 +50,13 @@
                 <h1>{{title}}</h1>
             </div>
 
+
             <!--Breadcrumb begin-->
-            {{#if this.Breadcrumb }}
-            <div class="ui-breadcrumb">
-                <div class="ui-widget-content ui-corner-all ui-state-default">
-                    <ul>
-                        {{#each Breadcrumb}}
-                        <li>
-                            {{#if this.url }}
-                            <span class="ui-icon ui-icon-play"></span>
-                            {{/if}}
-                            <a href="{{this.url}}">{{this.title}}</a>
-                        </li>
-                        {{/each}}
-                    </ul>
-                    <div class="ui-helper-clearfix"></div>
-                </div>
+            <div class="ui-breadcrumb-box">
+                {{#if this.breadcrumb }}
+                    {{{ breadcrumbHelper this }}}
+                {{/if}}
             </div>
-            <br />
-            {{/if}}
             <!--Breadcrumb end-->
 
             <div class="ui-siteContent">

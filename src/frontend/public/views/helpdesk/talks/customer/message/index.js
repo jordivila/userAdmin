@@ -321,7 +321,7 @@ function ($, jqUI, clientApp, P, UrlHelper, crudModule, scrollUtils, crudAjaxOpt
                          3.- if scroll is at bottom then add bubbles and force scroll to continue at bottom
                      */
 
-                     var scrollWasAtBottom = $messageWindow.isScrollNearToBottom(1);
+                     var scrollWasAtBottom = $messageWindow.isScrollNearBottom(1);
 
                      for (var i = 0; i < dataResultPaginated.data.data.length; i++) {
                          messagesUnreadAppendViewModelItem(dataResultPaginated.data.data[i]);

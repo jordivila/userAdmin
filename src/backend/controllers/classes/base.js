@@ -35,7 +35,7 @@
             },
             // Indica si la pagina viene de una peticion del menu o viene de una peticion para SEO
             isSEORequest: (req.query[crossLayer.queryParams.seoRequest] === undefined),
-            //Breadcrumb: [
+            //breadcrumb: [
             //{ title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
             //{ title: i18n.__("GeneralTexts.Home"), url: "/" }
             //],

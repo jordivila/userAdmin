@@ -21,6 +21,7 @@
     var GlobalizeController = require('./src/backend/controllers/globalize');
     var app = express();
     var usePreCompiled = config.get('clientApp:usePreCompiled');
+    var handleBarsHelpers = require('./src/crossLayer/handleBarsHelper');
 
     app.set('root', usePreCompiled === true ? (__dirname + '/src/frontend/public-build/') : (__dirname + '/src/frontend/public/'));
     app.set('crossLayer', __dirname + '/src/crossLayer/');
@@ -43,9 +44,7 @@
     app.engine('handlebars', exphbs({
         layoutsDir: app.get('views') + 'layouts/',
         defaultLayout: 'layoutRequire',
-        helpers: {
-            jsonHelper: function (context) { return JSON.stringify(context); },
-        }
+        helpers: handleBarsHelpers
     }));
     app.set('view engine', 'handlebars');
 

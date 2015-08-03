@@ -1,6 +1,10 @@
-﻿.ui-breadcrumb { clear:both;padding:0 0 0 0;margin:1em 0 0 0 ;clear:both;}
-.ui-breadcrumb .ui-state-default {/*background:none !important;*//*border:0px !important;*/padding:0.5em 0.5em 0.5em 0.5em;}
-.ui-breadcrumb ul li  { float:left;text-align:left;border:.1em solid transparent !important;margin:0.5em 0 0.5em 1em;}
-.ui-breadcrumb ul li.ui-breadcrumb-next {cursor:default !important;}
-.ui-breadcrumb ul li span {border:0 !important;}
-.ui-breadcrumb ul li span.ui-icon {border:0 !important; float:left;margin:0 0.5em 0 0;}
+﻿
+
+.ui-breadcrumb {overflow:hidden;height:2.4em;}
+.ui-breadcrumb .ui-breadcrumb-moveLeft , 
+.ui-breadcrumb .ui-breadcrumb-path ,
+.ui-breadcrumb .ui-breadcrumb-moveRight {padding:0.5em;cursor:pointer;float:left;}
+.ui-breadcrumb .ui-breadcrumb-moveLeft  {margin:0.1em 0.5em 0em 0em;}
+.ui-breadcrumb .ui-breadcrumb-path {white-space:nowrap; overflow-x:scroll;margin:0.1em 0 0 0em;}
+.ui-breadcrumb .ui-breadcrumb-path .ui-icon {margin:0em 1em 0em 1em;}
+.ui-breadcrumb .ui-breadcrumb-moveRight {float:right;margin:0.1em 0 0 0.5em;} 

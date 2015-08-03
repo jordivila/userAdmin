@@ -1,4 +1,10 @@
 {
     "title": "Helpdesk talks",
-    "viewEntryPoint": "./index.js"
+    "viewEntryPoint": "./index.js",
+    "breadcrumb": [
+        { "title": "GeneralTexts.BreadcrumbNavigation" },
+        { "title": "Helpdesk.Talks.Summary.Title1", "url": "/" },
+        { "title": "Helpdesk.Talks.Summary.Title2", "url": "/" },
+        { "title": "Helpdesk.Talks.Summary.Title3", "url": "/" }
+    ]
 }

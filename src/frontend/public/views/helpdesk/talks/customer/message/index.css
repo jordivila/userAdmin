@@ -1,4 +1,5 @@
-﻿body {overflow:hidden;}
+﻿body {overflow:hidden; /*prevents double scrolling on the page*/}
+.ui-pageHolder .ui-sitePage .ui-site-title  {display:none;/**/}
 
 .ui-helpdesk-talks-message-container { position:relative;background-image: none !important;width:99.5%;overflow:hidden;}
 

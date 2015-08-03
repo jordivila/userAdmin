@@ -3,13 +3,15 @@ define([
     "jqueryui",
     "handlebars",
     "history",
-    
+
+    'scripts/Template.Widget.Breadcrumb',
     "scripts/Template.Widget.Menu.nav",
     "pPromises",
     "crossLayer/config",
-    "scripts/Template.App.ClientApp"
+    "scripts/Template.App.ClientApp",
+    "crossLayer/handleBarsHelper"
 ],
-function ($, jqUI, Handlebars, hist,  nav, P, crossLayer, clientApp) {
+function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientApp, handleBarsHelpers) {
 
     jQuery.widget("ui.page", jQuery.ui.widgetBase, {
         options: {
@@ -43,30 +45,9 @@ function ($, jqUI, Handlebars, hist,  nav, P, crossLayer, clientApp) {
                 }
                 else {
                     self.menuNavInit();
+                    self.breadcrumbInitWidget();
                 }
             });
-
-
-
-            //self.i18nDataInit()
-            //    .done(function () {
-            //        self.historyInit()
-            //            .done(function () {
-            //                self.handlebarsInit()
-            //                    .done(function () {
-            //                        self.menuNavInit();
-            //                    })
-            //                    .fail(function (eMsg) {
-            //                        self.errorDisplay(eMsg);
-            //                    });
-            //            })
-            //            .fail(function (eMsg) {
-            //                self.errorDisplay(eMsg);
-            //            });
-            //    })
-            //    .fail(function (eMsg) {
-            //        self.errorDisplay(eMsg);
-            //    });
 
         },
         _create: function () {
@@ -81,7 +62,7 @@ function ($, jqUI, Handlebars, hist,  nav, P, crossLayer, clientApp) {
 
             var self = this;
             var dfd = jQuery.Deferred();
-            var currentCulture = clientApp.utils.getCookie(crossLayer.cookies.i18nLocale);
+            var currentCulture = clientApp.utils.getCookie(crossLayerConfig.cookies.i18nLocale);
 
             dfd.notify(self.options.texts.loadingI18n);
 
@@ -174,6 +155,11 @@ function ($, jqUI, Handlebars, hist,  nav, P, crossLayer, clientApp) {
             });
 
 
+            Handlebars.registerHelper('breadcrumbHelper', handleBarsHelpers.breadcrumbHelper);
+
+
+
+
 
             dfd.resolve();
 
@@ -220,6 +206,8 @@ function ($, jqUI, Handlebars, hist,  nav, P, crossLayer, clientApp) {
                                 .html(model.title);
                     }
 
+
+                    self.breadcrumbRender(model);
                     $siteContent.html(handlebarTemplate);
 
                     if (hasEntry) {
@@ -241,5 +229,30 @@ function ($, jqUI, Handlebars, hist,  nav, P, crossLayer, clientApp) {
 
             return dfd.promise();
         },
+        breadcrumbInitWidget: function () {
+            jQuery(this.element).find("div.ui-breadcrumb:first").breadcrumb();
+        },
+        breadcrumbRender: function (model) {
+
+            var $breadcrumbBox = jQuery(this.element).find('div.ui-breadcrumb-box:first');
+
+            if (model.breadcrumb) {
+                var htmlBreadcrumb = '{{{ breadcrumbHelper this }}}';
+                var modelBreadcrumb = model;
+                var templateBreadcrumb = Handlebars.compile(htmlBreadcrumb);
+                var handlebarBreadcrumbTemplate = templateBreadcrumb(jQuery.extend({}, modelBreadcrumb, {}));
+
+
+                $breadcrumbBox.append(handlebarBreadcrumbTemplate);
+
+                this.breadcrumbInitWidget();
+            }
+            else {
+                $breadcrumbBox.empty();
+            }
+
+
+        }
+
     });
 });

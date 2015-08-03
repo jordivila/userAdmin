@@ -13,17 +13,26 @@ define([
                 return this.get(0).scrollHeight > this.get(0).clientHeight;
             };
 
-            $.fn.isScrollToBottom = function () {
+            $.fn.isScrollAtBottom = function () {
                 return $(this).scrollTop() + $(this).innerHeight() >= ($(this)[0].scrollHeight);
             };
 
-            $.fn.isScrollNearToBottom = function (howNearInEmUnits) {
+            $.fn.isScrollAtRight = function () {
+                return $(this).scrollLeft() + $(this).innerWidth() >= ($(this)[0].scrollWidth);
+            };
+
+            $.fn.isScrollNearBottom = function (howNearInEmUnits) {
                 return $(this).scrollTop() + $(this).innerHeight() >= ($(this)[0].scrollHeight - utils.convertEmToPixels(howNearInEmUnits));
+            };
+
+            $.fn.isScrollNearRight = function (howNearInEmUnits) {
+                return $(this).scrollLeft() + $(this).innerWidth() >= ($(this)[0].scrollWidth - utils.convertEmToPixels(howNearInEmUnits));
             };
 
             $.fn.scrollToBottom = function () {
                 return $(this).scrollTop($(this)[0].scrollHeight);
             };
+
 
         })(jQuery);
 
