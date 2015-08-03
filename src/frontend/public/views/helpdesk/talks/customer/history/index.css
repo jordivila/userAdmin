@@ -3,6 +3,7 @@
 .ui-helpdesk-talks-summary-container ul.ui-helpdesk-talks-summary-list { border-width: 0; }
 
 .ui-helpdesk-talks-summary-crud {    width:99% !important;    overflow:hidden;    display:block !important;}
+.ui-helpdesk-talks-summary-crud .ui-crudGrid-dataRow .ui-widgetGrid-column  {border-right-width:0;padding:1em !important;}
 .ui-helpdesk-talks-summary-crud .ui-crudGrid-subject {width:74.9%;text-align:left !important;}
 .ui-helpdesk-talks-summary-crud .ui-crudGrid-dateLastMessage {width:24.9%;}
 .ui-helpdesk-talks-summary-crud .ui-crudGrid-dateLastMessage .ui-text-circle{border:none !important;float:left;font-size:0.8em;}
