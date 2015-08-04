@@ -171,10 +171,12 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
 
             var self = this;
             var $siteContent = jQuery('div.ui-siteContent:first');
+            var $breadcrumbBox = jQuery(this.element).find('div.ui-breadcrumb-box:first');
 
             var dfd = jQuery.Deferred();
 
             $siteContent.empty();
+            $breadcrumbBox.empty();
 
 
             dfd.notify(self.options.texts.loadingTmpl);
@@ -185,11 +187,20 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
 
                     console.error(err);
 
+                    jQuery('body')
+                        .find('h1:first')
+                            .html(err.statusText ? err.statusText : '');
+
+
+                    self.breadcrumbRender({});
+
                     dfd.reject("{0}: {1} - error - {2}".format(
                          self.options.texts.errLoadingTmpl,
                          err.status ? err.status : '',
                          err.statusText ? err.statusText : ''
                         ));
+
+
                 }
                 else {
 
@@ -230,7 +241,15 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
             return dfd.promise();
         },
         breadcrumbInitWidget: function () {
-            jQuery(this.element).find("div.ui-breadcrumb:first").breadcrumb();
+            jQuery(this.element).find("div.ui-breadcrumb:first").breadcrumb({
+                select: function (event, url) {
+
+                    console.log(url);
+                    alert("select");
+
+                    History.pushState(null, null, url);
+                }
+            });
         },
         breadcrumbRender: function (model) {
 

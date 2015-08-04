@@ -67,6 +67,8 @@
     "Template.Widget.ModelDate.clickToPickDate": "Click here to pick a date",
     "UserAdminTexts.DuplicateEmail": "A user already exists for the given email address",
     "UserAdminTexts.UserNotFound": "User not found",
+    "Views.Breadcrumb.MultipleItems.Title": "Breadcrumb with multiple items",
+    "Views.Breadcrumb.SingleItem.Title": "Breadcrumb with just one item",
     "Views.Crud.Birthdate": "Birthdate",
     "Views.Crud.CrudEmptyMessage.Message": "This is a custom message for an empty grid",
     "Views.Crud.CrudEmptyMessage.Title": "Crud widget - Basic grid . Custom message",

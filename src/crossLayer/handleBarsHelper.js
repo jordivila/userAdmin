@@ -40,13 +40,20 @@
 
                     return r;
                 };
-                var t = '<div class="ui-breadcrumb ui-widget-content ui-corner-all ui-state-default">' +
-                            '<i class="ui-breadcrumb-moveLeft fa fa-backward"></i>' +
-                            '<div class="ui-breadcrumb-path">' +
-                                tEach() + 
+                var t = '<div class="ui-breadcrumb ui-widget-content ui-corner-all ui-state-default ui-helper-invisible">' +
+                            '<div class="ui-breadcrumb-row">' +
+                                '<div class="ui-breadcrumb-col ui-breadcrumb-moveLeft">' +
+                                    '<i class="fa fa-arrow-left"></i>' +
+                                '</div>' +
+                                '<div class="ui-breadcrumb-col ui-breadcrumb-path">' +
+                                    '<div class="ui-breadcrumb-anchors">' +
+                                        tEach() +
+                                    '</div>' + 
+                                '</div>' +
+                                '<div class="ui-breadcrumb-col ui-breadcrumb-moveRight">' +
+                                    '<i class="fa fa-arrow-right"></i>' +
+                                '</div>' +
                             '</div>' +
-                            '<i class="ui-breadcrumb-moveRight fa fa-forward "></i>' +
-                            '<div class="ui-helper-clearfix"></div>' +
                         '</div>';
 
                 return t;

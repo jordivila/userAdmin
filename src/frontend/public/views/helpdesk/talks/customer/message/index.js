@@ -270,8 +270,8 @@ function ($, jqUI, clientApp, P, UrlHelper, crudModule, scrollUtils, crudAjaxOpt
                  var messageWidgetResizeInit = function () {
 
                      var widgetResize = function () {
-                         $mainBox.height((jQuery(window).height() - clientApp.utils.convertEmToPixels(7.7)));
-                         $messageWindow.height((jQuery(window).height() - clientApp.utils.convertEmToPixels(19)));
+                         $mainBox.height((jQuery(window).height() - clientApp.utils.convertEmToPixels(4.2)));
+                         $messageWindow.height((jQuery(window).height() - clientApp.utils.convertEmToPixels(11)));
                      };
 
                      jQuery(window)

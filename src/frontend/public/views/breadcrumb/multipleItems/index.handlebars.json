@@ -1,0 +1,8 @@
+{
+    "title": "Views.Breadcrumb.MultipleItems.Title",
+    "breadcrumb": [
+        { "title": "GeneralTexts.Before.Previous.Page", "url": "/" },
+        { "title": "GeneralTexts.Previous.Page", "url": "/" },
+        { "title": "GeneralTexts.Current.Page", "url": "/" }
+    ]
+}

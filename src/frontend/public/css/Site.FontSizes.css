@@ -1,8 +1,18 @@
-﻿html{
-  font-size: 0.8em !important;
+﻿/*
+    Changing font-size based on screen size === Bad idea.
+    If you do this, keep in mind some widths elements are 
+    calculated based on their font-size. As far as its font-size is bigger
+    could make screen to get malformed
+    
+*/
+
+html{
+  font-size: 0.9em !important;
 }
 
+.ui-widget {font-size:1em ;}
 
+/*
 @media screen and (min-width: 600px){
   html{ font-size: 0.8em !important; }
 }
@@ -14,29 +24,5 @@
 }
 @media screen and (min-width: 1300px){
   html{ font-size: 1em !important; }
-}
-
-
-
-/*
-@media screen and (min-width: 1300px){
-  html{
-    font-size: 1.1em;
-  }
-}
-@media screen and (min-width: 1750px){
-  html{
-    font-size: 1.2em;
-  }
-}
-@media screen and (min-width: 1900px){
-  html{
-    font-size: 1.3em;
-  }
-}
-@media screen and (min-width: 2100px){
-  html{
-    font-size: 1.4em;
-  }
 }
 */

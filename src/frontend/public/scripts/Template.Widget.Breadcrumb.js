@@ -24,13 +24,16 @@ function ($, jqUI, scrollUtils, Utils) {
             var utils = new Utils();
             var $el = $(self.element);
             var $breadCrumbPath = $el.find('div.ui-breadcrumb-path:first');
-            var $breadCrumbLeft = $el.find('i.ui-breadcrumb-moveLeft:first');
-            var $breadCrumbRight = $el.find('i.ui-breadcrumb-moveRight:first');
-            var leftPlusRightWidth = $breadCrumbLeft.outerWidth(true) + $breadCrumbRight.outerWidth(true);
-            var checkButtonsWhenScroll = function () {
+            var $breadCrumbAnchors = $breadCrumbPath.find('div.ui-breadcrumb-anchors:first');
+            var $breadCrumbLeft = $el.find('div.ui-breadcrumb-moveLeft:first');
+            var $breadCrumbRight = $el.find('div.ui-breadcrumb-moveRight:first');
+            var breadcrumbIsSinglePage = function () {
+                return anchorsLength === 0;
+            };
+            var buttonsCheckAvailable = function () {
 
 
-                if ($breadCrumbPath.scrollLeft() === 0) {
+                if (anchorCurrent === 0) {
                     $breadCrumbLeft.addClass('ui-state-disabled');
                 }
                 else {
@@ -38,7 +41,7 @@ function ($, jqUI, scrollUtils, Utils) {
                 }
 
 
-                if ($breadCrumbPath.isScrollNearRight(1)) {
+                if (anchorCurrent === anchorsLength) {
                     $breadCrumbRight.addClass('ui-state-disabled');
                 }
                 else {
@@ -46,10 +49,11 @@ function ($, jqUI, scrollUtils, Utils) {
                 }
 
             };
-            var messageWidgetResizeInit = function () {
+            var resizeInit = function () {
 
+                var buttonsTotalWidth = $breadCrumbLeft.outerWidth(true) + $breadCrumbRight.outerWidth(true);
                 var widgetResize = function () {
-                    $breadCrumbPath.width($el.parents().first().width() - (leftPlusRightWidth + utils.convertEmToPixels(7)));
+                    $breadCrumbPath.width($el.parents().first().width() - (buttonsTotalWidth + utils.convertEmToPixels(4)));
                 };
 
                 jQuery(window)
@@ -59,44 +63,100 @@ function ($, jqUI, scrollUtils, Utils) {
 
                 widgetResize();
             };
-            var scrollStep = function () {
-                return $breadCrumbPath.outerWidth() / ($breadCrumbPath.find('i.ui-icon:last').length);
+            var anchorsLength = $breadCrumbPath.find('a').length - 1;
+            var anchorCurrent = anchorsLength;
+            var anchorMovement = function (callback) {
+
+                $breadCrumbPath
+                    .fadeOut(200, function () {
+                        $breadCrumbPath
+                            .find('a')
+                                //.removeClass('ui-state-active')
+                                .addClass('ui-helper-hidden')
+                            .end()
+                            .find('a:eq(' + (anchorCurrent) + ')')
+                                //.addClass('ui-state-active')
+                                .removeClass('ui-helper-hidden')
+                            .end()
+                            .fadeIn(function () {
+                                if (callback) {
+                                    callback();
+                                }
+                            });
+                    });
+
+                buttonsCheckAvailable();
+            };
+            var anchorMove = function (isForward) {
+
+                console.log(isForward);
+                console.log(anchorCurrent);
+                console.log(anchorsLength);
+
+                if (isForward) {
+                    if (anchorCurrent < anchorsLength) {
+                        anchorCurrent++;
+                        anchorMovement();
+                    }
+                }
+                else {
+                    if (anchorCurrent > 0) {
+                        anchorCurrent--;
+                        anchorMovement();
+                    }
+                }
             };
 
-            $breadCrumbPath
-                .addClass('ui-helper-hidden')
-                .find('i.ui-icon:last')
-                    .hide()
+            var init = function () {
+                resizeInit();
+
+                var afterInit = function () {
+
+                    $breadCrumbAnchors
+                        .find('a')
+                        .click(function (event) {
+                            event.preventDefault();
+                            self._trigger('select', null, jQuery(this).attr('href'));
+                        });
+
+                    jQuery(self.element).removeClass('ui-helper-invisible');
+                };
+
+                if (breadcrumbIsSinglePage()) {
+                    $breadCrumbLeft.click(function () {
+                        $breadCrumbAnchors.find('a:first').click();
+                    });
+                    afterInit();
+                }
+                else {
+                    $breadCrumbLeft.click(function () {
+                        anchorMove(false);
+                    });
+                    $breadCrumbRight.click(function () {
+                        anchorMove(true);
+                    });
+                    $breadCrumbPath.removeClass('ui-helper-hidden');
+                    anchorMovement(function () {
+                        afterInit();
+                    });
+                }
+            };
+
+            jQuery(this.element)
+                .addClass(breadcrumbIsSinglePage() === true ? 'ui-breadcrumb-singlePage' : 'ui-breadcrumb-multiplePage')
+                .find($breadCrumbPath)
+                    .addClass('ui-helper-hidden')
+                    .find('i.ui-icon:last')
+                        .addClass('ui-helper-invisible')
+                    .end()
+                    .find($breadCrumbAnchors)
+                        .addClass(breadcrumbIsSinglePage() === true ? '' : 'ui-state-active')
+                    .end()
                 .end();
 
             setTimeout(function () {
-                messageWidgetResizeInit();
-
-                
-
-                $breadCrumbLeft.click(function () {
-                    if (!$breadCrumbLeft.hasClass('ui-state-disabled')) {
-                        
-                        $breadCrumbPath.stop().animate({ scrollLeft: (($breadCrumbPath.scrollLeft()) - scrollStep()) }, '500', 'swing', function () {
-                            checkButtonsWhenScroll();
-                        });
-                    }
-                });
-                $breadCrumbRight.click(function () {
-                    if (!$breadCrumbRight.hasClass('ui-state-disabled')) {
-
-                        $breadCrumbPath
-                            .stop()
-                            .animate({ scrollLeft: (($breadCrumbPath.scrollLeft()) + scrollStep()) }, '500', 'swing',
-                                function () {
-                                    checkButtonsWhenScroll();
-                                });
-                    }
-                });
-
-
-                $breadCrumbPath.removeClass('ui-helper-hidden');
-            }, 1000);
+                init();
+            }, 1);
 
 
 

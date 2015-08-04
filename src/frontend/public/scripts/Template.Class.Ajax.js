@@ -36,14 +36,14 @@ define([
             //});
         };
 
-        Ajax.prototype.userMenu = function (cbErrFirst) {
+        Ajax.prototype.userMenu = function (callback) {
             return P(jQuery.ajax({
                 url: "/api/user/menu",
                 type: "GET",
                 data: {},
                 cache: false
             })).nodeify(function (error, value) {
-                cbErrFirst(error, value);
+                callback(error, value);
             });
         };
 
@@ -68,7 +68,7 @@ define([
             });
         };
 
-        Ajax.prototype.view = function (historyState, cbErrFirst) {
+        Ajax.prototype.view = function (historyState, callback) {
 
             var self = this;
 
@@ -78,7 +78,7 @@ define([
             ]).nodeify(function (e, data) {
 
                 if (e !== null) {
-                    cbErrFirst(e, data);
+                    callback(e, data);
                 }
                 else {
 
@@ -110,14 +110,14 @@ define([
                             */
                             [viewEntryPointScript],
                             function (clientApp) {
-                                cbErrFirst(e, data);
+                                callback(e, data);
                             },
                             function (errRequiring) {
-                                cbErrFirst(errRequiring, data);
+                                callback(errRequiring, data);
                             });
                     }
                     else {
-                        cbErrFirst(null, data);
+                        callback(null, data);
                     }
                 }
             });
@@ -143,7 +143,7 @@ define([
             });
         };
 
-        Ajax.prototype.i18nData = function (currentCulture, cbErrFirst) {
+        Ajax.prototype.i18nData = function (currentCulture, callback) {
 
             var a = [];
 
@@ -165,11 +165,11 @@ define([
 
             return P.all(a).nodeify(function (e, data) {
                 if (e !== null) {
-                    cbErrFirst(e, data);
+                    callback(e, data);
                 }
                 else {
 
-                    cbErrFirst(null, {
+                    callback(null, {
                         I18nDatepicker: data[0],
                         I18nTexts: data[1]
                     });

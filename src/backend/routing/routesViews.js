@@ -99,6 +99,8 @@
         registerCommonVerbs(app, "globalize/clientside", globalizeController);
         registerCommonVerbs(app, "menu/menuTree", genericViewController);
         registerCommonVerbs(app, "menu/menuSlides", genericViewController);
+        registerCommonVerbs(app, "breadcrumb/singleItem", genericViewController);
+        registerCommonVerbs(app, "breadcrumb/multipleItems", genericViewController);
         registerCommonVerbs(app, "crud/crudCommon", baseController);
         registerCommonVerbs(app, "crud/crudGridSimple", genericViewController);
         registerCommonVerbs(app, "crud/crudGridSearch", genericViewController);

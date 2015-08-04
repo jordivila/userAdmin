@@ -124,6 +124,19 @@
                                 text: "UI Controls",
                                 childs: [
                                     {
+                                        text: "Breadrumb",
+                                        childs: [
+                                            {
+                                                url: "/breadcrumb/singleItem/",
+                                                text: "Single item"
+                                            },
+                                            {
+                                                url: "/breadcrumb/multipleItems/",
+                                                text: "Multiple items"
+                                            },
+                                        ]
+                                    },
+                                    {
                                         text: "Menu",
                                         childs: [
                                             {

@@ -1,0 +1,6 @@
+{
+    "title": "Views.Breadcrumb.SingleItem.Title",
+    "breadcrumb": [
+        { "title": "GeneralTexts.Previous.Page", "url": "/" }
+    ]
+}
