@@ -21,42 +21,47 @@
         breadcrumbHelper: function (context) {
 
             if (context.breadcrumb) {
-                var tEach = function () {
+                if (Array.isArray(context.breadcrumb)) {
+                    var tEach = function () {
 
-                    var r = '';
+                        var r = '';
 
-                    for (var i = 0; i < context.breadcrumb.length; i++) {
+                        for (var i = 0; i < context.breadcrumb.length; i++) {
 
-                        if (context.breadcrumb[i].url) {
-                            r += '<a href="' + context.breadcrumb[i].url + '">' + context.breadcrumb[i].title + '</a>';
+                            if (context.breadcrumb[i].url) {
+                                r += '<a href="' + context.breadcrumb[i].url + '">' + context.breadcrumb[i].title + '</a>';
+                            }
+                            else {
+                                r += '<a href="javascript:void(0);">' + context.breadcrumb[i].title + '</a>';
+                            }
+
+                            r += '<i class="ui-icon fa fa-angle-double-left"></i>';
+
                         }
-                        else {
-                            r += '<a href="javascript:void(0);">' + context.breadcrumb[i].title + '</a>';
-                        }
 
-                        r += '<i class="ui-icon fa fa-angle-double-left"></i>';
-
-                    }
-
-                    return r;
-                };
-                var t = '<div class="ui-breadcrumb ui-widget-content ui-corner-all ui-state-default ui-helper-invisible">' +
-                            '<div class="ui-breadcrumb-row">' +
-                                '<div class="ui-breadcrumb-col ui-breadcrumb-moveLeft">' +
-                                    '<i class="fa fa-arrow-left"></i>' +
+                        return r;
+                    };
+                    var t = '<div class="ui-breadcrumb ui-widget-content ui-corner-all ui-state-default ui-helper-invisible">' +
+                                '<div class="ui-breadcrumb-row">' +
+                                    '<div class="ui-breadcrumb-col ui-breadcrumb-moveLeft">' +
+                                        '<i class="fa fa-arrow-left"></i>' +
+                                    '</div>' +
+                                    '<div class="ui-breadcrumb-col ui-breadcrumb-path">' +
+                                        '<div class="ui-breadcrumb-anchors">' +
+                                            tEach() +
+                                        '</div>' +
+                                    '</div>' +
+                                    '<div class="ui-breadcrumb-col ui-breadcrumb-moveRight">' +
+                                        '<i class="fa fa-arrow-right"></i>' +
+                                    '</div>' +
                                 '</div>' +
-                                '<div class="ui-breadcrumb-col ui-breadcrumb-path">' +
-                                    '<div class="ui-breadcrumb-anchors">' +
-                                        tEach() +
-                                    '</div>' + 
-                                '</div>' +
-                                '<div class="ui-breadcrumb-col ui-breadcrumb-moveRight">' +
-                                    '<i class="fa fa-arrow-right"></i>' +
-                                '</div>' +
-                            '</div>' +
-                        '</div>';
+                            '</div>';
 
-                return t;
+                    return t;
+                }
+                else {
+                    return '';
+                }
             }
             else {
                 return '';

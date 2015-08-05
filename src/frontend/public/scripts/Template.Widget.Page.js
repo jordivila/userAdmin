@@ -23,14 +23,21 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
                 errLoadingI18nData: "Unhandled error getting data. Unable to continue loading site.",
                 errInModule: "The module loaded has thrown an unhandled exception"
             },
+
+            $siteContent: null,
+            $breadcrumbBox: null,
+        },
+        _create: function () {
+            this._super();
+
+            this.options.$siteContent = jQuery('div.ui-siteContent:first');
+            this.options.$breadcrumbBox = jQuery(this.element).find('div.ui-breadcrumb-box:first');
         },
         _init: function () {
 
             var self = this;
 
             this._super();
-
-
 
             var a = [
                 self.i18nDataInit(),
@@ -44,14 +51,22 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
                     self.errorDisplay(e);
                 }
                 else {
-                    self.menuNavInit();
-                    self.breadcrumbInitWidget();
+
+                    jQuery(globals.domIds.panelMain).addClass('ui-display-table').removeClass("ui-helper-hidden");
+                    jQuery(globals.domIds.panelProgress).addClass("ui-helper-hidden");
+
+                    var b = [
+                        self.menuNavInit(),
+                        self.viewEntryPointFirstLoad()
+                    ];
+
+                    P.all(b).nodeify(function (errB, data) {
+                        self._trigger('initComplete', null, null);
+                    });
+
                 }
             });
 
-        },
-        _create: function () {
-            this._super();
         },
         destroy: function () {
 
@@ -87,19 +102,49 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
 
             return dfd.promise();
         },
+        viewEntryPointFirstLoad: function () {
+
+            var dfd = jQuery.Deferred();
+            var self = this;
+
+            if (globals.viewEntryPoint) {
+                require([globals.viewEntryPoint],
+                    function (clientApp) {
+
+                        var layoutDataModel = [
+                                self.options.$siteContent.html(),
+                                globals,
+                                true
+                        ];
+
+                        self.handlebarsLoadTemplateDataTry(dfd, layoutDataModel);
+                    },
+                    function (errRequiring) {
+                        self.handlebarsLoadTemplateError(dfd, errRequiring);
+                    });
+            }
+            else {
+                self.breadcrumbRender(globals);
+            }
+
+            return dfd.promise();
+        },
         menuNavInit: function () {
 
+            var dfd = jQuery.Deferred();
             var self = this;
 
             jQuery(this.element).find('div[data-widget="userActivity"]:first').menuNav({
                 complete: function () {
-                    self._trigger('initComplete', null, null);
+                    dfd.resolve();
                 },
                 selected: function (e, ui) {
                     //clientApp.template.loadByUrl(ui.url);
                     History.pushState(null, null, ui.url);
                 }
             });
+
+            return dfd.promise();
         },
         historyInit: function () {
 
@@ -170,108 +215,110 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
         handlebarsLoadTemplate: function (state) {
 
             var self = this;
-            var $siteContent = jQuery('div.ui-siteContent:first');
-            var $breadcrumbBox = jQuery(this.element).find('div.ui-breadcrumb-box:first');
-
             var dfd = jQuery.Deferred();
 
-            $siteContent.empty();
-            $breadcrumbBox.empty();
-
+            this.options.$siteContent.empty();
+            this.options.$breadcrumbBox.empty();
 
             dfd.notify(self.options.texts.loadingTmpl);
 
             clientApp.ajax.view(state, function (err, data) {
 
                 if (err !== null) {
-
-                    console.error(err);
-
-                    jQuery('body')
-                        .find('h1:first')
-                            .html(err.statusText ? err.statusText : '');
-
-
-                    self.breadcrumbRender({});
-
-                    dfd.reject("{0}: {1} - error - {2}".format(
-                         self.options.texts.errLoadingTmpl,
-                         err.status ? err.status : '',
-                         err.statusText ? err.statusText : ''
-                        ));
-
-
+                    self.handlebarsLoadTemplateError(dfd, err);
                 }
                 else {
-
-                    var html = data[0] + "{{#each cssFiles}}<link href='{{this}}' rel='Stylesheet' type='text/css' />{{/each}}";
-                    var model = data[1];
-                    var hasEntry = data[2];
-                    var template = Handlebars.compile(html);
-                    var templateContext = {};
-                    var handlebarTemplate = template(jQuery.extend({}, model, templateContext));
-
-                    if (model.title) {
-                        jQuery('body')
-                            .find('h1:first')
-                                .html(model.title);
-                    }
-
-
-                    self.breadcrumbRender(model);
-                    $siteContent.html(handlebarTemplate);
-
-                    if (hasEntry) {
-
-                        try {
-                            clientApp.view.main();
-                            dfd.resolve();
-                        }
-                        catch (e) {
-                            console.error(e);
-                            dfd.reject(self.options.texts.errInModule);
-                        }
-                    }
-                    else {
-                        dfd.resolve();
-                    }
+                    self.handlebarsLoadTemplateDataTry(dfd, data);
                 }
             });
 
             return dfd.promise();
         },
+        handlebarsLoadTemplateError: function (dfd, err) {
+            console.error(err);
+
+            jQuery('body')
+                .find('h1:first')
+                    .html(err.statusText ? err.statusText : '');
+
+            this.breadcrumbRender({});
+
+            dfd.reject("{0}: {1} - error - {2}".format(
+                 this.options.texts.errLoadingTmpl,
+                 err.status ? err.status : '',
+                 err.statusText ? err.statusText : ''
+                ));
+
+        },
+        handlebarsLoadTemplateDataTry: function (dfd, data) {
+            try {
+                this.handlebarsLoadTemplateData(data);
+                dfd.resolve();
+            }
+            catch (errLoadigndata) {
+                console.error(errLoadigndata);
+                dfd.reject(this.options.texts.errInModule);
+            }
+        },
+        handlebarsLoadTemplateData: function (data) {
+
+            var html = data[0] + "{{#each cssFiles}}<link href='{{this}}' rel='Stylesheet' type='text/css' />{{/each}}";
+            var model = data[1];
+            var hasEntry = data[2];
+            var template = Handlebars.compile(html);
+            var templateContext = {};
+            var handlebarTemplate = template(jQuery.extend({}, model, templateContext));
+
+            if (model.title) {
+                jQuery('body')
+                    .find('h1:first')
+                        .html(model.title);
+            }
+
+
+            this.breadcrumbRender(model);
+            this.options.$siteContent.html(handlebarTemplate);
+
+            if (hasEntry) {
+                clientApp.view.main();
+            }
+
+        },
         breadcrumbInitWidget: function () {
             jQuery(this.element).find("div.ui-breadcrumb:first").breadcrumb({
                 select: function (event, url) {
-
-                    console.log(url);
-                    alert("select");
-
                     History.pushState(null, null, url);
                 }
             });
         },
         breadcrumbRender: function (model) {
 
-            var $breadcrumbBox = jQuery(this.element).find('div.ui-breadcrumb-box:first');
-
-            if (model.breadcrumb) {
+            var self = this;
+            var doRender = function () {
                 var htmlBreadcrumb = '{{{ breadcrumbHelper this }}}';
                 var modelBreadcrumb = model;
                 var templateBreadcrumb = Handlebars.compile(htmlBreadcrumb);
                 var handlebarBreadcrumbTemplate = templateBreadcrumb(jQuery.extend({}, modelBreadcrumb, {}));
 
 
-                $breadcrumbBox.append(handlebarBreadcrumbTemplate);
+                self.options.$breadcrumbBox.append(handlebarBreadcrumbTemplate);
 
-                this.breadcrumbInitWidget();
+                self.breadcrumbInitWidget();
+            };
+
+            if (Array.isArray(model.breadcrumb)) {
+                doRender();
             }
             else {
-                $breadcrumbBox.empty();
+                if (model.breadcrumb === true) {
+                    model.breadcrumb = clientApp.view.breadcrumb();
+                    doRender();
+                }
+                else {
+                    this.options.$breadcrumbBox.empty();
+                }
             }
 
-
         }
-
     });
 });

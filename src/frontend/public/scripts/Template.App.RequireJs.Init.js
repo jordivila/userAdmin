@@ -61,18 +61,6 @@ function (clientApp) {
                 cultureDatePicker: globals.globalization.cultureDatePicker,
                 initComplete: function () {
 
-                    jQuery(globals.domIds.panelMain).addClass('ui-display-table').removeClass("ui-helper-hidden");
-                    jQuery(globals.domIds.panelProgress).addClass("ui-helper-hidden");
-
-                    if (globals.viewEntryPoint) {
-                        require([globals.viewEntryPoint],
-                            function (clientApp) {
-                                clientApp.view.main();
-                            },
-                            function (errRequiring) {
-                                console.error(errRequiring);
-                            });
-                    }
                 }
             });
         });

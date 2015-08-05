@@ -1,4 +1,4 @@
-﻿
+﻿.ui-breadcrumb-box {overflow:hidden;}
 .ui-breadcrumb {overflow:hidden;width:99.9%;display:table;}
 .ui-breadcrumb * {}
 .ui-breadcrumb .ui-breadcrumb-row {display:table-row;}
@@ -7,19 +7,6 @@
 .ui-breadcrumb .ui-breadcrumb-moveRight {width:3em;text-align:center;padding:1.5em 1em 1.5em 1em;}
 .ui-breadcrumb .ui-breadcrumb-path {position:relative;overflow:hidden;}
 .ui-breadcrumb .ui-breadcrumb-path .ui-icon {margin:0em 1em 0em 1em;display:none;}
-.ui-breadcrumb .ui-breadcrumb-path .ui-breadcrumb-anchors {
-  /*
-  left:0em;
-  white-space:nowrap; 
-  width:99%;
-  position:absolute;
-  */
-  padding:0.5em 0 0.5em 0;
-  position:relative;
-  white-space:nowrap; 
-  text-align:center;
-  }
-
-
+.ui-breadcrumb .ui-breadcrumb-path .ui-breadcrumb-anchors {padding:0.5em 0 0.5em 0;  position:relative;  white-space:nowrap;   text-align:center;  }
 .ui-breadcrumb.ui-breadcrumb-singlePage .ui-breadcrumb-moveRight {display:none !important;}
 .ui-breadcrumb.ui-breadcrumb-singlePage .ui-breadcrumb-path .ui-breadcrumb-anchors {text-align:left;border:none;}

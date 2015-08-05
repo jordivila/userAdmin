@@ -67,6 +67,7 @@
     "Template.Widget.ModelDate.clickToPickDate": "Click aqui para seleccionar una fecha",
     "UserAdminTexts.DuplicateEmail": "Ya existe un nombre de usuario para este email. Por favor, entra una dirección de correo distinta",
     "UserAdminTexts.UserNotFound": "Usuario no encontrado",
+    "Views.Breadcrumb.ClientSide.Title": "Breadcrumb construido en el lado del cliente",
     "Views.Breadcrumb.MultipleItems.Title": "Ejemplo de navegación con multiples páginas anteriores",
     "Views.Breadcrumb.SingleItem.Title": "Ejemplo de navegación con un solo enlace",
     "Views.Crud.Birthdate": "Cumpleaños",

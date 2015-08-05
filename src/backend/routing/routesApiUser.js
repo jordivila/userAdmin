@@ -134,6 +134,10 @@
                                                 url: "/breadcrumb/multipleItems/",
                                                 text: "Multiple items"
                                             },
+                                            {
+                                                url: "/breadcrumb/clientSideBuild/",
+                                                text: "Client side built"
+                                            },
                                         ]
                                     },
                                     {

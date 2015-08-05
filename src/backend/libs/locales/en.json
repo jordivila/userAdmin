@@ -67,6 +67,7 @@
     "Template.Widget.ModelDate.clickToPickDate": "Click here to pick a date",
     "UserAdminTexts.DuplicateEmail": "A user already exists for the given email address",
     "UserAdminTexts.UserNotFound": "User not found",
+    "Views.Breadcrumb.ClientSide.Title": "Browser side breadcrumb built path",
     "Views.Breadcrumb.MultipleItems.Title": "Breadcrumb with multiple items",
     "Views.Breadcrumb.SingleItem.Title": "Breadcrumb with just one item",
     "Views.Crud.Birthdate": "Birthdate",

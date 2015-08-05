@@ -49,20 +49,6 @@ function ($, jqUI, scrollUtils, Utils) {
                 }
 
             };
-            var resizeInit = function () {
-
-                var buttonsTotalWidth = $breadCrumbLeft.outerWidth(true) + $breadCrumbRight.outerWidth(true);
-                var widgetResize = function () {
-                    $breadCrumbPath.width($el.parents().first().width() - (buttonsTotalWidth + utils.convertEmToPixels(4)));
-                };
-
-                jQuery(window)
-                    .resize(function (e, ui) {
-                        widgetResize();
-                    });
-
-                widgetResize();
-            };
             var anchorsLength = $breadCrumbPath.find('a').length - 1;
             var anchorCurrent = anchorsLength;
             var anchorMovement = function (callback) {
@@ -108,7 +94,6 @@ function ($, jqUI, scrollUtils, Utils) {
             };
 
             var init = function () {
-                resizeInit();
 
                 var afterInit = function () {
 

@@ -6,11 +6,20 @@
     "scripts/Template.Class.UrlHelper",
     "scripts/modules/crud",
     "scripts/jQuery.Plugins.scrollUtils",
-    "/helpdesk/talks/customer/helpdeskCommon/helpdeskCrudFakeData.js"
+    "/helpdesk/talks/customer/helpdeskCommon/helpdeskCrudFakeData.js",
+    "/helpdesk/talks/customer/helpdeskCommon/helpdeskUrls.js",
 ],
-function ($, jqUI, clientApp, P, UrlHelper, crudModule, scrollUtils, crudAjaxOpts) {
+function ($, jqUI, clientApp, P, UrlHelper, crudModule, scrollUtils, crudAjaxOpts, helpdeskUrls) {
 
     clientApp.view = {
+        breadcrumb: function () {
+
+            return [{
+                "title": clientApp.i18n.texts.get("Helpdesk.Talks.Summary.Title"),
+                "url": "{0}{1}".format(helpdeskUrls.baseAddress, helpdeskUrls.history())
+            }];
+
+        },
         main: function () {
 
             clientApp.globalizer.get()
