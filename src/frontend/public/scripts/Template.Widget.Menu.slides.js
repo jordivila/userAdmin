@@ -258,25 +258,36 @@ define([
 
                },
 
-               select: function (setSelected) {
+               select: function (callbackComparer) {
+                   /* callbackComparer -> a function receiving menu items that returns true or false in order to be selected */
+
+                   var $backButton = jQuery(this.element).find('div.ui-menuSlide-backButton:first');
 
                    var self = this;
 
                    self.options.slidesOpened = [];
+                   self.collapseAll();
+                   $backButton.addClass('ui-helper-hidden');
+                   self._beforeSelected();
 
                    var slidesPath = [];
 
                    jQuery(self.element)
                        .find('li.ui-menuList-item')
                            .each(function () {
-                               if (setSelected(jQuery(this).data('dataItem'))) {
+                               if (callbackComparer(jQuery(this).data('dataItem'))) {
+
                                    self._setSelectedCss(jQuery(this));
                                    self.options.slidesOpened = self._itemSlidesPath(jQuery(this).parents('ul.ui-menuList-childs:first'), []);
                                    self._itemSlidesPathInit();
                                    self.options.slidesOpened.pop();
+                                   if (self.options.slidesOpened.length > 0) {
+                                       $backButton.removeClass('ui-helper-hidden');
+                                   }
                                }
                            });
                }
+
            });
 
 

@@ -10,13 +10,20 @@ function ($, jqUI, clientApp, wSlides) {
         options: {
             texts: {
                 errLoadingMenuData: null
-            }
+            },
+            $sitePage: null,
+            $panelMenu: null,
+            $panelMenuList: null,
+            $panelMenuToggle: null,
         },
         _create: function () {
             this._super();
 
             this.options.texts.errLoadingMenuData = clientApp.i18n.texts.get("Template.Widget.Menu.nav.errLoadingMenuData");
-
+            this.options.$sitePage = jQuery('div.ui-sitePage:first');
+            this.options.$panelMenu = jQuery('#panelMenu');
+            this.options.$panelMenuList = jQuery(this.options.$panelMenu).find('div.ui-menuBase:first');
+            this.options.$panelMenuToggle = jQuery('div.ui-mainMenuToggle');
         },
         _init: function () {
 
@@ -37,14 +44,14 @@ function ($, jqUI, clientApp, wSlides) {
 
             //TODO: load async Menu based on user identity
             var self = this;
-            var $sitePage = jQuery('div.ui-sitePage:first');
-            var $panelMenu = jQuery('#panelMenu');
-            var $panelMenuList = jQuery($panelMenu).find('div.ui-menuBase:first');
-            var $panelMenuToggle = jQuery('div.ui-mainMenuToggle');
+            //var $sitePage = jQuery('div.ui-sitePage:first');
+            //var $panelMenu = jQuery('#panelMenu');
+            //var $panelMenuList = jQuery($panelMenu).find('div.ui-menuBase:first');
+            //var $panelMenuToggle = jQuery('div.ui-mainMenuToggle');
             var panelMenuHide = function (cb) {
-                $sitePage.show();
-                $panelMenu.hide('slide', function () {
-                    $panelMenu.removeClass('ui-front');
+                self.options.$sitePage.show();
+                self.options.$panelMenu.hide('slide', function () {
+                    self.options.$panelMenu.removeClass('ui-front');
 
                     if (jQuery.isFunction(cb)) {
                         cb();
@@ -52,10 +59,10 @@ function ($, jqUI, clientApp, wSlides) {
                 });
             };
             var panelMenuShow = function (cb) {
-                $panelMenu
+                self.options.$panelMenu
                     .addClass('ui-front')
                     .show('drop', function () {
-                        $sitePage.hide();
+                        self.options.$sitePage.hide();
 
                         if (jQuery.isFunction(cb)) {
                             cb();
@@ -63,7 +70,7 @@ function ($, jqUI, clientApp, wSlides) {
                     });
             };
             var panelMenuToggleOnClick = function (cb) {
-                if ($panelMenu.is(':visible')) {
+                if (self.options.$panelMenu.is(':visible')) {
                     panelMenuHide(cb);
                 }
                 else {
@@ -75,14 +82,14 @@ function ($, jqUI, clientApp, wSlides) {
 
 
 
-            $panelMenuList.menuSlides({
+            self.options.$panelMenuList.menuSlides({
                 selected: function (e, templ) {
 
                     var templGetFunc = function () {
                         self._trigger('selected', null, templ);
                     };
 
-                    if ($panelMenuToggle.is(':visible')) {
+                    if (self.options.$panelMenuToggle.is(':visible')) {
                         panelMenuHide(function () {
                             templGetFunc();
                         });
@@ -92,7 +99,7 @@ function ($, jqUI, clientApp, wSlides) {
                     }
                 },
                 done: function (e) {
-                    self._initMenuSelected($panelMenuList);
+                    self._initMenuSelected();
                 }
             });
 
@@ -104,9 +111,9 @@ function ($, jqUI, clientApp, wSlides) {
             var panelMenuToggleClickBind = null;
 
             panelMenuToggleClickBind = function () {
-                $panelMenuToggle
+                self.options.$panelMenuToggle
                     .one('click', function () {
-                        $panelMenuToggle.unbind('click');
+                        self.options.$panelMenuToggle.unbind('click');
                         panelMenuToggleOnClick(function () {
                             panelMenuToggleClickBind();
                         });
@@ -120,30 +127,31 @@ function ($, jqUI, clientApp, wSlides) {
             clientApp.ajax.userMenu(function (err, data) {
 
                 if (err !== null) {
-                    self._errMsgSet($panelMenu, self.options.texts.errLoadingMenuData);
+                    self._errMsgSet(self.options.$panelMenu, self.options.texts.errLoadingMenuData);
                 }
                 else {
-                    $panelMenuList.menuSlides('bind', data);
+                    self.options.$panelMenuList.menuSlides('bind', data);
                 }
 
                 self._trigger('complete', null, null);
             });
 
         },
-        _initMenuSelected: function ($widgetMenuList) {
+        _initMenuSelected: function () {
 
             var pathName = location.pathname;
 
-            $widgetMenuList.menuSlides('select', function (menuItem) {
+            this.options.$panelMenuList.menuSlides('select', function (menuItem) {
 
                 if (menuItem.url == pathName) {
                     return true;
                 }
             });
 
-
         },
-
+        setCurrentUrl: function () {
+            this._initMenuSelected();
+        }
     });
 
 

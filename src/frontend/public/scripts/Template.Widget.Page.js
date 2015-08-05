@@ -26,12 +26,14 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
 
             $siteContent: null,
             $breadcrumbBox: null,
+            $menuNav: null
         },
         _create: function () {
             this._super();
 
             this.options.$siteContent = jQuery('div.ui-siteContent:first');
             this.options.$breadcrumbBox = jQuery(this.element).find('div.ui-breadcrumb-box:first');
+            this.options.$menuNav = jQuery(this.element).find('div[data-widget="userActivity"]:first');
         },
         _init: function () {
 
@@ -134,13 +136,13 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
             var dfd = jQuery.Deferred();
             var self = this;
 
-            jQuery(this.element).find('div[data-widget="userActivity"]:first').menuNav({
+            this.options.$menuNav.menuNav({
                 complete: function () {
                     dfd.resolve();
                 },
                 selected: function (e, ui) {
                     //clientApp.template.loadByUrl(ui.url);
-                    History.pushState(null, null, ui.url);
+                    History.pushState({ isMenuEvent: true }, null, ui.url);
                 }
             });
 
@@ -153,21 +155,25 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
 
             History.Adapter.bind(window, 'statechange', function () { // Note: We are using statechange instead of popstate
 
-
-
                 var state = History.getState(); // Note: We are using History.getState() instead of event.state
 
-
-
                 History.debug('statechange:', state.data, state.title, state.url);
-
-
-
 
 
                 self.handlebarsLoadTemplate(state)
                         .progress(function (msg) {
                             self.progressShow(msg);
+                        })
+                        .done(function () {
+                            if (state.data.isMenuEvent === true) {
+                                // in case isMenuEvent === true 
+                                // no need to set active menu item as far as user has clicked on it
+                            }
+                            else {
+                                // in case isMenuEvent !== true
+                                // try setting active menu items
+                                self.options.$menuNav.menuNav('setCurrentUrl');
+                            }
                         })
                         .fail(function (msg) {
                             jQuery('div.ui-siteContent:first').html('<div class="ui-state-error ui-site-templateInfo">{0}</div>'.format(msg));
@@ -180,7 +186,6 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
             dfd.resolve();
 
             return dfd.promise();
-
         },
         handlebarsInit: function () {
 

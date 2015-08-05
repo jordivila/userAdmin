@@ -3,7 +3,6 @@ define([
 ],
 function (hist) {
 
-
     function TemplateHelper() {
 
     }
