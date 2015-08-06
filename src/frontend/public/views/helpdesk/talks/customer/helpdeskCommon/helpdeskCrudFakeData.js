@@ -1,5 +1,6 @@
 ﻿define([
     "scripts/Template.App.ClientApp",
+
     "crossLayer/models/dataResult",
     "crossLayer/models/dataResultPaginated"
 ],
@@ -336,7 +337,7 @@
                             idMessage: newId,
                             idTalk: dataItem.idTalk,
                             idPeople: crudAjaxOpts.ajax._fakeCurrentUser, // this should be set at server runtime using authentication info
-                            message: dataItem.message,
+                            message: dataItem.message, // --> REMEMBER !!!! as far as this is going to be at server side: do HtmlEncode of the dataItem.message property value (use some npm-hemlEncode existing module)
                             datePosted: new Date(),
                         });
 

@@ -47,16 +47,16 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
                                 '</p>' +
                             '</div>' +
                         '</div>' +
-                        '<div class="ui-helpdesk-talks-add-model ui-widget-content"></div>' +
+                        '<div class="ui-helpdesk-talks-add-model ui-widget-content ui-state-default"></div>' +
 
                         '<div class="ui-helpdesk-talks-message-inputBox-template ui-helper-hidden">' +
                             '<div class="ui-helpdesk-talks-message-inputBox">' +
-                                '<div class="block-compose ui-widget-content">' +
+                                '<div class="block-compose">' +
                                     '<div class="buttons-left table-cell">' +
                                         '<button class="ui-button-smile "><i class="fa fa-smile-o"></i></button>' +
                                     '</div>' +
                                     '<div class="input-container table-cell">' +
-                                        '<div dir="auto" contenteditable="true" class="input" placeholder="Escribe un mensaje"></div>' +
+                                        '<div dir="auto" contenteditable="true" class="input ui-widget-content" placeholder="Escribe un mensaje"></div>' +
                                     '</div>' +
                                     '<div class="buttons-right table-cell">' +
                                         '<span>' +

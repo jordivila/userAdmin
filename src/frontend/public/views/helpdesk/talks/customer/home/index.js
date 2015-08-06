@@ -21,12 +21,11 @@ function ($, jqUI, clientApp, helpdeskUrls) {
                         navNext();
                     })
                 .end()
-            //.find('i.ui-helpdesk-talks-wellcome-userIcon')
-            //    .click(function () {
-            //        navNext();
-            //    })
-            //.end()
-            ;
+                .find('i.ui-helpdesk-talks-wellcome-userIcon')
+                    .click(function () {
+                        navNext();
+                    })
+                .end();
         }
     };
 
