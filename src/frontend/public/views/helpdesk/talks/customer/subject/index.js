@@ -5,12 +5,21 @@
     "pPromises",
 
     "scripts/modules/crud",
-    "/helpdesk/talks/customer/helpdeskCommon/helpdeskCrudFakeData.js",
-    "/helpdesk/talks/customer/helpdeskCommon/helpdeskUrls.js",
+    "/helpdesk/talks/common/helpdeskCrudFakeData.js",
+    "/helpdesk/talks/customer/common/helpdeskUrls.js",
 ],
 function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts, helpdeskUrls) {
 
     clientApp.view = {
+        breadcrumb: function () {
+
+            return [{
+                "title": clientApp.i18n.texts.get("Helpdesk.Talks.Summary.Title"),
+                "url": "{0}{1}".format(helpdeskUrls.baseAddress, helpdeskUrls.history())
+            }];
+
+        },
+
         main: function () {
             
 

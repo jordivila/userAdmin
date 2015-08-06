@@ -4,13 +4,21 @@
     "scripts/Template.App.ClientApp",
 
     "scripts/modules/crud",
-    "/helpdesk/talks/customer/helpdeskCommon/helpdeskCrudFakeData.js",
-    "/helpdesk/talks/customer/helpdeskCommon/helpdeskUrls.js",
+    "/helpdesk/talks/common/helpdeskCrudFakeData.js",
+    "/helpdesk/talks/customer/common/helpdeskUrls.js",
     "crossLayer/dateHelper"
 ],
 function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskUrls, dateHelper) {
 
     clientApp.view = {
+        breadcrumb: function () {
+
+            return [{
+                "title": clientApp.i18n.texts.get("Helpdesk.Talks.Wellcome.Title"),
+                "url": "{0}{1}".format(helpdeskUrls.baseAddress, helpdeskUrls.home)
+            }];
+
+        },
         main: function () {
 
             var initMain = function () {

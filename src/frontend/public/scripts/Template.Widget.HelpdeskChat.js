@@ -31,7 +31,9 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
                 dfd.reject("{0}.{1}.messageGetAll is an abstract option . It should be implemented and passed as a widget option".format(this.namespace, this.widgetName));
                 return dfd.promise();
             },
-
+            messagesUnreadCheckMiliseconds: 1024, // interval time to wait untill next unreaded messages check call
+            messageSendMaxAttempts: 10, // in case of error
+            messageSendAttemptMilliseconds: 1024 
         },
         _create: function () {
 
@@ -266,8 +268,8 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
                                      .parents('div.ui-message:first');
 
 
-                     var attempMax = 10;
-                     var attempTime = 500;//1024 * 5;
+                     var attempMax = self.options.messageSendMaxAttempts;
+                     var attempTime = self.options.messageSendAttemptMilliseconds;//1024 * 5;
                      var attempt = attemptCount < attempMax;
                      var attemptIsLast = (attemptCount + 1 === attempMax);
                      var attemptTryNext = function () {
@@ -347,12 +349,11 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
                      widgetResize();
 
                  };
-                 var messagesUnreadCheckMiliseconds = 1000;
                  var messagesUnreadCheck = function (idTalk) {
 
                      P.all([self.options.messageGetUnread(idTalk, messagesUnreadLastIdAppended)]).nodeify(function (e, data) {
 
-                         setTimeout(function () { messagesUnreadCheck(idTalk); }, messagesUnreadCheckMiliseconds);
+                         setTimeout(function () { messagesUnreadCheck(idTalk); }, self.options.messagesUnreadCheckMiliseconds);
 
                          if (e !== null) {
                              // ????????????????????

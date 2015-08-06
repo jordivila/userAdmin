@@ -4,7 +4,7 @@ function () {
 
     var helpdeskUrls = {
         baseAddress: '/helpdesk/talks/customer/',
-        home: 'home',
+        home: 'home/',
         subject: function () {
             return 'subject/';
         },
