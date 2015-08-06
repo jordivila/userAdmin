@@ -30,6 +30,6 @@
     "p-promise": "0.5.0",
     "respond": "1.4.2",
     "es5-shim": "4.1.8",
-    "querystring": "~3.46.1"
+    "querystring": "3.46.1"
   }
 }

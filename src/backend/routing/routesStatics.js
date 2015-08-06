@@ -43,6 +43,9 @@
         app.use('/public/cdn', express.static(app.get('root') + 'cdn', {
             maxAge: cacheMaxAge
         }));
+        app.use('/public/css', express.static(app.get('root') + 'css', {
+            maxAge: cacheMaxAge
+        }));
         app.use('/public/fonts', express.static(app.get('bower_components') + 'components-font-awesome/fonts', {
             maxAge: cacheMaxAge
         }));

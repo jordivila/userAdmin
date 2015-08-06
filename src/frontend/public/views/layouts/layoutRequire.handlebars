@@ -32,7 +32,7 @@
         <div id="panelPage" class="ui-sitePage">
 
             <div data-widget="userActivity">
-                <div class="ui-site-header ui-widget-content ui-corner-all ui-state-highlight">
+                <div class="ui-site-header ui-widget-content ui-corner-all ui-widget-header">
                     <div class="ui-mainMenuToggle">
                         <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
                         <div class="ui-mainMenuToggle-text">Menu</div>
@@ -46,18 +46,16 @@
             </div>
             <div class="ui-helper-clearfix"></div>
 
-            <div class="ui-site-title ui-widget-header">
-                <h1>{{title}}</h1>
-            </div>
-
-
-            <!--Breadcrumb begin-->
             <div class="ui-breadcrumb-box">
                 {{#if this.breadcrumb }}
                     {{{ breadcrumbHelper this }}}
                 {{/if}}
             </div>
-            <!--Breadcrumb end-->
+
+            <div class="ui-site-title ui-widget-content">
+                <h1>{{title}}</h1>
+            </div>
+
 
             <div class="ui-siteContent">
                 {{#if body}}

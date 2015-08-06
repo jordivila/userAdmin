@@ -49,6 +49,29 @@ define([],
                return value * (parseFloat(getComputedStyle(document.documentElement).fontSize));
            };
 
+           Utils.prototype.cssAdd = function (id, cssText) {
+               
+               // this method is intended to add css text. Not link href="whatever"
+
+               if (document.getElementById(id) === null)
+               {
+                   var head = document.head || document.getElementsByTagName('head')[0],
+                       style = document.createElement('style');
+
+                   style.id = id;
+                   style.type = 'text/css';
+                   if (style.styleSheet) {
+                       style.styleSheet.cssText = cssText;
+                   } else {
+                       style.appendChild(document.createTextNode(cssText));
+                   }
+
+                   head.appendChild(style);
+               }
+
+
+           };
+
            return Utils;
 
        });
