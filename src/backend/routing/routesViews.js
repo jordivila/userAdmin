@@ -122,6 +122,7 @@
         registerCommonVerbs(app, "helpdesk/talks/employee/common", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/home", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/wiki", genericViewController);
+        registerCommonVerbs(app, "helpdesk/talks/employee/history", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/home", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/wiki", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/common", genericViewController);

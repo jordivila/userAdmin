@@ -30,7 +30,8 @@ function ($, jqUI, clientApp, helpdeskCommon) {
                     .click(function () {
                         clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.wiki()));
                     })
-                .end();
+                .end()
+                .removeClass('ui-helper-hidden');
 
             helpdeskCommon.methods.setTitleWiki();
         }
