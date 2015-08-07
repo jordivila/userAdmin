@@ -2,7 +2,7 @@
     "jquery",
     "jqueryui",
     "scripts/Template.App.ClientApp",
-    "/helpdesk/talks/customer/common/helpdeskCommon.js",
+    "/helpdesk/talks/employee/common/helpdeskCommon.js",
 ],
 function ($, jqUI, clientApp, helpdeskCommon) {
 
@@ -31,7 +31,6 @@ function ($, jqUI, clientApp, helpdeskCommon) {
                         clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.wiki()));
                     })
                 .end();
-
 
             helpdeskCommon.methods.setTitleWiki();
         }

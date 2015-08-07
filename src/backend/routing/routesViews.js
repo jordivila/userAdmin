@@ -102,6 +102,7 @@
         registerCommonVerbs(app, "breadcrumb/singleItem", genericViewController);
         registerCommonVerbs(app, "breadcrumb/multipleItems", genericViewController);
         registerCommonVerbs(app, "breadcrumb/clientSideBuild", genericViewController);
+        registerCommonVerbs(app, "breadcrumb/clientSideFunction", genericViewController);
         registerCommonVerbs(app, "crud/crudCommon", baseController);
         registerCommonVerbs(app, "crud/crudGridSimple", genericViewController);
         registerCommonVerbs(app, "crud/crudGridSearch", genericViewController);
@@ -118,8 +119,11 @@
 
         
         registerCommonVerbs(app, "helpdesk/talks/common/fakes", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/common/wiki", genericViewController);
+        registerCommonVerbs(app, "helpdesk/talks/employee/common", genericViewController);
+        registerCommonVerbs(app, "helpdesk/talks/employee/home", genericViewController);
+        registerCommonVerbs(app, "helpdesk/talks/employee/wiki", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/home", genericViewController);
+        registerCommonVerbs(app, "helpdesk/talks/customer/wiki", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/common", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/history", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/subject", genericViewController);

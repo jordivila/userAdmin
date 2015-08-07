@@ -2,16 +2,25 @@
     "jquery",
     "jqueryui",
     "scripts/Template.App.ClientApp",
-    "/helpdesk/talks/customer/common/helpdeskUrls.js",
+    "/helpdesk/talks/employee/common/helpdeskCommon.js",
 ],
-function ($, jqUI, clientApp, helpdeskUrls) {
+function ($, jqUI, clientApp, helpdeskCommon) {
 
     clientApp.view = {
+        breadcrumb: function () {
+
+            return [{
+                "title": clientApp.i18n.texts.get("GeneralTexts.BackToPreviousPage"),
+                "url": function () { History.back(); return false; }
+            }];
+
+        },
+
         main: function () {
 
             var navNext = function () {
-                console.log('{0}{1}'.format(helpdeskUrls.baseAddress, helpdeskUrls.history()));
-                clientApp.template.loadByUrl('{0}{1}'.format(helpdeskUrls.baseAddress, helpdeskUrls.history()));
+                console.log('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.history()));
+                clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.history()));
             };
 
             jQuery('div.ui-helpdesk-talks-wellcome-container:first')
@@ -26,6 +35,8 @@ function ($, jqUI, clientApp, helpdeskUrls) {
                         navNext();
                     })
                 .end();
+
+            
         }
     };
 

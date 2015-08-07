@@ -6,7 +6,6 @@ define([
 ],
        function ($, jqUI, mBase, clientApp) {
 
-
            jQuery.widget("ui.menuSlides", jQuery.ui.menuBase, {
                options: {
                    //slidesOpened: [], //http://bugs.jqueryui.com/ticket/8645
@@ -257,7 +256,6 @@ define([
                    }
 
                },
-
                select: function (callbackComparer) {
                    /* callbackComparer -> a function receiving menu items that returns true or false in order to be selected */
 
@@ -291,6 +289,4 @@ define([
                }
 
            });
-
-
        });

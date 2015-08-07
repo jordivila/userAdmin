@@ -89,10 +89,6 @@
                                     url: "/helpdesk/talks/employee/home/",
                                     text: "Employee"
                                 },
-                                {
-                                    url: "/helpdesk/talks/common/wiki/",
-                                    text: "Wiki"
-                                },
                         ]
                     },
                     {
@@ -150,6 +146,10 @@
                                             {
                                                 url: "/breadcrumb/clientSideBuild/",
                                                 text: "Client side built"
+                                            },
+                                            {
+                                                url: "/breadcrumb/clientSideFunction/",
+                                                text: "Client side function"
                                             },
                                         ]
                                     },

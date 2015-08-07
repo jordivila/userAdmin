@@ -29,7 +29,13 @@
                         for (var i = 0; i < context.breadcrumb.length; i++) {
 
                             if (context.breadcrumb[i].url) {
-                                r += '<a href="' + context.breadcrumb[i].url + '">' + context.breadcrumb[i].title + '</a>';
+
+                                if (typeof (context.breadcrumb[i].url) === 'function') {
+                                    r += '<a href="#" onclick="(' + context.breadcrumb[i].url + ').call(this)">' + context.breadcrumb[i].title + '</a>';
+                                }
+                                else {
+                                    r += '<a href="' + context.breadcrumb[i].url + '">' + context.breadcrumb[i].title + '</a>';
+                                }
                             }
                             else {
                                 r += '<a href="javascript:void(0);">' + context.breadcrumb[i].title + '</a>';

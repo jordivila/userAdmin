@@ -1,0 +1,52 @@
+<br /><br />
+
+This is a sample of a browser side breadcrumb built path: using anonymous functions.
+
+<br />
+
+<b>Keep in mind the anonymous function has no context</b>
+
+<br />
+
+Just set view model properties like this:
+
+<pre>
+<code>
+{
+    "title": "Views.Breadcrumb.ClientSide.Title",
+    "viewEntryPoint": "./index.js",
+    "breadcrumb": true
+}
+</code>
+</pre>
+
+
+and your view entrypoint (index.js) like this
+
+
+<pre>
+<code>
+define([
+    "scripts/Template.App.ClientApp",
+],
+function (clientApp) {
+
+    clientApp.view = {
+        breadcrumb: function () {
+
+            return [{
+                "title": clientApp.i18n.texts.get("GeneralTexts.BackToPreviousPage"),
+                "url": function () { History.back(); return false; }
+            }];
+
+        },
+        main: function () {
+
+        }
+    };
+
+    return clientApp;
+
+});
+</code>
+</pre>

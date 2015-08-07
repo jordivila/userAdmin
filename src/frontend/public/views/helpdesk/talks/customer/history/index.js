@@ -5,17 +5,17 @@
 
     "scripts/modules/crud",
     "/helpdesk/talks/common/fakes/helpdeskCrudFakeData.js",
-    "/helpdesk/talks/customer/common/helpdeskUrls.js",
+    "/helpdesk/talks/customer/common/helpdeskCommon.js",
     "crossLayer/dateHelper"
 ],
-function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskUrls, dateHelper) {
+function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskCommon, dateHelper) {
 
     clientApp.view = {
         breadcrumb: function () {
 
             return [{
                 "title": clientApp.i18n.texts.get("Helpdesk.Talks.Wellcome.Title"),
-                "url": "{0}{1}".format(helpdeskUrls.baseAddress, helpdeskUrls.home)
+                "url": "{0}{1}".format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.home)
             }];
 
         },
@@ -52,7 +52,7 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskUrls, dateHelper
                                          $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
                                          $cell.find('a')
                                              .click(function () {
-                                                 clientApp.template.loadByUrl('{0}{1}'.format(helpdeskUrls.baseAddress, helpdeskUrls.message(dataItem.idTalk)));
+                                                 clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.message(dataItem.idTalk)));
                                              });
                                          break;
                                      case "dateLastMessage":
@@ -121,18 +121,19 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskUrls, dateHelper
                          .end()
                          .find('i.ui-helpdesk-talks-summary-userIcon:first')
                              .click(function () {
-                                 clientApp.template.loadByUrl('{0}{1}'.format(helpdeskUrls.baseAddress, helpdeskUrls.subject()));
+                                 clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.subject()));
                              })
                          .end();
 
 
+                     helpdeskCommon.methods.setTitleWiki();
                  });
 
             };
 
             setTimeout(function () {
                 initMain();
-            }, 500);
+            }, 200);
         }
     };
 

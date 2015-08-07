@@ -4,17 +4,17 @@
     "scripts/Template.Widget.HelpdeskChat",
     "scripts/Template.App.ClientApp",
     "scripts/Template.Class.UrlHelper",
-    "/helpdesk/talks/customer/common/helpdeskUrls.js",
+    "/helpdesk/talks/customer/common/helpdeskCommon.js",
     "/helpdesk/talks/common/fakes/helpdeskCrudFakeData.js",
 ],
-function ($, jqUI, HelpdeskChatWidget, clientApp, UrlHelper, helpdeskUrls, crudAjaxOpts) {
+function ($, jqUI, HelpdeskChatWidget, clientApp, UrlHelper, helpdeskCommon, crudAjaxOpts) {
 
     clientApp.view = {
         breadcrumb: function () {
 
             return [{
                 "title": clientApp.i18n.texts.get("Helpdesk.Talks.Summary.Title"),
-                "url": "{0}{1}".format(helpdeskUrls.baseAddress, helpdeskUrls.history())
+                "url": "{0}{1}".format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.history())
             }];
 
         },

@@ -1,0 +1,5 @@
+{
+    "title": "Views.Breadcrumb.ClientSide.Title",
+    "viewEntryPoint": "./index.js",
+    "breadcrumb": true
+}

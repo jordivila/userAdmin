@@ -6,16 +6,16 @@
 
     "scripts/modules/crud",
     "/helpdesk/talks/common/fakes/helpdeskCrudFakeData.js",
-    "/helpdesk/talks/customer/common/helpdeskUrls.js",
+    "/helpdesk/talks/customer/common/helpdeskCommon.js",
 ],
-function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts, helpdeskUrls) {
+function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts, helpdeskCommon) {
 
     clientApp.view = {
         breadcrumb: function () {
 
             return [{
                 "title": clientApp.i18n.texts.get("Helpdesk.Talks.Summary.Title"),
-                "url": "{0}{1}".format(helpdeskUrls.baseAddress, helpdeskUrls.history())
+                "url": "{0}{1}".format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.history())
             }];
 
         },
@@ -78,7 +78,7 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts, helpdeskUrls) {
                     var showDataResultOK = function (dataResult) {
                         dataResult.addMessage(clientApp.i18n.texts.get("Views.Layout.PleaseWaitYouAreBeingRedirected"));
                         showMessage($infoBox, dataResult.messages.join('<br/>'));
-                        clientApp.template.loadByUrl('../' + helpdeskUrls.message(dataResult.data.editData.idTalk));
+                        clientApp.template.loadByUrl('../' + helpdeskCommon.helpdeskUrls.message(dataResult.data.editData.idTalk));
                     };
                     var showDataResultKO = function (dataResult) {
                         showMessage($errorsBox, dataResult.messages.join('<br/>'));
@@ -128,6 +128,8 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts, helpdeskUrls) {
 
 
             jQuery('div.ui-helpdesk-talks-subject-container:first').viewWidget();
+
+            helpdeskCommon.methods.setTitleWiki();
 
         }
     };
