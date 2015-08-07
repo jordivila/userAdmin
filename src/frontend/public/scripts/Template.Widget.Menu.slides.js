@@ -262,30 +262,32 @@ define([
                    /* callbackComparer -> a function receiving menu items that returns true or false in order to be selected */
 
                    var $backButton = jQuery(this.element).find('div.ui-menuSlide-backButton:first');
-
                    var self = this;
-
-                   self.options.slidesOpened = [];
-                   self.collapseAll();
-                   $backButton.addClass('ui-helper-hidden');
-                   self._beforeSelected();
-
-                   var slidesPath = [];
 
                    jQuery(self.element)
                        .find('li.ui-menuList-item')
-                           .each(function () {
-                               if (callbackComparer(jQuery(this).data('dataItem'))) {
+                            .each(function (index, item) {
 
-                                   self._setSelectedCss(jQuery(this));
-                                   self.options.slidesOpened = self._itemSlidesPath(jQuery(this).parents('ul.ui-menuList-childs:first'), []);
-                                   self._itemSlidesPathInit();
-                                   self.options.slidesOpened.pop();
-                                   if (self.options.slidesOpened.length > 0) {
-                                       $backButton.removeClass('ui-helper-hidden');
-                                   }
-                               }
-                           });
+                                if (callbackComparer(jQuery(this).data('dataItem'))) {
+
+                                    // Try to init menu
+                                    self.options.slidesOpened = [];
+                                    self.collapseAll();
+                                    $backButton.addClass('ui-helper-hidden');
+                                    self._beforeSelected();
+
+
+                                    // Try to set selected item
+                                    self._setSelectedCss(jQuery(this));
+                                    self.options.slidesOpened = self._itemSlidesPath(jQuery(this).parents('ul.ui-menuList-childs:first'), []);
+                                    self._itemSlidesPathInit();
+                                    self.options.slidesOpened.pop();
+                                    if (self.options.slidesOpened.length > 0) {
+                                        $backButton.removeClass('ui-helper-hidden');
+                                    }
+                                }
+
+                            });
                }
 
            });

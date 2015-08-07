@@ -79,8 +79,21 @@
                         text: i18n.__("AccountResources.LogOn"),
                     },
                     {
-                        url: "/helpdesk/talks/customer/home/",
-                        text: i18n.__("Helpdesk.Talks.MenuTitle")
+                        text: i18n.__("Helpdesk.Talks.MenuTitle"),
+                        childs: [
+                                {
+                                    url: "/helpdesk/talks/customer/home/",
+                                    text: "Customer"
+                                },
+                                {
+                                    url: "/helpdesk/talks/employee/home/",
+                                    text: "Employee"
+                                },
+                                {
+                                    url: "/helpdesk/talks/common/wiki/",
+                                    text: "Wiki"
+                                },
+                        ]
                     },
                     {
                         url: "/about/",
