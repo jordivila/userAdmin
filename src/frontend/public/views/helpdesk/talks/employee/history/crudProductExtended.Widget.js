@@ -24,7 +24,7 @@ function ($, jqUI, clientApp, wCrud, productAjax, productFormModelGet, productGr
 
                 return defaultButtons;
             },
-            gridFilterVisibleAlways: true,
+            gridFilterVisibleAlways: false,
             gridSearchMethod: productAjax.ajax.productSearch,
             gridSearchForEditMethod: productAjax.ajax.productSearchForEdit,
             gridButtonsGet: function (crudWidget, defaultButtons) {
@@ -33,6 +33,17 @@ function ($, jqUI, clientApp, wCrud, productAjax, productFormModelGet, productGr
                         defaultButtons[i].text = clientApp.i18n.texts.get("Views.Crud.SearchProducts");
                     }
                 }
+
+                defaultButtons.unshift({
+                    id: "add",
+                    text: "Add conversation",//clientApp.i18n.texts.get("Views.Crud.CrudFormExtended.BackToProducts"),
+                    cssClass: "ui-cancel-button",
+                    icon: "ui-icon-circle-arrow-w",
+                    click: function () {
+                        //self._pageSet(self._pageViews.products);
+                    }
+                });
+
                 return defaultButtons;
             },
             gridModel: productGridModelGet(),

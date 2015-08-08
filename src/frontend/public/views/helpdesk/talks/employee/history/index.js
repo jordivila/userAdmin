@@ -8,12 +8,12 @@
     "/crud/crudCommon/crudSamplesCustomerData.js",
     "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
 
-    "/crud/crudFormExtended/crudProductExtended.AjaxFake.js",
-    "/crud/crudFormExtended/crudProductExtended.FilterModel.js",
-    "/crud/crudFormExtended/crudProductExtended.FormModel.js",
-    "/crud/crudFormExtended/crudProductExtended.GridModel.js",
-    "/crud/crudFormExtended/crudProductExtended.Widget.js",
-    "/crud/crudFormExtended/crudPage.js",
+    "./crudProductExtended.AjaxFake.js",
+    "./crudProductExtended.FilterModel.js",
+    "./crudProductExtended.FormModel.js",
+    "./crudProductExtended.GridModel.js",
+    "./crudProductExtended.Widget.js",
+    "./crudPage.js",
 ],
    function ($, jqUI, clientApp, helpdeskCommon) {
 
@@ -47,13 +47,8 @@
 
                                var $gridControl = jQuery(this).find('div.ui-productCrud:first').find('div.ui-crudGrid-body:first');
 
-                               console.log($gridControl);
-
                                var gridControlResize = function () {
-
-                                   console.log($gridControl);
-
-                                   $gridControl.height(jQuery(window).height() - clientApp.utils.convertEmToPixels(46.4));
+                                   $gridControl.height(jQuery(window).height() - clientApp.utils.convertEmToPixels(24.4));
                                };
 
 
