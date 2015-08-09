@@ -7,6 +7,10 @@
              position:relative;
              /*DO NOT Remove position:relative*/
 }
+
+.ui-site-title {display:none;}
+
+
 .ui-pageHolder .ui-sitePage .ui-site-title,
 .ui-pageHolder .ui-sitePage .ui-site-header,
 .ui-pageHolder .ui-sitePage .ui-crud  {border-width:0em !important;}
@@ -21,8 +25,20 @@
 /* menu toggle */
 .ui-pageHolder .ui-mainMenuToggle {display:block !important;cursor:pointer;}
 .ui-pageHolder .ui-mainMenuToggle{position:absolute;top:1em;right:0em;width:6em;}
-.ui-pageHolder .ui-mainMenuToggle .ui-mainMenuToggle-icon {float:left;}
-.ui-pageHolder .ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;}
+.ui-pageHolder .ui-mainMenuToggle .ui-mainMenuToggle-icon {float: right;margin: -0.2em 0.5em 0 0;}
+.ui-pageHolder .ui-mainMenuToggle .ui-mainMenuToggle-text {float:left;margin:0.4em 0 0 0.5em;font-weight:normal;display:none;}
+
+/*********************************************************/
+.ui-pageHolder .ui-sitePage .ui-site-header-box {display:table;width:100%;}
+.ui-pageHolder .ui-sitePage .ui-site-header {display:table-row;}
+.ui-pageHolder .ui-sitePage .ui-site-header .ui-site-title ,
+.ui-pageHolder .ui-sitePage .ui-site-nameBox,
+.ui-pageHolder .ui-sitePage .ui-mainMenuToggle {display:table-cell;}
+.ui-pageHolder .ui-sitePage .ui-site-header .ui-site-title {width:70%;text-align:left;overflow:hidden;}
+.ui-pageHolder .ui-sitePage .ui-site-header .ui-site-title h1 {text-align:left;}
+.ui-pageHolder .ui-sitePage .ui-site-nameBox {width:7em;overflow:hidden;display:none;}
+.ui-pageHolder .ui-sitePage .ui-mainMenuToggle {width:6em;}
+
 /* menu panel  */
 .ui-pageHolder .ui-mainMenu { width:99%; position:absolute !important;min-height:100%;overflow:auto !important;background-image:none !important;display:none;}
 .ui-pageHolder .ui-mainMenu .ui-site-version {font-weight:normal;font-size:0.8em;margin: 17em 0 0 0;text-align:center;position:absolute;bottom:0;width:99%;}

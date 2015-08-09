@@ -242,11 +242,14 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
         handlebarsLoadTemplateError: function (dfd, err) {
             console.error(err);
 
-            jQuery('body')
-                .find('h1:first')
-                    .html(err.statusText ? err.statusText : '');
+            clientApp.utils.setPageTitle(err.statusText ? err.statusText : '');
 
-            this.breadcrumbRender({});
+            this.breadcrumbRender({
+                breadcrumb: [{
+                    "title": clientApp.i18n.texts.get("GeneralTexts.BackToPreviousPage"),
+                    "url": function () { History.back(); return false; }
+                }]
+            });
 
             dfd.reject("{0}: {1} - error - {2}".format(
                  this.options.texts.errLoadingTmpl,
@@ -275,9 +278,7 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
             var handlebarTemplate = template(jQuery.extend({}, model, templateContext));
 
             if (model.title) {
-                jQuery('body')
-                    .find('h1:first')
-                        .html(model.title);
+                clientApp.utils.setPageTitle(model.title);
             }
 
 

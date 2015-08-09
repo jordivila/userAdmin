@@ -32,8 +32,6 @@ function ($, jqUI, clientApp, helpdeskCommon) {
                     })
                 .end()
                 .removeClass('ui-helper-hidden');
-
-            helpdeskCommon.methods.setTitleWiki();
         }
     };
 

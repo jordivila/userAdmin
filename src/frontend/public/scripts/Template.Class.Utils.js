@@ -50,11 +50,10 @@ define([],
            };
 
            Utils.prototype.cssAdd = function (id, cssText) {
-               
+
                // this method is intended to add css text. Not link href="whatever"
 
-               if (document.getElementById(id) === null)
-               {
+               if (document.getElementById(id) === null) {
                    var head = document.head || document.getElementsByTagName('head')[0],
                        style = document.createElement('style');
 
@@ -71,6 +70,14 @@ define([],
 
 
            };
+
+           Utils.prototype.setPageTitle = function (content) {
+               jQuery('div.ui-site-title')
+                   .find('h1:first')
+                       .html(content)
+                   .end();
+           };
+
 
            return Utils;
 

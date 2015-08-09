@@ -29,8 +29,6 @@
 
            main: function () {
 
-               helpdeskCommon.methods.setTitleWiki();
-
                jQuery('div.ui-helpdesk-talks:first')
                    .find('i.ui-helpdesk-talks-summary-userIcon:first')
                        .click(function () {

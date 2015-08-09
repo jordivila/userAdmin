@@ -129,7 +129,6 @@ function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts, helpdeskCommon) {
 
             jQuery('div.ui-helpdesk-talks-subject-container:first').viewWidget();
 
-            helpdeskCommon.methods.setTitleWiki();
 
         }
     };

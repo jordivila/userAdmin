@@ -1,5 +1,5 @@
 {
-    "title": "Helpdesk talks",
+    "title": "Helpdesk.Talks.Summary.Title",
     "viewEntryPoint": "./index.js",
     "breadcrumb": true
 }

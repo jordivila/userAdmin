@@ -126,7 +126,6 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskCommon, dateHelp
                          .end();
 
 
-                     helpdeskCommon.methods.setTitleWiki();
                  });
 
             };

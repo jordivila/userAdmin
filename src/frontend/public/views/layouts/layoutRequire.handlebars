@@ -31,15 +31,18 @@
 
         <div id="panelPage" class="ui-sitePage">
 
-            <div data-widget="userActivity">
+            <div data-widget="userActivity" class="ui-site-header-box">
                 <div class="ui-site-header ui-widget-content ui-corner-all ui-widget-header">
+                    <div class="ui-site-nameBox">
+                        <a href="/">{{domainName}}</a>
+                    </div>
+                    <div class="ui-site-title">
+                        <h1>{{title}}</h1>
+                    </div>
                     <div class="ui-mainMenuToggle">
                         <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
                         <div class="ui-mainMenuToggle-text">Menu</div>
                         <div class="ui-helper-clearfix"></div>
-                    </div>
-                    <div class="ui-site-nameBox">
-                        <a href="/">{{domainName}}</a>
                     </div>
                 </div>
                 <div class="ui-helper-clearfix"></div>
@@ -51,10 +54,10 @@
                     {{{ breadcrumbHelper this }}}
                 {{/if}}
             </div>
-
             <div class="ui-site-title ui-widget-content">
                 <h1>{{title}}</h1>
             </div>
+
 
 
             <div class="ui-siteContent">
