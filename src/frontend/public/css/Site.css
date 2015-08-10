@@ -54,10 +54,11 @@
 
 @media all and /*(orientation: landscape) and */(min-width: 60em)
 {
-    .ui-pageHolder .ui-sitePage {width:70%;margin:0 auto 0 auto;}
+    .ui-pageHolder .ui-sitePage {width:70%;margin:0 1em 0 auto;}
     .ui-pageHolder .ui-sitePage .ui-site-title,
     .ui-pageHolder .ui-sitePage .ui-site-header,
     .ui-pageHolder .ui-sitePage .ui-crud  {border-width:0.1em !important;}
+    .ui-pageHolder .ui-sitePage .ui-site-header .ui-site-title h1 {text-align: center;}
 
     .ui-pageHolder .ui-mainMenuToggle {display:none !important;}
     .ui-pageHolder .ui-mainMenu {position:relative !important;display:block !important;float:left;width:25%;/*prevents scroll appearing even when no necessary*/min-height:99.5%;/**/}

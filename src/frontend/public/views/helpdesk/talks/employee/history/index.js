@@ -5,8 +5,8 @@
     "/helpdesk/talks/employee/common/helpdeskCommon.js",
 
     "scripts/modules/crud",
-    "/crud/crudCommon/crudSamplesCustomerData.js",
-    "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
+    "../common/crudSamplesCustomerData.js",
+    "../common/crudSamplesCustomerDefaultOptions.js",
 
     "./crudProductExtended.AjaxFake.js",
     "./crudProductExtended.FilterModel.js",
@@ -43,32 +43,9 @@
                            .removeClass('ui-helper-hidden')
                            .fadeIn(1, function () {
 
-                               var $gridControl = jQuery(this).find('div.ui-productCrud:first').find('div.ui-crudGrid-body:first');
-
-                               var gridControlResize = function () {
-                                   $gridControl.height(jQuery(window).height() - clientApp.utils.convertEmToPixels(24.4));
-                               };
-
-
-                               // WARNING !!!!!! Make it widget & Unbind event on destroy !!!! 
-
-                               jQuery(window)
-                                   .resize(function (e, ui) {
-                                       gridControlResize();
-                                   });
-
-                               gridControlResize();
 
                             });
                    });
-
-
-
-
-
-
-
-
            }
        };
 

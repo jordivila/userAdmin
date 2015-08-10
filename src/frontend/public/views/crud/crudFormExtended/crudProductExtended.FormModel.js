@@ -27,10 +27,10 @@ function (clientApp) {
         }, {
             id: "someStringFromList",
             displayName: clientApp.i18n.texts.get("Views.Crud.CrudExtended.ListOfString"),
-            input: { type: "list", value: null, listValues: [{ value: "", text: clientApp.i18n.texts.get("Views.Crud.SelectFromList") }, { value: "1", text: clientApp.i18n.texts.get("Views.Crud.CrudExtended.FirstValue") }] },
+            input: { type: "list", value: null, listValues: [{ value: "", text: clientApp.i18n.texts.get("GeneralTexts.SelectFromList") }, { value: "1", text: clientApp.i18n.texts.get("Views.Crud.CrudExtended.FirstValue") }] },
         }, {
             id: "someCustomValue",
-            displayName: clientApp.i18n.texts.get("Views.Crud.SelectFromList"),
+            displayName: clientApp.i18n.texts.get("GeneralTexts.SelectFromList"),
             input: {
                 type: "custom",
                 value: null,

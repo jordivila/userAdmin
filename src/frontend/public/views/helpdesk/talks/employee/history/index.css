@@ -1,64 +1,28 @@
-﻿/*
-.ui-helpdesk-talks-summary-container { background-image: none !important;padding:0em 0.5em 0 0.5em; }
-.ui-helpdesk-talks-summary-container .ui-helpdesk-talks-summary-userIcon {font-size:4em; padding:0.2em;float:left;margin:0 0.5em 0.5em 0;cursor:pointer;}
-.ui-helpdesk-talks-summary-container ul.ui-helpdesk-talks-summary-list { border-width: 0; }
-.ui-helpdesk-talks-summary-crud {    width:99% !important;    overflow:hidden;        display:table !important;table-layout: fixed;}
-.ui-helpdesk-talks-summary-crud .ui-crudGrid-dataRow .ui-widgetGrid-column  {border-right-width:0;padding:1em 0em 1em 0!important;}
-.ui-helpdesk-talks-summary-crud .ui-crudGrid-subject {width:74.9%;text-align:left !important;}
-.ui-helpdesk-talks-summary-crud .ui-crudGrid-dateLastMessage {width:24.9%;}
-.ui-helpdesk-talks-summary-crud .ui-crudGrid-dateLastMessage .ui-text-circle{border:none !important;float:left;font-size:0.8em;}
-body{overflow:hidden;}
-.ui-crudExtendedSample .ui-crud {position:relative;top:0;width:100%;top:0em;bottom:0em;overflow:hidden;border-collapse:collapse;}
-.ui-crudExtendedSample .ui-crud .ui-crudGrid-header {position:absolute; top:4em; left:0; height:2em; right:0;overflow:hidden;}
-.ui-crudExtendedSample .ui-crud .ui-crudGrid-body {position:absolute; top:7.3em; bottom:6em; left:0; right:0; overflow:auto;}
-.ui-crudExtendedSample .ui-crud .ui-crudGrid-body .ui-widgetGrid-emptyRow {height:99.9%;}
-.ui-crudExtendedSample .ui-crud .ui-crudGrid-pager-bottom {position:absolute; bottom:0; height:6em; left:0; right:0; overflow:hidden;width:100%;}
-.ui-crudExtendedSample .ui-crud .ui-crudGrid-pager-bottom .ui-gridPagination-navBar {}
-.ui-crudExtendedSample .ui-crud .ui-crudGrid-pager-bottom .ui-gridPagination-totals {bottom:0;position:absolute;width:100%;}
-.ui-crudExtendedSample .ui-crud .ui-widgetGrid-emptyRow {padding:0 0 0 0 !important;height:100%;display:table;width:100%;}
-.ui-crudExtendedSample .ui-crud .ui-widgetGrid-emptyRow div {vertical-align:middle;display:table-cell;}
-*/
-
-
-
-
-
-
-
-
-
-
-.ui-helpdesk-talks-summary-container { background-image: none !important;padding:0em 0.5em 0 0.5em; }
-.ui-helpdesk-talks-summary-container .ui-helpdesk-talks-summary-userIcon {font-size:4em; padding:0.2em;float:left;margin:0 0.5em 0.5em 0;cursor:pointer;}
-.ui-helpdesk-talks-summary-container ul.ui-helpdesk-talks-summary-list { border-width: 0; }
-.ui-helpdesk-talks-summary-crud {    width:99% !important;    overflow:hidden;        display:table !important;table-layout: fixed;}
-.ui-helpdesk-talks-summary-crud .ui-crudGrid-dataRow .ui-widgetGrid-column  {border-right-width:0;padding:1em 0em 1em 0!important;}
-.ui-helpdesk-talks-summary-crud .ui-crudGrid-subject {width:74.9%;text-align:left !important;}
-.ui-helpdesk-talks-summary-crud .ui-crudGrid-dateLastMessage {width:24.9%;}
-.ui-helpdesk-talks-summary-crud .ui-crudGrid-dateLastMessage .ui-text-circle{border:none !important;float:left;font-size:0.8em;}
-
-
-
-/*begin Prevents body from showing 2 scrolls on the page*/
-body{overflow:hidden;}
-/*end   Prevents body from showing 2 scrolls on the page*/
-
-/*
-.ui-crudExtendedSample .ui-crud * {}
-.ui-crudExtendedSample .ui-crud {position:relative;top:0;width:100%;top:0em;bottom:0em;border-collapse:collapse;}
-.ui-crudExtendedSample .ui-crud .ui-crudFilter {position:absolute;width:100%;top:1;}
-.ui-crudExtendedSample .ui-crud .ui-crudGrid-header {position:absolute; top:14.4em; left:0; height:2em; right:0;overflow:hidden;}
-.ui-crudExtendedSample .ui-crud .ui-crudGrid-body {position:absolute; top:17.7em; left:0; right:0; overflow:auto;}
-.ui-crudExtendedSample .ui-crud .ui-crudGrid-body .ui-widgetGrid-emptyRow {height:99.9%;}
-.ui-crudExtendedSample .ui-crud .ui-crudGrid-pager-bottom {position:absolute; bottom:0;top:42.8em;height:6em; left:0; right:0; overflow:hidden;width:100%;}
-.ui-crudExtendedSample .ui-crud .ui-crudGrid-pager-bottom .ui-gridPagination-navBar {}
-.ui-crudExtendedSample .ui-crud .ui-crudGrid-pager-bottom .ui-gridPagination-totals {bottom:0;position:absolute;width:100%;}
-.ui-crudExtendedSample .ui-crud .ui-widgetGrid-emptyRow {padding:0 0 0 0 !important;height:100%;display:table;width:100%;}
-.ui-crudExtendedSample .ui-crud .ui-widgetGrid-emptyRow div {vertical-align:middle;display:table-cell;}
-  */
-
-.ui-crudGrid-container,
+﻿.ui-crudGrid-container,
 .ui-crudGrid-pager,
 .ui-crud .ui-crudGrid-body,
 .ui-crud .ui-crudGrid-pager-bottom {position:relative !important;float:none !important;}
-.ui-crud .ui-crudGrid-body {overflow-y:auto;}
+.ui-crud .ui-crudGrid-body {overflow-y:auto;/*display:table;*/width:100%;}
+.ui-crud .ui-widgetGrid-emptyRow {/*display:table-row;*/height:100%;}
+.ui-crud .ui-widgetGrid-column-content {/*display:table-cell;*/vertical-align:middle;}
+
+
+.ui-productCrud {}
+.ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-searchCustomerIcon,
+.ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeCustomerIcon,
+.ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-searchEmplyeeIcon,
+.ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeEmployeeIcon { width: 1em; height: 1em;float:left;cursor:pointer; margin: 0 0.5em 0 0;padding:0.2em; }
+
+
+.ui-productCrud .ui-crudGrid .ui-crudGrid-productId {width:19.9%;}
+.ui-productCrud .ui-crudGrid .ui-crudGrid-productTypeDesc {width:59.9%;}
+.ui-productCrud .ui-crudGrid .ui-crudGrid-fechaDesde {width:19.9%;}
+
+
+.ui-customerCrud .ui-crudGrid .ui-crudGrid-nombre {width:49.9% !important;}
+.ui-customerCrud .ui-crudGrid .ui-crudGrid-nombre a {text-decoration:underline !important;}
+.ui-customerCrud .ui-crudGrid .ui-crudGrid-numDocumento {width:49.9% !important;text-align:right;}
+
+.ui-employeeCrud .ui-crudGrid .ui-crudGrid-employeeName {width:49.9% !important;}
+.ui-employeeCrud .ui-crudGrid .ui-crudGrid-employeeName a {text-decoration:underline !important;}
+.ui-employeeCrud .ui-crudGrid .ui-crudGrid-employeeEmail  {width:49.9% !important;}

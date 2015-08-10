@@ -34,11 +34,11 @@ function ($, jqUI, clientApp, wCrud, productAjax, productFormModelGet, productGr
                     }
                 }
 
-                defaultButtons.unshift({
+                defaultButtons.push({
                     id: "add",
-                    text: "Add conversation",//clientApp.i18n.texts.get("Views.Crud.CrudFormExtended.BackToProducts"),
+                    text: clientApp.i18n.texts.get("Helpdesk.Talks.History.AddTalk"),
                     cssClass: "ui-cancel-button",
-                    icon: "ui-icon-circle-arrow-w",
+                    icon: "fa fa-plus-circle",
                     click: function () {
                         //self._pageSet(self._pageViews.products);
                     }
@@ -71,6 +71,12 @@ function ($, jqUI, clientApp, wCrud, productAjax, productFormModelGet, productGr
                     default: break;
                 }
             },
+            gridPagerInit: function () {
+                return {
+                    pageSize: 30,
+                };
+            },
+
             formInit: function (crudWidget, $parent) {
 
                 var tBasicInfo = '' +
@@ -139,6 +145,18 @@ function ($, jqUI, clientApp, wCrud, productAjax, productFormModelGet, productGr
         filterSearchCustomer: function () {
             this._trigger('onSearchCustomer', null, null);
         },
+        filterSetEmployee: function (employeeInfo) {
+            for (var i = 0; i < this.options.filterModel.length; i++) {
+                if (this.options.filterModel[i].id == "employeeId") {
+                    this.options.filterModel[i].input.onItemBind(jQuery(this.element), employeeInfo);
+                }
+            }
+
+        },
+        filterSearchEmployee: function () {
+            this._trigger('onSearchEmployee', null, null);
+        },
+
     });
 
 });

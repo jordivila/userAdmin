@@ -13,7 +13,7 @@ function (clientApp) {
         }, {
             id: "productType",
             displayName: clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductType"),
-            input: { type: "list", value: null, listValues: [{ value: "", text: clientApp.i18n.texts.get("Views.Crud.SelectFromList") }] },
+            input: { type: "list", value: null, listValues: [{ value: "", text: clientApp.i18n.texts.get("GeneralTexts.SelectFromList") }] },
         }, {
             id: "customerId",
             displayName: clientApp.i18n.texts.get("Views.Crud.Customer"),
