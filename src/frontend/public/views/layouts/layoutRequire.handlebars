@@ -33,15 +33,18 @@
 
             <div data-widget="userActivity" class="ui-site-header-box">
                 <div class="ui-site-header ui-widget-content ui-corner-all ui-widget-header">
-                    <div class="ui-site-nameBox">
-                        <a href="/">{{domainName}}</a>
+                    <div class="ui-backButton ui-table-cell">
+                        <div class="ui-breadcrumb-box">
+                            {{#if this.breadcrumb }}
+                            {{{ breadcrumbHelper this }}}
+                            {{/if}}
+                        </div>
                     </div>
-                    <div class="ui-site-title">
-                        <h1>{{title}}</h1>
+                    <div class="ui-site-nameBox ui-table-cell">
+                        <!--<a href="/">{{domainName}}</a>-->
                     </div>
-                    <div class="ui-mainMenuToggle">
+                    <div class="ui-mainMenuToggle ui-table-cell">
                         <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
-                        <div class="ui-mainMenuToggle-text">Menu</div>
                         <div class="ui-helper-clearfix"></div>
                     </div>
                 </div>
@@ -51,7 +54,7 @@
 
             <div class="ui-breadcrumb-box">
                 {{#if this.breadcrumb }}
-                    {{{ breadcrumbHelper this }}}
+                {{{ breadcrumbHelper this }}}
                 {{/if}}
             </div>
             <div class="ui-site-title ui-widget-content">
@@ -82,15 +85,15 @@
         var globals = {
             crossLayer: {{{ jsonHelper  crossLayer }}},
             package: {{{ jsonHelper  package }}} ,
-            globalization : {{{ jsonHelper globalization }}},
-            viewEntryPoint : {{#if viewEntryPoint}} {{{ jsonHelper viewEntryPoint }}} {{else}} undefined  {{/if}},
-            breadcrumb: {{#if breadcrumb}} {{{ jsonHelper breadcrumb }}} {{else}} undefined {{/if}},
-            domIds:{
-                panelMain: '#panelMain',
-                panelMenu: '#panelMenu',
-                panelProgress: '#panelProgress'
-            }
-        };
+        globalization : {{{ jsonHelper globalization }}},
+        viewEntryPoint : {{#if viewEntryPoint}} {{{ jsonHelper viewEntryPoint }}} {{else}} undefined  {{/if}},
+                breadcrumb: {{#if breadcrumb}} {{{ jsonHelper breadcrumb }}} {{else}} undefined {{/if}},
+                        domIds:{
+                            panelMain: '#panelMain',
+                            panelMenu: '#panelMenu',
+                            panelProgress: '#panelProgress'
+                        }
+                };
 
     </script>
     <script data-main="/public/scripts/Template.App.RequireJs.Init.js?{{crossLayer.queryParams.appVersion}}={{package.version}}" src="/public/bower_components/requirejs/require.js"></script>

@@ -47,7 +47,7 @@
 
                         return r;
                     };
-                    var t = '<div class="ui-breadcrumb ui-widget-content ui-corner-all ui-state-default ui-helper-invisible">' +
+                    var t = '<div class="ui-breadcrumb ui-corner-all ui-helper-invisible">' +
                                 '<div class="ui-breadcrumb-row">' +
                                     '<div class="ui-breadcrumb-col ui-breadcrumb-moveLeft">' +
                                         '<i class="fa fa-arrow-left"></i>' +
