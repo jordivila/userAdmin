@@ -1,10 +1,14 @@
-﻿.ui-crudGrid-container,
+﻿.ui-crudGrid-container {display:table;table-layout:fixed;display:table;width:100%;table-layout:fixed;}
+.ui-crudGrid-container,
 .ui-crudGrid-pager,
 .ui-crud .ui-crudGrid-body,
 .ui-crud .ui-crudGrid-pager-bottom {position:relative !important;float:none !important;}
-.ui-crud .ui-crudGrid-body {overflow-y:auto;/*display:table;*/width:100%;}
-.ui-crud .ui-widgetGrid-emptyRow {/*display:table-row;*/height:100%;}
-.ui-crud .ui-widgetGrid-column-content {/*display:table-cell;*/vertical-align:middle;}
+.ui-crud .ui-crudGrid-body {overflow-y:auto;}
+.ui-crud .ui-widgetGrid-emptyRow {display:table !important;padding:0 0 0 0 !important; height:100% !important;width:100% ;}
+.ui-crud .ui-widgetGrid-emptyRow .ui-widgetGrid-column-content {margin:45% 0 auto;}
+.ui-crud .ui-widgetGrid-column {display:table-cell;}
+.ui-crud .ui-widgetGrid-column-content {vertical-align:middle;}
+
 
 
 .ui-productCrud {}
@@ -12,12 +16,9 @@
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeCustomerIcon,
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-searchEmplyeeIcon,
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeEmployeeIcon { width: 1em; height: 1em;float:left;cursor:pointer; margin: 0 0.5em 0 0;padding:0.2em; }
-
-
-.ui-productCrud .ui-crudGrid .ui-crudGrid-productId {width:19.9%;}
-.ui-productCrud .ui-crudGrid .ui-crudGrid-productTypeDesc {width:59.9%;}
-.ui-productCrud .ui-crudGrid .ui-crudGrid-fechaDesde {width:19.9%;}
-
+.ui-productCrud .ui-crudGrid-subject {width:85.9%;text-align:left !important;overflow:hidden;}
+.ui-productCrud .ui-crudGrid-dateLastMessage {width:12.9%;overflow:hidden;text-align:right !important;padding:0 1em 0 0;}
+.ui-productCrud .ui-crudGrid-dateLastMessage .ui-text-circle{border:none !important;float:left;font-size:0.8em;}
 
 .ui-customerCrud .ui-crudGrid .ui-crudGrid-nombre {width:49.9% !important;}
 .ui-customerCrud .ui-crudGrid .ui-crudGrid-nombre a {text-decoration:underline !important;}

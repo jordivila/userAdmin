@@ -1,0 +1,4 @@
+﻿body {overflow:hidden; /*prevents double scrolling on the page*/}
+.ui-pageHolder .ui-sitePage .ui-site-title  {display:none;/**/}
+
+

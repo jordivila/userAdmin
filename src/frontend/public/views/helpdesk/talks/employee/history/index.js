@@ -3,16 +3,6 @@
     "jqueryui",
     "scripts/Template.App.ClientApp",
     "/helpdesk/talks/employee/common/helpdeskCommon.js",
-
-    "scripts/modules/crud",
-    "../common/crudSamplesCustomerData.js",
-    "../common/crudSamplesCustomerDefaultOptions.js",
-
-    "./crudProductExtended.AjaxFake.js",
-    "./crudProductExtended.FilterModel.js",
-    "./crudProductExtended.FormModel.js",
-    "./crudProductExtended.GridModel.js",
-    "./crudProductExtended.Widget.js",
     "./crudPage.js",
 ],
    function ($, jqUI, clientApp, helpdeskCommon) {

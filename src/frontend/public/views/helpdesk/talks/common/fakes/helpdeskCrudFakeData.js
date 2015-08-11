@@ -261,6 +261,12 @@
                         }
                     }
 
+
+                    console.log("filter");
+                    console.log(filter);
+                    console.log(dataResult);
+
+
                     setTimeout(function () { dfd.resolve(dataResult); }, crudAjaxOpts.ajax._fakeDelay);
 
                     return dfd.promise();

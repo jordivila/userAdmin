@@ -30,15 +30,13 @@
 
 
 /* Breadcrumb */
-
-
 .ui-pageHolder .ui-sitePage .ui-breadcrumb.ui-breadcrumb-singlePage {display:none;}
 .ui-pageHolder .ui-sitePage .ui-breadcrumb.ui-helper-invisible {display:none;}
 .ui-pageHolder .ui-sitePage .ui-site-header .ui-breadcrumb.ui-breadcrumb-multiplePage {display:none;}
 .ui-pageHolder .ui-sitePage .ui-site-header .ui-breadcrumb.ui-breadcrumb-singlePage {display:table;}
 .ui-pageHolder .ui-sitePage .ui-site-header .ui-breadcrumb.ui-breadcrumb-singlePage .ui-breadcrumb-path {display:none;}
 .ui-pageHolder .ui-sitePage .ui-site-header .ui-breadcrumb.ui-breadcrumb-singlePage .ui-breadcrumb-moveLeft {padding:0 0 0 0;}
-.ui-pageHolder .ui-sitePage .ui-site-header .ui-breadcrumb.ui-breadcrumb-singlePage .ui-breadcrumb-moveLeft .fa {font-size:2em;}
+.ui-pageHolder .ui-sitePage .ui-site-header .ui-breadcrumb.ui-breadcrumb-singlePage .ui-breadcrumb-moveLeft .fa {font-size:1.5em;}
 
 
 

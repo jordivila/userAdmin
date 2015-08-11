@@ -4,7 +4,7 @@
     "scripts/Template.Widget.HelpdeskChat",
     "scripts/Template.App.ClientApp",
     "scripts/Template.Class.UrlHelper",
-    "/helpdesk/talks/customer/common/helpdeskCommon.js",
+    "/helpdesk/talks/employee/common/helpdeskCommon.js",
     "/helpdesk/talks/common/fakes/helpdeskCrudFakeData.js",
 ],
 function ($, jqUI, HelpdeskChatWidget, clientApp, UrlHelper, helpdeskCommon, crudAjaxOpts) {
@@ -20,7 +20,7 @@ function ($, jqUI, HelpdeskChatWidget, clientApp, UrlHelper, helpdeskCommon, cru
         },
         main: function () {
 
-            jQuery('#customerHelpdeskChat')
+            jQuery('#employeeHelpdeskChat')
                 .helpdeskChat({
                     idTalk: function () {
 
