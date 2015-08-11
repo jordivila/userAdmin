@@ -6,8 +6,9 @@ define([
     "crossLayer/dateHelper",
     "/helpdesk/talks/common/fakes/helpdeskCrudFakeData.js",
     "/helpdesk/talks/employee/common/helpdeskCommon.js",
+    "crossLayer/models/dataResult",
 ],
-function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon) {
+function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, DataResult) {
 
     jQuery.widget("ui.product", jQuery.ui.crud,
     {
@@ -40,7 +41,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon) {
 
                             customerTrashDomId
                                 .click(function () {
-                                    selfOption.onItemBind(jQuery(parent), { id: "", nombre: clientApp.i18n.texts.get("Views.Crud.CrudExtended.ClickToFilterByCustomer") });
+                                    selfOption.onItemBind(jQuery(parent), { customerId: "", customerName: clientApp.i18n.texts.get("Views.Crud.CrudExtended.ClickToFilterByCustomer") });
                                 });
 
                             customerNameDomId
@@ -62,10 +63,10 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon) {
                             var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
                             var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeCustomerIcon:first');
 
-                            customerIdDomId.val(dataItem.id);
-                            customerNameDomId.html(dataItem.nombre);
+                            customerIdDomId.val(dataItem.customerId);
+                            customerNameDomId.html(dataItem.customerName);
 
-                            if (dataItem.id !== "") {
+                            if (dataItem.customerId !== "") {
                                 customerTrashDomId.show();
                             }
                             else {
@@ -175,7 +176,6 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon) {
                 return defaultButtons;
             },
             gridFilterVisibleAlways: false,
-            //gridSearchForEditMethod: productAjax.ajax.productSearchForEdit,
             gridButtonsGet: function (crudWidget, defaultButtons) {
                 for (var i = 0; i < defaultButtons.length; i++) {
                     if (defaultButtons[i].id == "search") {
@@ -189,7 +189,8 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon) {
                     cssClass: "ui-cancel-button",
                     icon: "fa fa-plus-circle",
                     click: function () {
-                        clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.subject()));
+                        //clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.subject()));
+                        crudWidget.edit({});
                     }
                 });
 
@@ -249,23 +250,139 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon) {
                     pageSize: 30,
                 };
             },
+            //formInit: function (crudWidget, $parent) {
+
+            //},
+
+
+            gridSearchForEditMethod: function (dataItem) {
+
+
+                // this is just a fake. As far as this crud widget does NOT edit elements. It just adds elements
+
+                var self = this;
+                var dfd = jQuery.Deferred();
+                var dataResult = new DataResult(true, "", {
+                    idTalk: null,
+                    subject: '',
+                });
+
+                setTimeout(function () { dfd.resolve(dataResult); }, 1);
+
+                return dfd.promise();
+
+            },
             formInit: function (crudWidget, $parent) {
 
-                //var tBasicInfo = '' +
-                //    '<div class="ui-productCrud-form-searchOutput">' +
-                //        '<h3 class="ui-state-default">' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.BasicInfo")) + '</h3>' +
-                //        '<div data-fielditem="productId" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductNum")) + '"></div>' +
-                //        '<div data-fielditem="productTypeDesc" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.ProductTypeDescColumn")) + '"></div>' +
-                //        '<div data-fielditem="nombre" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.Name_BussinesName")) + '"></div>' +
-                //        '<div data-fielditem="fechaDesde" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DateFrom")) + '"></div>' +
-                //        '<div data-fielditem="fechaHasta" data-fielditem-name="' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DateTo")) + '"></div>' +
-                //    '</div>' +
-                //    '<div class="ui-productCrud-form-type">' +
-                //        '<h3 class="ui-state-default">' + clientApp.utils.htmlEncode(clientApp.i18n.texts.get("Views.Crud.CrudExtended.DetailInfo")) + '</h3>' +
-                //    '</div>';
+                var tBasicInfo = '' +
+                    '<div>' +
+                        'Indica el asunto y busca un cliente con el que entablar conversacion' +
+                    '</div>' +
+                    '<div class="ui-productCrud-form-type">' +
+                        '<h3 class="ui-state-default">Informacion de la conversaion</h3>' +
+                    '</div>';
 
-                //jQuery($parent).prepend(tBasicInfo);
+                jQuery($parent).prepend(tBasicInfo);
             },
+            formButtonsGet: function (self, defaultButtons) {
+                return defaultButtons;
+            },
+            formBind: function (self, dataItem) {
+
+
+            },
+            formSaveMethod: null,//productAjax.ajax.productSave,
+            formValueGet: function (self, currentValue) {
+                return currentValue;
+            },
+            formModel: function () {
+                return [{
+                    id: "subject",
+                    displayName: clientApp.i18n.texts.get("Helpdesk.Talks.History.GridColumns.Subject"),
+                    input: { value: "" },
+                }, {
+                    id: "customerId",
+                    displayName: clientApp.i18n.texts.get("Views.Crud.Customer"),
+                    input: {
+                        type: "custom",
+                        value: null,
+                        nullable: true,
+                        onItemBuild: function (widget, parent) {
+
+
+                            var selfOption = this;
+
+                            var _templateGet = function () {
+                                return '' +
+                                    '<input type="hidden" class="ui-productCrud-form-customerId" />' +
+                                    '<a href="javascript:void(0);" class="ui-productCrud-form-customerName"></a>' +
+                                    '<div class="ui-productCrud-form-removeCustomerIcon ui-state-error">' +
+                                        '<span class="ui-icon ui-icon-close"></span>' +
+                                    '</div>';
+                            };
+
+                            jQuery(parent).append(_templateGet());
+
+                            var customerNameDomId = jQuery(parent).find('a.ui-productCrud-form-customerName:first');
+                            var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-form-removeCustomerIcon:first');
+
+                            customerTrashDomId
+                                .click(function () {
+                                    selfOption.onItemBind(jQuery(parent), { customerId: "", customerName: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.ClickToFilterByCustomer") });
+                                });
+
+                            customerNameDomId
+                                .click(function () {
+                                    jQuery(parent)
+                                        .parents('div.ui-crud:first')
+                                            .product('formSearchCustomer');
+                                });
+
+                            customerTrashDomId.click();
+
+
+
+                            //jQuery(parent)
+                            //    .append('<p>' + clientApp.i18n.texts.get("Views.Crud.CrudExtended.SomeReadonlyValue") + '-><span class="someCustomValue">2</span></p>')
+                            //    .find('p:first')
+                            //        .click(function () {
+                            //            jQuery(widget).widgetModelItem('change');
+                            //        });
+                        },
+                        onItemValue: function (parent) {
+                            var customerIdDomId = jQuery(parent).find('input.ui-productCrud-form-customerId:first').val();
+                        },
+                        onItemBind: function (parent, dataItem) {
+                            //return jQuery(parent).find('span.someCustomValue').html(dataItem);
+
+                            var customerIdDomId = jQuery(parent).find('input.ui-productCrud-form-customerId:first');
+                            var customerNameDomId = jQuery(parent).find('a.ui-productCrud-form-customerName:first');
+                            var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-form-removeCustomerIcon:first');
+
+                            if (dataItem === null) {
+                                dataItem = {
+                                    customerId: "",
+                                    customerName: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.ClickToFilterByCustomer")
+                                };
+                            }
+
+                            customerIdDomId.val(dataItem.customerId);
+                            customerNameDomId.html(dataItem.customerName);
+
+                            if (dataItem.customerId !== "") {
+                                customerTrashDomId.show();
+                            }
+                            else {
+                                customerTrashDomId.hide();
+                            }
+
+
+                        }
+                    },
+                }
+                ];
+            }(),
+
         },
         _create: function () {
 
@@ -299,6 +416,19 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon) {
         filterSearchEmployee: function () {
             this._trigger('onSearchEmployee', null, null);
         },
+        formSetCustomer: function (custInfo) {
+            for (var i = 0; i < this.options.formModel.length; i++) {
+                if (this.options.formModel[i].id == "customerId") {
+                    this.options.formModel[i].input.onItemBind(jQuery(this.element), custInfo);
+                }
+            }
+        },
+        formSearchCustomer: function () {
+            this._trigger('onSearchCustomer', null, null);
+        },
+
+
+
 
     });
 

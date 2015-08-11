@@ -87,20 +87,6 @@ function ($, jqUI, wBase, crudBase, crudExtendedWidget, clientApp, crudDefaultOp
             var self = this;
 
             var customerOptions = jQuery.extend({}, crudDefaultOptionsCustomer.crudCustomerDefaultOptions(), {
-                gridFilterVisibleAlways: true,
-                gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
-
-                    switch (columnName) {
-                        case "nombre":
-                            $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
-                            $cell.find('a')
-                                .click(function () {
-                                    crudGridWidget._trigger('onSelect', null, dataItem);
-                                });
-                            break;
-                        default: break;
-                    }
-                },
                 gridFilterButtonsInit: function (widgetFilter, defaultButtons) {
 
                     for (var i = 0; i < defaultButtons.length; i++) {
@@ -126,6 +112,7 @@ function ($, jqUI, wBase, crudBase, crudExtendedWidget, clientApp, crudDefaultOp
                 },
                 onSelect: function (e, dataItem) {
                     jQuery(self.options.productDOMId).product('filterSetCustomer', dataItem);
+                    jQuery(self.options.productDOMId).product('formSetCustomer', dataItem);
                     self._pageSet(self._pageViews.products);
                 },
             });
@@ -137,20 +124,6 @@ function ($, jqUI, wBase, crudBase, crudExtendedWidget, clientApp, crudDefaultOp
             var self = this;
 
             var employeeOptions = jQuery.extend({}, crudDefaultOptionsEmployee.crudEmployeeDefaultOptions(), {
-                gridFilterVisibleAlways: true,
-                gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
-
-                    switch (columnName) {
-                        case "employeeName":
-                            $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
-                            $cell.find('a')
-                                .click(function () {
-                                    crudGridWidget._trigger('onSelect', null, dataItem);
-                                });
-                            break;
-                        default: break;
-                    }
-                },
                 gridFilterButtonsInit: function (widgetFilter, defaultButtons) {
 
                     for (var i = 0; i < defaultButtons.length; i++) {

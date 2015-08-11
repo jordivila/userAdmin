@@ -122,8 +122,7 @@ function ($, jqUI, clientApp) {
                         self._trigger('onSelect', null, dataItem);
                     },
                     onEdit: function (e, dataItem) {
-                        self.errorHide();
-                        self._searchForEdit(dataItem);
+                        self.edit(dataItem);
                     }
                 },
                 self.options.gridCustomOptions);
@@ -223,6 +222,11 @@ function ($, jqUI, clientApp) {
         },
         destroy: function () {
             this._super();
+        },
+        edit: function (dataItem) {
+            // do NOT make this method private 
+            this.errorHide();
+            this._searchForEdit(dataItem);
         },
         _templateInit: function (gridFilterClass, gridButtonsClass, gridControlClass, formControlClass) {
 

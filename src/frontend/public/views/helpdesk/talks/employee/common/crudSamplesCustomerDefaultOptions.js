@@ -9,16 +9,17 @@
             var r = {
                 filterModel: [
                     {
-                        id: "nombre",
+                        id: "customerName",
                         displayName: clientApp.i18n.texts.get("Views.Crud.Name_BussinesName"),
                         input: { value: "" },
                     },
                     {
-                        id: "dni",
+                        id: "customerCardId",
                         displayName: clientApp.i18n.texts.get("Views.Crud.IDCard"),
                         input: { value: "" }
                     }
                 ],
+                gridFilterVisibleAlways: true,
                 gridCustomOptions: {
                     //example: see code below
                     //onSelect: function (e, dataItem) {
@@ -29,19 +30,22 @@
                 gridSearchMethod: customerAjax.ajax.customerSearch,
                 gridModel: [
                     {
-                        key: "nombre",
+                        key: "customerName",
                         displayName: clientApp.i18n.texts.get("Views.Crud.Name_BussinesName")
                     },
                     {
-                        key: "numDocumento",
+                        key: "customerCardId",
                         displayName: clientApp.i18n.texts.get("Views.Crud.IDCard")
                     }
                 ],
                 gridViewCellBound: function (crudGridWidget, $row, $cell, dataItem, columnName) {
-
                     switch (columnName) {
-                        case "nombre":
-                            $cell.html('<span>{0}</span>'.format(dataItem[columnName]));
+                        case "customerName":
+                            $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
+                            $cell.find('a')
+                                .click(function () {
+                                    crudGridWidget._trigger('onSelect', null, dataItem);
+                                });
                             break;
                         default: break;
                     }

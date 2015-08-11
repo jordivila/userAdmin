@@ -12,6 +12,8 @@
 
 
 .ui-productCrud {}
+.ui-productCrud .ui-productCrud-form .ui-productCrud-form-searchCustomerIcon,
+.ui-productCrud .ui-productCrud-form .ui-productCrud-form-removeCustomerIcon,
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-searchCustomerIcon,
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeCustomerIcon,
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-searchEmplyeeIcon,
@@ -20,9 +22,9 @@
 .ui-productCrud .ui-crudGrid-dateLastMessage {width:12.9%;overflow:hidden;text-align:right !important;padding:0 1em 0 0;}
 .ui-productCrud .ui-crudGrid-dateLastMessage .ui-text-circle{border:none !important;float:left;font-size:0.8em;}
 
-.ui-customerCrud .ui-crudGrid .ui-crudGrid-nombre {width:49.9% !important;}
-.ui-customerCrud .ui-crudGrid .ui-crudGrid-nombre a {text-decoration:underline !important;}
-.ui-customerCrud .ui-crudGrid .ui-crudGrid-numDocumento {width:49.9% !important;text-align:right;}
+.ui-customerCrud .ui-crudGrid .ui-crudGrid-customerName {width:49.9% !important;}
+.ui-customerCrud .ui-crudGrid .ui-crudGrid-customerName a {text-decoration:underline !important;}
+.ui-customerCrud .ui-crudGrid .ui-crudGrid-customerCardId {width:49.9% !important;text-align:right;}
 
 .ui-employeeCrud .ui-crudGrid .ui-crudGrid-employeeName {width:49.9% !important;}
 .ui-employeeCrud .ui-crudGrid .ui-crudGrid-employeeName a {text-decoration:underline !important;}

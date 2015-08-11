@@ -19,6 +19,7 @@
                         input: { value: "" }
                     }
                 ],
+                gridFilterVisibleAlways: true,
                 gridCustomOptions: {
                     //example: see code below
                     //onSelect: function (e, dataItem) {
@@ -41,7 +42,11 @@
 
                     switch (columnName) {
                         case "employeeName":
-                            $cell.html('<span>{0}</span>'.format(dataItem[columnName]));
+                            $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
+                            $cell.find('a')
+                                .click(function () {
+                                    crudGridWidget._trigger('onSelect', null, dataItem);
+                                });
                             break;
                         default: break;
                     }
