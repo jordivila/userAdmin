@@ -1,14 +1,4 @@
-﻿.ui-crudGrid-container {display:table;table-layout:fixed;display:table;width:100%;table-layout:fixed;}
-.ui-crudGrid-container,
-.ui-crudGrid-pager,
-.ui-crud .ui-crudGrid-body,
-.ui-crud .ui-crudGrid-pager-bottom {position:relative !important;float:none !important;}
-.ui-crud .ui-crudGrid-body {overflow-y:auto;}
-.ui-crud .ui-widgetGrid-emptyRow {display:table !important;padding:0 0 0 0 !important; height:100% !important;width:100% ;}
-.ui-crud .ui-widgetGrid-emptyRow .ui-widgetGrid-column-content {margin:45% 0 auto;}
-.ui-crud .ui-widgetGrid-column {display:table-cell;}
-.ui-crud .ui-widgetGrid-column-content {vertical-align:middle;}
-
+﻿
 
 
 .ui-productCrud {}
@@ -18,8 +8,11 @@
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeCustomerIcon,
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-searchEmplyeeIcon,
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeEmployeeIcon { width: 1em; height: 1em;float:left;cursor:pointer; margin: 0 0.5em 0 0;padding:0.2em; }
-.ui-productCrud .ui-crudGrid-subject {width:86%;text-align:left !important;;}
-.ui-productCrud .ui-crudGrid-dateLastMessage {width:12%;text-align:right !important;padding:0 1em 0 0;}
+
+.ui-productCrud .ui-crudGrid-subject {width:80%;}
+.ui-productCrud .ui-crudGrid-body .ui-crudGrid-subject {text-align:left !important;}
+.ui-productCrud .ui-crudGrid-dateLastMessage {width:20%;}
+.ui-productCrud .ui-crudGrid-body .ui-crudGrid-dateLastMessage { text-align:right !important;padding:0 1em 0 0; }
 .ui-productCrud .ui-crudGrid-dateLastMessage .ui-text-circle{border:none !important;float:left;font-size:0.8em;}
 
 .ui-customerCrud .ui-crudGrid .ui-crudGrid-customerName {width:49.9% !important;}

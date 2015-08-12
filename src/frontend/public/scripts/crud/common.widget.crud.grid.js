@@ -49,7 +49,7 @@
                     .addClass('ui-crudGrid ui-widgetGrid')
                     .append(this._gridTemplate());
 
-                this.options.gridBodyDOMId = jQuery(this.element).find('div.ui-crudGrid-body:first');
+                this.options.gridBodyDOMId = jQuery(this.element).find('table.ui-crudGrid-body:first');
                 this.options.gridPagerDOMId = jQuery(this.element).find('div.ui-crudGrid-pager');
 
             },
@@ -91,33 +91,37 @@
             },
             _gridTemplate: function () {
 
-                return '<div class="ui-crudGrid-container">' +
-                            '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
-                            '<div class="ui-helper-clearfix" ></div>' +
-
-                            '<div class="ui-crudGrid-header ui-widgetGrid-header ui-state-default">' +
-                                '<div class="ui-widgetGrid-row" >' +
+                return '<table class="ui-crudGrid-container">' +
+                            '<tr>' +
+                                '<td colspan="' + this.options.gridModel.length + '">' +
+                                    '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
+                                '</td>' +
+                            '</tr>' + 
+                            '<tr class="ui-crudGrid-header ui-widgetGrid-header ui-state-default">' +
                                     this._gridHeaderTemplate() +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="ui-helper-clearfix" ></div>' +
-                            '<div class="ui-crudGrid-body-container">' +
-                                '<div class="ui-crudGrid-body ui-widgetGrid-body ui-helper-clearfix" >' +
-
-                                '</div>' +
-                            '</div>' +
-                            '<div class="ui-helper-clearfix" ></div>' +
-                            '<div class="ui-crudGrid-pager ui-crudGrid-pager-bottom ui-state-default"></div>' +
-                            '<div class="ui-helper-clearfix" ></div>' +
-                        '</div>'
-                ;
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="' + this.options.gridModel.length + '">' +
+                                    '<div class="ui-crudGrid-body-container">' +
+                                        '<table class="ui-crudGrid-body ui-widgetGrid-body" >' +
+                                        
+                                        '</table>' +
+                                    '</div>' + 
+                                '</td>' + 
+                            '</tr>' +
+                            '<tr>' +
+                                '<td colspan="' + this.options.gridModel.length + '">' +
+                                    '<div class="ui-crudGrid-pager ui-crudGrid-pager-bottom ui-state-default"></div>' +
+                                '</td>' +
+                            '</tr>' +
+                        '</table>';
             },
             _gridHeaderTemplate: function () {
 
                 var str = '';
 
                 for (var i = 0; i < this.options.gridModel.length; i++) {
-                    str += '<div class="ui-crudGrid-{0} ui-widgetGrid-column">{1}</div>'.format(this.options.gridModel[i].key, this.options.gridModel[i].displayName);
+                    str += '<td class="ui-crudGrid-{0} ui-widgetGrid-column">{1}</td>'.format(this.options.gridModel[i].key, this.options.gridModel[i].displayName);
                 }
 
                 return str;
@@ -127,7 +131,7 @@
                 var str = '';
 
                 for (var i = 0; i < this.options.gridModel.length; i++) {
-                    str += '<div class="ui-crudGrid-{0} ui-widgetGrid-column ui-state-default {2}"><div class="ui-widgetGrid-column-content">{1}</div></div>'
+                    str += '<td class="ui-crudGrid-{0} ui-widgetGrid-column ui-state-default {2}"><div class="ui-widgetGrid-column-content">{1}</div></td>'
                         .format(
                                 this.options.gridModel[i].key,
                                 dataItem[this.options.gridModel[i].key],
@@ -141,7 +145,7 @@
                 var self = this;
 
                 jQuery(self.options.gridBodyDOMId)
-                    .children('div')
+                    .children('tr')
                         .each(function (i, ui) {
                             if (((i % 2) == 1)) {
                                 //jQuery(this).addClass('');
@@ -163,18 +167,18 @@
                         jQuery(self.options.gridBodyDOMId).empty();
                     }
                     else {
-                        jQuery(self.options.gridBodyDOMId).find('div.ui-widgetGrid-emptyRow:first').remove();
+                        jQuery(self.options.gridBodyDOMId).find('tr.ui-widgetGrid-emptyRow:first').remove();
                     }
 
                     for (var i = 0; i < data.data.length; i++) {
                         var dataItem = data.data[i];
-                        var $row = jQuery('<div class="ui-crudGrid-dataRow ui-widgetGrid-row ui-state-default {1}">{0}</div>'
+                        var $row = jQuery('<tr class="ui-crudGrid-dataRow ui-widgetGrid-row ui-state-default {1}">{0}</tr>'
                                     .format(self._gridRowTemplate(dataItem),
                                             (i == (data.data.length - 1) ? 'ui-crudGrid-row-last' : '')));
 
                         for (var j = 0; j < this.options.gridModel.length; j++) {
 
-                            var $cell = $row.find('div.ui-crudGrid-{0}:first'.format(this.options.gridModel[j].key))
+                            var $cell = $row.find('td.ui-crudGrid-{0}:first'.format(this.options.gridModel[j].key))
                                             .find('div.ui-widgetGrid-column-content');
 
 
@@ -200,7 +204,7 @@
                 jQuery(this.options.gridPagerDOMId).gridPagination('bind', data.page, data.pageSize, data.totalRows);
             },
             _buildEmptyDataRow: function () {
-                var $emtpyRow = '<div class="ui-widgetGrid-emptyRow ui-widgetGrid-column  ui-state-active"><div class="ui-widgetGrid-column-content">{0}</div></div>'
+                var $emtpyRow = '<tr class="ui-widgetGrid-emptyRow ui-state-active"><td class="ui-widgetGrid-column"><div class="ui-widgetGrid-column-content">{0}</div></td></tr>'
                                     .format(this.options.texts.gridEmptyData);
 
                 jQuery(this.options.gridBodyDOMId).append($emtpyRow);

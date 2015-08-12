@@ -1,17 +1,19 @@
 ﻿/* Data lists Common */
-.ui-widgetGrid {width:100%;display:table;background-image:none !important;table-layout:fixed;}
+
+
+.ui-widgetGrid {width:100%;background-image:none !important;}
 .ui-widgetGrid a {text-decoration:underline !important;}
-.ui-widgetGrid .ui-widgetGrid-body {display:table;width:100%;overflow:hidden;}
-.ui-widgetGrid .ui-widgetGrid-row {font-weight:normal !important;display:table-row;padding:0 0 0 0;margin:.1em 0 .1em 0;}
-.ui-widgetGrid .ui-widgetGrid-column {display:table-cell;text-align:center;white-space:nowrap;font-weight:normal;background-image:none;}
+.ui-widgetGrid .ui-widgetGrid-body {width:100%;overflow:hidden;}
+.ui-widgetGrid .ui-widgetGrid-row {font-weight:normal !important;padding:0 0 0 0;margin:.1em 0 .1em 0;}
+.ui-widgetGrid .ui-widgetGrid-column {text-align:center;white-space:nowrap;font-weight:normal;background-image:none;}
 .ui-widgetGrid .ui-widgetGrid-column-content {overflow:hidden;padding:0 .5em 0 .5em;width:95% !important;text-overflow: ellipsis;}
 .ui-widgetGrid .ui-widgetGrid-emptyRow {padding:5em;text-align:center;background-image:none;}
 
-.ui-widgetGrid .ui-widgetGrid-header {display:table;width:100%; padding:0.5em 0 0.5em 0;}
+.ui-widgetGrid .ui-widgetGrid-header {width:100%; padding:0.5em 0 0.5em 0;}
 .ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column {text-align:center;}
 .ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content {cursor:pointer;text-decoration:underline;font-weight:bold;}
 .ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content div {width:auto;display: inline-block;}
-.ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content span.ui-icon {float:left;margin:0 0.5em 0 0; /*border:0.1em solid;*/}
+.ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content span.ui-icon {float:left;margin:0 0.5em 0 0;}
 .ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content button {margin:0; padding:0;background:none;border:0;}
 .ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content button.ui-state-default {color:inherit;}
 .ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content button .ui-button-text {color:inherit;margin:0; padding:0;}

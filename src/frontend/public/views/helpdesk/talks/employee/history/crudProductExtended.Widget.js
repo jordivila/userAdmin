@@ -152,6 +152,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                     },
                 }];
             }(this),
+            gridExpand: true,
             gridSearchMethod: crudAjaxOpts.ajax.talkSearch,
             gridModel: function () {
                 return [
@@ -165,16 +166,6 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                     }
                 ];
             }(),
-            gridFilterButtonsInit: function (widgetFilter, defaultButtons) {
-
-                for (var i = 0; i < defaultButtons.length; i++) {
-                    if (defaultButtons[i].id == "filter") {
-                        defaultButtons[i].text = clientApp.i18n.texts.get("Template.Widget.Crud.Search");
-                    }
-                }
-
-                return defaultButtons;
-            },
             gridFilterVisibleAlways: false,
             gridButtonsGet: function (crudWidget, defaultButtons) {
                 for (var i = 0; i < defaultButtons.length; i++) {

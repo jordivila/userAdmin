@@ -22,7 +22,7 @@ function ($, jqUI, clientApp) {
                 (
                     jQuery($widget).find('div.ui-crudGrid-body-container:first').offset().top +
                     jQuery($widget).find('div.ui-crudGrid-pager-bottom:first').height() +
-                    0//jQuery($widget).find('div.ui-widgetGrid-emptyRow:first').height()
+                    5
                 );
 
                 return gridBoxHeight;
@@ -513,7 +513,7 @@ function ($, jqUI, clientApp) {
                 .find('div.ui-crudGrid-body-container:first')
                     .height(gridBoxHeight)
                 .end()
-                .find('div.ui-widgetGrid-emptyRow')
+                .find('tr.ui-widgetGrid-emptyRow')
                     .height(gridBoxHeight - 5)
                 .end();
 

@@ -19,6 +19,7 @@
                         input: { value: "" }
                     }
                 ],
+                gridExpand: true,
                 gridFilterVisibleAlways: true,
                 gridCustomOptions: {
                     //example: see code below
