@@ -18,8 +18,8 @@
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeCustomerIcon,
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-searchEmplyeeIcon,
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeEmployeeIcon { width: 1em; height: 1em;float:left;cursor:pointer; margin: 0 0.5em 0 0;padding:0.2em; }
-.ui-productCrud .ui-crudGrid-subject {width:85.9%;text-align:left !important;overflow:hidden;}
-.ui-productCrud .ui-crudGrid-dateLastMessage {width:12.9%;overflow:hidden;text-align:right !important;padding:0 1em 0 0;}
+.ui-productCrud .ui-crudGrid-subject {width:86%;text-align:left !important;;}
+.ui-productCrud .ui-crudGrid-dateLastMessage {width:12%;text-align:right !important;padding:0 1em 0 0;}
 .ui-productCrud .ui-crudGrid-dateLastMessage .ui-text-circle{border:none !important;float:left;font-size:0.8em;}
 
 .ui-customerCrud .ui-crudGrid .ui-crudGrid-customerName {width:49.9% !important;}

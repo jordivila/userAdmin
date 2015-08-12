@@ -34,6 +34,7 @@
                     //    }
                     //};
                 },
+                //gridExpand: false,                        // -> this option comes from ui.crud
 
                 texts: {
                     gridEmptyData: clientApp.i18n.texts.get("Template.Widget.Crud.EmptyResults"),
@@ -53,52 +54,14 @@
 
             },
             _init: function () {
-
+                this._gridExpandInit();
+                this._gridPagerInit();
                 this._super();
-
-                var self = this;
-
-                var pagerOpts = {
-                    change: function (e, pagination) {
-                        self._trigger('paginated', null, pagination);
-                    },
-                };
-
-                var pagerConfig = jQuery.extend({},
-                    {
-                        infiniteScrolling: false,
-                        pagerTop: {
-                            paginationShow: false,
-                            totalRowsShow: false,
-                            pageSizeShow: false,
-                        },
-                        pagerBottom: {
-                            paginationShow: true,
-                            totalRowsShow: true,
-                            pageSizeShow: true,
-                        }
-                    },
-                    this.options.gridPagerInit());
-
-
-                if (pagerConfig.infiniteScrolling === true)
-                {
-                    pagerConfig.pagerTop.infiniteScrolling = true;
-                    pagerConfig.pagerBottom.infiniteScrolling = true;
-                }
-
-                pagerConfig = jQuery.extend({}, pagerOpts, pagerConfig);
-
-                jQuery(self.options.gridPagerDOMId)
-                        .first()
-                            .gridPagination(jQuery.extend({}, pagerConfig, pagerConfig.pagerTop))
-                        .end()
-                        .last()
-                            .gridPagination(jQuery.extend({}, pagerConfig, pagerConfig.pagerBottom))
-                        .end();
-
             },
             destroy: function () {
+
+                jQuery(window).unbind('resize');
+
 
                 this._super();
 
@@ -106,8 +69,12 @@
             emptyData: function () {
                 jQuery(this.options.gridBodyDOMId).empty();
                 this._buildEmptyDataRow();
+                if (this.options.gridExpand === true) {
+                    this._trigger('onHeightSet', null, {});
+                }
             },
             bind: function (data) {
+
                 try {
                     this._bindRows(data);
                     this._bindPagination(data);
@@ -118,6 +85,9 @@
                     this._trigger('errorDisplay', null, this.options.texts.gridBindingError);
                 }
 
+                if (this.options.gridExpand === true) {
+                    this._trigger('onHeightSet', null, {});
+                }
             },
             _gridTemplate: function () {
 
@@ -131,8 +101,10 @@
                                 '</div>' +
                             '</div>' +
                             '<div class="ui-helper-clearfix" ></div>' +
-                            '<div class="ui-crudGrid-body ui-widgetGrid-body ui-helper-clearfix" >' +
+                            '<div class="ui-crudGrid-body-container">' +
+                                '<div class="ui-crudGrid-body ui-widgetGrid-body ui-helper-clearfix" >' +
 
+                                '</div>' +
                             '</div>' +
                             '<div class="ui-helper-clearfix" ></div>' +
                             '<div class="ui-crudGrid-pager ui-crudGrid-pager-bottom ui-state-default"></div>' +
@@ -232,7 +204,69 @@
                                     .format(this.options.texts.gridEmptyData);
 
                 jQuery(this.options.gridBodyDOMId).append($emtpyRow);
-            }
+            },
+            _gridExpandInit: function () {
+
+                var self = this;
+
+                if (this.options.gridExpand === true) {
+
+                    jQuery(this.element)
+                        .find('div.ui-crudGrid-body-container:first')
+                            .addClass('ui-crudGrid-expanded')
+                        .end();
+
+                    jQuery(window)
+                        .resize(function (e, ui) {
+                            self._trigger('onHeightSet', null, {});
+                        });
+                }
+            },
+            _gridPagerInit: function () {
+
+                var self = this;
+
+                var pagerOpts = {
+                    change: function (e, pagination) {
+                        self._trigger('paginated', null, pagination);
+                    },
+                };
+
+                var pagerConfig = jQuery.extend({},
+                    {
+                        infiniteScrolling: false,
+                        pagerTop: {
+                            paginationShow: false,
+                            totalRowsShow: false,
+                            pageSizeShow: false,
+                        },
+                        pagerBottom: {
+                            paginationShow: true,
+                            totalRowsShow: true,
+                            pageSizeShow: true,
+                        }
+                    },
+                    this.options.gridPagerInit());
+
+
+                if (pagerConfig.infiniteScrolling === true) {
+                    pagerConfig.pagerTop.infiniteScrolling = true;
+                    pagerConfig.pagerBottom.infiniteScrolling = true;
+                }
+
+                pagerConfig = jQuery.extend({}, pagerOpts, pagerConfig);
+
+                jQuery(self.options.gridPagerDOMId)
+                        .first()
+                            .gridPagination(jQuery.extend({}, pagerConfig, pagerConfig.pagerTop))
+                        .end()
+                        .last()
+                            .gridPagination(jQuery.extend({}, pagerConfig, pagerConfig.pagerBottom))
+                        .end();
+
+
+            },
+
         });
 
     });

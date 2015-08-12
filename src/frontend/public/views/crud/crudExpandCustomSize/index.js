@@ -3,8 +3,8 @@ define([
     "jqueryui",
     "scripts/Template.App.ClientApp",
 
-
     "scripts/modules/crud",
+
     "/crud/crudCommon/crudSamplesCustomerData.js",
     "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
 
@@ -15,15 +15,34 @@ define([
            main: function () {
 
                var customerOptions = jQuery.extend({}, crudDefaultOptions.crudCustomerDefaultOptions(), {
-                   gridFilterVisibleAlways: true,
+                   gridExpand: true,
+                   gridExpandHeightCalc: function ($widget) {
+                       return clientApp.utils.convertEmToPixels(10);
+                   },
+                   gridPagerInit: function () {
+                       return {
+                           pageSize: 30,
+                       };
+                   },
                });
+
+
 
                jQuery('body')
                    .find('div.ui-customerCrud:first')
                        .crud(customerOptions)
                        .hide()
                        .removeClass('ui-helper-hidden')
-                       .fadeIn()
+                       .fadeIn(1, function () {
+
+                           var $widget = jQuery(this);
+
+                           //setTimeout(function () {
+
+                               jQuery($widget).crud('gridExpandHeightSet');
+
+                           //}, 1000);
+                       })
                    .end();
            }
        };

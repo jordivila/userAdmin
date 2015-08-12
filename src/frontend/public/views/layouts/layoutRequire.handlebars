@@ -31,38 +31,38 @@
 
         <div id="panelPage" class="ui-sitePage">
 
-            <div data-widget="userActivity" class="ui-site-header-box">
-                <div class="ui-site-header ui-widget-content ui-corner-all ui-widget-header">
-                    <div class="ui-backButton ui-table-cell">
-                        <div class="ui-breadcrumb-box">
-                            {{#if this.breadcrumb }}
-                            {{{ breadcrumbHelper this }}}
-                            {{/if}}
+            <div class="ui-siteContentTop">
+                <div data-widget="userActivity" class="ui-site-header-box">
+                    <div class="ui-site-header ui-widget-content ui-corner-all ui-widget-header">
+                        <div class="ui-backButton ui-table-cell">
+                            <div class="ui-breadcrumb-box">
+                                {{#if this.breadcrumb }}
+                                {{{ breadcrumbHelper this }}}
+                                {{/if}}
+                            </div>
+                        </div>
+                        <div class="ui-site-nameBox ui-table-cell">
+                            <!--<a href="/">{{domainName}}</a>-->
+                            <a href="/">Your Logo Here</a>
+                        </div>
+                        <div class="ui-mainMenuToggle ui-table-cell">
+                            <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
+                            <div class="ui-helper-clearfix"></div>
                         </div>
                     </div>
-                    <div class="ui-site-nameBox ui-table-cell">
-                         <!--<a href="/">{{domainName}}</a>-->
-                        <a href="/">Your Logo Here</a>
-                    </div>
-                    <div class="ui-mainMenuToggle ui-table-cell">
-                        <div class="ui-mainMenuToggle-icon fa fa-bars fa-2x"></div>
-                        <div class="ui-helper-clearfix"></div>
-                    </div>
+                    <div class="ui-helper-clearfix"></div>
                 </div>
                 <div class="ui-helper-clearfix"></div>
-            </div>
-            <div class="ui-helper-clearfix"></div>
 
-            <div class="ui-breadcrumb-box">
-                {{#if this.breadcrumb }}
-                {{{ breadcrumbHelper this }}}
-                {{/if}}
+                <div class="ui-breadcrumb-box">
+                    {{#if this.breadcrumb }}
+                    {{{ breadcrumbHelper this }}}
+                    {{/if}}
+                </div>
+                <div class="ui-site-title ui-widget-content">
+                    <h1>{{title}}</h1>
+                </div>
             </div>
-            <div class="ui-site-title ui-widget-content">
-                <h1>{{title}}</h1>
-            </div>
-
-
 
             <div class="ui-siteContent">
                 {{#if body}}

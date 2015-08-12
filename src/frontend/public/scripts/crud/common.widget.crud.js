@@ -15,6 +15,18 @@ function ($, jqUI, clientApp) {
     {
         options: {
             crudHeaderDomId: null,
+            gridExpand: false,
+            gridExpandHeightCalc: function ($widget) {
+
+                var gridBoxHeight = jQuery(window).height() -
+                (
+                    jQuery($widget).find('div.ui-crudGrid-body-container:first').offset().top +
+                    jQuery($widget).find('div.ui-crudGrid-pager-bottom:first').height() +
+                    0//jQuery($widget).find('div.ui-widgetGrid-emptyRow:first').height()
+                );
+
+                return gridBoxHeight;
+            },
             gridButtonsDOMId: null,
             gridDOMId: null,
             gridFilterDOMId: null,
@@ -99,6 +111,9 @@ function ($, jqUI, clientApp) {
                     gridModel: self.options.gridModel,
                     gridViewCellBound: self.options.gridViewCellBound,
                     gridPagerInit: self.options.gridPagerInit,
+                    gridExpand: self.options.gridExpand,
+
+
 
                     errorDisplay: function (e, msg) {
                         self.errorDisplay(msg);
@@ -123,22 +138,13 @@ function ($, jqUI, clientApp) {
                     },
                     onEdit: function (e, dataItem) {
                         self.edit(dataItem);
-                    }
+                    },
+                    onHeightSet: function () {
+                        self.gridExpandHeightSet();
+                    },
                 },
                 self.options.gridCustomOptions);
 
-
-
-            //var crudEmptyDataResult = {
-            //    Data: [],
-            //    IsValid: true,
-            //    Message: null,
-            //    Page: 0,
-            //    PageSize: self.options.gridPagerInit().pageSize,
-            //    SortAscending: false,
-            //    SortBy: "",
-            //    TotalRows: 0
-            //};
 
             jQuery(this.options.gridDOMId).crudGrid(gridOptions);
             jQuery(this.options.gridDOMId).crudGrid('emptyData');
@@ -162,6 +168,11 @@ function ($, jqUI, clientApp) {
                     self._actionSet(self._actions.list);
                 },
                 done: function () {
+
+
+                    /************************************************************
+                    INIT CRUD FORM
+                    *************************************************************/
 
                     var crudWidget = self;
 
@@ -213,7 +224,6 @@ function ($, jqUI, clientApp) {
                     self.options.formInit(self, jQuery(crudWidget.options.formDOMId).find('div.ui-crudForm-formContent:first'));
 
                     jQuery(crudWidget.options.formDOMId).fieldItem();
-
                 }
             });
 
@@ -221,6 +231,10 @@ function ($, jqUI, clientApp) {
             this._actionSet(this._actions.list);
         },
         destroy: function () {
+
+            jQuery(this.options.gridDOMId).crudGrid('destroy');
+            jQuery(this.options.gridFilterDOMId).crudFilter('destroy');
+
             this._super();
         },
         edit: function (dataItem) {
@@ -281,6 +295,7 @@ function ($, jqUI, clientApp) {
 
             if (actionSelected === self._actions.list) {
                 self._actionSetList();
+                //self.gridExpandHeightSet();
             }
 
             if (actionSelected === self._actions.form) {
@@ -313,6 +328,10 @@ function ($, jqUI, clientApp) {
                 else {
                     jQuery(self.options.gridButtonsDOMId).hide();
                 }
+            }
+
+            if (this.options.gridExpand === true) {
+                this.gridExpandHeightSet();
             }
         },
         _actionSetFilter: function () {
@@ -485,7 +504,21 @@ function ($, jqUI, clientApp) {
             }
 
             return this;
-        }
+        },
+        gridExpandHeightSet: function () {
+
+            var gridBoxHeight = this.options.gridExpandHeightCalc(this.element);
+
+            jQuery(this.element)
+                .find('div.ui-crudGrid-body-container:first')
+                    .height(gridBoxHeight)
+                .end()
+                .find('div.ui-widgetGrid-emptyRow')
+                    .height(gridBoxHeight - 5)
+                .end();
+
+        },
+
     });
 
 

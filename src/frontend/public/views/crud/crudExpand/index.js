@@ -15,6 +15,7 @@ define([
            main: function () {
 
                var customerOptions = jQuery.extend({}, crudDefaultOptions.crudCustomerDefaultOptions(), {
+                   gridExpand: true,
                    gridPagerInit: function () {
                        return {
                            pageSize: 30,
@@ -22,30 +23,24 @@ define([
                    },
                });
 
+
+
                jQuery('body')
                    .find('div.ui-customerCrud:first')
                        .crud(customerOptions)
-
                        .hide()
                        .removeClass('ui-helper-hidden')
-                       .fadeIn()
+                       .fadeIn(1, function () {
+
+                           var $widget = jQuery(this);
+
+                           //setTimeout(function () {
+
+                               jQuery($widget).crud('gridExpandHeightSet');
+
+                           //}, 1000);
+                       })
                    .end();
-
-               var $gridControl = jQuery('div.ui-crudCrud-gridControl:first');
-
-               var gridControlResize = function () {
-
-
-                   $gridControl.height(jQuery(window).height() - clientApp.utils.convertEmToPixels(11.7));
-               };
-
-               jQuery(window)
-                   .resize(function (e, ui) {
-                       gridControlResize();
-                   });
-
-               gridControlResize();
-
            }
        };
 

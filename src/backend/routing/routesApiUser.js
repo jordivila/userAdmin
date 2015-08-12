@@ -194,13 +194,14 @@
                                                 text: "Lazy loading pagination"
                                             },
                                             {
-                                                url: "/crud/crudScrollable/",
-                                                text: "Scrollable"
-                                            },
-                                            {
                                                 url: "/crud/crudExpand/",
                                                 text: "Expand grid & resize"
                                             },
+                                            {
+                                                url: "/crud/crudExpandCustomSize/",
+                                                text: "Expand + custom size"
+                                            },
+
                                         ],
                                     },
                                     {

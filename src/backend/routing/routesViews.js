@@ -109,8 +109,8 @@
         registerCommonVerbs(app, "crud/crudGridSearchDirect", genericViewController);
         registerCommonVerbs(app, "crud/crudGridPagination", genericViewController);
         registerCommonVerbs(app, "crud/crudGridPaginationLazyLoading", genericViewController);
-        registerCommonVerbs(app, "crud/crudScrollable", genericViewController);
         registerCommonVerbs(app, "crud/crudExpand", genericViewController);
+        registerCommonVerbs(app, "crud/crudExpandCustomSize", genericViewController);
         registerCommonVerbs(app, "crud/crudFormSimple", genericViewController);
         registerCommonVerbs(app, "crud/crudFormExtended", genericViewController);
         registerCommonVerbs(app, "crud/crudGridEmptyMessage", genericViewController);
