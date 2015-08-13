@@ -18,7 +18,7 @@
 .ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content button.ui-state-default {color:inherit;}
 .ui-widgetGrid .ui-widgetGrid-header .ui-widgetGrid-column  .ui-widgetGrid-column-content button .ui-button-text {color:inherit;margin:0; padding:0;}
 .ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row  {background-image:none;}
-.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column {padding-top:.5em;padding-bottom:.5em;}
+.ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column {padding:1em 0 1em 0;}
 
 /*
 .ui-widgetGrid .ui-widgetGrid-pager {border:0 !important;}
