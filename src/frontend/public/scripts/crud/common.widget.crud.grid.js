@@ -10,6 +10,7 @@
         {
             options: {
                 gridBodyDOMId: null,
+                gridHeaderDOMId: null,
                 gridPagerDOMId: null,
 
                 gridModel: [],
@@ -37,6 +38,7 @@
                 //gridExpand: false,                        // -> this option comes from ui.crud
 
                 texts: {
+                    gridFirstTime: clientApp.i18n.texts.get("Template.Widget.Crud.EmptyResultsFirstTime"),
                     gridEmptyData: clientApp.i18n.texts.get("Template.Widget.Crud.EmptyResults"),
                     gridBindingError: clientApp.i18n.texts.get("Template.Widget.Crud.UnhandledErrorBindingGridData")
                 }
@@ -51,6 +53,7 @@
 
                 this.options.gridBodyDOMId = jQuery(this.element).find('table.ui-crudGrid-body:first');
                 this.options.gridPagerDOMId = jQuery(this.element).find('div.ui-crudGrid-pager');
+                this.options.gridHeaderDOMId = jQuery(this.element).find('tr.ui-crudGrid-header');
 
             },
             _init: function () {
@@ -66,16 +69,31 @@
                 this._super();
 
             },
-            emptyData: function () {
-                jQuery(this.options.gridBodyDOMId).empty();
-                this._buildEmptyDataRow();
-                if (this.options.gridExpand === true) {
-                    this._trigger('onHeightSet', null, {});
-                }
+            emptyData: function (isFirstTime) {
+
+                jQuery(this.element)
+                    .addClass('ui-crudGrid-isEmpty')
+                    .find(this.options.gridBodyDOMId)
+                        .empty()
+                    .end()
+                    .find(this.options.gridHeaderDOMId)
+                        .addClass('ui-helper-hidden')
+                    .end();
+
+
+                this._buildEmptyDataRow(isFirstTime);
+                this._trigger('onHeightSet', null, {});
             },
             bind: function (data) {
 
                 try {
+
+                    jQuery(this.element)
+                        .removeClass('ui-crudGrid-isEmpty')
+                        .find(this.options.gridHeaderDOMId)
+                            .removeClass('ui-helper-hidden')
+                        .end();
+
                     this._bindRows(data);
                     this._bindPagination(data);
                     this._trigger('dataBound', null, data);
@@ -85,9 +103,9 @@
                     this._trigger('errorDisplay', null, this.options.texts.gridBindingError);
                 }
 
-                if (this.options.gridExpand === true) {
-                    this._trigger('onHeightSet', null, {});
-                }
+
+                this._trigger('onHeightSet', null, {});
+
             },
             _gridTemplate: function () {
 
@@ -96,18 +114,18 @@
                                 '<td colspan="' + this.options.gridModel.length + '">' +
                                     '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
                                 '</td>' +
-                            '</tr>' + 
-                            '<tr class="ui-crudGrid-header ui-widgetGrid-header ui-state-default">' +
+                            '</tr>' +
+                            '<tr class="ui-crudGrid-header ui-widgetGrid-header ui-widget-header">' +
                                     this._gridHeaderTemplate() +
                             '</tr>' +
                             '<tr>' +
                                 '<td colspan="' + this.options.gridModel.length + '">' +
                                     '<div class="ui-crudGrid-body-container">' +
                                         '<table class="ui-crudGrid-body ui-widgetGrid-body" >' +
-                                        
+
                                         '</table>' +
-                                    '</div>' + 
-                                '</td>' + 
+                                    '</div>' +
+                                '</td>' +
                             '</tr>' +
                             '<tr>' +
                                 '<td colspan="' + this.options.gridModel.length + '">' +
@@ -203,9 +221,9 @@
             _bindPagination: function (data) {
                 jQuery(this.options.gridPagerDOMId).gridPagination('bind', data.page, data.pageSize, data.totalRows);
             },
-            _buildEmptyDataRow: function () {
+            _buildEmptyDataRow: function (isFirstTime) {
                 var $emtpyRow = '<tr class="ui-widgetGrid-emptyRow ui-state-active"><td class="ui-widgetGrid-column"><div class="ui-widgetGrid-column-content">{0}</div></td></tr>'
-                                    .format(this.options.texts.gridEmptyData);
+                                    .format(isFirstTime === true ? this.options.texts.gridFirstTime : this.options.texts.gridEmptyData);
 
                 jQuery(this.options.gridBodyDOMId).append($emtpyRow);
             },

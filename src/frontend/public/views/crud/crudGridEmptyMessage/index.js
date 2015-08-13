@@ -17,7 +17,8 @@
                var customOptions = jQuery.extend({}, crudOptions.crudCustomerDefaultOptions(), {
                    gridCustomOptions: {
                        texts: {
-                           gridEmptyData: clientApp.i18n.texts.get("Views.Crud.CrudEmptyMessage.Message"),
+                           gridFirstTime: "This is a hardcoded message. Esto es un texto 'hardcoded'",
+                           gridEmptyData: "This is a hardcoded message. Esto es un texto 'hardcoded'",
                        },
                    }
                });

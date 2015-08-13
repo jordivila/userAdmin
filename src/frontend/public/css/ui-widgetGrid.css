@@ -20,6 +20,7 @@
 .ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row  {background-image:none;}
 .ui-widgetGrid .ui-widgetGrid-body .ui-widgetGrid-row .ui-widgetGrid-column {padding-top:.5em;padding-bottom:.5em;}
 
+/*
 .ui-widgetGrid .ui-widgetGrid-pager {border:0 !important;}
 .ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info {clear:both;padding:0.5em 0.5em 0em 0.5em;margin:0 0 0 0;border:0;}
 .ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info table {width:100%;}
@@ -30,3 +31,4 @@
 .ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info .ui-widgetGrid-pager-numbers ul li button { min-width:2em;}
 .ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info .ui-widgetGrid-pager-numbers ul li button span { padding:0.5em 0.2em 0.5em 0.2em;}
 .ui-widgetGrid .ui-widgetGrid-pager .ui-widgetGrid-pager-Info .ui-widgetGrid-pager-totalPages{width:25%;text-align:right;vertical-align:middle;}
+*/

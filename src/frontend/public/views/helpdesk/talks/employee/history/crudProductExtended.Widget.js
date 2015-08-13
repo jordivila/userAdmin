@@ -177,7 +177,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                 defaultButtons.push({
                     id: "add",
                     text: clientApp.i18n.texts.get("Helpdesk.Talks.History.AddTalk"),
-                    cssClass: "ui-cancel-button",
+                    cssClass: "ui-add-button",
                     icon: "fa fa-plus-circle",
                     click: function () {
                         //clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.subject()));
@@ -290,7 +290,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                 return [{
                     id: "subject",
                     displayName: clientApp.i18n.texts.get("Helpdesk.Talks.History.GridColumns.Subject"),
-                    input: { value: "" },
+                    input: { value: "", nullable: false },
                 }, {
                     id: "customerId",
                     displayName: clientApp.i18n.texts.get("Views.Crud.Customer"),
@@ -319,7 +319,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
 
                             customerTrashDomId
                                 .click(function () {
-                                    selfOption.onItemBind(jQuery(parent), { customerId: "", customerName: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.ClickToFilterByCustomer") });
+                                    selfOption.onItemBind(jQuery(parent), { customerId: "", customerName: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.ClickToAddCustomer") });
                                 });
 
                             customerNameDomId
@@ -353,7 +353,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                             if (dataItem === null) {
                                 dataItem = {
                                     customerId: "",
-                                    customerName: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.ClickToFilterByCustomer")
+                                    customerName: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.ClickToAddCustomer")
                                 };
                             }
 

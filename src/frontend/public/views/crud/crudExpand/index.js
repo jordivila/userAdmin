@@ -31,14 +31,7 @@ define([
                        .hide()
                        .removeClass('ui-helper-hidden')
                        .fadeIn(1, function () {
-
-                           var $widget = jQuery(this);
-
-                           //setTimeout(function () {
-
-                               jQuery($widget).crud('gridExpandHeightSet');
-
-                           //}, 1000);
+                           jQuery(this).crud('gridExpandHeightSet');
                        })
                    .end();
            }

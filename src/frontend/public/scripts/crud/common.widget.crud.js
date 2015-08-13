@@ -105,49 +105,49 @@ function ($, jqUI, clientApp) {
             this._gridButtonsInit();
 
 
-            var gridOptions = jQuery.extend(
-                {},
-                {
-                    gridModel: self.options.gridModel,
-                    gridViewCellBound: self.options.gridViewCellBound,
-                    gridPagerInit: self.options.gridPagerInit,
-                    gridExpand: self.options.gridExpand,
 
 
+            jQuery(this.options.gridDOMId).crudGrid(function () {
 
-                    errorDisplay: function (e, msg) {
-                        self.errorDisplay(msg);
-                    },
-                    dataBound: function () {
-                        if (jQuery(self.options.gridFilterDOMId).is(':visible')) {
-                            if (self.options.gridFilterVisibleAlways === false) {
-                                self._actionSet(self._actions.list);
-                            }
-                        }
-                    },
-                    paginated: function (e, pagination) {
-                        self.options.gridFilterObject.page = pagination.pageIndex;
-                        self.options.gridFilterObject.pageSize = pagination.pageSize;
+                return jQuery.extend(
+                                {},
+                                {
+                                    gridModel: self.options.gridModel,
+                                    gridViewCellBound: self.options.gridViewCellBound,
+                                    gridPagerInit: self.options.gridPagerInit,
+                                    gridExpand: self.options.gridExpand,
+                                    errorDisplay: function (e, msg) {
+                                        self.errorDisplay(msg);
+                                    },
+                                    dataBound: function () {
+                                        if (jQuery(self.options.gridFilterDOMId).is(':visible')) {
+                                            if (self.options.gridFilterVisibleAlways === false) {
+                                                self._actionSet(self._actions.list);
+                                            }
+                                        }
+                                    },
+                                    paginated: function (e, pagination) {
+                                        self.options.gridFilterObject.page = pagination.pageIndex;
+                                        self.options.gridFilterObject.pageSize = pagination.pageSize;
 
-                        self.errorHide();
-                        self._search();
-                    },
-                    onSelect: function (e, dataItem) {
-                        self.errorHide();
-                        self._trigger('onSelect', null, dataItem);
-                    },
-                    onEdit: function (e, dataItem) {
-                        self.edit(dataItem);
-                    },
-                    onHeightSet: function () {
-                        self.gridExpandHeightSet();
-                    },
-                },
-                self.options.gridCustomOptions);
+                                        self.errorHide();
+                                        self._search();
+                                    },
+                                    onSelect: function (e, dataItem) {
+                                        self.errorHide();
+                                        self._trigger('onSelect', null, dataItem);
+                                    },
+                                    onEdit: function (e, dataItem) {
+                                        self.edit(dataItem);
+                                    },
+                                    onHeightSet: function () {
+                                        self.gridExpandHeightSet();
+                                    },
+                                },
+                                self.options.gridCustomOptions);
 
-
-            jQuery(this.options.gridDOMId).crudGrid(gridOptions);
-            jQuery(this.options.gridDOMId).crudGrid('emptyData');
+            }());
+            jQuery(this.options.gridDOMId).crudGrid('emptyData', true);
 
             this.options.gridFilterInit(self, {
                 model: self.options.filterModel,
@@ -169,6 +169,8 @@ function ($, jqUI, clientApp) {
                 },
                 done: function () {
 
+
+                    setTimeout(function () { self.gridExpandHeightSet(); }, 200);
 
                     /************************************************************
                     INIT CRUD FORM
@@ -330,9 +332,9 @@ function ($, jqUI, clientApp) {
                 }
             }
 
-            if (this.options.gridExpand === true) {
-                this.gridExpandHeightSet();
-            }
+
+            this.gridExpandHeightSet();
+
         },
         _actionSetFilter: function () {
 
@@ -507,16 +509,17 @@ function ($, jqUI, clientApp) {
         },
         gridExpandHeightSet: function () {
 
-            var gridBoxHeight = this.options.gridExpandHeightCalc(this.element);
+            if (this.options.gridExpand === true) {
+                var gridBoxHeight = this.options.gridExpandHeightCalc(this.element);
 
-            jQuery(this.element)
-                .find('div.ui-crudGrid-body-container:first')
-                    .height(gridBoxHeight)
-                .end()
-                .find('tr.ui-widgetGrid-emptyRow')
-                    .height(gridBoxHeight - 5)
-                .end();
-
+                jQuery(this.element)
+                    .find('div.ui-crudGrid-body-container:first')
+                        .height(gridBoxHeight)
+                    .end()
+                    .find('tr.ui-widgetGrid-emptyRow')
+                        .height(gridBoxHeight - 5)
+                    .end();
+            }
         },
 
     });

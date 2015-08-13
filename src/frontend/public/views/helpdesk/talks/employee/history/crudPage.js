@@ -57,13 +57,13 @@ function ($, jqUI, wBase, crudBase, crudExtendedWidget, clientApp, crudDefaultOp
 
             switch (pageView) {
                 case self._pageViews.customers:
-                    jQuery(self.options.customerDOMId).fadeIn();
+                    jQuery(self.options.customerDOMId).fadeIn(1, function () { jQuery(self.options.customerDOMId).crud('gridExpandHeightSet'); });
                     break;
                 case self._pageViews.products:
-                    jQuery(self.options.productDOMId).fadeIn();
+                    jQuery(self.options.productDOMId).fadeIn(1, function () { jQuery(self.options.productDOMId).product('gridExpandHeightSet'); });
                     break;
                 case self._pageViews.employees:
-                    jQuery(self.options.employeeDOMId).fadeIn();
+                    jQuery(self.options.employeeDOMId).fadeIn(1, function () { jQuery(self.options.employeeDOMId).crud('gridExpandHeightSet'); });
                     break;
                 default: break;
             }

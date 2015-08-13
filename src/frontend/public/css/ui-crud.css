@@ -1,7 +1,7 @@
 ﻿.ui-crud {background-image:none;}
 .ui-crud h3 {padding: 0.5em;margin:0.5em 0 0.5em 0;}
 /*override ribbon buttons*/
-.ui-crud .ui-ribbonButtons { padding:0em;background-image:none;border-width:0;}
+.ui-crud .ui-ribbonButtons { padding:0.5em 0 0.5em 0;background-image:none;border-width:0;}
 .ui-crud .ui-ribbonButtons * {background-image:none;}
 .ui-crud .ui-ribbonButtons button {margin-bottom: 0.1em !important;font-weight:normal;border:none;}
 .ui-crud .ui-ribbonButtons span.ui-button-text {}
@@ -9,7 +9,7 @@
 /*override widgetModel*/
 .ui-crud .ui-widgetModel div.ui-widgetModel-content {padding:0 0 0 0;}
 .ui-crud .ui-widgetModel .ui-widgetModelItem {padding:.5em .5em .5em 0em;}
-.ui-crud .ui-crud-messages {background-image:none;/*display:block;*/min-height:2em;border-width:0;}
+.ui-crud .ui-crud-messages {background-image:none;min-height:2em;border-width:0;}
 .ui-crud .ui-crud-messages .ui-crud-title {padding:0.5em 0.5em 0 0.5em;text-align:center;}
 .ui-crud .ui-crud-messages .ui-crud-error {padding:0.2em;border:0; font-weight:normal;text-align:center;}
 .ui-crud .ui-crud-messages .ui-crud-info {padding:0.2em;border:0; font-weight:normal;text-align:center;}
@@ -17,7 +17,10 @@
 .ui-crud .ui-crudFilter .ui-crudFilter-form {padding:0.5em 0.5em 0.5em 0.5em;background-image:none;border-width:0;}
 .ui-crud .ui-crudFilter .ui-widgetModel-content {background-image:none;}
 .ui-crud .ui-crudGrid-header {border-left:0;border-right:0;}
+.ui-crud .ui-crudGrid-header .ui-widgetGrid-column {padding:1em 0 1em 0;background-image:none;}
 .ui-crud .ui-crudGrid .ui-crudGrid-container {width:100%;}
+.ui-crud .ui-crudGrid.ui-crudGrid-isEmpty{height:10em !important;}
+.ui-crud .ui-crudGrid.ui-crudGrid-isEmpty table {height:10em !important;}
 .ui-crud .ui-crudGrid .ui-crudGrid-body-container.ui-crudGrid-expanded {overflow-y:auto;}
 .ui-crud .ui-crudGrid .ui-crudGrid-body-container.ui-crudGrid-expanded .ui-widgetGrid-emptyRow {padding: 0 0 0 0;vertical-align: middle;}
 .ui-crud .ui-crudGrid .ui-crudGrid-body {border-width:0 !important;table-layout:fixed;}
@@ -25,7 +28,7 @@
 .ui-crud .ui-crudGrid .ui-crudGrid-body .ui-widgetGrid-row {border-width:0;margin:0;}
 .ui-crud .ui-crudGrid .ui-crudGrid-body .ui-widgetGrid-row .ui-state-default { border-left-width:0em !important;border-top-width:0em !important; }
 .ui-crud .ui-crudGrid .ui-crudGrid-body .ui-widgetGrid-row .ui-crudGrid-column-last {border-right-width:0;}
-.ui-crud .ui-crudGrid .ui-crudGrid-body .ui-crudGrid-row-last .ui-widgetGrid-column {border-bottom-width:0;}
+.ui-crud .ui-crudGrid .ui-crudGrid-body .ui-crudGrid-column-last { padding-right: 1em;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager {font-weight:normal;	text-align:left;border:0;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar {text-align:center;}
 .ui-crud .ui-crudGrid .ui-crudGrid-pager .ui-gridPagination-navBar .ui-gridPagination-navBar-firstCol{border-left-width:0;}
