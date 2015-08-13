@@ -3,7 +3,7 @@ define([
     "jquery",
     "jqueryui",
     "scripts/Template.Widget.Base",
-    "scripts/crud/common.widget.crud",
+    "scripts/modules/crud",
     "./crudProductExtended.Widget.js",
     "scripts/Template.App.ClientApp",
     "../common/crudSamplesCustomerDefaultOptions.js",

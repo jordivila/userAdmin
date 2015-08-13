@@ -2,7 +2,7 @@ define([
     "jquery",
     "jqueryui",
     "scripts/Template.App.ClientApp",
-    "scripts/crud/common.widget.crud",
+    "scripts/modules/crud",
     "./crudProductExtended.AjaxFake.js",
     "./crudProductExtended.FormModel.js",
     "./crudProductExtended.GridModel.js",

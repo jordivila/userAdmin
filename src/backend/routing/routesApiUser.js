@@ -86,8 +86,16 @@
                                     text: "Customer"
                                 },
                                 {
+                                    url: "/helpdesk/talks/customer/wiki/",
+                                    text: "Customer wiki"
+                                },
+                                {
                                     url: "/helpdesk/talks/employee/home/",
                                     text: "Employee"
+                                },
+                                {
+                                    url: "/helpdesk/talks/employee/wiki/",
+                                    text: "Employee wiki"
                                 },
                         ]
                     },

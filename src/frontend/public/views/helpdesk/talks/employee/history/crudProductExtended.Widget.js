@@ -2,7 +2,7 @@ define([
     "jquery",
     "jqueryui",
     "scripts/Template.App.ClientApp",
-    "scripts/crud/common.widget.crud",
+    "scripts/modules/crud",
     "crossLayer/dateHelper",
     "/helpdesk/talks/common/fakes/helpdeskCrudFakeData.js",
     "/helpdesk/talks/employee/common/helpdeskCommon.js",
