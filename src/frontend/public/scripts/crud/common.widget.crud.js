@@ -1,6 +1,7 @@
 define(["jquery",
         "jqueryui",
         "scripts/Template.App.ClientApp",
+        "pPromises",
         "scripts/crud/common.widget.crud.base",
         "scripts/crud/common.widget.crud.grid",
         "scripts/crud/common.widget.crud.filter",
@@ -8,7 +9,7 @@ define(["jquery",
         "scripts/crud/common.widget.grid.pagination",
         "scripts/crud/common.widget.fieldItem",
 ],
-function ($, jqUI, clientApp) {
+function ($, jqUI, clientApp, P) {
 
 
     jQuery.widget("ui.crud", jQuery.ui.crudBase,
@@ -101,136 +102,47 @@ function ($, jqUI, clientApp) {
 
             var self = this;
 
-            this._super();
-            this._gridButtonsInit();
+            
 
 
+            var errTreat = function (e) {
+                console.error(e);
+                self.errorDisplay(clientApp.i18n.texts.get("Template.Widget.Crud.UnhandledErrorInitCrud"));
+            };
 
-
-            jQuery(this.options.gridDOMId).crudGrid(function () {
-
-                return jQuery.extend(
-                                {},
-                                {
-                                    gridModel: self.options.gridModel,
-                                    gridViewCellBound: self.options.gridViewCellBound,
-                                    gridPagerInit: self.options.gridPagerInit,
-                                    gridExpand: self.options.gridExpand,
-                                    errorDisplay: function (e, msg) {
-                                        self.errorDisplay(msg);
-                                    },
-                                    dataBound: function () {
-                                        if (jQuery(self.options.gridFilterDOMId).is(':visible')) {
-                                            if (self.options.gridFilterVisibleAlways === false) {
-                                                self._actionSet(self._actions.list);
-                                            }
-                                        }
-                                    },
-                                    paginated: function (e, pagination) {
-                                        self.options.gridFilterObject.page = pagination.pageIndex;
-                                        self.options.gridFilterObject.pageSize = pagination.pageSize;
-
-                                        self.errorHide();
-                                        self._search();
-                                    },
-                                    onSelect: function (e, dataItem) {
-                                        self.errorHide();
-                                        self._trigger('onSelect', null, dataItem);
-                                    },
-                                    onEdit: function (e, dataItem) {
-                                        self.edit(dataItem);
-                                    },
-                                    onHeightSet: function () {
-                                        self.gridExpandHeightSet();
-                                    },
-                                },
-                                self.options.gridCustomOptions);
-
-            }());
-            jQuery(this.options.gridDOMId).crudGrid('emptyData', true);
-
-            this.options.gridFilterInit(self, {
-                model: self.options.filterModel,
-                pageSize: self.options.gridPagerInit().pageSize,
-                gridFilterVisibleAlways: self.options.gridFilterVisibleAlways,
-                filterButtonsInit: self.options.gridFilterButtonsInit,
-                errorDisplay: function (e, msg) {
-                    self.errorDisplay(msg);
-                },
-                change: function (e, filter) {
-                    self.options.gridFilterObject = filter;
-                    self.errorHide();
-                    jQuery(self.options.gridDOMId).crudGrid('emptyData');
-                    self._search();
-                },
-                cancel: function () {
-                    self.errorHide();
-                    self._actionSet(self._actions.list);
-                },
-                done: function () {
-
-
-                    setTimeout(function () { self.gridExpandHeightSet(); }, 200);
-
-                    /************************************************************
-                    INIT CRUD FORM
-                    *************************************************************/
-
-                    var crudWidget = self;
-
-                    jQuery(crudWidget.options.formDOMId)
-                        .crudForm(jQuery.extend({}, {
-                            messagedisplayAutoHide: function (e, msg) {
-                                self.messagedisplayAutoHide(msg);
-                            },
-                            messageDisplay: function (e, msg) {
-                                self.messageDisplay(msg);
-                            },
-                            errorDisplay: function (e, msg) {
-                                self.errorDisplay(msg);
-                            },
-                            errorHide: function () {
-                                self.errorHide();
-                            },
-                            change: function (e, formValue) {
-                                self.errorHide();
-                                self._search();
-                            },
-                            dataBound: function () {
-                                self.errorHide();
-                                self._actionSet(self._actions.form);
-                            },
-                            cancel: function () {
-                                self.errorHide();
-                                self._actionSet(self._actions.list);
-                            },
-                        },
-                            {
-                                formModel: crudWidget.options.formModel,
-                                formButtonsGet: crudWidget.options.formButtonsGet,
-                                formBind: crudWidget.options.formBind,
-                                formValueGet: crudWidget.options.formValueGet,
-                                formSaveMethod: crudWidget.options.formSaveMethod
-                            }));
-
-                    jQuery(crudWidget.options.formDOMId)
-                        .find('div.ui-crudForm-modelBinding:first')
-                            .widgetModel({
-                                modelItems: crudWidget.options.formModel,
-                                errorsCleared: function () {
-                                    crudWidget.errorHide();
-                                }
-                            })
-                        .end();
-
-                    self.options.formInit(self, jQuery(crudWidget.options.formDOMId).find('div.ui-crudForm-formContent:first'));
-
-                    jQuery(crudWidget.options.formDOMId).fieldItem();
+            P.all([
+                self._gridInit(),
+                self._gridFilterInit()
+            ]).nodeify(function (errInitGrid, data) {
+                if (errInitGrid !== null) {
+                    errTreat(errInitGrid);
+                }
+                else {
+                    P.all([
+                        self._formInit()
+                    ]).nodeify(function (errFormInit, data) {
+                        if (errFormInit !== null) {
+                            errTreat(errFormInit);
+                        }
+                        else {
+                            self._gridButtonsInit();
+                            jQuery(self.options.gridDOMId).crudGrid('emptyFirstLoad');
+                            setTimeout(function () { self.gridExpandHeightSet(); }, 200);
+                            self._actionSet(self._actions.list);
+                        }
+                    });
                 }
             });
 
 
-            this._actionSet(this._actions.list);
+
+
+
+
+
+
+
+            this._super();
         },
         destroy: function () {
 
@@ -467,6 +379,159 @@ function ($, jqUI, clientApp) {
             }
 
         },
+        _gridInit: function () {
+
+            var self = this;
+            var dfd = jQuery.Deferred();
+
+            try {
+                jQuery(this.options.gridDOMId).crudGrid(function () {
+
+                    return jQuery.extend(
+                                    {},
+                                    {
+                                        gridModel: self.options.gridModel,
+                                        gridViewCellBound: self.options.gridViewCellBound,
+                                        gridPagerInit: self.options.gridPagerInit,
+                                        gridExpand: self.options.gridExpand,
+                                        errorDisplay: function (e, msg) {
+                                            self.errorDisplay(msg);
+                                        },
+                                        dataBound: function () {
+                                            if (jQuery(self.options.gridFilterDOMId).is(':visible')) {
+                                                if (self.options.gridFilterVisibleAlways === false) {
+                                                    self._actionSet(self._actions.list);
+                                                }
+                                            }
+                                        },
+                                        paginated: function (e, pagination) {
+                                            self.options.gridFilterObject.page = pagination.pageIndex;
+                                            self.options.gridFilterObject.pageSize = pagination.pageSize;
+
+                                            self.errorHide();
+                                            self._search();
+                                        },
+                                        onSelect: function (e, dataItem) {
+                                            self.errorHide();
+                                            self._trigger('onSelect', null, dataItem);
+                                        },
+                                        onEdit: function (e, dataItem) {
+                                            self.edit(dataItem);
+                                        },
+                                        onHeightSet: function () {
+                                            self.gridExpandHeightSet();
+                                        },
+                                    },
+                                    self.options.gridCustomOptions);
+
+                }());
+                setTimeout(function () { dfd.resolve(); }, 1);
+            } catch (e) {
+                setTimeout(function () { dfd.reject(e); }, 1);
+            }
+
+            return dfd.promise();
+        },
+        _gridFilterInit: function () {
+            var self = this;
+            var dfd = jQuery.Deferred();
+
+            try {
+                this.options.gridFilterInit(self, {
+                    model: self.options.filterModel,
+                    pageSize: self.options.gridPagerInit().pageSize,
+                    gridFilterVisibleAlways: self.options.gridFilterVisibleAlways,
+                    filterButtonsInit: self.options.gridFilterButtonsInit,
+                    errorDisplay: function (e, msg) {
+                        self.errorDisplay(msg);
+                    },
+                    change: function (e, filter) {
+                        self.options.gridFilterObject = filter;
+                        self.errorHide();
+                        jQuery(self.options.gridDOMId).crudGrid('emptyData');
+                        self._search();
+                    },
+                    cancel: function () {
+                        self.errorHide();
+                        self._actionSet(self._actions.list);
+                    },
+                    done: function () {
+                        setTimeout(function () { dfd.resolve(); }, 1);
+                    }
+                });
+            }
+            catch (e) {
+                setTimeout(function () { dfd.reject(e); }, 1);
+            }
+
+            return dfd.promise();
+        },
+        _formInit: function () {
+            var self = this;
+            var dfd = jQuery.Deferred();
+
+            try {
+
+                var crudWidget = self;
+
+                jQuery(crudWidget.options.formDOMId)
+                    .crudForm(jQuery.extend({}, {
+                        messagedisplayAutoHide: function (e, msg) {
+                            self.messagedisplayAutoHide(msg);
+                        },
+                        messageDisplay: function (e, msg) {
+                            self.messageDisplay(msg);
+                        },
+                        errorDisplay: function (e, msg) {
+                            self.errorDisplay(msg);
+                        },
+                        errorHide: function () {
+                            self.errorHide();
+                        },
+                        change: function (e, formValue) {
+                            self.errorHide();
+                            self._search();
+                        },
+                        dataBound: function () {
+                            self.errorHide();
+                            self._actionSet(self._actions.form);
+                        },
+                        cancel: function () {
+                            self.errorHide();
+                            self._actionSet(self._actions.list);
+                        },
+                    },
+                    {
+                        formModel: crudWidget.options.formModel,
+                        formButtonsGet: crudWidget.options.formButtonsGet,
+                        formBind: crudWidget.options.formBind,
+                        formValueGet: crudWidget.options.formValueGet,
+                        formSaveMethod: crudWidget.options.formSaveMethod
+                    }));
+
+                jQuery(crudWidget.options.formDOMId)
+                    .find('div.ui-crudForm-modelBinding:first')
+                        .widgetModel({
+                            modelItems: crudWidget.options.formModel,
+                            errorsCleared: function () {
+                                crudWidget.errorHide();
+                            }
+                        })
+                    .end();
+
+                self.options.formInit(self, jQuery(crudWidget.options.formDOMId).find('div.ui-crudForm-formContent:first'));
+
+                jQuery(crudWidget.options.formDOMId).fieldItem();
+
+                setTimeout(function () { dfd.resolve(); }, 1);
+            }
+            catch (e) {
+                setTimeout(function () { dfd.reject(e); }, 1);
+            }
+
+            return dfd.promise();
+        },
+
         //public methods
         gridSearch: function () {
 

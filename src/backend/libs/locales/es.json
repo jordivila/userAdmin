@@ -80,6 +80,7 @@
     "Template.Widget.Crud.Showing_From_To_Of": "Mostrando {0}-{1} de {2}",
     "Template.Widget.Crud.UnhandledErrorBindingFormData": "Ocurrio un error enlazando los datos del formulario",
     "Template.Widget.Crud.UnhandledErrorBindingGridData": "Ocurrio un error enlazando los datos",
+    "Template.Widget.Crud.UnhandledErrorInitCrud": "Ocurrio un error iniciando ui.crud",
     "Template.Widget.Crud.UnhandledErrorSavingFormData": "Ocurrio un error guardando los datos del formulario",
     "Template.Widget.Crud.UnhandledErrorSearchingData": "Ocurrio un error durante la búsqueda",
     "Template.Widget.Crud.UnhandledErrorSearchingForEdit": "Ocurrio un error durante la búsqueda",

@@ -69,20 +69,11 @@
                 this._super();
 
             },
-            emptyData: function (isFirstTime) {
-
-                jQuery(this.element)
-                    .addClass('ui-crudGrid-isEmpty')
-                    .find(this.options.gridBodyDOMId)
-                        .empty()
-                    .end()
-                    .find(this.options.gridHeaderDOMId)
-                        .addClass('ui-helper-hidden')
-                    .end();
-
-
-                this._buildEmptyDataRow(isFirstTime);
-                this._trigger('onHeightSet', null, {});
+            emptyData: function () {
+                this._emptyGridSet(this.options.texts.gridEmptyData);
+            },
+            emptyFirstLoad: function () {
+                this._emptyGridSet(this.options.texts.gridFirstTime);
             },
             bind: function (data) {
 
@@ -221,9 +212,9 @@
             _bindPagination: function (data) {
                 jQuery(this.options.gridPagerDOMId).gridPagination('bind', data.page, data.pageSize, data.totalRows);
             },
-            _buildEmptyDataRow: function (isFirstTime) {
+            _buildSingleDataRow: function (message) {
                 var $emtpyRow = '<tr class="ui-widgetGrid-emptyRow ui-state-active"><td class="ui-widgetGrid-column"><div class="ui-widgetGrid-column-content">{0}</div></td></tr>'
-                                    .format(isFirstTime === true ? this.options.texts.gridFirstTime : this.options.texts.gridEmptyData);
+                                    .format(message);
 
                 jQuery(this.options.gridBodyDOMId).append($emtpyRow);
             },
@@ -288,7 +279,20 @@
 
 
             },
+            _emptyGridSet: function (message) {
+                jQuery(this.element)
+                    .addClass('ui-crudGrid-isEmpty')
+                    .find(this.options.gridBodyDOMId)
+                        .empty()
+                    .end()
+                    .find(this.options.gridHeaderDOMId)
+                        .addClass('ui-helper-hidden')
+                    .end();
 
+
+                this._buildSingleDataRow(message);
+                this._trigger('onHeightSet', null, {});
+            }
         });
 
     });

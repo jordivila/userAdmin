@@ -80,6 +80,7 @@
     "Template.Widget.Crud.Showing_From_To_Of": "Showing {0}-{1} of {2}",
     "Template.Widget.Crud.UnhandledErrorBindingFormData": "Unhandled error binding form data",
     "Template.Widget.Crud.UnhandledErrorBindingGridData": "Unhandled error binding data grid",
+    "Template.Widget.Crud.UnhandledErrorInitCrud": "Unhandled error initializing ui.crud",
     "Template.Widget.Crud.UnhandledErrorSavingFormData": "Unhandled error saving form data",
     "Template.Widget.Crud.UnhandledErrorSearchingData": "Unhandled error searching",
     "Template.Widget.Crud.UnhandledErrorSearchingForEdit": "Unhandled error during search",

@@ -96,7 +96,7 @@
                                 {
                                     url: "/helpdesk/talks/employee/wiki/",
                                     text: "Employee wiki"
-                                },
+                                }
                         ]
                     },
                     {
