@@ -323,10 +323,33 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                                      alert("Please save form before trying to chat");
                                  }
                                  else {
-                                     alert("loadByUrl");
-                                     //clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.message(dataItem.idTalk)));
+                                     clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.message(dataItem.editData.idTalk)));
                                  }
                              })
+                         .end()
+                         .find('div.ui-widgetModelItem-customerId:first')
+                            .addClass(dataItem.isNew === true ? '' : 'ui-helper-hidden')
+                            .removeClass(dataItem.isNew === true ? ' ui-helper-hidden ' : '')
+                         .end()
+                         .find('div.ui-widgetModelItem-customerReadonly:first')
+                            .addClass(dataItem.isNew === true ? 'ui-helper-hidden' : '')
+                            .removeClass(dataItem.isNew === true ? '' : 'ui-helper-hidden')
+                            .find('div.ui-widgetModel-inputValue:first')
+                                .html(
+                                    dataItem.isNew === true ? '' : dataItem.editData.customerId.name
+                                )
+                            .end()
+                         .end()
+                         .parents('div.ui-crud:first')
+                            .product('formSetCustomer',
+                                     dataItem.isNew === true ?
+                                        null
+                                          :
+                                        {
+                                            customerId: dataItem.editData.customerId.idPeople,
+                                            customerName: dataItem.editData.customerId.name
+                                        }
+                            )
                          .end();
 
 
@@ -423,6 +446,26 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                                 customerTrashDomId.hide();
                             }
 
+
+                        }
+                    },
+                }, {
+                    id: "customerReadonly",
+                    displayName: clientApp.i18n.texts.get("Views.Crud.Customer"),
+                    input: {
+                        type: "custom",
+                        value: null,
+                        nullable: true,
+                        onItemBuild: function (widget, parent) {
+
+
+                            var selfOption = this;
+
+                        },
+                        onItemValue: function (parent) {
+                            
+                        },
+                        onItemBind: function (parent, dataItem) {
 
                         }
                     },
