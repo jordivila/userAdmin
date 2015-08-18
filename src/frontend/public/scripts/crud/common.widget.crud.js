@@ -156,6 +156,11 @@ function ($, jqUI, clientApp, P) {
             this.errorHide();
             this._searchForEdit(dataItem);
         },
+        add: function (dataItem) {
+            // do NOT make this method private 
+            this.errorHide();
+            jQuery(this.options.formDOMId).crudForm('bind', dataItem);
+        },
         _templateInit: function (gridFilterClass, gridButtonsClass, gridControlClass, formControlClass) {
 
             var self = this;

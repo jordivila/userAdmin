@@ -215,15 +215,18 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
                      var className = '';
 
                      if (isEmployee) {
-                         className = 'ui-state-default';
+                         className = ' ui-isEmployee ';
                      }
                      else {
-                         className = 'ui-isEmployee ui-state-highlight';
+                         className = ' ';
                      }
 
 
                      if (isCurrentUser) {
-                         className += ' ui-isCurrentUser';
+                         className += ' ui-isCurrentUser ui-state-highlight ';
+                     }
+                     else {
+                         className += ' ui-state-default ';
                      }
 
 

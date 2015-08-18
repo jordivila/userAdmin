@@ -15,6 +15,7 @@
                 _fakeDataGridTalks: null,
                 _fakeDataGridMessages: null,
                 _fakeDataGridPeople: null,
+                _fakeDataGridPeopleInvolved: null,
                 //_fakeDataGridPeopleLastRead: [],
                 /*
                 _fakeDataGridPeopleLastReadAdd: function (idTalk, idPeople, idMessage) {
@@ -58,8 +59,34 @@
 
                     return result;
                 },
-                _fakeDataGridPeopleInvolved: null,
+                _fakeDataGridTalksFindById: function (idTalk) {
 
+                    var result = null;
+
+                    for (var i = 0; i < crudAjaxOpts.ajax._fakeDataGridTalks.length; i++) {
+                        if (crudAjaxOpts.ajax._fakeDataGridTalks[i].idTalk === idTalk) {
+                            // just ensure no reference is passed by creating new object using jQuery.extend
+                            // Do not need to simulate this at backend. As far as database query will return new object
+                            result = jQuery.extend({}, crudAjaxOpts.ajax._fakeDataGridTalks[i], {});
+                        }
+                    }
+
+                    return result;
+                },
+                _fakeDataGridPeopleInvolvedByTalkId: function (idTalk) {
+
+                    var peopleInvolved = [];
+
+                    for (var i = 0; i < crudAjaxOpts.ajax._fakeDataGridPeopleInvolved.length; i++) {
+                        if (crudAjaxOpts.ajax._fakeDataGridPeopleInvolved[i].idTalk == idTalk) {
+                            peopleInvolved.push(
+                                crudAjaxOpts.ajax._fakeDataGridPeopleFindById(crudAjaxOpts.ajax._fakeDataGridPeopleInvolved[i].idPeople)
+                            );
+                        }
+                    }
+
+                    return peopleInvolved.slice(0); //--> clone array. This is not needed at backend
+                },
                 _fakeMessagesGetDateLastMessage: function (idTalk) {
 
                     // busca dentro del maestro de mensajes cual es el ultimo
@@ -91,14 +118,14 @@
                         return [
                             {
                                 idPeople: 0,
-                                idPerson: 1,    //identificaador de la persona en ORG_TB_EMLPEADOS
+                                idPersonBackOffice: 1,    //identificaador de la persona en ORG_TB_EMLPEADOS
                                 isEmployee: true,
 
                                 name: "Empleado 1" // this is not part of the BDD model. instead will be added ArquiaXXI o ArquiaRed BBDD
                             },
                             {
                                 idPeople: 1,
-                                idPerson: 1,    //identificador de la persona en PEF_TB_personaFisica
+                                idPersonBackOffice: 1,    //identificador de la persona en PEF_TB_personaFisica
                                 isEmployee: false,
 
                                 name: "Cliente 1" // this is not part of the BDD model. instead will be added ArquiaXXI o ArquiaRed BBDD
@@ -287,6 +314,28 @@
                             //dateLastMessage: new Date(),
                         });
 
+
+
+
+                        //add an employee to that talk
+                        crudAjaxOpts.ajax._fakeDataGridPeopleInvolved.push({
+                            idTalk: newId,
+                            idPeople: crudAjaxOpts.ajax._fakeDataGridPeople[0].idPeople
+                        });
+
+                        //add a customer to that talk -> this should be done at backend  by taking the current logged user id
+                        crudAjaxOpts.ajax._fakeDataGridPeopleInvolved.push({
+                            idTalk: newId,
+                            idPeople: crudAjaxOpts.ajax._fakeDataGridPeople[1].idPeople
+                        });
+
+
+
+
+
+
+
+
                         // Simulate retrieving data from server
                         dataItem.editData = crudAjaxOpts.ajax._fakeDataGridTalks[newId];
                         // Simulate server response
@@ -467,6 +516,54 @@
 
                     return dfd.promise();
                 },
+
+
+                /*************************************************************
+                Methods for employee
+                ***************************************************************/
+                talkGetById: function (dataItem) {
+
+                    var self = this;
+                    var dfd = jQuery.Deferred();
+                    var dataResult = null;
+
+                    // search for talkId
+                    var talk = crudAjaxOpts.ajax._fakeDataGridTalksFindById(dataItem.idTalk);
+
+
+                    if (talk === null) {
+                        dataResult = new DataResult(false, "Talk not found", null);
+                    }
+                    else {
+
+                        var peopleInvolved = crudAjaxOpts.ajax._fakeDataGridPeopleInvolvedByTalkId(dataItem.idTalk);
+
+                        var customerId = function () {
+                            for (var i = 0; i < peopleInvolved.length; i++) {
+                                if (peopleInvolved[i].isEmployee === false)
+                                {
+                                    return peopleInvolved[i];
+                                }
+                            }
+                            return null;
+                        }();
+
+                        var dataObj = jQuery.extend({},
+                                        talk,
+                                        {
+                                            editData: jQuery.extend({}, talk, { customerId: customerId })
+                                        });
+
+
+                        dataResult = new DataResult(true, "", dataObj);
+                    }
+
+                    setTimeout(function () { dfd.resolve(dataResult); }, crudAjaxOpts.ajax._fakeDelay);
+
+                    return dfd.promise();
+
+                },
+
             },
             cache: {
 

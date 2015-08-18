@@ -8,7 +8,8 @@
 .ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message .ui-message-text {font-weight:normal;word-break: break-word;}
 .ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message .ui-message-idMessage {display:none;}
 .ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message .ui-message-datePosted {font-size:0.7em;margin: 0.4em 0 0 0;float:right;clear:both;}
-.ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message.ui-isEmployee {float:right;}
+.ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message.ui-isEmployee {/*float:right;*/}
+.ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message.ui-isCurrentUser {float:right;}
 .ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message.ui-isCurrentUser .ui-message-colon {display:none;}
 
 .ui-helpdeskChat .ui-widgetModel {width:100%;bottom:0;position:absolute;display:table;padding:0.5em 0 0.5em 0;}

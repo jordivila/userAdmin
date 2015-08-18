@@ -83,7 +83,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                         type: "list",
                         value: null,
                         listValues: [
-                            { value: "", text: clientApp.i18n.texts.get("GeneralTexts.SelectFromList") },
+                            { value: "", text: clientApp.i18n.texts.get("GeneralTexts.All") },
                             { value: "2", text: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.Unread") },
                             { value: "1", text: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.PendingAnswer") },
                             { value: "0", text: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.OK") }
@@ -181,7 +181,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                     icon: "fa fa-plus-circle",
                     click: function () {
                         //clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.subject()));
-                        crudWidget.edit({});
+                        crudWidget.add({ isNew: true });
                     }
                 });
 
@@ -194,7 +194,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                         $cell.html('<a href="javascript:void(0);">{0}</a>'.format(dataItem[columnName]));
                         $cell.find('a')
                             .click(function () {
-                                clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.message(dataItem.idTalk)));
+                                crudGridWidget._trigger('onEdit', null, dataItem);
                             });
                         break;
                     case "dateLastMessage":
@@ -246,39 +246,95 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
             //},
 
 
-            gridSearchForEditMethod: function (dataItem) {
-
-
-                // this is just a fake. As far as this crud widget does NOT edit elements. It just adds elements
-
-                var self = this;
-                var dfd = jQuery.Deferred();
-                var dataResult = new DataResult(true, "", {
-                    idTalk: null,
-                    subject: '',
-                });
-
-                setTimeout(function () { dfd.resolve(dataResult); }, 1);
-
-                return dfd.promise();
-
-            },
+            gridSearchForEditMethod: crudAjaxOpts.ajax.talkGetById,
             formInit: function (crudWidget, $parent) {
 
                 var tBasicInfo = '' +
-                    '<div>' +
-                        'Indica el asunto y busca un cliente con el que entablar conversacion' +
+                    '<div class="formDescription">' +
                     '</div>' +
-                    '<div class="ui-productCrud-form-type">' +
-                        '<h3 class="ui-state-default">Informacion de la conversaion</h3>' +
+                    '<div class="formTitle">' +
+                        '<h3 class="ui-state-default">' +
+                        '</h3>' +
                     '</div>';
 
                 jQuery($parent).prepend(tBasicInfo);
             },
             formButtonsGet: function (self, defaultButtons) {
+
+                defaultButtons.push({
+                    id: "chat",
+                    text: clientApp.i18n.texts.get("Helpdesk.Talks.History.Chat"),
+                    cssClass: "ui-chat-button",
+                    icon: "fa fa-comment",
+                    //click: function () {
+                    //    //clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.message(dataItem.idTalk)));
+                    //    //alert("get id and loadByUrl");
+                    //}
+                });
+
                 return defaultButtons;
             },
-            formBind: function (self, dataItem) {
+            formBind: function (widgetForm, dataItem) {
+
+                console.log("formBind");
+                console.log(dataItem);
+                console.log(widgetForm);
+
+                clientApp.globalizer.get()
+                 .done(function (Globalize) {
+
+                     //jQuery(self.element)
+                     //    .find('div.ui-productCrud-form-searchOutput')
+                     //        .find('div[data-fieldItem="productId"]').html(dataItem.productId)
+                     //        .end()
+                     //        .find('div[data-fieldItem="nombre"]').html(dataItem.nombre)
+                     //        .end()
+                     //        .find('div[data-fieldItem="productTypeDesc"]').html(dataItem.productTypeDesc)
+                     //        .end()
+                     //        .find('div[data-fieldItem="fechaDesde"]').html(dataItem.fechaDesde !== null ? Globalize.formatDate(dataItem.fechaDesde) : '')
+                     //        .end()
+                     //        .find('div[data-fieldItem="fechaHasta"]').html(dataItem.fechaHasta !== null ? Globalize.formatDate(dataItem.fechaHasta) : '')
+                     //        .end();
+
+
+
+                     jQuery(widgetForm.element)
+                         .find('div.formDescription')
+                             .html(
+                                 dataItem.isNew === true ?
+                                     clientApp.i18n.texts.get("Helpdesk.Talks.History.Form.NewTalkDescription") :
+                                     clientApp.i18n.texts.get("Helpdesk.Talks.History.Form.EditTalkDescription")
+                             )
+                         .end()
+                         .find('div.formTitle')
+                             .find('h3')
+                                 .html(
+                                     dataItem.isNew === true ?
+                                         clientApp.i18n.texts.get("Helpdesk.Talks.History.Form.NewTalkTitle") :
+                                         clientApp.i18n.texts.get("Helpdesk.Talks.History.Form.EditTalkTitle")
+                                 )
+                             .end()
+                         .end()
+                         .find('button.ui-chat-button')
+                             .unbind('click')
+                             .click(function () {
+
+                                 if (dataItem.isNew === true) {
+                                     alert("Please save form before trying to chat");
+                                 }
+                                 else {
+                                     alert("loadByUrl");
+                                     //clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.message(dataItem.idTalk)));
+                                 }
+                             })
+                         .end();
+
+
+                 });
+
+
+
+
 
 
             },
