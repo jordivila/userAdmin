@@ -241,12 +241,8 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                     pageSize: 30,
                 };
             },
-            //formInit: function (crudWidget, $parent) {
-
-            //},
-
-
             gridSearchForEditMethod: crudAjaxOpts.ajax.talkGetById,
+
             formInit: function (crudWidget, $parent) {
 
                 var tBasicInfo = '' +
@@ -266,39 +262,50 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                     text: clientApp.i18n.texts.get("Helpdesk.Talks.History.Chat"),
                     cssClass: "ui-chat-button",
                     icon: "fa fa-comment",
-                    //click: function () {
-                    //    //clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.message(dataItem.idTalk)));
-                    //    //alert("get id and loadByUrl");
-                    //}
                 });
 
                 return defaultButtons;
             },
-            formBind: function (widgetForm, dataItem) {
-
-                console.log("formBind");
-                console.log(dataItem);
-                console.log(widgetForm);
+            formBind: function (widgetCrud, widgetForm, dataItem) {
 
                 clientApp.globalizer.get()
                  .done(function (Globalize) {
 
-                     //jQuery(self.element)
-                     //    .find('div.ui-productCrud-form-searchOutput')
-                     //        .find('div[data-fieldItem="productId"]').html(dataItem.productId)
-                     //        .end()
-                     //        .find('div[data-fieldItem="nombre"]').html(dataItem.nombre)
-                     //        .end()
-                     //        .find('div[data-fieldItem="productTypeDesc"]').html(dataItem.productTypeDesc)
-                     //        .end()
-                     //        .find('div[data-fieldItem="fechaDesde"]').html(dataItem.fechaDesde !== null ? Globalize.formatDate(dataItem.fechaDesde) : '')
-                     //        .end()
-                     //        .find('div[data-fieldItem="fechaHasta"]').html(dataItem.fechaHasta !== null ? Globalize.formatDate(dataItem.fechaHasta) : '')
-                     //        .end();
+                     // CUSTOMER INFO WILL ONLY BE EDITABLE WHEN ADDING A TALK
+                     // begin customer info block
+                     // set customer info in case is an edit form
+                     jQuery(widgetCrud.element)
+                         .product('formSetCustomer',
+                                  dataItem.isNew === true ?
+                                     null
+                                       :
+                                        {
+                                            customerId: dataItem.editData.customerInfo.idPeople,
+                                            customerName: dataItem.editData.customerInfo.name
+                                        }
+                         )
+                         .find(widgetForm.element)
+                             // show customer selector in case form is in Add mode. Hide when Edit
+                             .find('div.ui-widgetModelItem-customerId:first')
+                                .addClass(dataItem.isNew === true ? '' : 'ui-helper-hidden')
+                                .removeClass(dataItem.isNew === true ? ' ui-helper-hidden ' : '')
+                             .end()
+                             // hide customer readonly name in case form is in Add mode. Show when Edit
+                             .find('div.ui-widgetModelItem-customerReadonly:first')
+                                .addClass(dataItem.isNew === true ? 'ui-helper-hidden' : '')
+                                .removeClass(dataItem.isNew === true ? '' : 'ui-helper-hidden')
+                                .find('div.ui-widgetModel-inputValue:first')
+                                    .html(
+                                        dataItem.isNew === true ? '' : dataItem.editData.customerInfo.name
+                                    )
+                                .end()
+                             .end()
+                        .end();
 
 
 
                      jQuery(widgetForm.element)
+                         // set Form descriptions based on Edit or Add features
                          .find('div.formDescription')
                              .html(
                                  dataItem.isNew === true ?
@@ -315,10 +322,13 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                                  )
                              .end()
                          .end()
+                         // hide chat button in case of new item 
                          .find('button.ui-chat-button')
+                             .addClass(dataItem.isNew === true ? 'ui-helper-hidden' : '')
+                             .removeClass(dataItem.isNew === true ? '' : 'ui-helper-hidden')
+                             // unbind everytime. Otherwise click events are fired one after the other
                              .unbind('click')
                              .click(function () {
-
                                  if (dataItem.isNew === true) {
                                      alert("Please save form before trying to chat");
                                  }
@@ -326,42 +336,18 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                                      clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.message(dataItem.editData.idTalk)));
                                  }
                              })
-                         .end()
-                         .find('div.ui-widgetModelItem-customerId:first')
-                            .addClass(dataItem.isNew === true ? '' : 'ui-helper-hidden')
-                            .removeClass(dataItem.isNew === true ? ' ui-helper-hidden ' : '')
-                         .end()
-                         .find('div.ui-widgetModelItem-customerReadonly:first')
-                            .addClass(dataItem.isNew === true ? 'ui-helper-hidden' : '')
-                            .removeClass(dataItem.isNew === true ? '' : 'ui-helper-hidden')
-                            .find('div.ui-widgetModel-inputValue:first')
-                                .html(
-                                    dataItem.isNew === true ? '' : dataItem.editData.customerId.name
-                                )
-                            .end()
-                         .end()
-                         .parents('div.ui-crud:first')
-                            .product('formSetCustomer',
-                                     dataItem.isNew === true ?
-                                        null
-                                          :
-                                        {
-                                            customerId: dataItem.editData.customerId.idPeople,
-                                            customerName: dataItem.editData.customerId.name
-                                        }
-                            )
                          .end();
+
+
+
+
+
 
 
                  });
 
-
-
-
-
-
             },
-            formSaveMethod: null,//productAjax.ajax.productSave,
+            formSaveMethod: crudAjaxOpts.ajax.talkSavedByEmployee,
             formValueGet: function (self, currentValue) {
                 return currentValue;
             },
@@ -421,6 +407,8 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                         },
                         onItemValue: function (parent) {
                             var customerIdDomId = jQuery(parent).find('input.ui-productCrud-form-customerId:first').val();
+
+                            return customerIdDomId;
                         },
                         onItemBind: function (parent, dataItem) {
                             //return jQuery(parent).find('span.someCustomValue').html(dataItem);
@@ -463,7 +451,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
 
                         },
                         onItemValue: function (parent) {
-                            
+                            return this.value;
                         },
                         onItemBind: function (parent, dataItem) {
 

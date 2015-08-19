@@ -538,10 +538,9 @@
 
                         var peopleInvolved = crudAjaxOpts.ajax._fakeDataGridPeopleInvolvedByTalkId(dataItem.idTalk);
 
-                        var customerId = function () {
+                        var customerInfo = function () {
                             for (var i = 0; i < peopleInvolved.length; i++) {
-                                if (peopleInvolved[i].isEmployee === false)
-                                {
+                                if (peopleInvolved[i].isEmployee === false) {
                                     return peopleInvolved[i];
                                 }
                             }
@@ -551,12 +550,33 @@
                         var dataObj = jQuery.extend({},
                                         talk,
                                         {
-                                            editData: jQuery.extend({}, talk, { customerId: customerId })
+                                            editData: jQuery.extend({}, talk, { customerInfo: customerInfo })
                                         });
 
 
                         dataResult = new DataResult(true, "", dataObj);
                     }
+
+                    setTimeout(function () { dfd.resolve(dataResult); }, crudAjaxOpts.ajax._fakeDelay);
+
+                    return dfd.promise();
+
+                },
+                talkSavedByEmployee: function (dataItem) {
+
+                    var dfd = jQuery.Deferred();
+
+                    var dataResult = null;
+                    var modelErrors = [];
+
+
+
+                    dataResult = new DataResult(
+                        false,
+                        "Not implemented exception",
+                        {
+                            modelState: modelErrors
+                        });
 
                     setTimeout(function () { dfd.resolve(dataResult); }, crudAjaxOpts.ajax._fakeDelay);
 

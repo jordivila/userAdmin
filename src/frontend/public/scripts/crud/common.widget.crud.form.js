@@ -8,12 +8,15 @@
            jQuery.widget("ui.crudForm", jQuery.ui.crudBase,
            {
                options: {
+
+                   crudParent: null,
+
                    formButtonsDOMId: null,
                    formButtonsGet: function (self, defaultButtons) {
                        return defaultButtons;
                    },
-                   formBind: function (self, dataItem) {
-                       throw new Error(self.namespace + '.' + self.widgetName + ".formBind() is an abstract method. Child class method must be implemented");
+                   formBind: function (crudWidget, crudFormWidget, dataItem) {
+                       throw new Error(crudFormWidget.namespace + '.' + crudFormWidget.widgetName + ".formBind() is an abstract method. Child class method must be implemented");
                    },
 
                    texts: {
@@ -78,6 +81,7 @@
                    this._super();
                },
                bind: function (dataItem) {
+
                    try {
                        jQuery(this.element)
                            .data('lastBoundItem', dataItem)
@@ -85,7 +89,7 @@
                                .widgetModel('bindValue', dataItem.editData)
                            .end();
 
-                       this.options.formBind(this, dataItem);
+                       this.options.formBind(this.options.crudParent, this, dataItem);
                        this._trigger('dataBound', null, dataItem);
                    } catch (e) {
                        console.error(e);
@@ -125,9 +129,6 @@
                        .then(
                                function (result, statusText, jqXHR) {
 
-
-                                   console.log(result);
-
                                    if (result.isValid) {
                                        self._trigger('messagedisplayAutoHide', null, result.messages[0], 50);
                                        self._trigger('change', null, result.data);
@@ -159,9 +160,5 @@
                    var result = jQuery.extend({}, dataItem, { formData: formData });
                    return this.options.formValueGet(this, result);
                }
-
            });
-
-
-
        });

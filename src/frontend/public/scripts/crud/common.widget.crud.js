@@ -45,7 +45,7 @@ function ($, jqUI, clientApp, P) {
                 gridSearchEditNotifyFailMsg: clientApp.i18n.texts.get("Template.Widget.Crud.UnhandledErrorSearchingForEdit"),
             },
 
-            formDOMId: null,
+
 
 
             gridCustomOptions: {},
@@ -80,6 +80,7 @@ function ($, jqUI, clientApp, P) {
                 };
             },
 
+            formDOMId: null,
             formInit: function (crudWidget, formOptions) {
                 throw new Error(crudWidget.namespace + '.' + crudWidget.widgetName + ".formInit is an abstract method. Child class method must be implemented");
             },
@@ -102,7 +103,7 @@ function ($, jqUI, clientApp, P) {
 
             var self = this;
 
-            
+
 
 
             var errTreat = function (e) {
@@ -481,6 +482,7 @@ function ($, jqUI, clientApp, P) {
 
                 jQuery(crudWidget.options.formDOMId)
                     .crudForm(jQuery.extend({}, {
+                        crudParent: self,
                         messagedisplayAutoHide: function (e, msg) {
                             self.messagedisplayAutoHide(msg);
                         },

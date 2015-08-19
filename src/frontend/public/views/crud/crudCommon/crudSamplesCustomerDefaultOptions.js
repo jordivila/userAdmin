@@ -101,7 +101,7 @@
                         }
                     ];
                 }(),
-                formBind: function (self, dataItem) {
+                formBind: function (widgetCrud, widgetCrudForm, dataItem) {
                     // automatic model binding is done
                     // you can perform customizations here
                 },

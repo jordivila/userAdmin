@@ -80,12 +80,12 @@ function ($, jqUI, clientApp, wCrud, productAjax, productFormModelGet, productGr
             formButtonsGet: function (self, defaultButtons) {
                 return defaultButtons;
             },
-            formBind: function (self, dataItem) {
+            formBind: function (widgetCrud, widgetCrudForm, dataItem) {
 
                 clientApp.globalizer.get()
                  .done(function (Globalize) {
 
-                     jQuery(self.element)
+                     jQuery(widgetCrudForm.element)
                          .find('div.ui-productCrud-form-searchOutput')
                              .find('div[data-fieldItem="productId"]').html(dataItem.productId)
                              .end()
