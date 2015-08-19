@@ -15,6 +15,7 @@
 .ui-productCrud .ui-crudGrid-dateLastMessage {width:20%;}
 .ui-productCrud .ui-crudGrid-body .ui-crudGrid-dateLastMessage { text-align:right !important;}
 .ui-productCrud .ui-crudGrid-dateLastMessage .ui-text-circle{border:none !important;float:left;font-size:0.8em;}
+.ui-productCrud .ui-chat-button.ui-helper-hidden {display:none !important;}
 
 .ui-customerCrud .ui-crudGrid .ui-crudGrid-customerName {width:49.9% !important;}
 .ui-customerCrud .ui-crudGrid .ui-crudGrid-customerName a {text-decoration:underline !important;}

@@ -270,17 +270,30 @@ function ($, jqUI, clientApp, P) {
 
             var self = this;
 
-            self._gridSearch()
-                    .progress(function (status) {
-                        self.progressShow(status);
-                    })
-                    .fail(function (args) {
-                        self.progressHide();
-                        self.errorDisplay(args);
-                    })
-                    .always(function () {
-                        self.progressHide();
-                    });
+
+
+            // sometimes self.options.gridFilterObject can be null
+            // for instance: 
+            //      1.- user adds a new item before searching-> thus crudfilter has not been set yet
+            //      2.- new item is saved and crudForm.change event is fired
+            //      3.- when crudForm.change is fired crudWidget fires crudGrid.search method
+            //
+            // That's why we will only fire search in case filterObject is not null
+            if (self.options.gridFilterObject !== null)
+            {
+                self._gridSearch()
+                        .progress(function (status) {
+                            self.progressShow(status);
+                        })
+                        .fail(function (args) {
+                            self.progressHide();
+                            self.errorDisplay(args);
+                        })
+                        .always(function () {
+                            self.progressHide();
+                        });
+            }
+
         },
         _gridSearch: function () {
 
