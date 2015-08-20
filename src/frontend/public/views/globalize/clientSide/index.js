@@ -10,7 +10,7 @@ function (clientApp, crossLayer) {
             clientApp.globalizer.get()
              .done(function (Globalize) {
 
-                 var currency = clientApp.utils.getCookie(crossLayer.cookies.currency);
+                 var currency = clientApp.utils.cookieGet(crossLayer.cookies.currency);
 
                  jQuery("#date").html(Globalize.formatDate(new Date(), {
                      datetime: "medium"

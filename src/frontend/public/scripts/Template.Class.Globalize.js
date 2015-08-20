@@ -16,7 +16,7 @@
         var dfd = jQuery.Deferred();
         var self = this;
 
-        var currentCulture = new Utils().getCookie(crossLayer.cookies.i18nLocale);
+        var currentCulture = new Utils().cookieGet(crossLayer.cookies.i18nLocale);
 
         if (self.instance === null) {
 

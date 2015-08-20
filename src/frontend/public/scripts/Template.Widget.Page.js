@@ -79,7 +79,7 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
 
             var self = this;
             var dfd = jQuery.Deferred();
-            var currentCulture = clientApp.utils.getCookie(crossLayerConfig.cookies.i18nLocale);
+            var currentCulture = clientApp.utils.cookieGet(crossLayerConfig.cookies.i18nLocale);
 
             dfd.notify(self.options.texts.loadingI18n);
 

@@ -6,16 +6,68 @@ define([],
 
            }
 
-           Utils.prototype.getCookie = function (cname) {
-               var name = cname + "=";
-               var ca = document.cookie.split(';');
-               for (var i = 0; i < ca.length; i++) {
-                   var c = ca[i];
-                   while (c.charAt(0) == ' ') c = c.substring(1);
-                   if (c.indexOf(name) === 0) return c.substring(name.length, c.length);
+
+           function cookieHelper(name, value, days, deleteIt) {
+               // if value is undefined, get the cookie value
+               if (value === undefined) {
+                   var cookiestring = "; " + window.document.cookie;
+                   var cookies = cookiestring.split("; " + name + "=");
+                   if (cookies.length === 2) {
+                       return cookies.pop().split(";").shift();
+                   }
+                   return null;
                }
-               return "";
+               else {
+                   // if value is a false boolean, we'll treat that as a delete
+                   if (deleteIt === true) {
+                       days = -1;
+                   }
+                   var expires;
+                   if (days) {
+                       var date = new Date();
+                       date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                       expires = "; expires=" + date.toGMTString();
+                   }
+                   else {
+                       expires = "";
+                   }
+                   window.document.cookie = name + "=" + value + expires + "; path=/";
+               }
+           }
+
+           Utils.prototype.cookieGet = function (name) {
+               return cookieHelper(name);
            };
+
+           Utils.prototype.cookieSet = function (name, value, days) {
+
+               if (arguments.length !== 3) {
+                   throw new Error("Argument exception");
+               }
+
+               cookieHelper(name, value, days);
+           };
+
+           Utils.prototype.cookieSetForSession = function (name, value) {
+
+               if (arguments.length !== 2) {
+                   throw new Error("Argument exception");
+               }
+
+               cookieHelper(name, value);
+           };
+
+           Utils.prototype.cookieDelete = function (name) {
+
+               if (arguments.length !== 1) {
+                   throw new Error("Argument exception");
+               }
+
+               cookieHelper(name, null, null, true);
+           };
+
+
+
 
            Utils.prototype.htmlEncode = function (html) {
                return document.createElement('a').appendChild(
