@@ -50,26 +50,52 @@
 
                         var dataResult = null;
                         var modelErrors = [];
+                        var isNew = idTalk === null;
 
                         if (((subject.trim() === '') === true)) {
                             modelErrors.push({ key: "subject", value: [clientApp.i18n.texts.get("Views.Crud.FieldRequired")] });
                         }
+
+                        if (isNew && (customerId.toString().trim() === "")) {
+                            modelErrors.push({ key: "customerId", value: [clientApp.i18n.texts.get("Views.Crud.FieldRequired")] });
+                        }
+
+
+
 
                         if (modelErrors.length > 0) {
                             dataResult = new DataResult(false, clientApp.i18n.texts.get("Views.Crud.ErrorExistsInForm"), { modelState: modelErrors });
                         }
                         else {
 
+                            subject = subject.trim();
+                            employeeId = parseInt(employeeId);
+                            customerId = parseInt(customerId);
+
+
                             // Simulate saving data
                             if (idTalk === null) {
                                 idTalk = crudAjaxOpts.ajax._fakeDataGridTalks.length;
                             }
+                            else {
 
-                            crudAjaxOpts.ajax._fakeDataGridTalks.push({
-                                idTalk: idTalk,
-                                subject: subject.trim(),
-                                //dateLastMessage: new Date(),
-                            });
+                                if (idTalk === undefined) {
+                                    throw new Error("Argument exception");
+                                }
+
+                                idTalk = parseInt(idTalk);
+                            }
+
+                            if (isNew) {
+                                crudAjaxOpts.ajax._fakeDataGridTalks.push({
+                                    idTalk: idTalk,
+                                    subject: subject,
+                                    //dateLastMessage: new Date(),
+                                });
+                            }
+                            else {
+                                crudAjaxOpts.ajax._fakeDataGridTalks[idTalk].subject = subject;
+                            }
 
                             //add an employee to that talk
                             crudAjaxOpts.ajax._fakeDataGridPeopleInvolved.push({
@@ -77,18 +103,79 @@
                                 idPeople: employeeId
                             });
 
-                            //add a customer to that talk -> this should be done at backend  by taking the current logged user id
-                            crudAjaxOpts.ajax._fakeDataGridPeopleInvolved.push({
-                                idTalk: idTalk,
-                                idPeople: customerId
-                            });
 
-                            dataResult = new DataResult(true, clientApp.i18n.texts.get("Helpdesk.Talks.Subject.NewSubjectAdded"), { idTalk: idTalk });
+
+                            if (isNew) {
+                                // add a customer to that talk -> this should be done at backend  by taking the current logged user id
+                                crudAjaxOpts.ajax._fakeDataGridPeopleInvolved.push({
+                                    idTalk: idTalk,
+                                    idPeople: customerId
+                                });
+                            }
+                            else {
+                                // existing talks must NOT change its customerId
+                            }
+
+
+                            dataResult = new DataResult(
+                                true,
+                                isNew ? clientApp.i18n.texts.get("Helpdesk.Talks.Subject.NewSubjectAdded") :
+                                        clientApp.i18n.texts.get("Template.Widget.Crud.SavedChanges"),
+                                {
+                                    idTalk: idTalk
+                                });
                         }
 
                         cb(null, dataResult);
 
                     } catch (e) {
+                        console.error(e);
+                        cb(e, null);
+                    }
+                },
+                _fakeDataGridTalkGetByIdForEdit: function (idTalk, cb) {
+
+                    try {
+                        // search for talkId
+                        var talk = crudAjaxOpts.ajax._fakeDataGridTalksFindById(idTalk);
+
+
+                        if (talk === null) {
+                            dataResult = new DataResult(false, clientApp.i18n.texts.get("Helpdesk.Talks.TalkNotFound"), null);
+                        }
+                        else {
+
+                            var peopleInvolved = crudAjaxOpts.ajax._fakeDataGridPeopleInvolvedByTalkId(idTalk);
+
+
+
+                            var customerInfo = function () {
+                                for (var i = 0; i < peopleInvolved.length; i++) {
+                                    if (peopleInvolved[i].isEmployee === false) {
+                                        return {
+                                            idPeople: peopleInvolved[i].idPeople,
+                                            name: peopleInvolved[i].name
+                                        };
+                                    }
+                                }
+                                return null;
+                            }();
+
+                            var dataObj = jQuery.extend({},
+                                            talk,
+                                            {
+                                                editData: jQuery.extend({}, talk, { customerInfo: customerInfo })
+                                            });
+
+                            dataResult = new DataResult(true, "", dataObj);
+                        }
+
+                        cb(null, dataResult);
+                    }
+                    catch (e) {
+
+                        console.error(e);
+
                         cb(e, null);
                     }
                 },
@@ -96,8 +183,13 @@
 
                     var peopleInvolved = [];
 
+
+
                     for (var i = 0; i < crudAjaxOpts.ajax._fakeDataGridPeopleInvolved.length; i++) {
                         if (crudAjaxOpts.ajax._fakeDataGridPeopleInvolved[i].idTalk == idTalk) {
+
+
+
                             peopleInvolved.push(
                                 crudAjaxOpts.ajax._fakeDataGridPeopleFindById(crudAjaxOpts.ajax._fakeDataGridPeopleInvolved[i].idPeople)
                             );
@@ -130,62 +222,41 @@
                 },
                 _fakeDataInit: function () {
 
+
+                    var pMax = 10; // pMax -> number of employees & number of customers created
+
+                    // create fake table models
                     crudAjaxOpts.ajax._fakeDataGridTalks = [];
                     crudAjaxOpts.ajax._fakeDataGridMessages = [];
-                    //crudAjaxOpts.ajax._fakeDataGridPeople = function () {
+                    crudAjaxOpts.ajax._fakeDataGridPeople = function (pMax) {
 
-                    //    return [
-                    //        {
-                    //            idPeople: 0,
-                    //            idPersonBackOffice: 1,    //identificaador de la persona en ORG_TB_EMLPEADOS
-                    //            isEmployee: true,
+                        var peopleAll = [];
 
-                    //            name: "Empleado 1" // this is not part of the BDD model. instead will be added ArquiaXXI o ArquiaRed BBDD
-                    //        },
-                    //        {
-                    //            idPeople: 1,
-                    //            idPersonBackOffice: 2,    //identificaador de la persona en ORG_TB_EMLPEADOS
-                    //            isEmployee: true,
+                        for (var j = 0; j < pMax; j++) {
+                            peopleAll.push({
+                                idPeople: j,
+                                idPersonBackOffice: j,    //identificaador de la persona en ORG_TB_EMLPEADOS
+                                isEmployee: true,
+                                name: "Empleado " + j
+                            });
+                        }
 
-                    //            name: "Empleado 2" // this is not part of the BDD model. instead will be added ArquiaXXI o ArquiaRed BBDD
-                    //        },
-                    //        {
-                    //            idPeople: 3,
-                    //            idPersonBackOffice: 1,    //identificador de la persona en PEF_TB_personaFisica
-                    //            isEmployee: false,
+                        for (var k = 0; k < pMax; k++) {
+                            peopleAll.push({
+                                idPeople: pMax + k,
+                                idPersonBackOffice: k,    //identificaador de la persona en PEF_tb_personaFisica
+                                isEmployee: false,
+                                name: "Cliente " + k
+                            });
+                        }
 
-                    //            name: "Cliente 1" // this is not part of the BDD model. instead will be added ArquiaXXI o ArquiaRed BBDD
-                    //        }];
+                        return peopleAll;
 
-                    //}();
-
-
-                    //crudAjaxOpts.ajax._fakeCurrentEmployee = crudAjaxOpts.ajax._fakeDataGridPeople[0];
-                    //crudAjaxOpts.ajax._fakeDefaultEmployee = crudAjaxOpts.ajax._fakeDataGridPeople[1];
-                    //crudAjaxOpts.ajax._fakeCurrentCustomer = crudAjaxOpts.ajax._fakeDataGridPeople[2];
+                    }(pMax);
+                    crudAjaxOpts.ajax._fakeDataGridPeopleInvolved = [];
 
 
-                    var pMax = 1000;
-
-                    crudAjaxOpts.ajax._fakeDataGridPeople = [];
-                    for (var j = 0; j < pMax; j++) {
-                        crudAjaxOpts.ajax._fakeDataGridPeople.push({
-                            idPeople: j,
-                            idPersonBackOffice: j,    //identificaador de la persona en ORG_TB_EMLPEADOS
-                            isEmployee: true,
-                            name: "Empleado " + j
-                        });
-                    }
-
-                    for (var k = 0; k < pMax; k++) {
-                        crudAjaxOpts.ajax._fakeDataGridPeople.push({
-                            idPeople: pMax + 1 + k,
-                            idPersonBackOffice: k,    //identificaador de la persona en ORG_TB_EMLPEADOS
-                            isEmployee: false,
-                            name: "Cliente " + k
-                        });
-                    }
-
+                    // assign fake users
                     crudAjaxOpts.ajax._fakeCurrentEmployee = crudAjaxOpts.ajax._fakeDataGridPeople[0];
                     crudAjaxOpts.ajax._fakeDefaultEmployee = crudAjaxOpts.ajax._fakeDataGridPeople[1];
                     crudAjaxOpts.ajax._fakeCurrentCustomer = crudAjaxOpts.ajax._fakeDataGridPeople[pMax + 1];
@@ -193,62 +264,63 @@
 
 
 
+                    var createFakeTalks = function () {
+
+                        var calcDatePosted = function (days) {
+                            var g = new Date();
+                            g.setDate(g.getDate() - days);
+                            return g;
+                        };
 
 
+                        for (var i = 0; i < 78; i++) {
 
+                            //create a talk
+                            crudAjaxOpts.ajax._fakeDataGridTalks.push({
+                                //subject: "{0} {1}".format(clientApp.i18n.texts.get("Helpdesk.Talks.History.Message"), i),
+                                idTalk: i,
+                                subject: "{0} - {1}".format(i, crudAjaxOpts.ajax._fakeTextGet()),
+                            });
 
-                    crudAjaxOpts.ajax._fakeDataGridPeopleInvolved = [];
+                            //add an employee to that talk
+                            crudAjaxOpts.ajax._fakeDataGridPeopleInvolved.push({
+                                idTalk: i,
+                                idPeople: crudAjaxOpts.ajax._fakeDefaultEmployee.idPeople
+                            });
 
+                            //add a customer to that talk
+                            crudAjaxOpts.ajax._fakeDataGridPeopleInvolved.push({
+                                idTalk: i,
+                                idPeople: crudAjaxOpts.ajax._fakeCurrentCustomer.idPeople
+                            });
 
-                    var calcDatePosted = function (days) {
-                        var g = new Date();
-                        g.setDate(g.getDate() - days);
-                        return g;
+                            // add messages to that talk
+                            for (var z = 0; z < 10; z++) {
+
+                                var messageInstance = {
+                                    idMessage: crudAjaxOpts.ajax._fakeDataGridMessages.length,
+                                    idTalk: i,
+                                    idPeople: (z % 2 === 0) ? crudAjaxOpts.ajax._fakeDefaultEmployee.idPeople : crudAjaxOpts.ajax._fakeCurrentCustomer.idPeople,
+                                    message: crudAjaxOpts.ajax._fakeTextGet(),
+                                    datePosted: calcDatePosted(crudAjaxOpts.ajax._fakeDataGridMessages.length)
+                                };
+
+                                // add the message
+                                crudAjaxOpts.ajax._fakeDataGridMessages.push(messageInstance);
+
+                                // add message as a read one. As far as the message is written by the current idPeople 
+                                //crudAjaxOpts.ajax._fakeDataGridPeopleLastReadAdd(
+                                //    messageInstance.idTalk,
+                                //    messageInstance.idPeople,
+                                //    messageInstance.idMessage);
+                            }
+                        }
+
                     };
 
+                    // uncomment the line below to create fake conversations
+                    //createFakeTalks();
 
-                    for (var i = 0; i < 78; i++) {
-
-                        //create a talk
-                        crudAjaxOpts.ajax._fakeDataGridTalks.push({
-                            //subject: "{0} {1}".format(clientApp.i18n.texts.get("Helpdesk.Talks.History.Message"), i),
-                            idTalk: i,
-                            subject: "{0} - {1}".format(i, crudAjaxOpts.ajax._fakeTextGet()),
-                        });
-
-                        //add an employee to that talk
-                        crudAjaxOpts.ajax._fakeDataGridPeopleInvolved.push({
-                            idTalk: i,
-                            idPeople: crudAjaxOpts.ajax._fakeDefaultEmployee.idPeople
-                        });
-
-                        //add a customer to that talk
-                        crudAjaxOpts.ajax._fakeDataGridPeopleInvolved.push({
-                            idTalk: i,
-                            idPeople: crudAjaxOpts.ajax._fakeCurrentCustomer.idPeople
-                        });
-
-                        // add messages to that talk
-                        for (var z = 0; z < 10; z++) {
-
-                            var messageInstance = {
-                                idMessage: crudAjaxOpts.ajax._fakeDataGridMessages.length,
-                                idTalk: i,
-                                idPeople: (z % 2 === 0) ? crudAjaxOpts.ajax._fakeDefaultEmployee.idPeople : crudAjaxOpts.ajax._fakeCurrentCustomer.idPeople,
-                                message: crudAjaxOpts.ajax._fakeTextGet(),
-                                datePosted: calcDatePosted(crudAjaxOpts.ajax._fakeDataGridMessages.length)
-                            };
-
-                            // add the message
-                            crudAjaxOpts.ajax._fakeDataGridMessages.push(messageInstance);
-
-                            // add message as a read one. As far as the message is written by the current idPeople 
-                            //crudAjaxOpts.ajax._fakeDataGridPeopleLastReadAdd(
-                            //    messageInstance.idTalk,
-                            //    messageInstance.idPeople,
-                            //    messageInstance.idMessage);
-                        }
-                    }
 
 
 
@@ -563,39 +635,15 @@
                     var dfd = jQuery.Deferred();
                     var dataResult = null;
 
-                    // search for talkId
-                    var talk = crudAjaxOpts.ajax._fakeDataGridTalksFindById(dataItem.idTalk);
-
-
-                    if (talk === null) {
-                        dataResult = new DataResult(false, "Talk not found", null);
-                    }
-                    else {
-
-                        var peopleInvolved = crudAjaxOpts.ajax._fakeDataGridPeopleInvolvedByTalkId(dataItem.idTalk);
-
-                        var customerInfo = function () {
-                            for (var i = 0; i < peopleInvolved.length; i++) {
-                                if (peopleInvolved[i].isEmployee === false) {
-                                    return {
-                                        idPeople: peopleInvolved[i].idPeople,
-                                        name: peopleInvolved[i].name
-                                    };
-                                }
+                    crudAjaxOpts.ajax._fakeDataGridTalkGetByIdForEdit(dataItem.idTalk,
+                        function (error, dataResult) {
+                            if (error) {
+                                setTimeout(function () { dfd.reject(error); }, crudAjaxOpts.ajax._fakeDelay);
                             }
-                            return null;
-                        }();
-
-                        var dataObj = jQuery.extend({},
-                                        talk,
-                                        {
-                                            editData: jQuery.extend({}, talk, { customerInfo: customerInfo })
-                                        });
-
-                        dataResult = new DataResult(true, "", dataObj);
-                    }
-
-                    setTimeout(function () { dfd.resolve(dataResult); }, crudAjaxOpts.ajax._fakeDelay);
+                            else {
+                                setTimeout(function () { dfd.resolve(dataResult); }, crudAjaxOpts.ajax._fakeDelay);
+                            }
+                        });
 
                     return dfd.promise();
                 },
@@ -603,24 +651,38 @@
 
                     var dfd = jQuery.Deferred();
 
+
                     crudAjaxOpts.ajax._fakeDataGridTalkSave(
                         dataItem.isNew === true ? null : dataItem.formData.idTalk,
                         dataItem.formData.subject,
-                        crudAjaxOpts.ajax._fakeCurrentEmployee.idPeople, //employeeId -> taken from current user request
                         dataItem.formData.customerId, // customerId
+                        crudAjaxOpts.ajax._fakeCurrentEmployee.idPeople, //employeeId -> taken from current user request
                         function (e, dataResult) {
+
+
                             if (e) {
                                 setTimeout(function () { dfd.reject(e); }, crudAjaxOpts.ajax._fakeDelay);
                             }
                             else {
 
                                 if (dataResult.isValid === true) {
-                                    // Simulate retrieving data from server
-                                    dataItem.editData = crudAjaxOpts.ajax._fakeDataGridTalks[dataResult.data.idTalk];
-                                    // Simulate server response
-                                    dataItem.formData = undefined;
-                                    // return result
-                                    dataResult.data = dataItem;
+
+                                    crudAjaxOpts.ajax._fakeDataGridTalkGetByIdForEdit(dataResult.data.idTalk,
+                                        function (eGetById, dataResultGetById) {
+                                            if (eGetById) {
+                                                setTimeout(function () { dfd.reject(eGetById); }, crudAjaxOpts.ajax._fakeDelay);
+                                            }
+                                            else {
+
+                                                if (dataResultGetById.isValid) {
+                                                    // ponemos en el mensaje de salida
+                                                    // el mensaje resultado de guardar
+                                                    dataResultGetById.messages[0] = dataResult.messages[0];
+                                                }
+
+                                                setTimeout(function () { dfd.resolve(dataResultGetById); }, crudAjaxOpts.ajax._fakeDelay);
+                                            }
+                                        });
                                 }
 
                                 setTimeout(function () { dfd.resolve(dataResult); }, crudAjaxOpts.ajax._fakeDelay);

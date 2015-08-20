@@ -349,115 +349,147 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
             },
             formSaveMethod: crudAjaxOpts.ajax.talkSavedByEmployee,
             formValueGet: function (self, currentValue) {
+
                 return currentValue;
             },
             formModel: function () {
-                return [{
-                    id: "subject",
-                    displayName: clientApp.i18n.texts.get("Helpdesk.Talks.History.GridColumns.Subject"),
-                    input: { value: "", nullable: false },
-                }, {
-                    id: "customerId",
-                    displayName: clientApp.i18n.texts.get("Views.Crud.Customer"),
-                    input: {
-                        type: "custom",
-                        value: null,
-                        nullable: true,
-                        onItemBuild: function (widget, parent) {
+                return [
+                    {
+                        id: "idTalk",
+                        displayName: "",
+                        input: {
+                            type: "custom",
+                            value: null,
+                            nullable: true,
+                            onItemBuild: function (widget, parent) {
 
+                                var selfOption = this;
 
-                            var selfOption = this;
-
-                            var _templateGet = function () {
-                                return '' +
-                                    '<input type="hidden" class="ui-productCrud-form-customerId" />' +
-                                    '<a href="javascript:void(0);" class="ui-productCrud-form-customerName"></a>' +
-                                    '<div class="ui-productCrud-form-removeCustomerIcon ui-state-error">' +
-                                        '<span class="ui-icon ui-icon-close"></span>' +
-                                    '</div>';
-                            };
-
-                            jQuery(parent).append(_templateGet());
-
-                            var customerNameDomId = jQuery(parent).find('a.ui-productCrud-form-customerName:first');
-                            var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-form-removeCustomerIcon:first');
-
-                            customerTrashDomId
-                                .click(function () {
-                                    selfOption.onItemBind(jQuery(parent), { customerId: "", customerName: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.ClickToAddCustomer") });
-                                });
-
-                            customerNameDomId
-                                .click(function () {
-                                    jQuery(parent)
-                                        .parents('div.ui-crud:first')
-                                            .product('formSearchCustomer');
-                                });
-
-                            customerTrashDomId.click();
-
-
-
-                            //jQuery(parent)
-                            //    .append('<p>' + clientApp.i18n.texts.get("Views.Crud.CrudExtended.SomeReadonlyValue") + '-><span class="someCustomValue">2</span></p>')
-                            //    .find('p:first')
-                            //        .click(function () {
-                            //            jQuery(widget).widgetModelItem('change');
-                            //        });
-                        },
-                        onItemValue: function (parent) {
-                            var customerIdDomId = jQuery(parent).find('input.ui-productCrud-form-customerId:first').val();
-
-                            return customerIdDomId;
-                        },
-                        onItemBind: function (parent, dataItem) {
-                            //return jQuery(parent).find('span.someCustomValue').html(dataItem);
-
-                            var customerIdDomId = jQuery(parent).find('input.ui-productCrud-form-customerId:first');
-                            var customerNameDomId = jQuery(parent).find('a.ui-productCrud-form-customerName:first');
-                            var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-form-removeCustomerIcon:first');
-
-                            if (dataItem === null) {
-                                dataItem = {
-                                    customerId: "",
-                                    customerName: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.ClickToAddCustomer")
+                                var _templateGet = function () {
+                                    return '<input type="hidden" class="ui-productCrud-form-idTalk" />';
                                 };
+
+                                jQuery(parent).append(_templateGet());
+                            },
+                            onItemValue: function (parent) {
+                                return jQuery(parent).find('input.ui-productCrud-form-idTalk:first').val();
+                            },
+                            onItemBind: function (parent, dataItem) {
+
+                                jQuery(parent).find('input.ui-productCrud-form-idTalk:first').val(dataItem);
                             }
-
-                            customerIdDomId.val(dataItem.customerId);
-                            customerNameDomId.html(dataItem.customerName);
-
-                            if (dataItem.customerId !== "") {
-                                customerTrashDomId.show();
-                            }
-                            else {
-                                customerTrashDomId.hide();
-                            }
-
-
-                        }
-                    },
-                }, {
-                    id: "customerReadonly",
-                    displayName: clientApp.i18n.texts.get("Views.Crud.Customer"),
-                    input: {
-                        type: "custom",
-                        value: null,
-                        nullable: true,
-                        onItemBuild: function (widget, parent) {
-
-
-                            var selfOption = this;
-
                         },
-                        onItemValue: function (parent) {
-                            return this.value;
-                        },
-                        onItemBind: function (parent, dataItem) {
-
-                        }
                     },
-                }
+                    {
+                        id: "subject",
+                        displayName: clientApp.i18n.texts.get("Helpdesk.Talks.History.GridColumns.Subject"),
+                        input: { value: "", nullable: false },
+                    }, {
+                        id: "customerId",
+                        displayName: clientApp.i18n.texts.get("Views.Crud.Customer"),
+                        input: {
+                            type: "custom",
+                            value: null,
+                            nullable: false,
+                            onItemBuild: function (widget, parent) {
+
+
+                                var selfOption = this;
+
+                                var _templateGet = function () {
+                                    return '' +
+                                        '<input type="hidden" class="ui-productCrud-form-customerId" />' +
+                                        '<a href="javascript:void(0);" class="ui-productCrud-form-customerName"></a>' +
+                                        '<div class="ui-productCrud-form-removeCustomerIcon ui-state-error">' +
+                                            '<span class="ui-icon ui-icon-close"></span>' +
+                                        '</div>';
+                                };
+
+                                jQuery(parent).append(_templateGet());
+
+                                var customerNameDomId = jQuery(parent).find('a.ui-productCrud-form-customerName:first');
+                                var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-form-removeCustomerIcon:first');
+
+                                customerTrashDomId
+                                    .click(function () {
+                                        selfOption.onItemBind(jQuery(parent), { customerId: "", customerName: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.ClickToAddCustomer") });
+                                    });
+
+                                customerNameDomId
+                                    .click(function () {
+                                        jQuery(parent)
+                                            .parents('div.ui-crud:first')
+                                                .product('formSearchCustomer');
+                                    });
+
+                                customerTrashDomId.click();
+
+
+
+                                //jQuery(parent)
+                                //    .append('<p>' + clientApp.i18n.texts.get("Views.Crud.CrudExtended.SomeReadonlyValue") + '-><span class="someCustomValue">2</span></p>')
+                                //    .find('p:first')
+                                //        .click(function () {
+                                //            jQuery(widget).widgetModelItem('change');
+                                //        });
+                            },
+                            onItemValue: function (parent) {
+                                var customerIdDomId = jQuery(parent).find('input.ui-productCrud-form-customerId:first').val();
+
+                                return customerIdDomId;
+                            },
+                            onItemBind: function (parent, dataItem) {
+                                //return jQuery(parent).find('span.someCustomValue').html(dataItem);
+
+                                var customerIdDomId = jQuery(parent).find('input.ui-productCrud-form-customerId:first');
+                                var customerNameDomId = jQuery(parent).find('a.ui-productCrud-form-customerName:first');
+                                var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-form-removeCustomerIcon:first');
+
+                                if (dataItem === null) {
+                                    dataItem = {
+                                        customerId: "",
+                                        customerName: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.ClickToAddCustomer")
+                                    };
+                                }
+
+                                customerIdDomId.val(dataItem.customerId);
+                                customerNameDomId.html(dataItem.customerName);
+
+                                if (dataItem.customerId !== "") {
+                                    customerTrashDomId.show();
+                                }
+                                else {
+                                    customerTrashDomId.hide();
+                                }
+
+                                jQuery(customerIdDomId)
+                                    .parents('div.ui-widgetModelItem')
+                                        .widgetModelItem('change')
+                                    .end();
+
+                            }
+                        },
+                    }, {
+                        id: "customerReadonly",
+                        displayName: clientApp.i18n.texts.get("Views.Crud.Customer"),
+                        input: {
+                            type: "custom",
+                            value: null,
+                            nullable: true,
+                            onItemBuild: function (widget, parent) {
+
+
+                                var selfOption = this;
+
+                            },
+                            onItemValue: function (parent) {
+                                return this.value;
+                            },
+                            onItemBind: function (parent, dataItem) {
+
+                            }
+                        },
+                    }
                 ];
             }(),
 

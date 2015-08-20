@@ -33,7 +33,6 @@ function ($, jqUI, wBase, crudBase, crudExtendedWidget, clientApp, crudDefaultOp
             this._employeeCrudInit();
             this._productCrudInit();
             this._bindResize();
-
             this._super();
         },
         destroy: function () {

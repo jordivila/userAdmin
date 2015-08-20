@@ -106,7 +106,7 @@
                                     '<div class="ui-crudGrid-pager ui-crudGrid-pager-top ui-state-default"></div>' +
                                 '</td>' +
                             '</tr>' +
-                            '<tr class="ui-crudGrid-header ui-widgetGrid-header ui-widget-header">' +
+                            '<tr class="ui-crudGrid-header ui-widgetGrid-header ui-widget-header ui-helper-hidden">' +
                                     this._gridHeaderTemplate() +
                             '</tr>' +
                             '<tr>' +
@@ -202,7 +202,7 @@
                 else {
 
                     if (pagerOptions.infiniteScrolling !== true) {
-                        self._buildEmptyDataRow();
+                        self.emptyData();
                     }
                     else {
                         // Pager unbind scroll event automatically when no data is present based on Page*PageSize>TotalRows

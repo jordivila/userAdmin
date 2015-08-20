@@ -16,3 +16,5 @@
 .ui-helpdesk-talks-summary-crud .ui-crudGrid-body .ui-crudGrid-subject {text-align:left !important;}
 .ui-helpdesk-talks-summary-crud .ui-crudGrid-dateLastMessage {width:24.9%;}
 .ui-helpdesk-talks-summary-crud .ui-crudGrid-dateLastMessage .ui-text-circle{border:none !important;float:left;font-size:0.8em;}
+.ui-helpdesk-talks-summary-crud .ui-widgetGrid-emptyRow  {height:15em;vertical-align:middle;}
+.ui-helpdesk-talks-summary-crud .ui-widgetGrid-emptyRow .ui-widgetGrid-column-content {}
