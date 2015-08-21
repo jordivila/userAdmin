@@ -13,10 +13,22 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
     jQuery.widget("ui.product", jQuery.ui.crud,
     {
         options: {
+            stateStorageId: "helpdeskHistoryTalksCrud",
+            stateStorageDeserialize: function (currentValue) {
+
+                if (currentValue.gridData && currentValue.gridData !== null) {
+                    for (var i = 0; i < currentValue.gridData.data.length; i++) {
+                        currentValue.gridData.data[i].dateLastMessage = new Date(currentValue.gridData.data[i].dateLastMessage);
+                    }
+
+                }
+
+                return currentValue;
+            },
             filterModel: function (context) {
 
                 return [{
-                    id: "customerId",
+                    id: "customerInfo",
                     displayName: clientApp.i18n.texts.get("Views.Crud.Customer"),
                     input: {
                         type: "custom",
@@ -55,13 +67,28 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                         },
                         onItemValue: function (parent) {
                             var customerIdDomId = jQuery(parent).find('input.ui-productCrud-filter-custId:first');
-                            return customerIdDomId.val();
+                            var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
+
+                            return {
+                                customerId: customerIdDomId.val(),
+                                customerName: customerNameDomId.html()
+                            };
+
                         },
                         onItemBind: function (parent, dataItem) {
+
+                            console.log("onItemBind_customerId");
+                            console.log(arguments);
 
                             var customerIdDomId = jQuery(parent).find('input.ui-productCrud-filter-custId:first');
                             var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
                             var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeCustomerIcon:first');
+
+                            if (dataItem === null) {
+                                dataItem = {
+                                    customerId: ""
+                                };
+                            }
 
                             customerIdDomId.val(dataItem.customerId);
                             customerNameDomId.html(dataItem.customerName);
@@ -91,7 +118,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                     },
                 },
                 {
-                    id: "employeeId",
+                    id: "employeeInfo",
                     displayName: clientApp.i18n.texts.get("Helpdesk.Talks.Employee"),
                     input: {
                         type: "custom",
@@ -130,13 +157,30 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                         },
                         onItemValue: function (parent) {
                             var employeeIdDomId = jQuery(parent).find('input.ui-productCrud-filter-employeeId:first');
-                            return employeeIdDomId.val();
+                            var employeeNameDomId = jQuery(parent).find('a.ui-productCrud-filter-employeeName:first');
+
+                            return {
+                                employeeId: employeeIdDomId.val(),
+                                employeeName: employeeNameDomId.html()
+                            };
+
                         },
                         onItemBind: function (parent, dataItem) {
+
+                            console.log("onItemBind_employeeId");
+                            console.log(arguments);
+
 
                             var employeeIdDomId = jQuery(parent).find('input.ui-productCrud-filter-employeeId:first');
                             var employeeNameDomId = jQuery(parent).find('a.ui-productCrud-filter-employeeName:first');
                             var employeeTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeEmployeeIcon:first');
+
+
+                            if (dataItem === null) {
+                                dataItem = {
+                                    employeeId: ""
+                                };
+                            }
 
                             employeeIdDomId.val(dataItem.employeeId);
                             employeeNameDomId.html(dataItem.employeeName);
@@ -213,7 +257,6 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                                  else {
                                      return Globalize.formatDate(dataItem[columnName], { date: "short" });
                                  }
-
                              };
 
                              var strDate = dataItem[columnName] !== null ? dateDescr() : '';
@@ -274,19 +317,29 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                      // CUSTOMER INFO WILL ONLY BE EDITABLE WHEN ADDING A TALK
                      // begin customer info block
                      // set customer info in case is an edit form
-                     jQuery(widgetCrud.element)
-                         .product('formSetCustomer',
+
+                     widgetCrud.formSetCustomer(
                                   dataItem.isNew === true ?
                                      null
                                        :
                                         {
-                                            customerId: dataItem.editData.customerInfo.idPeople,
-                                            customerName: dataItem.editData.customerInfo.name
-                                        }
-                         )
+                                            customerId: dataItem.editData.customerInfo.customerId,
+                                            customerName: dataItem.editData.customerInfo.customerName
+                                        });
+
+                     jQuery(widgetCrud.element)
+                         //.product('formSetCustomer',
+                         //         dataItem.isNew === true ?
+                         //            null
+                         //              :
+                         //               {
+                         //                   customerId: dataItem.editData.customerInfo.idPeople,
+                         //                   customerName: dataItem.editData.customerInfo.name
+                         //               }
+                         //)
                          .find(widgetForm.element)
                              // show customer selector in case form is in Add mode. Hide when Edit
-                             .find('div.ui-widgetModelItem-customerId:first')
+                             .find('div.ui-widgetModelItem-customerInfo:first')
                                 .addClass(dataItem.isNew === true ? '' : 'ui-helper-hidden')
                                 .removeClass(dataItem.isNew === true ? ' ui-helper-hidden ' : '')
                              .end()
@@ -296,7 +349,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                                 .removeClass(dataItem.isNew === true ? '' : 'ui-helper-hidden')
                                 .find('div.ui-widgetModel-inputValue:first')
                                     .html(
-                                        dataItem.isNew === true ? '' : dataItem.editData.customerInfo.name
+                                        dataItem.isNew === true ? '' : dataItem.editData.customerInfo.customerName
                                     )
                                 .end()
                              .end()
@@ -385,7 +438,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                         displayName: clientApp.i18n.texts.get("Helpdesk.Talks.History.GridColumns.Subject"),
                         input: { value: "", nullable: false },
                     }, {
-                        id: "customerId",
+                        id: "customerInfo",
                         displayName: clientApp.i18n.texts.get("Views.Crud.Customer"),
                         input: {
                             type: "custom",
@@ -434,9 +487,13 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                                 //        });
                             },
                             onItemValue: function (parent) {
-                                var customerIdDomId = jQuery(parent).find('input.ui-productCrud-form-customerId:first').val();
+                                var customerIdDomId = jQuery(parent).find('input.ui-productCrud-form-customerId:first');
+                                var customerNameDomId = jQuery(parent).find('a.ui-productCrud-form-customerName:first');
 
-                                return customerIdDomId;
+                                return {
+                                    customerId: customerIdDomId.val(),
+                                    customerName: customerNameDomId.html()
+                                };
                             },
                             onItemBind: function (parent, dataItem) {
                                 //return jQuery(parent).find('span.someCustomValue').html(dataItem);
@@ -491,8 +548,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                         },
                     }
                 ];
-            }(),
-
+            }()
         },
         _create: function () {
 
@@ -506,7 +562,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
         },
         filterSetCustomer: function (custInfo) {
             for (var i = 0; i < this.options.filterModel.length; i++) {
-                if (this.options.filterModel[i].id == "customerId") {
+                if (this.options.filterModel[i].id == "customerInfo") {
                     this.options.filterModel[i].input.onItemBind(jQuery(this.element), custInfo);
                 }
             }
@@ -517,7 +573,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
         },
         filterSetEmployee: function (employeeInfo) {
             for (var i = 0; i < this.options.filterModel.length; i++) {
-                if (this.options.filterModel[i].id == "employeeId") {
+                if (this.options.filterModel[i].id == "employeeInfo") {
                     this.options.filterModel[i].input.onItemBind(jQuery(this.element), employeeInfo);
                 }
             }
@@ -528,7 +584,7 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
         },
         formSetCustomer: function (custInfo) {
             for (var i = 0; i < this.options.formModel.length; i++) {
-                if (this.options.formModel[i].id == "customerId") {
+                if (this.options.formModel[i].id == "customerInfo") {
                     this.options.formModel[i].input.onItemBind(jQuery(this.element), custInfo);
                 }
             }

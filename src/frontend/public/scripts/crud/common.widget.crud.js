@@ -15,7 +15,25 @@ function ($, jqUI, clientApp, P) {
     jQuery.widget("ui.crud", jQuery.ui.crudBase,
     {
         options: {
-            crudHeaderDomId: null,
+
+            // is used to identifiy crud as unique 
+            // when navigating to another page crud loses its state
+            // use this option to store state in a cookie 
+            // when the user comes back from another page
+            // crud searches for its state and uses it
+            // trying to keep 
+            stateStorageId: null,
+            stateStorageDeserialize: function (currentValue) {
+                // use this function to customize some deserialization
+                // for example... Date conversion, number conversion, etc
+
+                // as far as JSON.stringify serializes dates as string 
+                // JSON.parse deserializes dates in string format.
+                // thus, you should use something like currentValue.dateValue = new Date("2015-08-21T09:26:24.583Z")
+                return currentValue;
+            },
+
+            //crudHeaderDomId: null,
             gridExpand: false,
             gridExpandHeightCalc: function ($widget) {
 
@@ -130,6 +148,7 @@ function ($, jqUI, clientApp, P) {
                             jQuery(self.options.gridDOMId).crudGrid('emptyFirstLoad');
                             setTimeout(function () { self.gridExpandHeightSet(); }, 200);
                             self._actionSet(self._actions.list);
+                            self._stateToGrid();
                         }
                     });
                 }
@@ -171,7 +190,7 @@ function ($, jqUI, clientApp, P) {
                 .append(self._templateGet(gridFilterClass, gridButtonsClass, gridControlClass, formControlClass))
                 .find('div.ui-crud-messages:first')
                     .each(function () {
-                        self.options.crudHeaderDomId = jQuery(this);
+                        //self.options.crudHeaderDomId = jQuery(this);
                         self.errorInit(jQuery(this));
                     });
 
@@ -279,8 +298,7 @@ function ($, jqUI, clientApp, P) {
             //      3.- when crudForm.change is fired crudWidget fires crudGrid.search method
             //
             // That's why we will only fire search in case filterObject is not null
-            if (self.options.gridFilterObject !== null)
-            {
+            if (self.options.gridFilterObject !== null) {
                 self._gridSearch()
                         .progress(function (status) {
                             self.progressShow(status);
@@ -295,6 +313,51 @@ function ($, jqUI, clientApp, P) {
             }
 
         },
+        _stateSave: function (filterValue, gridData) {
+
+            if (this.options.stateStorageId !== null) {
+                sessionStorage.setItem("{0}_filter".format(this.options.stateStorageId), JSON.stringify(filterValue));
+                sessionStorage.setItem("{0}_gridData".format(this.options.stateStorageId), JSON.stringify(gridData));
+            }
+
+        },
+        _stateGet: function () {
+
+            var result = null;
+
+            if (this.options.stateStorageId !== null) {
+
+                var stateFilter = sessionStorage.getItem("{0}_filter".format(this.options.stateStorageId));
+                var stateGridData = sessionStorage.getItem("{0}_gridData".format(this.options.stateStorageId));
+
+                if ((stateFilter !== null) && (stateGridData !== null)) {
+                    result = this.options.stateStorageDeserialize({
+                        filter: JSON.parse(stateFilter),
+                        gridData: JSON.parse(stateGridData)
+                    });
+                }
+            }
+
+            return result;
+
+        },
+        _stateToGrid: function () {
+
+            var state = this._stateGet();
+
+            if (state !== null) {
+                this.options.gridFilterObject = state.filter;
+
+
+                console.log("state.filter");
+                console.log(state.filter);
+
+                jQuery(this.options.gridFilterDOMId).crudFilter('val', state.filter);
+                jQuery(this.options.gridDOMId).crudGrid('bind', state.gridData);
+            }
+
+        },
+
         _gridSearch: function () {
 
             var self = this;
@@ -312,6 +375,7 @@ function ($, jqUI, clientApp, P) {
                         function (result, statusText, jqXHR) {
                             if (result.isValid) {
                                 jQuery(self.options.gridDOMId).crudGrid('bind', result.data);
+                                self._stateSave(self.options.gridFilterObject, result.data);
                                 dfd.resolve();
                             }
                             else {
@@ -469,6 +533,8 @@ function ($, jqUI, clientApp, P) {
                         self.errorHide();
                         jQuery(self.options.gridDOMId).crudGrid('emptyData');
                         self._search();
+
+
                     },
                     cancel: function () {
                         self.errorHide();

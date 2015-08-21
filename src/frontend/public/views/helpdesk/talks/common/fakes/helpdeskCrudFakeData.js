@@ -153,8 +153,8 @@
                                 for (var i = 0; i < peopleInvolved.length; i++) {
                                     if (peopleInvolved[i].isEmployee === false) {
                                         return {
-                                            idPeople: peopleInvolved[i].idPeople,
-                                            name: peopleInvolved[i].name
+                                            customerId: peopleInvolved[i].idPeople,
+                                            customerName: peopleInvolved[i].name
                                         };
                                     }
                                 }
@@ -655,7 +655,7 @@
                     crudAjaxOpts.ajax._fakeDataGridTalkSave(
                         dataItem.isNew === true ? null : dataItem.formData.idTalk,
                         dataItem.formData.subject,
-                        dataItem.formData.customerId, // customerId
+                        dataItem.formData.customerInfo.customerId, // customerId
                         crudAjaxOpts.ajax._fakeCurrentEmployee.idPeople, //employeeId -> taken from current user request
                         function (e, dataResult) {
 

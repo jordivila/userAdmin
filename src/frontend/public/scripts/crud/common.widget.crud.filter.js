@@ -97,20 +97,34 @@
 
                    ///TODO: unbind select change events + button events
                },
-               val: function () {
+               val: function (value) {
 
                    var self = this;
 
-                   var model = {
+                   if (value) {
+                       this.options.page = value.page;
+                       this.options.pageSize = value.pageSize;
+                       this.options.sortBy = value.sortBy;
+                       this.options.sortAscending = value.sortAscending;
 
-                       filter: jQuery(this.element).widgetModel('valAsObject'),
-                       page: 0,
-                       pageSize: this.options.pageSize,
-                       sortBy: this.options.sortBy,
-                       sortAscending: this.options.sortAscending
-                   };
+                       console.log("crudFilter_Val");
+                       console.log(value);
 
-                   return model;
+                       jQuery(this.element).widgetModel('bindValue', value.filter);
+                   }
+                   else {
+
+                       var model = {
+
+                           filter: jQuery(this.element).widgetModel('valAsObject'),
+                           page: 0,
+                           pageSize: this.options.pageSize,
+                           sortBy: this.options.sortBy,
+                           sortAscending: this.options.sortAscending
+                       };
+
+                       return model;
+                   }
                }
            });
 
