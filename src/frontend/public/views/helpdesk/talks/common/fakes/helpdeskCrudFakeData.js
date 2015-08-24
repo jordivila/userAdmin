@@ -57,7 +57,7 @@
                         }
 
                         if (isNew && (customerId.toString().trim() === "")) {
-                            modelErrors.push({ key: "customerId", value: [clientApp.i18n.texts.get("Views.Crud.FieldRequired")] });
+                            modelErrors.push({ key: "customerInfo", value: [clientApp.i18n.texts.get("Views.Crud.FieldRequired")] });
                         }
 
 
