@@ -107,9 +107,6 @@
                        this.options.sortBy = value.sortBy;
                        this.options.sortAscending = value.sortAscending;
 
-                       console.log("crudFilter_Val");
-                       console.log(value);
-
                        jQuery(this.element).widgetModel('bindValue', value.filter);
                    }
                    else {

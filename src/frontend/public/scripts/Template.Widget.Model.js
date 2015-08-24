@@ -104,17 +104,8 @@ function ($, jqUI) {
 
             var self = this;
 
-
-            console.log("widgetModel_bindValue");
-            console.log(dataItem);
-
-
-
             this._clearErrors();
             this.resetForm();
-
-
-
 
             for (var i in dataItem) {
                 for (var j = 0; j < this.options.modelItems.length; j++) {

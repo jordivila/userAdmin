@@ -75,10 +75,6 @@ function ($, jqUI, scrollUtils, Utils) {
             };
             var anchorMove = function (isForward) {
 
-                console.log(isForward);
-                console.log(anchorCurrent);
-                console.log(anchorsLength);
-
                 if (isForward) {
                     if (anchorCurrent < anchorsLength) {
                         anchorCurrent++;

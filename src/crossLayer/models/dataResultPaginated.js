@@ -33,6 +33,18 @@
 
     }
 
+    DataResultPaginated.prototype.clone = function (instance) {
+
+        // usefull when server sends DataResultPaginatedModel
+        // and client needs to use prototype methods
+        // 
+        // as far as data from server contains just the model with no methods
+        this.isValid = instance.isValid;
+        this.messages = instance.messages;
+        this.data = instance.data;
+        this.messageType = 0;
+    };
+
     DataResultPaginated.prototype.addMessage = function (message) {
         if (message)
             this.messages.push(message);

@@ -348,10 +348,6 @@ function ($, jqUI, clientApp, P) {
             if (state !== null) {
                 this.options.gridFilterObject = state.filter;
 
-
-                console.log("state.filter");
-                console.log(state.filter);
-
                 jQuery(this.options.gridFilterDOMId).crudFilter('val', state.filter);
                 jQuery(this.options.gridDOMId).crudGrid('bind', state.gridData);
             }

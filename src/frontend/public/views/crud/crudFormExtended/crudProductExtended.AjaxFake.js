@@ -123,7 +123,7 @@ function (clientApp, DataResult, DataResultPaginated) {
                     }
                 }
 
-                setTimeout(function () { console.log(dataResult); dfd.resolve(dataResult); }, productAjax.ajax._fakeDelay);
+                setTimeout(function () { dfd.resolve(dataResult); }, productAjax.ajax._fakeDelay);
 
                 return dfd.promise();
             },

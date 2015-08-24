@@ -19,7 +19,6 @@ function ($, jqUI, clientApp, helpdeskCommon) {
         main: function () {
 
             var navNext = function () {
-                console.log('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.history()));
                 clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.history()));
             };
 

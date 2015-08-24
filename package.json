@@ -1,6 +1,6 @@
 {
   "name": "userAdmin",
-  "version": "0.0.9746",
+  "version": "0.0.9819",
   "description": "userAdmin",
   "private": true,
   "author": {
@@ -48,6 +48,7 @@
     "method-override": "2.3.2",
     "mongoose": "4.0.2",
     "nconf": "0.7.1",
+    "node-html-encoder": "0.0.2",
     "node-uuid": "1.4.3",
     "node.extend": "^1.1.5",
     "passport": "0.2.1",

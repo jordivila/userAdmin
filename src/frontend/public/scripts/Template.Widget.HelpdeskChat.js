@@ -33,7 +33,8 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
             },
             messagesUnreadCheckMiliseconds: 1024, // interval time to wait untill next unreaded messages check call
             messageSendMaxAttempts: 10, // in case of error
-            messageSendAttemptMilliseconds: 1024 
+            messageSendAttemptMilliseconds: 1024,
+            messagesUnreadCheckTimeOutId: null
         },
         _create: function () {
 
@@ -352,11 +353,15 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
                      widgetResize();
 
                  };
+
                  var messagesUnreadCheck = function (idTalk) {
 
                      P.all([self.options.messageGetUnread(idTalk, messagesUnreadLastIdAppended)]).nodeify(function (e, data) {
 
-                         setTimeout(function () { messagesUnreadCheck(idTalk); }, self.options.messagesUnreadCheckMiliseconds);
+                         self.options.messagesUnreadCheckTimeOutId = setTimeout(
+                             function () {
+                                 messagesUnreadCheck(idTalk);
+                             }, self.options.messagesUnreadCheckMiliseconds);
 
                          if (e !== null) {
                              // ????????????????????
@@ -464,6 +469,7 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
 
             this._super();
 
+            clearTimeout(this.options.messagesUnreadCheckTimeOutId);
 
             jQuery(window).unbind('resize');
 

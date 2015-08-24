@@ -57,19 +57,19 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskCommon, dateHelp
                                          break;
                                      case "dateLastMessage":
 
-                                         var dateDescr = function () {
+                                         var dateDescr = function (theDate) {
 
-                                             var diff = dateHelper.getDifferenceDays(new Date(), dataItem[columnName]);
+                                             var diff = dateHelper.getDifferenceDays(new Date(), theDate);
                                              if (diff === 0) {
-                                                 return Globalize.formatDate(dataItem[columnName], { time: "short" });
+                                                 return Globalize.formatDate(theDate, { time: "short" });
                                              }
                                              else {
-                                                 return Globalize.formatDate(dataItem[columnName], { date: "short" });
+                                                 return Globalize.formatDate(theDate, { date: "short" });
                                              }
 
                                          };
 
-                                         var strDate = dataItem[columnName] !== null ? dateDescr() : '';
+                                         var strDate = dataItem[columnName] !== null ? dateDescr(new Date(dataItem[columnName])) : '';
                                          var strUnread = '<div class="ui-text-circle {0}">{1}</div>'.format(
                                              dataItem.nMessagesUnread > 0 ? 'ui-state-active' : 'ui-helper-invisible',
                                              dataItem.nMessagesUnread);

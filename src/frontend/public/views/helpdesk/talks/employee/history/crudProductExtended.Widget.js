@@ -77,9 +77,6 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                         },
                         onItemBind: function (parent, dataItem) {
 
-                            console.log("onItemBind_customerId");
-                            console.log(arguments);
-
                             var customerIdDomId = jQuery(parent).find('input.ui-productCrud-filter-custId:first');
                             var customerNameDomId = jQuery(parent).find('a.ui-productCrud-filter-custName:first');
                             var customerTrashDomId = jQuery(parent).find('div.ui-productCrud-filter-removeCustomerIcon:first');
@@ -166,10 +163,6 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
 
                         },
                         onItemBind: function (parent, dataItem) {
-
-                            console.log("onItemBind_employeeId");
-                            console.log(arguments);
-
 
                             var employeeIdDomId = jQuery(parent).find('input.ui-productCrud-filter-employeeId:first');
                             var employeeNameDomId = jQuery(parent).find('a.ui-productCrud-filter-employeeName:first');
