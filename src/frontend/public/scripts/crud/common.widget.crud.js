@@ -145,10 +145,19 @@ function ($, jqUI, clientApp, P) {
                         }
                         else {
                             self._gridButtonsInit();
-                            jQuery(self.options.gridDOMId).crudGrid('emptyFirstLoad');
+
+                            if (self._stateExists() === true) {
+                                self._stateToGrid();
+                            }
+                            else {
+                                jQuery(self.options.gridDOMId).crudGrid('emptyFirstLoad');
+                            }
+
                             setTimeout(function () { self.gridExpandHeightSet(); }, 200);
                             self._actionSet(self._actions.list);
-                            self._stateToGrid();
+
+
+                            self._trigger('done', null, self);
                         }
                     });
                 }
@@ -321,6 +330,9 @@ function ($, jqUI, clientApp, P) {
             }
 
         },
+        _stateExists: function () {
+            return this._stateGet() !== null;
+        },
         _stateGet: function () {
 
             var result = null;
@@ -343,11 +355,9 @@ function ($, jqUI, clientApp, P) {
         },
         _stateToGrid: function () {
 
-            var state = this._stateGet();
-
-            if (state !== null) {
+            if (this._stateExists() === true) {
+                var state = this._stateGet();
                 this.options.gridFilterObject = state.filter;
-
                 jQuery(this.options.gridFilterDOMId).crudFilter('val', state.filter);
                 jQuery(this.options.gridDOMId).crudGrid('bind', state.gridData);
             }

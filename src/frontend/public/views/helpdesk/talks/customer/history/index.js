@@ -29,6 +29,11 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskCommon, dateHelp
                      var crudOptions = function () {
 
                          var r = {
+
+                             done: function (event, widget) {
+                                 jQuery(widget.element).crud('gridSearch');
+                             },
+
                              //filterModel: [
 
                              //],
@@ -114,7 +119,6 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskCommon, dateHelp
                          .find('div.ui-helpdesk-talks-summary-crud:first')
                              .crud(crudOptions)
                              .crud('gridButtonsVisible', false)
-                             .crud('gridSearch')
                              .hide()
                              .removeClass('ui-helper-hidden')
                              .fadeIn()

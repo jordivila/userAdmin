@@ -10,7 +10,7 @@
     'handlebars',
     "/scripts/modules/modernizr.customBuild.js",
     '/scripts/Template.Class.UrlHelper.js',
-    '/scripts/Template.ExtendPrototypes.js',
+    '/scripts/Template.ExtendPrototypes.String.js',
     '/scripts/Template.Widget.Base.js',
     '/scripts/Template.Widget.Menu.base.js',
     '/scripts/Template.Widget.Menu.slides.js',
@@ -22,7 +22,6 @@
     //'/scripts/Template.Class.Globalize.js',
 ],
 function (json, text, $, domReady, jqUI, hist, handl, Modernizr, url, a, b, c, d, e, f, clientApp) {
-
 
     return clientApp;
 

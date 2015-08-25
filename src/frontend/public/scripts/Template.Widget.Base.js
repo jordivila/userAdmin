@@ -1,7 +1,7 @@
 define([
     "jquery",
     "jqueryui",
-    "scripts/Template.ExtendPrototypes"
+    "scripts/Template.ExtendPrototypes.String"
 ],
 function ($, jqUI) {
 

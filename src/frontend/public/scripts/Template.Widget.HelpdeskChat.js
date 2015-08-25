@@ -5,9 +5,11 @@ define([
     "pPromises",
     "scripts/modules/crud",
     "scripts/jQuery.Plugins.scrollUtils",
+    "crossLayer/dateHelper",
+    "scripts/Template.ExtendPrototypes.ObservableObject",
     "text!css/ui-helpdeskChat.css",
 ],
-function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
+function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observableArray, helpdeskCss) {
 
     clientApp.utils.cssAdd("uiHelpdeskChatCss", helpdeskCss);
 
@@ -31,12 +33,24 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
                 dfd.reject("{0}.{1}.messageGetAll is an abstract option . It should be implemented and passed as a widget option".format(this.namespace, this.widgetName));
                 return dfd.promise();
             },
-            messagesUnreadCheckMiliseconds: 1024, // interval time to wait untill next unreaded messages check call
+            messagesUnreadCheckMiliseconds: 2048, // interval time to wait untill next unreaded messages check call
             messageSendMaxAttempts: 10, // in case of error
             messageSendAttemptMilliseconds: 1024,
-            messagesUnreadCheckTimeOutId: null
+            messagesUnreadCheckTimeOutId: null,
+            idleTimeInSecondsBeforeStopping: 10, // Prevents users to keep the window chat opened
+            idleTimeCurrent: null,
+            messagesPending: null, // WARNING !!! this is in fact an array. But array inizializations on widget options make this array a static one since jQuery.ui version xx. So, initialize the array on widget.create
+            messagesPendingChangeCallback: function (changes) {
+
+                console.log("Array obsereve");
+                console.log(arguments);
+
+            }
         },
         _create: function () {
+
+
+            this.options.messagesPending = [];
 
             var widgetTemplate = function () {
 
@@ -259,11 +273,11 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
                          $input.focus();
                          //6.- set message to be send
                          if (formValue.message.trim().length > 0) {
-                             messagesPending.push([$parent, $input, formValue]);
+                             self.options.messagesPending.push([$parent, $input, formValue]);
                          }
                      }
                  };
-                 var messagesPending = [];
+                 //var messagesPending = [];
                  var messageSendData = function ($parent, $input, formValue, attemptCount) {
 
 
@@ -329,9 +343,9 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
                      }
                  };
                  var messageSendCheckQueue = function () {
-                     if (messagesPending.length > 0) {
-                         var dataItem = messagesPending[0];
-                         messagesPending.shift();
+                     if (self.options.messagesPending.length > 0) {
+                         var dataItem = self.options.messagesPending[0];
+                         self.options.messagesPending.shift();
                          messageSendData(dataItem[0], dataItem[1], dataItem[2], 0);
                      }
                      else {
@@ -351,6 +365,15 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
                          });
 
                      widgetResize();
+
+                 };
+
+                 var idleTimeCheckerInit = function () {
+
+                     var observer = Object.observe(self.options.messagesPending, self.options.messagesPendingChangeCallback);
+
+                     console.log("observer");
+                     console.log(observer);
 
                  };
 
@@ -450,6 +473,7 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
 
                          messageSendCheckQueue();
                          messagesUnreadCheck(idTalk);
+                         idleTimeCheckerInit();
 
 
                          //messageScrollInit();
@@ -468,6 +492,11 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, helpdeskCss) {
         destroy: function () {
 
             this._super();
+
+
+            console.log("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
+
+            Object.unobserve(this.options.messagesPending, this.options.messagesPendingChangeCallback);
 
             clearTimeout(this.options.messagesUnreadCheckTimeOutId);
 
