@@ -40,6 +40,7 @@
     "GeneralTexts.SelectFromList": "Select from list",
     "GeneralTexts.Settings": "Settings",
     "GeneralTexts.SiteThemes": "Themes",
+    "Helpdesk.Talks.Chat.IddleTimePassed": "Chat window became idle since you were not writing messages for a while",
     "Helpdesk.Talks.Customer.History.gridFirstTime": "Use the above button to start a conversation",
     "Helpdesk.Talks.Employee": "Employee",
     "Helpdesk.Talks.Employee.Summary.Description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus",

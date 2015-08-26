@@ -3,6 +3,7 @@
 
 .ui-helpdeskChat .ui-helpdesk-talks-message-window {overflow-y:auto;height:90%;width:100%;top:0;margin:0em 0 0 0;position:absolute;}
 .ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message {clear:both;margin:0.2em 0 0.2em 0;float:left;max-width:90%;padding:0.5em;background-image: none;}
+.ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message.ui-message-idle { width:100% !important; max-width:98% !important;}
 .ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message div {float:left;margin:0 0.2em 0 0.2em;}
 .ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message .ui-message-who {font-weight:normal;}
 .ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message .ui-message-text {font-weight:normal;word-break: break-word;}

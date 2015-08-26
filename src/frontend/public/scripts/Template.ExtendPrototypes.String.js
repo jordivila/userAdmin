@@ -19,8 +19,7 @@ if (!String.prototype.format) {
 
 
 
-if (!String.prototype.padIndex)
-{
+if (!String.prototype.padIndex) {
     String.prototype.padIndex = function (maxLength, repeatChar) {
 
         if (!repeatChar) {
@@ -33,6 +32,12 @@ if (!String.prototype.padIndex)
         }
 
         return pad(this.toString(), maxLength);
+    };
+}
+
+if (!String.prototype.replaceAll) {
+    String.prototype.replaceAll = function (find, replace) {
+        return this.replace(new RegExp(find, 'g'), replace);
     };
 }
 
