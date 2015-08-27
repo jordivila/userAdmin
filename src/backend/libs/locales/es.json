@@ -40,6 +40,7 @@
     "GeneralTexts.SelectFromList": "Selecciona uno de la lista",
     "GeneralTexts.Settings": "Ajustes",
     "GeneralTexts.SiteThemes": "Apariencia",
+    "Helpdesk.Talks.Chat.IddleClickToActivate": "Si quieres reactivar esta ventana haz click en el boton ",
     "Helpdesk.Talks.Chat.IddleTimePassed": "La ventana de chat se desactivó porque no había actividad",
     "Helpdesk.Talks.Customer.History.gridFirstTime": "Usa el botón de arriba para empezar una conversación",
     "Helpdesk.Talks.Employee": "Empleado",

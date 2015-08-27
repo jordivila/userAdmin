@@ -13,6 +13,13 @@
 .ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message.ui-isCurrentUser {float:right;}
 .ui-helpdeskChat .ui-helpdesk-talks-message-window .ui-message.ui-isCurrentUser .ui-message-colon {display:none;}
 
+.ui-helpdeskChat .ui-message-idle {}
+.ui-helpdeskChat .ui-message-idle .ui-message-idleChatMessage {text-align:center;width:100%;}
+.ui-helpdeskChat .ui-message-idle .ui-message-text {float:none !important;}
+.ui-helpdeskChat .ui-message-idle .ui-message-idleChatButton {margin:1em auto 0 auto;padding:0.5em;cursor:pointer;}
+.ui-helpdeskChat .ui-message-idle .ui-message-idleChatButton i.fa { font-size:1.5em; }
+
+
 .ui-helpdeskChat .ui-widgetModel {width:100%;bottom:0;position:absolute;display:table;padding:0.5em 0 0.5em 0;}
 .ui-helpdeskChat .ui-widgetModel .ui-widgetModel-inputLabel {width:0 !important;}
 .ui-helpdeskChat .ui-widgetModel .ui-widgetModel-inputValue {width: 100% !important;}
