@@ -7,6 +7,18 @@
     function (clientApp, DataResult, DataResultPaginated, P) {
 
         var crudAjaxOpts = {
+            apiRoutes: {
+                talkSearch: null,
+                talkAdd: null,
+                messageAdd: null,
+                messageGetAll: null,
+                messageGetUnread: null,
+
+                talkGetById: null,
+                talkSavedByEmployee: null,
+                customerSearch: null,
+                employeeSearch: null
+            },
             ajax: {
                 talkSearch: function (filter) {
 
@@ -15,7 +27,7 @@
 
                     var a = [
                         jQuery.ajax({
-                            url: "/api/helpdesk/talk/search",
+                            url: crudAjaxOpts.apiRoutes.talkSearch,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
@@ -54,7 +66,7 @@
 
                     var a = [
                         jQuery.ajax({
-                            url: "/api/helpdesk/talk/add",
+                            url: crudAjaxOpts.apiRoutes.talkAdd,
                             type: "POST",
                             data: JSON.stringify(dataItem),
                             cache: false
@@ -93,7 +105,7 @@
 
                     var a = [
                         jQuery.ajax({
-                            url: "/api/helpdesk/message/add",
+                            url: crudAjaxOpts.apiRoutes.messageAdd,
                             type: "POST",
                             data: JSON.stringify(dataItem),
                             cache: false
@@ -141,7 +153,7 @@
 
                     var a = [
                         jQuery.ajax({
-                            url: "/api/helpdesk/message/getAll",
+                            url: crudAjaxOpts.apiRoutes.messageGetAll,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
@@ -189,7 +201,7 @@
 
                     var a = [
                         jQuery.ajax({
-                            url: "/api/helpdesk/message/getUnread",
+                            url: crudAjaxOpts.apiRoutes.messageGetUnread,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
@@ -228,7 +240,7 @@
 
                     var a = [
                         jQuery.ajax({
-                            url: "/api/helpdesk/talk/getById",
+                            url: crudAjaxOpts.apiRoutes.talkGetById,
                             type: "POST",
                             data: JSON.stringify(dataItem),
                             cache: false
@@ -268,7 +280,7 @@
 
                     var a = [
                         jQuery.ajax({
-                            url: "/api/helpdesk/talk/savedByEmployee",
+                            url: crudAjaxOpts.apiRoutes.talkSavedByEmployee,
                             type: "POST",
                             data: JSON.stringify(dataItem),
                             cache: false
@@ -308,7 +320,7 @@
 
                     var a = [
                         jQuery.ajax({
-                            url: "/api/helpdesk/customer/search",
+                            url: crudAjaxOpts.apiRoutes.customerSearch,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
@@ -348,7 +360,7 @@
 
                     var a = [
                         jQuery.ajax({
-                            url: "/api/helpdesk/employee/search",
+                            url: crudAjaxOpts.apiRoutes.employeeSearch,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
@@ -362,19 +374,7 @@
                         else {
                             var dataResult = new DataResultPaginated();
                             dataResult.clone(dataFromServer[0]);
-
-                            //for (var i = 0; i < dataResult.data.data.length; i++) {
-                            //    if (dataResult.data.data[i].dateLastMessage) {
-                            //        // deserialize dates
-                            //        dataResult.data.data[i].dateLastMessage = new Date(dataResult.data.data[i].dateLastMessage);
-                            //    }
-                            //}
-
                             dfd.resolve(dataResult);
-
-
-
-                            //dfd.resolve(dataFromServer[0]);
                         }
                     });
 

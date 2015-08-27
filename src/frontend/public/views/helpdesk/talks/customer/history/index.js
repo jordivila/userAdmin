@@ -4,7 +4,7 @@
     "scripts/Template.App.ClientApp",
 
     "scripts/modules/crud",
-    "/helpdesk/talks/common/fakes/helpdeskCrudFakeData.js",
+    "/helpdesk/talks/customer/common/helpdeskCrudFakeData.js",
     "/helpdesk/talks/customer/common/helpdeskCommon.js",
     "crossLayer/dateHelper"
 ],

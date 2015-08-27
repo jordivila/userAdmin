@@ -344,7 +344,7 @@
                 };
 
                 // uncomment the line below to create fake conversations
-                createFakeTalks();
+                //createFakeTalks();
 
             },
             _fakeDelay: 1000,
@@ -743,6 +743,7 @@
             employeeSearch: function (req, filter, cb) {
 
                 var employees = [];
+                var i18n = req.i18n;
 
                 for (var j = 0; j < crudAjaxOpts.ajax._fakeDataGridPeople.length; j++) {
                     if (crudAjaxOpts.ajax._fakeDataGridPeople[j].isEmployee === true) {
@@ -763,7 +764,7 @@
                         dataResult.data.data.push({
                             employeeId: employees[i].idPeople,
                             employeeName: employees[i].name,
-                            employeeEmail: "{0}{1}@something.com".format(i18n.__("Helpdesk.Talks.Employee"), employees[i].idPeople),// make inner join using idPersonBackOffice and get employee email address
+                            employeeEmail: myUtils.stringFormatCSharp("{0}{1}@something.com", i18n.__("Helpdesk.Talks.Employee"), employees[i].idPeople),// make inner join using idPersonBackOffice and get employee email address
                         });
 
                     }
@@ -783,6 +784,11 @@
 
 
 
+
+
+    function _isCustomer(req) {
+        return req.params.userType === "customer";
+    }
 
     function talkSearch(req, params, cb) {
         cb(null, crudAjaxOpts.ajax.talkSearch(req, params, cb));

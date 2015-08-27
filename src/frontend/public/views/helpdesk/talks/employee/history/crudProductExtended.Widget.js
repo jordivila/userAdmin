@@ -4,7 +4,7 @@ define([
     "scripts/Template.App.ClientApp",
     "scripts/modules/crud",
     "crossLayer/dateHelper",
-    "/helpdesk/talks/common/fakes/helpdeskCrudFakeData.js",
+    "/helpdesk/talks/employee/common/helpdeskCrudFakeData.js",
     "/helpdesk/talks/employee/common/helpdeskCommon.js",
     "crossLayer/models/dataResult",
 ],

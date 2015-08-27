@@ -5,7 +5,7 @@
     "scripts/Template.App.ClientApp",
     "scripts/Template.Class.UrlHelper",
     "/helpdesk/talks/customer/common/helpdeskCommon.js",
-    "/helpdesk/talks/common/fakes/helpdeskCrudFakeData.js",
+    "/helpdesk/talks/customer/common/helpdeskCrudFakeData.js",
 ],
 function ($, jqUI, HelpdeskChatWidget, clientApp, UrlHelper, helpdeskCommon, crudAjaxOpts) {
 

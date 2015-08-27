@@ -249,68 +249,65 @@
 
 
 
-        app.post('/api/helpdesk/talk/search', function (req, res, next) {
+
+        app.post('/api/helpdesk/:userType(customer|employee)/talk/search', function (req, res, next) {
             var result = helpdeskController.talkSearch(req, req.body, function (err, user) {
                 if (err) return next(err);
 
                 res.json(user);
             });
         });
-        app.post('/api/helpdesk/talk/add', function (req, res, next) {
+        app.post('/api/helpdesk/:userType(customer|employee)/talk/add', function (req, res, next) {
             var result = helpdeskController.talkAdd(req, req.body, function (err, user) {
                 if (err) return next(err);
 
                 res.json(user);
             });
         });
-        app.post('/api/helpdesk/message/add', function (req, res, next) {
+        app.post('/api/helpdesk/:userType(customer|employee)/message/add', function (req, res, next) {
             var result = helpdeskController.messageAdd(req, req.body, function (err, user) {
                 if (err) return next(err);
 
                 res.json(user);
             });
         });
-        app.post('/api/helpdesk/message/getAll', function (req, res, next) {
+        app.post('/api/helpdesk/:userType(customer|employee)/message/getAll', function (req, res, next) {
             var result = helpdeskController.messageGetAll(req, req.body, function (err, user) {
                 if (err) return next(err);
 
                 res.json(user);
             });
         });
-        app.post('/api/helpdesk/message/getUnread', function (req, res, next) {
+        app.post('/api/helpdesk/:userType(customer|employee)/message/getUnread', function (req, res, next) {
             var result = helpdeskController.messageGetUnread(req, req.body, function (err, user) {
                 if (err) return next(err);
 
                 res.json(user);
             });
         });
-
-
-
-
-
-        app.post('/api/helpdesk/talk/getById', function (req, res, next) {
+        // api routes just for employees
+        app.post('/api/helpdesk/:userType(employee)/talk/getById', function (req, res, next) {
             var result = helpdeskController.talkGetById(req, req.body, function (err, user) {
                 if (err) return next(err);
 
                 res.json(user);
             });
         });
-        app.post('/api/helpdesk/talk/savedByEmployee', function (req, res, next) {
+        app.post('/api/helpdesk/:userType(employee)/talk/savedByEmployee', function (req, res, next) {
             var result = helpdeskController.talkSavedByEmployee(req, req.body, function (err, user) {
                 if (err) return next(err);
 
                 res.json(user);
             });
         });
-        app.post('/api/helpdesk/customer/search', function (req, res, next) {
+        app.post('/api/helpdesk/:userType(employee)/customer/search', function (req, res, next) {
             var result = helpdeskController.customerSearch(req, req.body, function (err, user) {
                 if (err) return next(err);
 
                 res.json(user);
             });
         });
-        app.post('/api/helpdesk/employee/search', function (req, res, next) {
+        app.post('/api/helpdesk/:userType(employee)/employee/search', function (req, res, next) {
             var result = helpdeskController.employeeSearch(req, req.body, function (err, user) {
                 if (err) return next(err);
 
