@@ -223,7 +223,7 @@
                                     '/scripts/modules/jquery.ui.custom.bundle.js',
                                     'history',
                                     'handlebars',
-                                    '/scripts/Template.ExtendPrototypes.js',
+                                    '/scripts/Template.ExtendPrototypes.String.js',
                                     '/scripts/Template.Widget.Base.js',
                                     '/scripts/Template.Widget.Menu.base.js',
                                     '/scripts/Template.Widget.Menu.slides.js',
