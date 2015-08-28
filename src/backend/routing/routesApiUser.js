@@ -250,70 +250,96 @@
 
 
 
-        app.post('/api/helpdesk/:userType(customer|employee)/talk/search', function (req, res, next) {
-            var result = helpdeskController.talkSearch(req, req.body, function (err, user) {
-                if (err) return next(err);
+        app.post('/api/helpdesk/:apiEndpointType(customer|employee)/talk/search', [
+            helpdeskController.isAuthenticated,
+            function (req, res, next) {
+                helpdeskController.talkSearch(req, req.body, function (err, dateResult) {
+                    if (err) return next(err);
 
-                res.json(user);
-            });
-        });
-        app.post('/api/helpdesk/:userType(customer|employee)/talk/add', function (req, res, next) {
-            var result = helpdeskController.talkAdd(req, req.body, function (err, user) {
-                if (err) return next(err);
+                    res.json(dateResult);
+                });
+            }]);
+        app.post('/api/helpdesk/:apiEndpointType(customer|employee)/talk/add', [
+            helpdeskController.isAuthenticated,
+            function (req, res, next) {
+                helpdeskController.talkAdd(req, req.body, function (err, dateResult) {
+                    if (err) return next(err);
 
-                res.json(user);
-            });
-        });
-        app.post('/api/helpdesk/:userType(customer|employee)/message/add', function (req, res, next) {
-            var result = helpdeskController.messageAdd(req, req.body, function (err, user) {
-                if (err) return next(err);
+                    res.json(dateResult);
+                });
+            }]
+        );
+        app.post('/api/helpdesk/:apiEndpointType(customer|employee)/message/add', [
+            helpdeskController.isAuthenticated,
+            function (req, res, next) {
+                helpdeskController.messageAdd(req, req.body, function (err, dateResult) {
+                    if (err) return next(err);
 
-                res.json(user);
-            });
-        });
-        app.post('/api/helpdesk/:userType(customer|employee)/message/getAll', function (req, res, next) {
-            var result = helpdeskController.messageGetAll(req, req.body, function (err, user) {
-                if (err) return next(err);
+                    res.json(dateResult);
+                });
+            }]
+        );
+        app.post('/api/helpdesk/:apiEndpointType(customer|employee)/message/getAll', [
+            helpdeskController.isAuthenticated,
+            function (req, res, next) {
+                helpdeskController.messageGetAll(req, req.body, function (err, dateResult) {
+                    if (err) return next(err);
 
-                res.json(user);
-            });
-        });
-        app.post('/api/helpdesk/:userType(customer|employee)/message/getUnread', function (req, res, next) {
-            var result = helpdeskController.messageGetUnread(req, req.body, function (err, user) {
-                if (err) return next(err);
+                    res.json(dateResult);
+                });
+            }]
+        );
+        app.post('/api/helpdesk/:apiEndpointType(customer|employee)/message/getUnread', [
+            helpdeskController.isAuthenticated,
+            function (req, res, next) {
+                helpdeskController.messageGetUnread(req, req.body, function (err, dateResult) {
+                    if (err) return next(err);
 
-                res.json(user);
-            });
-        });
+                    res.json(dateResult);
+                });
+            }]
+        );
         // api routes just for employees
-        app.post('/api/helpdesk/:userType(employee)/talk/getById', function (req, res, next) {
-            var result = helpdeskController.talkGetById(req, req.body, function (err, user) {
-                if (err) return next(err);
+        app.post('/api/helpdesk/:apiEndpointType(employee)/talk/getById', [
+            helpdeskController.isAuthenticated,
+            function (req, res, next) {
+                helpdeskController.talkGetById(req, req.body, function (err, dateResult) {
+                    if (err) return next(err);
 
-                res.json(user);
-            });
-        });
-        app.post('/api/helpdesk/:userType(employee)/talk/savedByEmployee', function (req, res, next) {
-            var result = helpdeskController.talkSavedByEmployee(req, req.body, function (err, user) {
-                if (err) return next(err);
+                    res.json(dateResult);
+                });
+            }]
+        );
+        app.post('/api/helpdesk/:apiEndpointType(employee)/talk/savedByEmployee', [
+            helpdeskController.isAuthenticated,
+            function (req, res, next) {
+                helpdeskController.talkSavedByEmployee(req, req.body, function (err, dateResult) {
+                    if (err) return next(err);
 
-                res.json(user);
-            });
-        });
-        app.post('/api/helpdesk/:userType(employee)/customer/search', function (req, res, next) {
-            var result = helpdeskController.customerSearch(req, req.body, function (err, user) {
-                if (err) return next(err);
+                    res.json(dateResult);
+                });
+            }]
+        );
+        app.post('/api/helpdesk/:apiEndpointType(employee)/customer/search', [
+            helpdeskController.isAuthenticated,
+            function (req, res, next) {
+                helpdeskController.customerSearch(req, req.body, function (err, dateResult) {
+                    if (err) return next(err);
 
-                res.json(user);
-            });
-        });
-        app.post('/api/helpdesk/:userType(employee)/employee/search', function (req, res, next) {
-            var result = helpdeskController.employeeSearch(req, req.body, function (err, user) {
-                if (err) return next(err);
+                    res.json(dateResult);
+                });
+            }]
+        );
+        app.post('/api/helpdesk/:apiEndpointType(employee)/employee/search', [
+            helpdeskController.isAuthenticated,
+            function (req, res, next) {
+                helpdeskController.employeeSearch(req, req.body, function (err, dateResult) {
+                    if (err) return next(err);
 
-                res.json(user);
-            });
-        });
+                    res.json(dateResult);
+                });
+            }]
+        );
 
 
 

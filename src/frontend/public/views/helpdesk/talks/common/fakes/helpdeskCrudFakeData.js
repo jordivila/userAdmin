@@ -20,18 +20,26 @@
                 employeeSearch: null
             },
             ajax: {
+
+                helpdeskCommonOptions: {
+                    beforeSend: function (xhr, settings) {
+                        //xhr.setRequestHeader("Authorization", "Basic " + btoa(helpdesk + ":" + user.password));
+                        xhr.setRequestHeader("Authorization", "Basic " + btoa("helpdeskUsernameFake:helpdeskPasswordFake"));
+                    }
+                },
+
                 talkSearch: function (filter) {
 
                     var self = this;
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax({
+                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
                             url: crudAjaxOpts.apiRoutes.talkSearch,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
-                        })
+                        }))
                     ];
 
                     P.all(a).nodeify(function (e, dataFromServer) {
@@ -65,12 +73,12 @@
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax({
+                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
                             url: crudAjaxOpts.apiRoutes.talkAdd,
                             type: "POST",
                             data: JSON.stringify(dataItem),
                             cache: false
-                        })
+                        }))
                     ];
 
                     P.all(a).nodeify(function (e, dataFromServer) {
@@ -104,12 +112,12 @@
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax({
+                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
                             url: crudAjaxOpts.apiRoutes.messageAdd,
                             type: "POST",
                             data: JSON.stringify(dataItem),
                             cache: false
-                        })
+                        }))
                     ];
 
                     P.all(a).nodeify(function (e, dataFromServer) {
@@ -152,12 +160,12 @@
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax({
+                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
                             url: crudAjaxOpts.apiRoutes.messageGetAll,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
-                        })
+                        }))
                     ];
 
                     P.all(a).nodeify(function (e, dataFromServer) {
@@ -200,12 +208,12 @@
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax({
+                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
                             url: crudAjaxOpts.apiRoutes.messageGetUnread,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
-                        })
+                        }))
                     ];
 
                     P.all(a).nodeify(function (e, dataFromServer) {
@@ -228,8 +236,6 @@
 
                     return dfd.promise();
                 },
-
-
                 /*************************************************************
                                     Methods for employee
                 *************************************************************/
@@ -239,12 +245,12 @@
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax({
+                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
                             url: crudAjaxOpts.apiRoutes.talkGetById,
                             type: "POST",
                             data: JSON.stringify(dataItem),
                             cache: false
-                        })
+                        }))
                     ];
 
                     P.all(a).nodeify(function (e, dataFromServer) {
@@ -279,12 +285,12 @@
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax({
+                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
                             url: crudAjaxOpts.apiRoutes.talkSavedByEmployee,
                             type: "POST",
                             data: JSON.stringify(dataItem),
                             cache: false
-                        })
+                        }))
                     ];
 
                     P.all(a).nodeify(function (e, dataFromServer) {
@@ -319,12 +325,12 @@
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax({
+                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
                             url: crudAjaxOpts.apiRoutes.customerSearch,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
-                        })
+                        }))
                     ];
 
                     P.all(a).nodeify(function (e, dataFromServer) {
@@ -359,12 +365,12 @@
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax({
+                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
                             url: crudAjaxOpts.apiRoutes.employeeSearch,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
-                        })
+                        }))
                     ];
 
                     P.all(a).nodeify(function (e, dataFromServer) {
