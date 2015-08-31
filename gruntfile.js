@@ -155,7 +155,7 @@
         watch: {
             test: {
                 files: ['<%= jshint.files %>'],
-                tasks: ['env:test', 'jshint:files', 'mochaTest:test', 'express:testQunit', 'qunit']
+                tasks: ['env:test', 'jshint:files', 'mochaTest:test', /*'express:testQunit', 'qunit'*/]
             },
             preCompile: {
                 files: ['<%= jshint.files %>', '<%= concat.ui_css.src %>'],

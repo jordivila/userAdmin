@@ -86,15 +86,15 @@
         var globals = {
             crossLayer: {{{ jsonHelper  crossLayer }}},
             package: {{{ jsonHelper  package }}} ,
-        globalization : {{{ jsonHelper globalization }}},
-        viewEntryPoint : {{#if viewEntryPoint}} {{{ jsonHelper viewEntryPoint }}} {{else}} undefined  {{/if}},
-                breadcrumb: {{#if breadcrumb}} {{{ jsonHelper breadcrumb }}} {{else}} undefined {{/if}},
-                        domIds:{
-                            panelMain: '#panelMain',
-                            panelMenu: '#panelMenu',
-                            panelProgress: '#panelProgress'
-                        }
-                };
+            globalization : {{{ jsonHelper globalization }}},
+            viewEntryPoint : {{#if viewEntryPoint}} {{{ jsonHelper viewEntryPoint }}} {{else}} undefined  {{/if}},
+                    breadcrumb: {{#if breadcrumb}} {{{ jsonHelper breadcrumb }}} {{else}} undefined {{/if}},
+                            domIds:{
+                                panelMain: '#panelMain',
+                                panelMenu: '#panelMenu',
+                                panelProgress: '#panelProgress'
+                            }
+                    };
 
     </script>
     <script data-main="/public/scripts/Template.App.RequireJs.Init.js?{{crossLayer.queryParams.appVersion}}={{package.version}}" src="/public/bower_components/requirejs/require.js"></script>

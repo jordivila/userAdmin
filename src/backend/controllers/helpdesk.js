@@ -9,7 +9,9 @@
     var Encoder = require('node-html-encoder').Encoder;
     var DataResult = require('../../crossLayer/models/dataResult');
     var DataResultPaginated = require('../../crossLayer/models/dataResultPaginated');
-    var _ = require("underscore");
+    //var _ = require("underscore");
+    var config = require('../libs/config');
+    var P = require('p-promise');
 
     var HelpdeskTalkModel = require('../models/helpdesk').HelpdeskTalk;
     var HelpdeskPeopleModel = require('../models/helpdesk').HelpdeskPeople;
@@ -20,6 +22,157 @@
 
     var crudAjaxOpts = {
         ajax: {
+            _testEmployeeDefaultIdBackOffice: 2,
+
+
+            _employeeDefaultGet: function (customerId, cb) {
+
+                if (config.get('IsTestEnv')) {
+
+                    HelpdeskPeopleModel.findOne({
+                        isEmployee: true,
+                        idPersonBackOffice: crudAjaxOpts.ajax._testEmployeeDefaultIdBackOffice
+                    }, function (e, employeeDefault) {
+                        if (e) return cb(e, null);
+
+                        cb(null, employeeDefault);
+                    });
+                }
+                else {
+                    cb(new Error("Not implemented error"), null);
+                }
+
+            },
+            _talkSave: function (i18n, idTalk, subject, customerId, employeeId, cb) {
+                try {
+
+
+                    var dataResult = null;
+                    var modelErrors = [];
+                    var isNew = idTalk === null;
+                    var validate = function () {
+
+                        if (((subject.trim() === '') === true)) {
+                            modelErrors.push({ key: "subject", value: [i18n.__("Views.Crud.FieldRequired")] });
+                        }
+
+                        if (isNew && (customerId.toString().trim() === "")) {
+                            modelErrors.push({ key: "customerInfo", value: [i18n.__("Views.Crud.FieldRequired")] });
+                        }
+
+                    }();
+
+
+                    if (modelErrors.length > 0) {
+                        dataResult = new DataResult(false, i18n.__("Views.Crud.ErrorExistsInForm"), { modelState: modelErrors });
+                        cb(null, dataResult);
+                    }
+                    else {
+
+                        subject = subject.trim();
+                        employeeId = parseInt(employeeId);
+                        customerId = parseInt(customerId);
+
+
+
+                        var helpdeskTalk = null;
+
+                        // Simulate saving data
+                        if (idTalk === null) {
+                            //idTalk = crudAjaxOpts.ajax._fakeDataGridTalks.length;
+                            helpdeskTalk = new HelpdeskTalkModel({
+                                subject: subject
+                            });
+                        }
+                        else {
+
+                            if (idTalk === undefined) {
+                                throw new Error("Argument exception");
+                            }
+
+                            idTalk = parseInt(idTalk);
+
+                            helpdeskTalk = new HelpdeskTalkModel({
+                                idTalk: idTalk,
+                                subject: subject
+                            });
+
+                        }
+
+
+                        helpdeskTalk.save(function (e, talkObject, numberAffected) {
+
+                            if (e) return cb(e, null);
+
+                            if (isNew) {
+                                idTalk = talkObject.idTalk;
+                            }
+
+                            new HelpdeskPeopleInvolvedModel({
+                                idTalk: idTalk,
+                                idPeople: employeeId
+                            }).save(function (e, employeeInvolved, numberAffected) {
+
+                                if (e) return cb(e, null);
+
+                                var sendResult = function () {
+
+                                    
+
+                                    dataResult = new DataResult(
+                                        true,
+                                        isNew ? i18n.__("Helpdesk.Talks.Subject.NewSubjectAdded") :
+                                                i18n.__("Template.Widget.Crud.SavedChanges"),
+                                        {
+                                            idTalk: idTalk
+                                        });
+
+                                    
+                                    
+
+                                    cb(null, dataResult);
+
+                                };
+
+                                
+                                
+                                
+
+                                if (isNew) {
+
+                                    new HelpdeskPeopleInvolvedModel({
+                                        idTalk: idTalk,
+                                        idPeople: customerId
+                                    }).save(function (e, customerInvolved, numberAffected) {
+                                        sendResult();
+                                    });
+
+                                }
+                                else {
+                                    // existing talks must NOT change its customerId
+                                    sendResult();
+                                }
+
+
+
+
+                            });
+
+
+
+                        });
+
+                    }
+
+
+
+                } catch (e) {
+                    console.error(e);
+                    cb(e, null);
+                }
+            },
+
+
             reqCredentialsCheck: function (req, username, password, callback) {
 
                 var i18n = req.i18n;
@@ -93,12 +246,91 @@
             },
 
 
+            testMethodInitDb: function (cb) {
+
+
+                var self = this;
+                var pMax = 10; // pMax -> number of employees & number of customers created
+
+                var initPeople = function () {
+
+
+                    var peopleSaved = [];
+
+                    for (var j = 0; j < pMax; j++) {
+
+                        peopleSaved.push(new HelpdeskPeopleModel({
+                            //idPeople: j,
+                            idPersonBackOffice: j,    //identificaador de la persona en ORG_TB_EMLPEADOS
+                            isEmployee: true,
+                            //name: "Empleado " + j
+                        }).save());
+
+                    }
+
+                    for (var k = 0; k < pMax; k++) {
+
+                        peopleSaved.push(new HelpdeskPeopleModel({
+                            //idPeople: pMax + k,
+                            idPersonBackOffice: k,    //identificaador de la persona en PEF_tb_personaFisica
+                            isEmployee: false,
+                            //name: "Cliente " + k
+                        }).save());
+                    }
+
+
+
+                    return P.all(peopleSaved).nodeify(function (e, data) {
+
+                        if (e !== null) {
+                            cb(e, null);
+                        }
+                        else {
+                            HelpdeskPeopleModel.find({}, function (e, all) {
+
+
+                                var employeeCurrent = all.filter(function (element) {
+                                    return element.isEmployee === true;
+                                })[0];
+                                var employeeAnother = all.filter(function (element) {
+                                    return element.isEmployee === true;
+                                })[1];
+                                var employeeDefault = all.filter(function (element) {
+                                    return (element.isEmployee === true) && (element.idPersonBackOffice == crudAjaxOpts.ajax._testEmployeeDefaultIdBackOffice);
+                                })[0];
+                                var customerCurrent = all.filter(function (element) {
+                                    return element.isEmployee === false;
+                                })[0];
+                                var customerAnother = all.filter(function (element) {
+                                    return element.isEmployee === false;
+                                })[1];
+
+
+                                self._testEmployeeDefault = employeeDefault;
+
+
+                                cb(e, {
+                                    all: all,
+                                    employeeCurrent: employeeCurrent,
+                                    employeeAnother: employeeAnother,
+                                    employeeDefault: employeeDefault,
+                                    customerCurrent: customerCurrent,
+                                    customerAnother: customerAnother
+                                });
+                            });
+                        }
+                    });
+
+                }();
+
+            },
+
+
+
             talkSearch: function (req, filter, cb) {
 
                 var dataToViewModel = function (dataSourceArray) {
 
-                    console.log("dataSourceArray");
-                    console.log(dataSourceArray);
 
                     var dataResult = new DataResultPaginated();
                     dataResult.isValid = true;
@@ -131,42 +363,73 @@
                     },
                     function (err, data) {
 
+
                         if (err) return cb(err);
 
                         return cb(null, dataToViewModel(data));
                     });
                 }
                 else {
-                    console.log("Es Empleado !!!!");
                     cb(null, dataToViewModel(crudAjaxOpts.ajax._fakeDataGridTalks));
                 }
             },
             talkAdd: function (req, dataItem, cb) {
 
-                crudAjaxOpts.ajax._fakeDataGridTalkSave(
-                    req.i18n,
-                    null,
-                    dataItem.subject,
-                    crudAjaxOpts.ajax._fakeDefaultEmployee.idPeople, //employeeId
-                    crudAjaxOpts.ajax._fakeCurrentCustomer.idPeople, // customerId
-                    function (e, dataResult) {
-                        if (e) {
-                            cb(e, null);
-                        }
-                        else {
 
-                            if (dataResult.isValid === true) {
-                                // Simulate retrieving data from server
-                                dataItem.editData = crudAjaxOpts.ajax._fakeDataGridTalks[dataResult.data.idTalk];
-                                // Simulate server response
-                                dataItem.formData = undefined;
-                                // return result
-                                dataResult.data = dataItem;
+                crudAjaxOpts.ajax._employeeDefaultGet(req.user.idPeople, function (e, employeeDefault) {
+
+                    if (e) return cb(e, null);
+
+                    crudAjaxOpts.ajax._talkSave(
+                        req.i18n,
+                        null,
+                        dataItem.subject,
+                        employeeDefault.idPeople, //employeeId
+                        req.user.idPeople, // customerId
+                        function (e, dataResult) {
+                            if (e) {
+                                cb(e, null);
                             }
+                            else {
 
-                            cb(null, dataResult);
-                        }
-                    });
+
+                                if (dataResult.isValid === true) {
+
+                                    console.log("talkAdd idTalk");
+                                    console.log(dataResult.data.idTalk);
+
+
+                                    HelpdeskTalkModel.findOne({ idTalk: dataResult.data.idTalk }, function (e, talkDetail) {
+
+                                        if (e) return cb(e, null);
+
+
+                                        console.log("talkAdd");
+                                        console.log(new HelpdeskTalkModel(talkDetail).toObject());
+
+
+                                        // Simulate retrieving data from server
+                                        dataItem.editData = talkDetail;
+                                        // Simulate server response
+                                        dataItem.formData = undefined;
+                                        // return result
+                                        dataResult.data = dataItem;
+
+                                        cb(null, dataResult);
+                                    });
+
+                                }
+                                else {
+                                    cb(null, dataResult);
+                                }
+                            }
+                        });
+
+                });
+
+
+
+
             },
             messageAdd: function (req, dataItem, cb) {
 
@@ -475,6 +738,10 @@
     };
 
     passport.use(new BasicStrategy({ passReqToCallback: true }, crudAjaxOpts.ajax.reqCredentialsCheck));
+
+    if (config.get('IsTestEnv') === true) {
+        module.exports.testMethodInitDb = crudAjaxOpts.ajax.testMethodInitDb;
+    }
 
     module.exports.isAuthenticated = crudAjaxOpts.ajax.reqAuthenticate;
     module.exports.talkSearch = crudAjaxOpts.ajax.talkSearch;

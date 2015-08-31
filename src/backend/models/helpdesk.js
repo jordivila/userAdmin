@@ -5,6 +5,7 @@
     // Load required packages
     var mongoose = require('mongoose');
     var bcrypt = require('bcrypt-nodejs');
+    var uuid = require('node-uuid');
 
 
     /*********************************************************
@@ -15,6 +16,10 @@
 
     // Define our user schema
     var HelpdeskTalk = new mongoose.Schema({
+        idTalk: {
+            type: String,
+            //required: true, // this should be required. Added at .pre('save' 
+        },
         subject: {
             type: String,
             required: true
@@ -22,13 +27,15 @@
     });
 
 
-    HelpdeskTalk
-        .virtual('idTalk')
-        .get(function () {
-            return this.id;
-        });
 
-    // Export the Mongoose model
+    HelpdeskTalk.pre('save', function (next) {
+
+        this.idTalk = uuid.v1(); 
+
+        next();
+    });
+
+
     module.exports.HelpdeskTalk = mongoose.model('HelpdeskTalk', HelpdeskTalk);
 
 
@@ -47,7 +54,7 @@
             type: Boolean,
             required: true
         },
-        idPersonBackoffice: {
+        idPersonBackOffice: {
             type: Number,
             required: true
         }
@@ -60,7 +67,6 @@
             return this.id;
         });
 
-    // Export the Mongoose model
     module.exports.HelpdeskPeople = mongoose.model('HelpdeskPeople', HelpdeskPeople);
 
 
@@ -97,7 +103,6 @@
             return this.id;
         });
 
-    // Export the Mongoose model
     module.exports.HelpdeskMessage = mongoose.model('HelpdeskMessage', HelpdeskMessage);
 
 
@@ -128,13 +133,6 @@
     });
 
 
-    //HelpdeskPeopleLastRead
-    //    .virtual('idPeople')
-    //    .get(function () {
-    //        return this.id;
-    //    });
-
-    // Export the Mongoose model
     module.exports.HelpdeskPeopleLastRead = mongoose.model('HelpdeskPeopleLastRead', HelpdeskPeopleLastRead);
 
 
@@ -160,14 +158,6 @@
         }
     });
 
-
-    //HelpdeskPeopleInvolved
-    //    .virtual('idPeople')
-    //    .get(function () {
-    //        return this.id;
-    //    });
-
-    // Export the Mongoose model
     module.exports.HelpdeskPeopleInvolved = mongoose.model('HelpdeskPeopleInvolved', HelpdeskPeopleInvolved);
 
 })(module);
