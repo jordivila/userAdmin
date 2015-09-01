@@ -43,6 +43,8 @@
             //     Removes all documents in all collections in db 
 
 
+
+
             var modelsInDb = mongoose.connection.modelNames();
             var modelCounter = 0;
             var modelRemoveTrack = null;

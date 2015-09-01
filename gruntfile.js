@@ -102,13 +102,15 @@
         jshint: {
             files: ['gruntfile.js',
                     'server.js',
-                    'src/**/*.js',
-                    'src/**/*.json',
+                    'src/backend/**/*.js',
+                    'src/backend/*.json',
+                    'src/frontend/public/**/*.js',
+                    'src/frontend/public/*/*.json',
                     'src/test/qunit/**/*.js',
                     'src/test/mocha/**/*.js',
 
-                    '!src/frontend/public-build/**/*.*',
-                    '!src/frontend/bower_components/**/*',
+                    //'!src/frontend/public-build/**/*.*',
+                    //'!src/frontend/bower_components/**/*',
                     '!src/test/qunit/libs/**/*.js',
             ],
             options: {

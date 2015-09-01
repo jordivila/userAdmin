@@ -9,8 +9,9 @@
     var Encoder = require('node-html-encoder').Encoder;
     var DataResult = require('../../crossLayer/models/dataResult');
     var DataResultPaginated = require('../../crossLayer/models/dataResultPaginated');
-    //var _ = require("underscore");
+    var _ = require("underscore");
     var config = require('../libs/config');
+    var crossLayer = require('../../crossLayer/config');
     var P = require('p-promise');
 
     var HelpdeskTalkModel = require('../models/helpdesk').HelpdeskTalk;
@@ -47,6 +48,7 @@
                 try {
 
 
+
                     var dataResult = null;
                     var modelErrors = [];
                     var isNew = idTalk === null;
@@ -63,6 +65,9 @@
                     }();
 
 
+                    
+
+
                     if (modelErrors.length > 0) {
                         dataResult = new DataResult(false, i18n.__("Views.Crud.ErrorExistsInForm"), { modelState: modelErrors });
                         cb(null, dataResult);
@@ -70,8 +75,8 @@
                     else {
 
                         subject = subject.trim();
-                        employeeId = parseInt(employeeId);
-                        customerId = parseInt(customerId);
+                        employeeId = employeeId;
+                        customerId = customerId;
 
 
 
@@ -90,7 +95,7 @@
                                 throw new Error("Argument exception");
                             }
 
-                            idTalk = parseInt(idTalk);
+                            idTalk = idTalk;
 
                             helpdeskTalk = new HelpdeskTalkModel({
                                 idTalk: idTalk,
@@ -99,6 +104,7 @@
 
                         }
 
+                        
 
                         helpdeskTalk.save(function (e, talkObject, numberAffected) {
 
@@ -117,7 +123,7 @@
 
                                 var sendResult = function () {
 
-                                    
+
 
                                     dataResult = new DataResult(
                                         true,
@@ -127,16 +133,16 @@
                                             idTalk: idTalk
                                         });
 
-                                    
-                                    
+
+
 
                                     cb(null, dataResult);
 
                                 };
 
-                                
-                                
-                                
+
+
+
 
                                 if (isNew) {
 
@@ -167,9 +173,27 @@
 
 
                 } catch (e) {
-                    console.error(e);
                     cb(e, null);
                 }
+            },
+            _fakeMessageObjectToViewModel: function (currentUserIdPeople, peopleInvolvedDetailsArray, message) {
+
+                var whoPosted = _.first(_.filter(peopleInvolvedDetailsArray, function (elem) { return elem.idPeople == message.idPeople; }));
+
+
+
+                return {
+                    idMessage: message.idMessage,
+                    idTalk: message.idTalk,
+                    message: message.message,
+                    datePosted: message.datePosted,
+                    whoPosted: {
+                        name: whoPosted.name,
+                        isEmployee: whoPosted.isEmployee,
+                        isCurrentUser: message.idPeople === currentUserIdPeople
+                    }
+                };
+
             },
 
 
@@ -186,14 +210,23 @@
                 var checkByCookieName = function (cookieName) {
 
                     if (req.cookies[cookieName]) {
-                        var peopleId = parseInt(req.cookies[cookieName]);
-                        var peopleInfo = crudAjaxOpts.ajax._fakeDataGridPeopleFindById(peopleId);
-                        if (peopleInfo === null) {
-                            invalidCredentials();
-                        }
-                        else {
-                            callback(null, peopleInfo);
-                        }
+
+                        var peopleId = req.cookies[cookieName];
+
+                        HelpdeskPeopleModel.findOne({
+                            idPeople: peopleId
+                        }, function (err, peopleInfo) {
+
+                            if (peopleInfo === null) {
+                                invalidCredentials();
+                            }
+                            else {
+                                callback(null, peopleInfo);
+                            }
+
+
+                        });
+
                     }
                     else {
                         invalidCredentials();
@@ -206,10 +239,10 @@
                 // was a customer route
                 // See /src/backend/routing/routesApiUser.js
                 if (req.params.apiEndpointType === 'customer') {
-                    checkByCookieName("customerId");
+                    checkByCookieName(crossLayer.cookies.helpdeskCustomerId);
                 }
                 else {
-                    checkByCookieName("employeeId");
+                    checkByCookieName(crossLayer.cookies.helpdeskEmployeeId);
                 }
             },
             reqAuthenticate: function (req, res, next) {
@@ -248,80 +281,92 @@
 
             testMethodInitDb: function (cb) {
 
-
                 var self = this;
-                var pMax = 10; // pMax -> number of employees & number of customers created
+                var dataToModel = function (all) {
 
-                var initPeople = function () {
-
-
-                    var peopleSaved = [];
-
-                    for (var j = 0; j < pMax; j++) {
-
-                        peopleSaved.push(new HelpdeskPeopleModel({
-                            //idPeople: j,
-                            idPersonBackOffice: j,    //identificaador de la persona en ORG_TB_EMLPEADOS
-                            isEmployee: true,
-                            //name: "Empleado " + j
-                        }).save());
-
-                    }
-
-                    for (var k = 0; k < pMax; k++) {
-
-                        peopleSaved.push(new HelpdeskPeopleModel({
-                            //idPeople: pMax + k,
-                            idPersonBackOffice: k,    //identificaador de la persona en PEF_tb_personaFisica
-                            isEmployee: false,
-                            //name: "Cliente " + k
-                        }).save());
-                    }
+                    var employeeCurrent = all.filter(function (element) {
+                        return element.isEmployee === true;
+                    })[0];
+                    var employeeAnother = all.filter(function (element) {
+                        return element.isEmployee === true;
+                    })[1];
+                    var employeeDefault = all.filter(function (element) {
+                        return (element.isEmployee === true) && (element.idPersonBackOffice == crudAjaxOpts.ajax._testEmployeeDefaultIdBackOffice);
+                    })[0];
+                    var customerCurrent = all.filter(function (element) {
+                        return element.isEmployee === false;
+                    })[0];
+                    var customerAnother = all.filter(function (element) {
+                        return element.isEmployee === false;
+                    })[1];
 
 
-
-                    return P.all(peopleSaved).nodeify(function (e, data) {
-
-                        if (e !== null) {
-                            cb(e, null);
-                        }
-                        else {
-                            HelpdeskPeopleModel.find({}, function (e, all) {
+                    self._testEmployeeDefault = employeeDefault;
 
 
-                                var employeeCurrent = all.filter(function (element) {
-                                    return element.isEmployee === true;
-                                })[0];
-                                var employeeAnother = all.filter(function (element) {
-                                    return element.isEmployee === true;
-                                })[1];
-                                var employeeDefault = all.filter(function (element) {
-                                    return (element.isEmployee === true) && (element.idPersonBackOffice == crudAjaxOpts.ajax._testEmployeeDefaultIdBackOffice);
-                                })[0];
-                                var customerCurrent = all.filter(function (element) {
-                                    return element.isEmployee === false;
-                                })[0];
-                                var customerAnother = all.filter(function (element) {
-                                    return element.isEmployee === false;
-                                })[1];
-
-
-                                self._testEmployeeDefault = employeeDefault;
-
-
-                                cb(e, {
-                                    all: all,
-                                    employeeCurrent: employeeCurrent,
-                                    employeeAnother: employeeAnother,
-                                    employeeDefault: employeeDefault,
-                                    customerCurrent: customerCurrent,
-                                    customerAnother: customerAnother
-                                });
-                            });
-                        }
+                    cb(null, {
+                        all: all,
+                        employeeCurrent: employeeCurrent,
+                        employeeAnother: employeeAnother,
+                        employeeDefault: employeeDefault,
+                        customerCurrent: customerCurrent,
+                        customerAnother: customerAnother
                     });
 
-                }();
+
+                };
+
+
+                HelpdeskPeopleModel.find({}, function (e, existingData) {
+
+                    if (existingData.length === 0) {
+                        var pMax = 10; // pMax -> number of employees & number of customers created
+                        var initPeople = function () {
+
+
+                            var peopleSaved = [];
+
+                            for (var j = 0; j < pMax; j++) {
+
+                                peopleSaved.push(new HelpdeskPeopleModel({
+                                    //idPeople: j,      // -> identity (1,1)
+                                    idPersonBackOffice: j,    //identificaador de la persona en ORG_TB_EMLPEADOS
+                                    isEmployee: true,
+                                    name: "Empleado/Employee " + j
+                                }).save());
+
+                            }
+
+                            for (var k = 0; k < pMax; k++) {
+
+                                peopleSaved.push(new HelpdeskPeopleModel({
+                                    //idPeople: pMax + k,
+                                    idPersonBackOffice: k,    //identificaador de la persona en PEF_tb_personaFisica
+                                    isEmployee: false,
+                                    name: "Cliente/Customer " + k
+                                }).save());
+                            }
+
+
+
+                            return P.all(peopleSaved).nodeify(function (e, data) {
+
+                                if (e !== null) {
+                                    cb(e, null);
+                                }
+                                else {
+                                    HelpdeskPeopleModel.find({}, function (e, all) {
+                                        dataToModel(all);
+                                    });
+                                }
+                            });
+
+                        }();
+                    }
+                    else {
+                        dataToModel(existingData);
+                    }
+                });
 
             },
 
@@ -329,8 +374,7 @@
 
             talkSearch: function (req, filter, cb) {
 
-                var dataToViewModel = function (dataSourceArray) {
-
+                var dataToViewModel = function (dataSourceArray, cb) {
 
                     var dataResult = new DataResultPaginated();
                     dataResult.isValid = true;
@@ -343,8 +387,8 @@
                             dataResult.data.data.push({
                                 idTalk: dataSourceArray[i].idTalk,
                                 subject: dataSourceArray[i].subject,
-                                dateLastMessage: crudAjaxOpts.ajax._fakeMessagesGetDateLastMessage(dataSourceArray[i].idTalk),
-                                nMessagesUnread: i
+                                dateLastMessage: new Date(), // crudAjaxOpts.ajax._fakeMessagesGetDateLastMessage(dataSourceArray[i].idTalk),
+                                nMessagesUnread: 0
                             });
                         }
                     }
@@ -360,13 +404,32 @@
 
                     HelpdeskPeopleInvolvedModel.find({
                         idPeople: filter.customerInfo.customerId
-                    },
-                    function (err, data) {
-
+                    }, function (err, data) {
 
                         if (err) return cb(err);
 
-                        return cb(null, dataToViewModel(data));
+                        var userTalkIds = _.map(data, function (value, index, list) { return value.idTalk; });
+
+                        HelpdeskTalkModel.find({
+                            idTalk: {
+                                $in: userTalkIds
+                            },
+                            //idTalk: userTalkIds, // valid as weell
+                        }, function (err, userTalks) {
+
+                            if (err) return cb(err, null);
+
+                            HelpdeskPeopleLastReadModel.find({
+                                idPeople: req.user.idPeople
+                            }, function (err, lastReadResults) {
+
+                                if (err) return cb(err, null);
+
+                                return cb(null, dataToViewModel(userTalks));
+                            });
+
+                        });
+
                     });
                 }
                 else {
@@ -374,7 +437,6 @@
                 }
             },
             talkAdd: function (req, dataItem, cb) {
-
 
                 crudAjaxOpts.ajax._employeeDefaultGet(req.user.idPeople, function (e, employeeDefault) {
 
@@ -387,61 +449,33 @@
                         employeeDefault.idPeople, //employeeId
                         req.user.idPeople, // customerId
                         function (e, dataResult) {
-                            if (e) {
-                                cb(e, null);
+
+                            if (e) return cb(e, null);
+
+                            if (dataResult.isValid === true) {
+
+                                HelpdeskTalkModel.findOne({
+                                    idTalk: dataResult.data.idTalk
+                                }, function (e, talkDetail) {
+
+                                    if (e) return cb(e, null);
+
+                                    dataItem.editData = talkDetail;
+                                    dataItem.formData = undefined;
+                                    dataResult.data = dataItem;
+
+                                    cb(null, dataResult);
+                                });
+
                             }
                             else {
-
-
-                                if (dataResult.isValid === true) {
-
-                                    console.log("talkAdd idTalk");
-                                    console.log(dataResult.data.idTalk);
-
-
-                                    HelpdeskTalkModel.findOne({ idTalk: dataResult.data.idTalk }, function (e, talkDetail) {
-
-                                        if (e) return cb(e, null);
-
-
-                                        console.log("talkAdd");
-                                        console.log(new HelpdeskTalkModel(talkDetail).toObject());
-
-
-                                        // Simulate retrieving data from server
-                                        dataItem.editData = talkDetail;
-                                        // Simulate server response
-                                        dataItem.formData = undefined;
-                                        // return result
-                                        dataResult.data = dataItem;
-
-                                        cb(null, dataResult);
-                                    });
-
-                                }
-                                else {
-                                    cb(null, dataResult);
-                                }
+                                cb(null, dataResult);
                             }
+
                         });
-
                 });
-
-
-
-
             },
             messageAdd: function (req, dataItem, cb) {
-
-
-
-                // Recordar !!!!
-                // solo en este metodo !!!!
-                // Sobreescribir los defaults de jQuery ajax
-                // para que no saquen el progress bar
-                // ya que la pantalla que utiliza el metodo 
-                // utiliza otro tipo de indicativo a la hora de enseñar progreso
-
 
                 var dataResult = null;
                 var modelErrors = [];
@@ -454,35 +488,42 @@
                     //modelErrors.push({ key: "message", value: [i18n.__("Views.Crud.FieldRequired")] });
                 }
 
-
-
-
                 if (modelErrors.length > 0) {
-                    dataResult = new DataResult(false, i18n.__("Views.Crud.ErrorExistsInForm"), { modelState: modelErrors });
+                    cb(null, new DataResult(false, i18n.__("Views.Crud.ErrorExistsInForm"), { modelState: modelErrors }));
                 }
                 else {
 
+                    var messageDate = new Date();
 
-
-                    // Simulate saving data
-                    var newId = crudAjaxOpts.ajax._fakeDataGridMessages.length;
-
-                    crudAjaxOpts.ajax._fakeDataGridMessages.push({
-                        idMessage: newId,
+                    new HelpdeskMessageModel({
+                        //idMessage: newId,
                         idTalk: dataItem.idTalk,
-                        idPeople: crudAjaxOpts.ajax._fakeCurrentCustomer.idPeople, // this should be set at server runtime using authentication info
+                        idPeople: req.user.idPeople, // this should be set at server runtime using authentication info
                         message: dataItem.message, // --> REMEMBER !!!! as far as this is going to be at server side: do HtmlEncode of the dataItem.message property value (use some npm-hemlEncode existing module)
-                        datePosted: new Date(),
+                        datePosted: messageDate,
+                    }).save(function (e, messageObject, messageNumberAffected) {
+
+                        if (e) return cb(e, null);
+
+                        HelpdeskTalkModel.findOne({
+                            idTalk: messageObject.idTalk
+                        }, function (e, talkObject) {
+
+                            if (e) return cb(e, null);
+
+                            HelpdeskTalkModel
+                                .update({ _id: talkObject._id }, { dateLastMessage: messageDate }, {},
+                                function (e, updateResult) {
+
+                                    if (e) return cb(e, null);
+
+                                    dataResult = new DataResult(true, "", messageObject);
+                                    cb(null, dataResult);
+
+                                });
+                        });
                     });
-
-                    // Simulate retrieving data from server
-                    dataItem = myUtils.extendDeep(crudAjaxOpts.ajax._fakeDataGridMessages[newId], {});
-                    // return result
-                    //dataResult = new DataResult(true, i18n.__("Helpdesk.Talks.Subject.NewMessageAdded"), dataItem);
-                    dataResult = new DataResult(true, "", dataItem);
                 }
-
-                cb(null, dataResult);
             },
             messageGetAll: function (req, params, cb) {
 
@@ -506,30 +547,55 @@
                 // check first if current request user has permission to see this conversation
                 // this will be hardcodeed just to make fake easier
 
-                var hasPermission = true;
+                HelpdeskPeopleInvolvedModel.find({
+                    idTalk: idTalk
+                }, function (e, peopleInvolved) {
 
-                if (hasPermission) {
+                    if (e) return cb(e, null);
 
-                    var messagesByIdTalk = crudAjaxOpts.ajax._fakeMessagesByidTalkGet(idTalk);
 
-                    for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
-                        if (i < messagesByIdTalk.length) {
-                            dataResult.data.data.push(crudAjaxOpts.ajax._fakeMessageObjectToViewModel(messagesByIdTalk[i]));
-                        }
+                    var hasPermission = peopleInvolved.length > 0;
+
+                    if (hasPermission) {
+
+                        var peopleInvolvedIds = _.map(peopleInvolved, function (value, index, list) { return value.idPeople; });
+
+                        HelpdeskPeopleModel.find({
+                            idPeople: {
+                                $in: peopleInvolvedIds
+                            }
+                        }, function (e, peopleInvolvedDetails) {
+
+                            if (e) return cb(e, null);
+
+                            HelpdeskMessageModel.find({
+                                idTalk: idTalk
+                            }, function (e, messagesByIdTalk) {
+
+                                for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
+                                    if (i < messagesByIdTalk.length) {
+                                        dataResult.data.data.push(crudAjaxOpts.ajax._fakeMessageObjectToViewModel(req.user.idPeople, peopleInvolvedDetails, messagesByIdTalk[i]));
+                                    }
+                                }
+
+                                dataResult.isValid = true;
+                                dataResult.data.totalRows = messagesByIdTalk.length;
+                                dataResult.data.page = filter.page;
+                                dataResult.data.pageSize = filter.pageSize;
+
+                                cb(null, dataResult);
+                            });
+
+                        });
                     }
+                    else {
 
-                    dataResult.isValid = true;
-                    dataResult.data.totalRows = messagesByIdTalk.length;
-                    dataResult.data.page = filter.page;
-                    dataResult.data.pageSize = filter.pageSize;
-                }
-                else {
+                        dataResult.isValid = false;
+                        dataResult.message = i18n.__("GeneralTexts.PermissionDenied");
+                        cb(null, dataResult);
+                    }
+                });
 
-                    dataResult.isValid = false;
-                    dataResult.message = i18n.__("GeneralTexts.PermissionDenied");
-                }
-
-                cb(null, dataResult);
             },
             messageGetUnread: function (req, params, cb) {
 
@@ -739,10 +805,8 @@
 
     passport.use(new BasicStrategy({ passReqToCallback: true }, crudAjaxOpts.ajax.reqCredentialsCheck));
 
-    if (config.get('IsTestEnv') === true) {
-        module.exports.testMethodInitDb = crudAjaxOpts.ajax.testMethodInitDb;
-    }
 
+    module.exports.testMethodInitDb = crudAjaxOpts.ajax.testMethodInitDb;
     module.exports.isAuthenticated = crudAjaxOpts.ajax.reqAuthenticate;
     module.exports.talkSearch = crudAjaxOpts.ajax.talkSearch;
     module.exports.talkAdd = crudAjaxOpts.ajax.talkAdd;

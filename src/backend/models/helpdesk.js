@@ -24,13 +24,17 @@
             type: String,
             required: true
         },
+        dateLastMessage: {
+            type: Date,
+            default: Date.now
+        }
     });
 
 
 
     HelpdeskTalk.pre('save', function (next) {
 
-        this.idTalk = uuid.v1(); 
+        this.idTalk = uuid.v4();
 
         next();
     });
@@ -50,6 +54,10 @@
 
     // Define our user schema
     var HelpdeskPeople = new mongoose.Schema({
+        idPeople: {
+            type: String,
+            //required: true, // this should be required. Added at .pre('save' 
+        },
         isEmployee: {
             type: Boolean,
             required: true
@@ -57,15 +65,20 @@
         idPersonBackOffice: {
             type: Number,
             required: true
+        },
+        name: {
+            type: String,
+            required: true
         }
     });
 
 
-    HelpdeskPeople
-        .virtual('idPeople')
-        .get(function () {
-            return this.id;
-        });
+    HelpdeskPeople.pre('save', function (next) {
+
+        this.idPeople = uuid.v4();
+
+        next();
+    });
 
     module.exports.HelpdeskPeople = mongoose.model('HelpdeskPeople', HelpdeskPeople);
 
@@ -78,6 +91,10 @@
 
     // Define our user schema
     var HelpdeskMessage = new mongoose.Schema({
+        idMessage: {
+            type: String,
+            //required: true, // this should be required. Added at .pre('save' 
+        },
         idTalk: {
             type: String,
             required: true
@@ -96,12 +113,13 @@
         },
     });
 
+    HelpdeskMessage.pre('save', function (next) {
 
-    HelpdeskMessage
-        .virtual('idMessage')
-        .get(function () {
-            return this.id;
-        });
+        this.idMessage = uuid.v4();
+
+        next();
+    });
+
 
     module.exports.HelpdeskMessage = mongoose.model('HelpdeskMessage', HelpdeskMessage);
 

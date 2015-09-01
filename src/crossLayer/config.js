@@ -24,7 +24,10 @@
         cookies: {
             currency: "curId",
             i18nLocale: "i18nL",
-            theme: "th"
+            theme: "th",
+
+            helpdeskCustomerId: "hcid",
+            helpdeskEmployeeId: "heid",
         } 
     };
 

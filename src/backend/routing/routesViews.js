@@ -9,6 +9,7 @@
     var GlobalizeController = require('../controllers/globalize');
     var BaseController = require('../controllers/classes/base');
     var GenericViewController = require('../controllers/classes/genericView');
+    var HelpdeskViewHomeController = require('../controllers/helpdeskViewHome');
 
     var languagesController = new LanguagesController();
     var currenciesController = new CurrenciesController();
@@ -17,6 +18,7 @@
     var globalizeController = new GlobalizeController();
     var baseController = new BaseController();
     var genericViewController = new GenericViewController();
+    var helpdeskViewHomeController = new HelpdeskViewHomeController();
 
     function registerCommonVerbs(app, route, controller) {
 
@@ -120,12 +122,12 @@
         
         registerCommonVerbs(app, "helpdesk/talks/common/fakes", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/common", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/employee/home", genericViewController);
+        registerCommonVerbs(app, "helpdesk/talks/employee/home", helpdeskViewHomeController);
         registerCommonVerbs(app, "helpdesk/talks/employee/wiki", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/history", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/message", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/subject", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/customer/home", genericViewController);
+        registerCommonVerbs(app, "helpdesk/talks/customer/home", helpdeskViewHomeController);
         registerCommonVerbs(app, "helpdesk/talks/customer/wiki", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/common", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/history", genericViewController);

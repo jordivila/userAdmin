@@ -17,11 +17,12 @@
         app.get('/api/user', [
             authController.isAuthenticated,
             function (req, res, next) {
+
                 usersController.getById(req.user.userId, function (err, userInfo) {
                     if (err) return next(err);
 
                     res.json({
-                        email: userInfo.email
+                        email: userInfo ? userInfo.email : null
                     });
 
                     res.end();

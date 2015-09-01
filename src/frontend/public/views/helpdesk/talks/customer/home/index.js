@@ -3,8 +3,9 @@
     "jqueryui",
     "scripts/Template.App.ClientApp",
     "/helpdesk/talks/customer/common/helpdeskCommon.js",
+    "crossLayer/config"
 ],
-function ($, jqUI, clientApp, helpdeskCommon) {
+function ($, jqUI, clientApp, helpdeskCommon, crossLayer) {
 
     clientApp.view = {
         main: function () {
@@ -31,6 +32,31 @@ function ($, jqUI, clientApp, helpdeskCommon) {
                     })
                 .end()
                 .removeClass('ui-helper-hidden');
+
+
+
+
+            /**************************************
+                Customer Selector
+            *************************************/
+            jQuery('ul.ui-userSelector-list:first')
+                .find('li')
+                    .click(function () {
+                        var idPeople = jQuery(this).attr('data-user-id');
+                        clientApp.utils.cookieSetForSession(crossLayer.cookies.helpdeskCustomerId, idPeople);
+
+                        jQuery(this)
+                            .parents('ul:first')
+                                .find('li')
+                                    .removeClass('ui-state-active')
+                                .end()
+                            .end()
+                            .addClass('ui-state-active');
+                    })
+                .end()
+                .find('li[data-user-id="' + clientApp.utils.cookieGet(crossLayer.cookies.helpdeskCustomerId) + '"]')
+                    .addClass('ui-state-active')
+                .end();
 
 
         }
