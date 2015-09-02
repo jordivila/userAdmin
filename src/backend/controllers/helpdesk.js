@@ -65,7 +65,7 @@
                     }();
 
 
-                    
+
 
 
                     if (modelErrors.length > 0) {
@@ -104,7 +104,7 @@
 
                         }
 
-                        
+
 
                         helpdeskTalk.save(function (e, talkObject, numberAffected) {
 
@@ -141,9 +141,6 @@
                                 };
 
 
-
-
-
                                 if (isNew) {
 
                                     new HelpdeskPeopleInvolvedModel({
@@ -176,6 +173,29 @@
                     cb(e, null);
                 }
             },
+            _talkGetPeopleInvolved: function (idTalk, cb) {
+
+                HelpdeskPeopleInvolvedModel.find({
+                    idTalk: idTalk,
+                }, function (e, peopleInvolved) {
+
+                    if (e) return cb(e, null);
+
+                    var peopleInvolvedIds = _.map(peopleInvolved, function (value, index, list) { return value.idPeople; });
+
+                    HelpdeskPeopleModel.find({
+                        idPeople: {
+                            $in: peopleInvolvedIds
+                        }
+                    }, function (e, peopleInvolvedDetails) {
+
+                        if (e) return cb(e, null);
+
+                        cb(null, peopleInvolvedDetails);
+                    });
+
+                });
+            },
             _fakeMessageObjectToViewModel: function (currentUserIdPeople, peopleInvolvedDetailsArray, message) {
 
                 var whoPosted = _.first(_.filter(peopleInvolvedDetailsArray, function (elem) { return elem.idPeople == message.idPeople; }));
@@ -194,6 +214,87 @@
                     }
                 };
 
+            },
+            _userCanAccessTalk: function (idPeople, idTalk, cb) {
+
+                crudAjaxOpts.ajax._talkGetPeopleInvolved(idTalk,
+                    function (e, peopleInvolved) {
+
+                        if (e) return cb(e, null);
+
+                        var evens = _.filter(peopleInvolved, function (element) { return element.idPeople == idPeople; });
+
+                        cb(null, evens.length > 0, peopleInvolved);
+
+                    });
+            },
+            _userRequestCanAccessTalk: function (req, idTalk, cb) {
+                crudAjaxOpts.ajax._userCanAccessTalk(req.user.idPeople, idTalk, cb);
+            },
+            _messageResultToViewModel: function (req, filter, peopleInvolvedDetails, messageArray, cb) {
+
+                var dataResult = new DataResultPaginated();
+
+                for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
+                    if (i < messageArray.length) {
+                        dataResult.data.data.push(crudAjaxOpts.ajax._fakeMessageObjectToViewModel(req.user.idPeople, peopleInvolvedDetails, messageArray[i]));
+                    }
+                }
+
+
+                dataResult.isValid = true;
+                dataResult.data.totalRows = messageArray.length;
+                dataResult.data.page = filter.page;
+                dataResult.data.pageSize = filter.pageSize;
+
+                cb(null, dataResult);
+            },
+            _fakeDataGridTalkGetByIdForEdit: function (req, idTalk, cb) {
+
+                try {
+
+                    var i18n = req.i18n;
+                    var dataResult = null;
+
+                    HelpdeskTalkModel.findOne({
+                        idTalk: idTalk
+                    }, function (e, talk) {
+
+                        if (e) return cb(e, null);
+
+                        if (talk === null) {
+                            cb(null, new DataResult(false, i18n.__("Helpdesk.Talks.TalkNotFound"), null));
+                        }
+                        else {
+
+                            crudAjaxOpts.ajax._userRequestCanAccessTalk(req, idTalk,
+                                function (e, hasPermission, peopleInvolved) {
+
+                                    if (e) return cb(e, null);
+
+                                    var customerInfo = function () {
+                                        for (var i = 0; i < peopleInvolved.length; i++) {
+                                            if (peopleInvolved[i].isEmployee === false) {
+                                                return {
+                                                    customerId: peopleInvolved[i].idPeople,
+                                                    customerName: peopleInvolved[i].name
+                                                };
+                                            }
+                                        }
+                                        return null;
+                                    }();
+                                    var dataObj = myUtils.extendDeep({}, talk);
+                                    dataObj.editData = myUtils.extendDeep(talk, { customerInfo: customerInfo });
+                                    dataResult = new DataResult(true, "", dataObj);
+                                    cb(null, dataResult);
+                                });
+                        }
+                    });
+
+                }
+                catch (e) {
+                    cb(e, null);
+                }
             },
 
 
@@ -277,8 +378,6 @@
 
                     })(req, res, next);
             },
-
-
             testMethodInitDb: function (cb) {
 
                 var self = this;
@@ -369,9 +468,6 @@
                 });
 
             },
-
-
-
             talkSearch: function (req, filter, cb) {
 
                 var dataToViewModel = function (dataSourceArray, cb) {
@@ -396,44 +492,57 @@
                     return dataResult;
                 };
 
+                var performSearch = function (mongooseFilter) {
+
+                    HelpdeskPeopleInvolvedModel.find(mongooseFilter,
+                        function (err, data) {
+
+                            if (err) return cb(err);
+
+                            var userTalkIds = _.map(data, function (value, index, list) { return value.idTalk; });
+
+                            HelpdeskTalkModel.find({
+                                idTalk: {
+                                    $in: userTalkIds
+                                },
+                                //idTalk: userTalkIds, // valid as weell
+                            }, function (err, userTalks) {
+
+                                if (err) return cb(err, null);
+
+                                //HelpdeskPeopleLastReadModel.find({
+                                //    idPeople: req.user.idPeople
+                                //}, function (err, lastReadResults) {
+
+                                //    if (err) return cb(err, null);
+
+                                return cb(null, dataToViewModel(userTalks));
+                                //});
+
+                            });
+
+                        });
+
+
+                };
+
                 if (!req.user.isEmployee) {
                     // set filter on customer talks
                     filter.customerInfo = {
                         customerId: req.user.idPeople
                     };
 
-                    HelpdeskPeopleInvolvedModel.find({
+                    performSearch({
                         idPeople: filter.customerInfo.customerId
-                    }, function (err, data) {
-
-                        if (err) return cb(err);
-
-                        var userTalkIds = _.map(data, function (value, index, list) { return value.idTalk; });
-
-                        HelpdeskTalkModel.find({
-                            idTalk: {
-                                $in: userTalkIds
-                            },
-                            //idTalk: userTalkIds, // valid as weell
-                        }, function (err, userTalks) {
-
-                            if (err) return cb(err, null);
-
-                            HelpdeskPeopleLastReadModel.find({
-                                idPeople: req.user.idPeople
-                            }, function (err, lastReadResults) {
-
-                                if (err) return cb(err, null);
-
-                                return cb(null, dataToViewModel(userTalks));
-                            });
-
-                        });
-
                     });
                 }
                 else {
-                    cb(null, dataToViewModel(crudAjaxOpts.ajax._fakeDataGridTalks));
+
+                    // de momento tratamos las dos busquedas de la misma manera
+
+                    performSearch({
+
+                    });
                 }
             },
             talkAdd: function (req, dataItem, cb) {
@@ -446,8 +555,8 @@
                         req.i18n,
                         null,
                         dataItem.subject,
-                        employeeDefault.idPeople, //employeeId
                         req.user.idPeople, // customerId
+                        employeeDefault.idPeople, //employeeId
                         function (e, dataResult) {
 
                             if (e) return cb(e, null);
@@ -489,40 +598,58 @@
                 }
 
                 if (modelErrors.length > 0) {
-                    cb(null, new DataResult(false, i18n.__("Views.Crud.ErrorExistsInForm"), { modelState: modelErrors }));
+                    cb(null, new DataResult(false, req.i18n.__("Views.Crud.ErrorExistsInForm"), { modelState: modelErrors }));
                 }
                 else {
 
-                    var messageDate = new Date();
+                    crudAjaxOpts.ajax._userRequestCanAccessTalk(req, dataItem.idTalk,
+                        function (e, hasPermission, peopleInvolved) {
 
-                    new HelpdeskMessageModel({
-                        //idMessage: newId,
-                        idTalk: dataItem.idTalk,
-                        idPeople: req.user.idPeople, // this should be set at server runtime using authentication info
-                        message: dataItem.message, // --> REMEMBER !!!! as far as this is going to be at server side: do HtmlEncode of the dataItem.message property value (use some npm-hemlEncode existing module)
-                        datePosted: messageDate,
-                    }).save(function (e, messageObject, messageNumberAffected) {
 
-                        if (e) return cb(e, null);
+                            if (hasPermission) {
 
-                        HelpdeskTalkModel.findOne({
-                            idTalk: messageObject.idTalk
-                        }, function (e, talkObject) {
+                                var messageDate = new Date();
 
-                            if (e) return cb(e, null);
-
-                            HelpdeskTalkModel
-                                .update({ _id: talkObject._id }, { dateLastMessage: messageDate }, {},
-                                function (e, updateResult) {
+                                new HelpdeskMessageModel({
+                                    //idMessage: newId,
+                                    idTalk: dataItem.idTalk,
+                                    idPeople: req.user.idPeople, // this should be set at server runtime using authentication info
+                                    message: dataItem.message, // --> REMEMBER !!!! as far as this is going to be at server side: do HtmlEncode of the dataItem.message property value (use some npm-hemlEncode existing module)
+                                    datePosted: messageDate,
+                                }).save(function (e, messageObject, messageNumberAffected) {
 
                                     if (e) return cb(e, null);
 
-                                    dataResult = new DataResult(true, "", messageObject);
-                                    cb(null, dataResult);
+                                    HelpdeskTalkModel.findOne({
+                                        idTalk: messageObject.idTalk
+                                    }, function (e, talkObject) {
 
+                                        if (e) return cb(e, null);
+
+                                        HelpdeskTalkModel
+                                            .update({ _id: talkObject._id }, { dateLastMessage: messageDate }, {},
+                                            function (e, updateResult) {
+
+                                                if (e) return cb(e, null);
+
+                                                dataResult = new DataResult(true, "", messageObject);
+                                                cb(null, dataResult);
+
+                                            });
+                                    });
                                 });
+
+
+                            }
+                            else {
+                                var dataResult = new DataResultPaginated();
+                                dataResult.isValid = false;
+                                dataResult.addMessage(req.i18n.__("GeneralTexts.PermissionDenied"));
+                                cb(null, dataResult);
+                            }
+
+
                         });
-                    });
                 }
             },
             messageGetAll: function (req, params, cb) {
@@ -541,57 +668,38 @@
 
                 var filter = params;
                 var idTalk = filter.filter.idTalk;
-                var dataResult = new DataResultPaginated();
 
-                // as far as this should be executed at server runtime:
-                // check first if current request user has permission to see this conversation
-                // this will be hardcodeed just to make fake easier
 
-                HelpdeskPeopleInvolvedModel.find({
-                    idTalk: idTalk
-                }, function (e, peopleInvolved) {
+
+                crudAjaxOpts.ajax._userRequestCanAccessTalk(req, idTalk, function (e, hasPermission, peopleInvolvedDetails) {
 
                     if (e) return cb(e, null);
 
-
-                    var hasPermission = peopleInvolved.length > 0;
-
                     if (hasPermission) {
 
-                        var peopleInvolvedIds = _.map(peopleInvolved, function (value, index, list) { return value.idPeople; });
+                        HelpdeskMessageModel.find({
+                            idTalk: idTalk
+                        }, function (e, messagesByIdTalk) {
 
-                        HelpdeskPeopleModel.find({
-                            idPeople: {
-                                $in: peopleInvolvedIds
-                            }
-                        }, function (e, peopleInvolvedDetails) {
+                            crudAjaxOpts.ajax._messageResultToViewModel(
+                                req,
+                                filter,
+                                peopleInvolvedDetails,
+                                messagesByIdTalk,
+                                function (e, dataResult) {
 
-                            if (e) return cb(e, null);
+                                    if (e) return cb(e, null);
 
-                            HelpdeskMessageModel.find({
-                                idTalk: idTalk
-                            }, function (e, messagesByIdTalk) {
-
-                                for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
-                                    if (i < messagesByIdTalk.length) {
-                                        dataResult.data.data.push(crudAjaxOpts.ajax._fakeMessageObjectToViewModel(req.user.idPeople, peopleInvolvedDetails, messagesByIdTalk[i]));
-                                    }
-                                }
-
-                                dataResult.isValid = true;
-                                dataResult.data.totalRows = messagesByIdTalk.length;
-                                dataResult.data.page = filter.page;
-                                dataResult.data.pageSize = filter.pageSize;
-
-                                cb(null, dataResult);
-                            });
+                                    cb(null, dataResult);
+                                });
 
                         });
                     }
                     else {
 
+                        var dataResult = new DataResultPaginated();
                         dataResult.isValid = false;
-                        dataResult.message = i18n.__("GeneralTexts.PermissionDenied");
+                        dataResult.addMessage(req.i18n.__("GeneralTexts.PermissionDenied"));
                         cb(null, dataResult);
                     }
                 });
@@ -619,55 +727,76 @@
                 var idTalk = filter.filter.idTalk;
                 var idMessageLastRead = filter.filter.idMessageLastRead;
 
+                crudAjaxOpts.ajax._userRequestCanAccessTalk(req, idTalk, function (e, hasPermission, peopleInvolvedDetails) {
+
+                    if (e) return cb(e, null);
+
+                    if (hasPermission) {
 
 
-                //var self = this;
-                //var dfd = jQuery.Deferred();
-                var dataResult = new DataResultPaginated();
+                        HelpdeskMessageModel.findOne({
+                            idMessage: idMessageLastRead
+                        }, function (e, lastMessageRead) {
+
+                            if (e) return cb(e, null);
+
+                            var messageModelFilter = {
+                                idTalk: idTalk,
+                                idPeople: {
+                                    $ne: req.user.idPeople
+                                }
+                            };
+
+                            if (lastMessageRead !== null) {
+                                messageModelFilter.datePosted = { $gt: lastMessageRead.datePosted };
+                            }
+
+                            HelpdeskMessageModel.find(messageModelFilter,
+                                function (e, messagesByIdTalk) {
+
+                                    var returnResult = function () {
+
+                                        crudAjaxOpts.ajax._messageResultToViewModel(
+                                            req,
+                                            filter,
+                                            peopleInvolvedDetails,
+                                            messagesByIdTalk,
+                                            function (e, dataResult) {
+
+                                                if (e) return cb(e, null);
+
+                                                cb(null, dataResult);
+                                            });
+
+                                    };
+                                    var newMessageRead = _.last(messagesByIdTalk);
+
+                                    if (newMessageRead) {
+                                        new HelpdeskPeopleLastReadModel({
+                                            idTalk: idTalk,
+                                            idPeople: req.user.idPeople,
+                                            idMessage: newMessageRead.idMessage,
+                                            dateRead: new Date()
+                                        }).save(function (e, talkObject, numberAffected) {
+                                            returnResult();
+                                        });
+                                    }
+                                    else {
+                                        returnResult();
+                                    }
+                                });
+                        });
 
 
-                // as far as this should be executed at server runtime:
-                // check first if current request user has permission to see this conversation
-                // this will be hardcodeed just to make fake easier
 
-                var hasPermission = true;
-
-
-                if (hasPermission) {
-
-                    var messagesAlreadyRead = function (arrayItem) {
-                        return arrayItem.idMessage > idMessageLastRead;
-                    };
-                    var messagesFromOtherUsers = function (arrayItem) {
-
-                        var viewModeledItem = crudAjaxOpts.ajax._fakeMessageObjectToViewModel(arrayItem);
-
-                        return viewModeledItem.whoPosted.isCurrentUser === false;
-                    };
-
-                    var messagesByIdTalk = [];
-                    messagesByIdTalk = crudAjaxOpts.ajax._fakeMessagesByidTalkGet(idTalk);
-                    messagesByIdTalk = messagesByIdTalk.filter(messagesAlreadyRead);
-                    messagesByIdTalk = messagesByIdTalk.filter(messagesFromOtherUsers);
-
-                    for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
-                        if (i < messagesByIdTalk.length) {
-                            dataResult.data.data.push(crudAjaxOpts.ajax._fakeMessageObjectToViewModel(messagesByIdTalk[i]));
-                        }
                     }
-
-                    dataResult.isValid = true;
-                    dataResult.data.totalRows = messagesByIdTalk.length;
-                    dataResult.data.page = filter.page;
-                    dataResult.data.pageSize = filter.pageSize;
-                }
-                else {
-
-                    dataResult.isValid = false;
-                    dataResult.message = i18n.__("GeneralTexts.PermissionDenied");
-                }
-
-                cb(null, dataResult);
+                    else {
+                        var dataResult = new DataResultPaginated();
+                        dataResult.isValid = false;
+                        dataResult.addMessage(req.i18n.__("GeneralTexts.PermissionDenied"));
+                        cb(null, dataResult);
+                    }
+                });
             },
             /************************************************************
                                 Methods for employee
@@ -676,125 +805,131 @@
 
                 var dataResult = null;
 
-                crudAjaxOpts.ajax._fakeDataGridTalkGetByIdForEdit(req.i18n, dataItem.idTalk,
-                    function (error, dataResult) {
-                        if (error) {
-                            cb(error, null);
-                        }
-                        else {
-                            cb(null, dataResult);
-                        }
-                    });
+                crudAjaxOpts.ajax._fakeDataGridTalkGetByIdForEdit(
+                    req,
+                    dataResult.data.idTalk,
+                    function (e, dataResultGetById) {
 
+                        if (e) return cb(e, null);
+
+                        cb(null, dataResultGetById);
+
+                    });
             },
             talkSavedByEmployee: function (req, dataItem, cb) {
 
-                crudAjaxOpts.ajax._fakeDataGridTalkSave(
+                crudAjaxOpts.ajax._talkSave(
                     req.i18n,
                     dataItem.isNew === true ? null : dataItem.formData.idTalk,
                     dataItem.formData.subject,
-                    dataItem.formData.customerInfo.customerId, // customerId
-                    crudAjaxOpts.ajax._fakeCurrentEmployee.idPeople, //employeeId -> taken from current user request
+                    dataItem.formData.customerInfo.customerId,  // customerId
+                    req.user.idPeople, // employeeId
                     function (e, dataResult) {
 
+                        if (e) return cb(e, null);
 
-                        if (e) {
-                            cb(e, null);
+                        if (dataResult.isValid === true) {
+
+                            crudAjaxOpts.ajax._fakeDataGridTalkGetByIdForEdit(
+                                req,
+                                dataResult.data.idTalk,
+                                function (e, dataResultGetById) {
+
+                                    if (e) return cb(e, null);
+
+                                    if (dataResultGetById.isValid) {
+                                        // ponemos en el mensaje de salida
+                                        // el mensaje resultado de guardar
+                                        dataResultGetById.messages[0] = dataResult.messages[0];
+                                    }
+
+                                    cb(null, dataResultGetById);
+                                });
                         }
                         else {
-
-                            if (dataResult.isValid === true) {
-
-                                crudAjaxOpts.ajax._fakeDataGridTalkGetByIdForEdit(
-                                    req.i18n,
-                                    dataResult.data.idTalk,
-                                    function (eGetById, dataResultGetById) {
-                                        if (eGetById) {
-                                            setTimeout(function () { dfd.reject(eGetById); }, crudAjaxOpts.ajax._fakeDelay);
-                                        }
-                                        else {
-
-                                            if (dataResultGetById.isValid) {
-                                                // ponemos en el mensaje de salida
-                                                // el mensaje resultado de guardar
-                                                dataResultGetById.messages[0] = dataResult.messages[0];
-                                            }
-
-                                            cb(null, dataResultGetById);
-                                        }
-                                    });
-                            }
-
                             cb(null, dataResult);
                         }
                     });
-
-
-
-
             },
             customerSearch: function (req, filter, cb) {
 
-                var customers = [];
+                HelpdeskPeopleModel.find({
+                    isEmployee: false
+                }, function (e, peopleInvolvedDetails) {
 
-                for (var j = 0; j < crudAjaxOpts.ajax._fakeDataGridPeople.length; j++) {
-                    if (crudAjaxOpts.ajax._fakeDataGridPeople[j].isEmployee === false) {
-                        customers.push(crudAjaxOpts.ajax._fakeDataGridPeople[j]);
+                    if (e) return cb(e, null);
+
+                    
+                    var customers = [];
+
+                    for (var j = 0; j < peopleInvolvedDetails.length; j++) {
+                        if (peopleInvolvedDetails[j].isEmployee === false) {
+                            customers.push(peopleInvolvedDetails[j]);
+                        }
                     }
-                }
 
-                var dataResult = new DataResultPaginated();
-                dataResult.isValid = true;
-                dataResult.data.totalRows = customers.length;
-                dataResult.data.page = filter.page;
-                dataResult.data.pageSize = filter.pageSize;
+                    var dataResult = new DataResultPaginated();
+                    dataResult.isValid = true;
+                    dataResult.data.totalRows = customers.length;
+                    dataResult.data.page = filter.page;
+                    dataResult.data.pageSize = filter.pageSize;
 
 
-                for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
-                    if (i < customers.length) {
+                    for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
+                        if (i < customers.length) {
 
-                        dataResult.data.data.push({
-                            customerCardId: new Array(11).join(customers[i].idPeople.toString()), // make inner join using idPersonBackOffice and get customer card id 
-                            customerId: customers[i].idPeople,
-                            customerName: customers[i].name
-                        });
+                            dataResult.data.data.push({
+                                customerCardId: new Array(11).join(customers[i].idPeople.toString()), // make inner join using idPersonBackOffice and get customer card id 
+                                customerId: customers[i].idPeople,
+                                customerName: customers[i].name
+                            });
 
+                        }
                     }
-                }
 
-                cb(null, dataResult);
+                    cb(null, dataResult);
+
+                });
             },
             employeeSearch: function (req, filter, cb) {
 
-                var employees = [];
-                var i18n = req.i18n;
+                HelpdeskPeopleModel.find({
+                    isEmployee: true
+                }, function (e, peopleInvolvedDetails) {
 
-                for (var j = 0; j < crudAjaxOpts.ajax._fakeDataGridPeople.length; j++) {
-                    if (crudAjaxOpts.ajax._fakeDataGridPeople[j].isEmployee === true) {
-                        employees.push(crudAjaxOpts.ajax._fakeDataGridPeople[j]);
+                    if (e) return cb(e, null);
+
+                    var employees = [];
+                    var i18n = req.i18n;
+
+                    for (var j = 0; j < peopleInvolvedDetails.length; j++) {
+                        if (peopleInvolvedDetails[j].isEmployee === true) {
+                            employees.push(peopleInvolvedDetails[j]);
+                        }
                     }
-                }
 
-                var dataResult = new DataResultPaginated();
-                dataResult.isValid = true;
-                dataResult.data.totalRows = employees.length;
-                dataResult.data.page = filter.page;
-                dataResult.data.pageSize = filter.pageSize;
+                    var dataResult = new DataResultPaginated();
+                    dataResult.isValid = true;
+                    dataResult.data.totalRows = employees.length;
+                    dataResult.data.page = filter.page;
+                    dataResult.data.pageSize = filter.pageSize;
 
 
-                for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
-                    if (i < employees.length) {
+                    for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
+                        if (i < employees.length) {
 
-                        dataResult.data.data.push({
-                            employeeId: employees[i].idPeople,
-                            employeeName: employees[i].name,
-                            employeeEmail: myUtils.stringFormatCSharp("{0}{1}@something.com", i18n.__("Helpdesk.Talks.Employee"), employees[i].idPeople),// make inner join using idPersonBackOffice and get employee email address
-                        });
+                            dataResult.data.data.push({
+                                employeeId: employees[i].idPeople,
+                                employeeName: employees[i].name,
+                                employeeEmail: myUtils.stringFormatCSharp("{0}{1}@something.com", i18n.__("Helpdesk.Talks.Employee"), employees[i].idPeople),// make inner join using idPersonBackOffice and get employee email address
+                            });
 
+                        }
                     }
-                }
 
-                cb(null, dataResult);
+                    cb(null, dataResult);
+
+                });
             },
 
         },

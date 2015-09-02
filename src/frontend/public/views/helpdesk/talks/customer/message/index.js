@@ -30,7 +30,7 @@ function ($, jqUI, HelpdeskChatWidget, clientApp, UrlHelper, helpdeskCommon, cru
                             console.error(new Error('Argument exception: missing idTalk from query string'));
                         }
 
-                        return parseInt(new UrlHelper().query.parsed.idTalk);
+                        return new UrlHelper().query.parsed.idTalk;
 
                     }(),
                     talkTitle: clientApp.i18n.texts.get("Helpdesk.Talks.Message.Title"),
