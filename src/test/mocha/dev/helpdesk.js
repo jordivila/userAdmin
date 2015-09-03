@@ -12,6 +12,7 @@
     var ErrorHandled = require(pathToSrc + 'crossLayer/models/errorHandled');
     var myUtils = require(pathToSrc + 'backend/libs/commonFunctions');
     var _ = require("underscore");
+    var helpdeskCrossLayer = require(pathToSrc + 'crossLayer/helpdesk');
 
 
     function resultHasMessage(messageToSearch, keyValueArray) {
@@ -1016,12 +1017,14 @@
                     },
                     function (err, addResult) {
 
+                        
+
                         var filter = {
                             filter: {
                                 //customerInfo: {
                                 //    customerId: initDbData.customerCurrent.idPeople
                                 //},
-                                lastMessageStatus: "1",
+                                lastMessageStatus: helpdeskCrossLayer.talkStatus.notRead,
                                 //employeeInfo: {
                                 //    employeeId: initDbData.employeeCurrent.idPeople
                                 //}
@@ -1032,6 +1035,10 @@
                             sortBy: ""
                         };
 
+                        if (filter)
+                        {
+                            throw new Error("Not imlpemented");
+                        }
 
                         helpdeskController.talkSearch
                             (reqEmployee,
