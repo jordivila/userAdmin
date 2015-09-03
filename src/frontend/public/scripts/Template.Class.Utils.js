@@ -1,11 +1,9 @@
 define([],
        function () {
 
-
            function Utils() {
 
            }
-
 
            function cookieHelper(name, value, days, deleteIt) {
                // if value is undefined, get the cookie value
@@ -65,9 +63,6 @@ define([],
 
                cookieHelper(name, null, null, true);
            };
-
-
-
 
            Utils.prototype.htmlEncode = function (html) {
                return document.createElement('a').appendChild(
@@ -129,7 +124,6 @@ define([],
                        .html(content)
                    .end();
            };
-
 
            return Utils;
 

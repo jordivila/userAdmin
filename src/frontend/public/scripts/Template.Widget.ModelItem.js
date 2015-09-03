@@ -232,6 +232,8 @@ function ($, jqUI) {
                 .append(t)
                 .find(jqSelector)
                 .change(function () {
+                    // Trim() value on change by default
+                    jQuery(this).val(jQuery(this).val().trim());
                     self.change();
                 });
 

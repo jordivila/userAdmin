@@ -24,8 +24,6 @@
     var crudAjaxOpts = {
         ajax: {
             _testEmployeeDefaultIdBackOffice: 2,
-
-
             _employeeDefaultGet: function (customerId, cb) {
 
                 if (config.get('IsTestEnv')) {
@@ -46,8 +44,6 @@
             },
             _talkSave: function (i18n, idTalk, subject, customerId, employeeId, cb) {
                 try {
-
-
 
                     var dataResult = null;
                     var modelErrors = [];
@@ -296,6 +292,34 @@
                     cb(e, null);
                 }
             },
+            _searchPeoplePaginated: function (mongooseFilter, page, pageSize, mapItemCallback, cb) {
+
+                var query = HelpdeskPeopleModel.find(mongooseFilter);
+                var queryCount = HelpdeskPeopleModel.find(mongooseFilter).count();
+
+                query
+                    .skip((page * pageSize))
+                    .limit(pageSize)
+                    .exec(function (e, people) {
+
+                        if (e) return cb(e, null);
+
+                        queryCount
+                            .exec(function (e, peopleCount) {
+
+                                if (e) return cb(e, null);
+
+                                var dataResult = new DataResultPaginated();
+                                dataResult.isValid = true;
+                                dataResult.data.totalRows = peopleCount;
+                                dataResult.data.page = page;
+                                dataResult.data.pageSize = pageSize;
+                                dataResult.data.data = _.map(people, mapItemCallback);
+
+                                cb(null, dataResult);
+                            });
+                    });
+            },
 
 
             reqCredentialsCheck: function (req, username, password, callback) {
@@ -431,7 +455,9 @@
                                     //idPeople: j,      // -> identity (1,1)
                                     idPersonBackOffice: j,    //identificaador de la persona en ORG_TB_EMLPEADOS
                                     isEmployee: true,
-                                    name: "Empleado/Employee " + j
+                                    name: "Empleado/Employee " + j,
+                                    cardId: new Array(11).join(j.toString()),
+                                    email: myUtils.stringFormatCSharp("{0}@something.com", new Array(6).join(j.toString()))
                                 }).save());
 
                             }
@@ -442,7 +468,9 @@
                                     //idPeople: pMax + k,
                                     idPersonBackOffice: k,    //identificaador de la persona en PEF_tb_personaFisica
                                     isEmployee: false,
-                                    name: "Cliente/Customer " + k
+                                    name: "Cliente/Customer " + k,
+                                    cardId: new Array(11).join(k.toString()),
+                                    email: myUtils.stringFormatCSharp("{0}@something.com", new Array(6).join(k.toString()))
                                 }).save());
                             }
 
@@ -468,17 +496,17 @@
                 });
 
             },
-            talkSearch: function (req, filter, cb) {
+            talkSearch: function (req, params, cb) {
 
                 var dataToViewModel = function (dataSourceArray, cb) {
 
                     var dataResult = new DataResultPaginated();
                     dataResult.isValid = true;
                     dataResult.data.totalRows = dataSourceArray.length;
-                    dataResult.data.page = filter.page;
-                    dataResult.data.pageSize = filter.pageSize;
+                    dataResult.data.page = params.page;
+                    dataResult.data.pageSize = params.pageSize;
 
-                    for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
+                    for (var i = (params.page * params.pageSize) ; i < ((params.page * params.pageSize) + params.pageSize) ; i++) {
                         if (i < dataSourceArray.length) {
                             dataResult.data.data.push({
                                 idTalk: dataSourceArray[i].idTalk,
@@ -491,7 +519,6 @@
 
                     return dataResult;
                 };
-
                 var performSearch = function (mongooseFilter) {
 
                     HelpdeskPeopleInvolvedModel.find(mongooseFilter,
@@ -526,24 +553,39 @@
 
                 };
 
+
+                
+
                 if (!req.user.isEmployee) {
                     // set filter on customer talks
-                    filter.customerInfo = {
-                        customerId: req.user.idPeople
-                    };
-
-                    performSearch({
-                        idPeople: filter.customerInfo.customerId
-                    });
+                    performSearch({ idPeople: req.user.idPeople });
                 }
                 else {
 
                     // de momento tratamos las dos busquedas de la misma manera
 
-                    performSearch({
+                    
 
-                    });
+                    var dbFilter = {};
+                    var peopleInvolvedFilter = [];
+
+                    if ((params.filter.customerInfo) && (params.filter.customerInfo.customerId !== "")) {
+                        peopleInvolvedFilter.push(params.filter.customerInfo.customerId);
+                    }
+
+                    if ((params.filter.employeeInfo) && (params.filter.employeeInfo.employeeId !== "")) {
+                        peopleInvolvedFilter.push(params.filter.employeeInfo.employeeId);
+                    }
+
+                    if (peopleInvolvedFilter.length > 0) {
+                        dbFilter.idPeople = {
+                            $in: peopleInvolvedFilter
+                        };
+                    }
+
+                    performSearch(dbFilter);
                 }
+
             },
             talkAdd: function (req, dataItem, cb) {
 
@@ -851,87 +893,59 @@
                         }
                     });
             },
-            customerSearch: function (req, filter, cb) {
+            customerSearch: function (req, params, cb) {
 
-                HelpdeskPeopleModel.find({
-                    isEmployee: false
-                }, function (e, peopleInvolvedDetails) {
+                var dbFilter = { isEmployee: false };
 
-                    if (e) return cb(e, null);
+                if ((params.filter.customerName) && (params.filter.customerName.trim() !== "")) {
+                    dbFilter.name = new RegExp(myUtils.stringFormatCSharp('{0}', params.filter.customerName), "i");
+                }
 
-                    
-                    var customers = [];
+                if ((params.filter.customerCardId) && (params.filter.customerCardId.trim() !== "")) {
+                    dbFilter.cardId = new RegExp(myUtils.stringFormatCSharp('{0}', params.filter.customerCardId), "i");
+                }
 
-                    for (var j = 0; j < peopleInvolvedDetails.length; j++) {
-                        if (peopleInvolvedDetails[j].isEmployee === false) {
-                            customers.push(peopleInvolvedDetails[j]);
-                        }
-                    }
+                crudAjaxOpts.ajax._searchPeoplePaginated(
+                    dbFilter,
+                    params.page,
+                    params.pageSize,
+                    function (value, index, list) {
+                        return {
+                            customerCardId: value.cardId,
+                            customerId: value.idPeople,
+                            customerName: value.name
+                        };
+                    },
+                    cb);
 
-                    var dataResult = new DataResultPaginated();
-                    dataResult.isValid = true;
-                    dataResult.data.totalRows = customers.length;
-                    dataResult.data.page = filter.page;
-                    dataResult.data.pageSize = filter.pageSize;
-
-
-                    for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
-                        if (i < customers.length) {
-
-                            dataResult.data.data.push({
-                                customerCardId: new Array(11).join(customers[i].idPeople.toString()), // make inner join using idPersonBackOffice and get customer card id 
-                                customerId: customers[i].idPeople,
-                                customerName: customers[i].name
-                            });
-
-                        }
-                    }
-
-                    cb(null, dataResult);
-
-                });
             },
-            employeeSearch: function (req, filter, cb) {
+            employeeSearch: function (req, params, cb) {
 
-                HelpdeskPeopleModel.find({
-                    isEmployee: true
-                }, function (e, peopleInvolvedDetails) {
+                var dbFilter = { isEmployee: true };
 
-                    if (e) return cb(e, null);
+                if ((params.filter.employeeName) && (params.filter.employeeName.trim() !== "")) {
+                    dbFilter.name = new RegExp(myUtils.stringFormatCSharp('{0}', params.filter.employeeName), "i");
+                }
 
-                    var employees = [];
-                    var i18n = req.i18n;
+                if ((params.filter.employeeEmail) && (params.filter.employeeEmail.trim() !== "")) {
+                    dbFilter.email = new RegExp(myUtils.stringFormatCSharp('{0}', params.filter.employeeEmail), "i");
+                }
 
-                    for (var j = 0; j < peopleInvolvedDetails.length; j++) {
-                        if (peopleInvolvedDetails[j].isEmployee === true) {
-                            employees.push(peopleInvolvedDetails[j]);
-                        }
-                    }
+                crudAjaxOpts.ajax._searchPeoplePaginated(
+                    dbFilter,
+                    params.page,
+                    params.pageSize,
+                    function (value, index, list) {
 
-                    var dataResult = new DataResultPaginated();
-                    dataResult.isValid = true;
-                    dataResult.data.totalRows = employees.length;
-                    dataResult.data.page = filter.page;
-                    dataResult.data.pageSize = filter.pageSize;
+                        return {
+                            employeeId: value.idPeople,
+                            employeeName: value.name,
+                            employeeEmail: value.email
+                        };
 
-
-                    for (var i = (filter.page * filter.pageSize) ; i < ((filter.page * filter.pageSize) + filter.pageSize) ; i++) {
-                        if (i < employees.length) {
-
-                            dataResult.data.data.push({
-                                employeeId: employees[i].idPeople,
-                                employeeName: employees[i].name,
-                                employeeEmail: myUtils.stringFormatCSharp("{0}{1}@something.com", i18n.__("Helpdesk.Talks.Employee"), employees[i].idPeople),// make inner join using idPersonBackOffice and get employee email address
-                            });
-
-                        }
-                    }
-
-                    cb(null, dataResult);
-
-                });
-            },
-
+                    },
+                    cb);
+            }
         },
         cache: {
 
