@@ -23,10 +23,11 @@
 
     var crudAjaxOpts = {
         ajax: {
+            _isInTestMode: true, // forced untill deployment. Then use -> config.get('IsTestEnv')
             _testEmployeeDefaultIdBackOffice: 2,
             _employeeDefaultGet: function (customerId, cb) {
 
-                if (config.get('IsTestEnv')) {
+                if (crudAjaxOpts.ajax._isInTestMode) {
 
                     HelpdeskPeopleModel.findOne({
                         isEmployee: true,
@@ -950,6 +951,13 @@
 
         }
     };
+
+
+    if (crudAjaxOpts.ajax._isInTestMode)
+    {
+        crudAjaxOpts.ajax.testMethodInitDb();
+    }
+
 
     passport.use(new BasicStrategy({ passReqToCallback: true }, crudAjaxOpts.ajax.reqCredentialsCheck));
 
