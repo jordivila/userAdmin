@@ -955,7 +955,9 @@
 
     if (crudAjaxOpts.ajax._isInTestMode)
     {
-        crudAjaxOpts.ajax.testMethodInitDb();
+        crudAjaxOpts.ajax.testMethodInitDb(function (e, data) {
+
+        });
     }
 
 
