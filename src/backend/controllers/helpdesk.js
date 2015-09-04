@@ -46,6 +46,9 @@
             _talkSave: function (i18n, idTalk, subject, customerId, employeeId, cb) {
                 try {
 
+
+
+
                     var dataResult = null;
                     var modelErrors = [];
                     var isNew = idTalk === null;
@@ -75,16 +78,82 @@
                         employeeId = employeeId;
                         customerId = customerId;
 
+                        
 
 
-                        var helpdeskTalk = null;
+                        var helpdeskTalkSave = function (helpdeskTalk) {
 
-                        // Simulate saving data
-                        if (idTalk === null) {
-                            //idTalk = crudAjaxOpts.ajax._fakeDataGridTalks.length;
-                            helpdeskTalk = new HelpdeskTalkModel({
-                                subject: subject
+                            helpdeskTalk.save(function (e, talkObject, numberAffected) {
+
+                                if (e) return cb(e, null);
+
+                                if (isNew) {
+                                    idTalk = talkObject.idTalk;
+                                }
+                                else {
+
+                                }
+
+
+
+                                new HelpdeskPeopleInvolvedModel({
+                                    idTalk: idTalk,
+                                    idPeople: employeeId
+                                }).save(function (e, employeeInvolved, numberAffected) {
+
+                                    if (e) return cb(e, null);
+
+                                    var sendResult = function () {
+
+
+
+                                        dataResult = new DataResult(
+                                            true,
+                                            isNew ? i18n.__("Helpdesk.Talks.Subject.NewSubjectAdded") :
+                                                    i18n.__("Template.Widget.Crud.SavedChanges"),
+                                            {
+                                                idTalk: idTalk
+                                            });
+
+
+                                        
+
+                                        cb(null, dataResult);
+
+                                    };
+
+
+                                    if (isNew) {
+
+                                        new HelpdeskPeopleInvolvedModel({
+                                            idTalk: idTalk,
+                                            idPeople: customerId
+                                        }).save(function (e, customerInvolved, numberAffected) {
+                                            sendResult();
+                                        });
+
+                                    }
+                                    else {
+                                        // existing talks must NOT change its customerId
+                                        sendResult();
+                                    }
+
+
+
+
+                                });
+
+
+
                             });
+
+                        };
+                        //var helpdeskTalk = null;
+
+                        if (idTalk === null) {
+                            helpdeskTalkSave(new HelpdeskTalkModel({
+                                subject: subject
+                            }));
                         }
                         else {
 
@@ -92,75 +161,28 @@
                                 throw new Error("Argument exception");
                             }
 
-                            idTalk = idTalk;
+                            //helpdeskTalk = new HelpdeskTalkModel({
+                            //    idTalk: idTalk,
+                            //    subject: subject
+                            //});
 
-                            helpdeskTalk = new HelpdeskTalkModel({
-                                idTalk: idTalk,
-                                subject: subject
+
+                            HelpdeskTalkModel.findOne({ idTalk: idTalk },
+                                function (e, helpdeskTalk) {
+
+                                    if (e) return cb(e, null);
+
+
+                                    helpdeskTalk.subject = subject;
+                                    helpdeskTalkSave(helpdeskTalk);
                             });
+
 
                         }
 
 
 
-                        helpdeskTalk.save(function (e, talkObject, numberAffected) {
 
-                            if (e) return cb(e, null);
-
-                            if (isNew) {
-                                idTalk = talkObject.idTalk;
-                            }
-
-                            new HelpdeskPeopleInvolvedModel({
-                                idTalk: idTalk,
-                                idPeople: employeeId
-                            }).save(function (e, employeeInvolved, numberAffected) {
-
-                                if (e) return cb(e, null);
-
-                                var sendResult = function () {
-
-
-
-                                    dataResult = new DataResult(
-                                        true,
-                                        isNew ? i18n.__("Helpdesk.Talks.Subject.NewSubjectAdded") :
-                                                i18n.__("Template.Widget.Crud.SavedChanges"),
-                                        {
-                                            idTalk: idTalk
-                                        });
-
-
-
-
-                                    cb(null, dataResult);
-
-                                };
-
-
-                                if (isNew) {
-
-                                    new HelpdeskPeopleInvolvedModel({
-                                        idTalk: idTalk,
-                                        idPeople: customerId
-                                    }).save(function (e, customerInvolved, numberAffected) {
-                                        sendResult();
-                                    });
-
-                                }
-                                else {
-                                    // existing talks must NOT change its customerId
-                                    sendResult();
-                                }
-
-
-
-
-                            });
-
-
-
-                        });
 
                     }
 
@@ -250,6 +272,8 @@
 
                 try {
 
+
+
                     var i18n = req.i18n;
                     var dataResult = null;
 
@@ -260,7 +284,7 @@
                         if (e) return cb(e, null);
 
                         if (talk === null) {
-                            cb(null, new DataResult(false, i18n.__("Helpdesk.Talks.TalkNotFound"), null));
+                            cb(null, new DataResult(false, i18n.__("Helpdesk.Talks.TalkNotFound")));
                         }
                         else {
 
@@ -294,9 +318,6 @@
                                             customerInfo: customerInfo
                                         }
                                     };
-
-                                    console.log("_fakeDataGridTalkGetByIdForEdit");
-                                    console.log(dataObj);
 
                                     cb(null, new DataResult(true, "", dataObj));
                                 });
@@ -862,8 +883,6 @@
 
                 var dataResult = null;
 
-                console.log("talkGetById");
-                console.log(dataItem);
 
                 crudAjaxOpts.ajax._fakeDataGridTalkGetByIdForEdit(req, dataItem.idTalk,
                     function (e, dataResult) {
@@ -875,6 +894,10 @@
             },
             talkSavedByEmployee: function (req, dataItem, cb) {
 
+
+
+
+
                 crudAjaxOpts.ajax._talkSave(
                     req.i18n,
                     dataItem.isNew === true ? null : dataItem.formData.idTalk,
@@ -885,7 +908,12 @@
 
                         if (e) return cb(e, null);
 
+
+
+
                         if (dataResult.isValid === true) {
+
+
 
                             crudAjaxOpts.ajax._fakeDataGridTalkGetByIdForEdit(
                                 req,

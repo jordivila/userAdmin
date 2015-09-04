@@ -34,7 +34,10 @@
 
     HelpdeskTalk.pre('save', function (next) {
 
-        this.idTalk = uuid.v4();
+
+        if (!this.idTalk) {
+            this.idTalk = uuid.v4();
+        }
 
         next();
     });

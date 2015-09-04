@@ -33,9 +33,9 @@
         if (data) {
             this.data = data;
         }
-        else {
-            this.data = {};
-        }
+        //else {
+        //    this.data = {};
+        //}
     }
 
     DataResult.prototype.clone = function (instance) {

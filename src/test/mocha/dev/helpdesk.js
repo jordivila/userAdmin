@@ -775,6 +775,99 @@
 
         });
 
+        it('Employee can edit a talk', function (done) {
+
+
+            var filter = {
+                filter: {},
+                page: 0,
+                pageSize: 50,
+                sortAscending: false,
+                sortBy: ""
+            };
+
+
+            helpdeskController.testMethodInitDb(function (e, initDbData) {
+
+                if (e) throw e;
+
+
+                var reqEmployee = myUtils.extendDeep({ user: initDbData.employeeCurrent }, global);
+
+                helpdeskController.talkSavedByEmployee
+                    (reqEmployee,
+                    {
+                        isNew: true,
+                        formData: {
+                            subject: 'nueva conversaciopn de test',
+                            customerInfo: {
+                                customerId: initDbData.customerCurrent.idPeople
+                            }
+                        }
+                    },
+                    function (err, addResult) {
+
+                        if (err) throw err;
+
+
+                        assert.equal(err, null, err === null ? '' : err.message);
+                        assert.equal(addResult.isValid, true);
+                        assert.equal(resultHasMessage(i18n.__("Helpdesk.Talks.Subject.NewSubjectAdded"), addResult.messages), true);
+
+
+
+
+                        
+
+                        var pp = {
+                            idTalk: addResult.data.editData.idTalk,
+                            subject: addResult.data.editData.subject,
+                            dateLastMessage: addResult.data.editData.dateLastMessage,
+                            editData: {
+                                idTalk: addResult.data.editData.idTalk,
+                                subject: addResult.data.editData.subject,
+                                dateLastMessage: addResult.data.editData.dateLastMessage,
+                                customerInfo: {
+                                    customerId: addResult.data.editData.customerInfo.customerId,
+                                    customerName: addResult.data.editData.customerInfo.customerName
+                                }
+                            },
+                            formData: {
+                                idTalk: addResult.data.editData.idTalk,
+                                subject: "nueva conversaciopn de test modificada",
+                                customerInfo: {
+                                    customerId: addResult.data.editData.customerInfo.customerId,
+                                    customerName: addResult.data.editData.customerInfo.customerName
+                                },
+                                customerReadonly: null
+                            }
+                        };
+
+
+                        helpdeskController.talkSavedByEmployee
+                            (reqEmployee,
+                            pp,
+                            function (err, editResult) {
+
+                                if (err) throw err;
+
+
+                                assert.equal(err, null, err === null ? '' : err.message);
+                                assert.equal(editResult.isValid, true);
+                                assert.equal(resultHasMessage(i18n.__("Template.Widget.Crud.SavedChanges"), editResult.messages), true);
+                                assert.equal(editResult.data.editData.subject, pp.formData.subject, true);
+
+                                done();
+                            });
+
+
+
+                    });
+
+            });
+
+        });
+
         it('Employee can find talks', function (done) {
 
             helpdeskController.testMethodInitDb(function (e, initDbData) {
@@ -1114,6 +1207,9 @@
                     });
             });
         });
+
+
+
 
         it('Employee can find their talks & filter by status', function (done) {
 
