@@ -7,8 +7,9 @@ define([
     "/helpdesk/talks/employee/common/helpdeskCrudFakeData.js",
     "/helpdesk/talks/employee/common/helpdeskCommon.js",
     "crossLayer/models/dataResult",
+    'crossLayer/helpdesk',
 ],
-function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, DataResult) {
+function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, DataResult, helpdeskCrossLayer) {
 
     jQuery.widget("ui.product", jQuery.ui.crud,
     {
@@ -107,10 +108,10 @@ function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, D
                         type: "list",
                         value: null,
                         listValues: [
-                            { value: "", text: clientApp.i18n.texts.get("GeneralTexts.All") },
-                            { value: "2", text: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.Unread") },
-                            { value: "1", text: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.PendingAnswer") },
-                            { value: "0", text: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.OK") }
+                            { value: '', text: clientApp.i18n.texts.get("GeneralTexts.All") },
+                            { value: helpdeskCrossLayer.talkStatus.notRead, text: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.Unread") },
+                            { value: helpdeskCrossLayer.talkStatus.pendingAnswer, text: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.PendingAnswer") },
+                            { value: helpdeskCrossLayer.talkStatus.Ok, text: clientApp.i18n.texts.get("Helpdesk.Talks.History.Filter.OK") }
                         ]
                     },
                 },

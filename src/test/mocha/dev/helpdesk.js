@@ -995,67 +995,6 @@
             });
         });
 
-        it('Employee can find their talks & filter by status', function (done) {
-
-
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
-
-                if (e) throw e;
-
-                var reqEmployee = myUtils.extendDeep({ user: initDbData.employeeCurrent }, global);
-
-                helpdeskController.talkSavedByEmployee
-                    (reqEmployee,
-                    {
-                        isNew: true,
-                        formData: {
-                            subject: 'nueva conversaciopn de test',
-                            customerInfo: {
-                                customerId: initDbData.customerCurrent.idPeople
-                            }
-                        }
-                    },
-                    function (err, addResult) {
-
-                        
-
-                        var filter = {
-                            filter: {
-                                //customerInfo: {
-                                //    customerId: initDbData.customerCurrent.idPeople
-                                //},
-                                lastMessageStatus: helpdeskCrossLayer.talkStatus.notRead,
-                                //employeeInfo: {
-                                //    employeeId: initDbData.employeeCurrent.idPeople
-                                //}
-                            },
-                            page: 0,
-                            pageSize: 50,
-                            sortAscending: false,
-                            sortBy: ""
-                        };
-
-                        if (filter)
-                        {
-                            throw new Error("Not imlpemented");
-                        }
-
-                        helpdeskController.talkSearch
-                            (reqEmployee,
-                            filter,
-                            function (err, searchResult) {
-
-                                assert.equal(err, null, err === null ? '' : err.message);
-                                assert.equal(searchResult.isValid, true);
-                                assert.equal(searchResult.data.totalRows === 1, true);
-
-                                done();
-
-                            });
-                    });
-            });
-        });
-
         it('Employee can find & filter customers', function (done) {
 
             var filter = {
@@ -1175,6 +1114,67 @@
                     });
             });
         });
+
+        it('Employee can find their talks & filter by status', function (done) {
+
+
+            helpdeskController.testMethodInitDb(function (e, initDbData) {
+
+                if (e) throw e;
+
+                var reqEmployee = myUtils.extendDeep({ user: initDbData.employeeCurrent }, global);
+
+                helpdeskController.talkSavedByEmployee
+                    (reqEmployee,
+                    {
+                        isNew: true,
+                        formData: {
+                            subject: 'nueva conversaciopn de test',
+                            customerInfo: {
+                                customerId: initDbData.customerCurrent.idPeople
+                            }
+                        }
+                    },
+                    function (err, addResult) {
+
+
+
+                        var filter = {
+                            filter: {
+                                //customerInfo: {
+                                //    customerId: initDbData.customerCurrent.idPeople
+                                //},
+                                lastMessageStatus: helpdeskCrossLayer.talkStatus.notRead,
+                                //employeeInfo: {
+                                //    employeeId: initDbData.employeeCurrent.idPeople
+                                //}
+                            },
+                            page: 0,
+                            pageSize: 50,
+                            sortAscending: false,
+                            sortBy: ""
+                        };
+
+                        if (filter) {
+                            throw new Error("Not imlpemented");
+                        }
+
+                        helpdeskController.talkSearch
+                            (reqEmployee,
+                            filter,
+                            function (err, searchResult) {
+
+                                assert.equal(err, null, err === null ? '' : err.message);
+                                assert.equal(searchResult.isValid, true);
+                                assert.equal(searchResult.data.totalRows === 1, true);
+
+                                done();
+
+                            });
+                    });
+            });
+        });
+
     });
 
 })();

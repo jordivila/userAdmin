@@ -528,7 +528,7 @@
 
                             var userTalkIds = _.map(data, function (value, index, list) { return value.idTalk; });
 
-                            HelpdeskTalkModel.find({
+                            var query = HelpdeskTalkModel.find({
                                 idTalk: {
                                     $in: userTalkIds
                                 },
@@ -554,7 +554,7 @@
                 };
 
 
-                
+
 
                 if (!req.user.isEmployee) {
                     // set filter on customer talks
@@ -564,9 +564,8 @@
 
                     // de momento tratamos las dos busquedas de la misma manera
 
-                    
-
                     var dbFilter = {};
+
                     var peopleInvolvedFilter = [];
 
                     if ((params.filter.customerInfo) && (params.filter.customerInfo.customerId !== "")) {
