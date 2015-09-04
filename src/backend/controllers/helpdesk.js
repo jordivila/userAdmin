@@ -280,10 +280,25 @@
                                         }
                                         return null;
                                     }();
-                                    var dataObj = myUtils.extendDeep({}, talk);
-                                    dataObj.editData = myUtils.extendDeep(talk, { customerInfo: customerInfo });
-                                    dataResult = new DataResult(true, "", dataObj);
-                                    cb(null, dataResult);
+
+
+                                    //var dataObj = myUtils.extendDeep({}, talk);
+                                    var dataObj = {
+                                        idTalk: talk.idTalk,
+                                        subject: talk.subject,
+                                        dateLastMessage: talk.dateLastMessage,
+                                        editData: {
+                                            idTalk: talk.idTalk,
+                                            subject: talk.subject,
+                                            dateLastMessage: talk.dateLastMessage,
+                                            customerInfo: customerInfo
+                                        }
+                                    };
+
+                                    console.log("_fakeDataGridTalkGetByIdForEdit");
+                                    console.log(dataObj);
+
+                                    cb(null, new DataResult(true, "", dataObj));
                                 });
                         }
                     });
@@ -847,14 +862,14 @@
 
                 var dataResult = null;
 
-                crudAjaxOpts.ajax._fakeDataGridTalkGetByIdForEdit(
-                    req,
-                    dataResult.data.idTalk,
-                    function (e, dataResultGetById) {
+                console.log("talkGetById");
+                console.log(dataItem);
 
-                        if (e) return cb(e, null);
+                crudAjaxOpts.ajax._fakeDataGridTalkGetByIdForEdit(req, dataItem.idTalk,
+                    function (e, dataResult) {
+                        if (e) return cb(error, null);
 
-                        cb(null, dataResultGetById);
+                        cb(null, dataResult);
 
                     });
             },
@@ -953,8 +968,7 @@
     };
 
 
-    if (crudAjaxOpts.ajax._isInTestMode)
-    {
+    if (crudAjaxOpts.ajax._isInTestMode) {
         crudAjaxOpts.ajax.testMethodInitDb(function (e, data) {
 
         });
