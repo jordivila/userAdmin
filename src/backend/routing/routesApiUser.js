@@ -102,10 +102,10 @@
                                 }
                         ]
                     },
-                    {
-                        url: "/about/",
-                        text: i18n.__("GeneralTexts.About")
-                    },
+                    //{
+                    //    url: "/about/",
+                    //    text: i18n.__("GeneralTexts.About")
+                    //},
                     {
                         text: i18n.__("GeneralTexts.Settings"),
                         childs: [
