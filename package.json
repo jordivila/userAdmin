@@ -1,6 +1,6 @@
 {
   "name": "userAdmin",
-  "version": "0.0.10127",
+  "version": "0.0.10128",
   "description": "userAdmin",
   "private": true,
   "author": {
@@ -57,6 +57,7 @@
     "requirejs": "2.1.18",
     "sendgrid": "1.7.0",
     "serve-favicon": "2.2.0",
+    "underscore": "^1.8.3",
     "validator": "3.39.0",
     "winston": "1.0.0"
   },
