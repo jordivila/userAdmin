@@ -148,6 +148,7 @@ function ($, jqUI, clientApp, P) {
 
                             if (self._stateExists() === true) {
                                 self._stateToGrid();
+                                self.gridSearch();
                             }
                             else {
                                 jQuery(self.options.gridDOMId).crudGrid('emptyFirstLoad');
@@ -326,7 +327,7 @@ function ($, jqUI, clientApp, P) {
 
             if (this.options.stateStorageId !== null) {
                 sessionStorage.setItem("{0}_filter".format(this.options.stateStorageId), JSON.stringify(filterValue));
-                sessionStorage.setItem("{0}_gridData".format(this.options.stateStorageId), JSON.stringify(gridData));
+                //sessionStorage.setItem("{0}_gridData".format(this.options.stateStorageId), JSON.stringify(gridData));
             }
 
         },
@@ -340,12 +341,12 @@ function ($, jqUI, clientApp, P) {
             if (this.options.stateStorageId !== null) {
 
                 var stateFilter = sessionStorage.getItem("{0}_filter".format(this.options.stateStorageId));
-                var stateGridData = sessionStorage.getItem("{0}_gridData".format(this.options.stateStorageId));
+                //var stateGridData = sessionStorage.getItem("{0}_gridData".format(this.options.stateStorageId));
 
-                if ((stateFilter !== null) && (stateGridData !== null)) {
+                if ((stateFilter !== null) /*&& (stateGridData !== null)*/) {
                     result = this.options.stateStorageDeserialize({
                         filter: JSON.parse(stateFilter),
-                        gridData: JSON.parse(stateGridData)
+                        //gridData: JSON.parse(stateGridData)
                     });
                 }
             }
@@ -359,7 +360,7 @@ function ($, jqUI, clientApp, P) {
                 var state = this._stateGet();
                 this.options.gridFilterObject = state.filter;
                 jQuery(this.options.gridFilterDOMId).crudFilter('val', state.filter);
-                jQuery(this.options.gridDOMId).crudGrid('bind', state.gridData);
+                //jQuery(this.options.gridDOMId).crudGrid('bind', state.gridData);
             }
 
         },

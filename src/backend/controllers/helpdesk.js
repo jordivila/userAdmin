@@ -610,8 +610,14 @@
                     }
 
                     if ((params.filter.employeeInfo) && (params.filter.employeeInfo.employeeId !== "")) {
+                        // comprobar si tiene permisos para buscar por otro empleado. Debe ser super user o admin ...
                         peopleInvolvedFilter.push(params.filter.employeeInfo.employeeId);
                     }
+
+                    
+                    // en caso de que no sea super user. Añadir el filtro de empleado
+                    peopleInvolvedFilter.push(req.user.idPeople);
+
 
                     if (peopleInvolvedFilter.length > 0) {
                         dbFilter.idPeople = {
