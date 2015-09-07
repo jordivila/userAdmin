@@ -729,7 +729,7 @@
 
     describe('Helpdesk Employees features', function () {
 
-        it('Employee can add a talk', function (done) {
+        it('Employees can add a talk', function (done) {
 
 
             var filter = {
@@ -775,7 +775,7 @@
 
         });
 
-        it('Employee can edit a talk', function (done) {
+        it('Employees can edit a talk', function (done) {
 
 
             var filter = {
@@ -817,9 +817,9 @@
 
 
 
-                        
 
-                        var pp = {
+                        // simulate form data submit
+                        var formDataSubmit = {
                             idTalk: addResult.data.editData.idTalk,
                             subject: addResult.data.editData.subject,
                             dateLastMessage: addResult.data.editData.dateLastMessage,
@@ -846,7 +846,7 @@
 
                         helpdeskController.talkSavedByEmployee
                             (reqEmployee,
-                            pp,
+                            formDataSubmit,
                             function (err, editResult) {
 
                                 if (err) throw err;
@@ -855,7 +855,7 @@
                                 assert.equal(err, null, err === null ? '' : err.message);
                                 assert.equal(editResult.isValid, true);
                                 assert.equal(resultHasMessage(i18n.__("Template.Widget.Crud.SavedChanges"), editResult.messages), true);
-                                assert.equal(editResult.data.editData.subject, pp.formData.subject, true);
+                                assert.equal(editResult.data.editData.subject, formDataSubmit.formData.subject, true);
 
                                 done();
                             });
@@ -868,7 +868,7 @@
 
         });
 
-        it('Employee can find talks', function (done) {
+        it('Employees can find their talks', function (done) {
 
             helpdeskController.testMethodInitDb(function (e, initDbData) {
 
@@ -930,7 +930,7 @@
             });
         });
 
-        it('Employee can find their talks & filter by customer', function (done) {
+        it('Employees can find their talks & filter by customer', function (done) {
 
 
             helpdeskController.testMethodInitDb(function (e, initDbData) {
@@ -967,9 +967,6 @@
 
                                 var filter = {
                                     filter: {
-                                        customerInfo: {
-                                            customerId: initDbData.customerCurrent.idPeople
-                                        },
                                     },
                                     page: 0,
                                     pageSize: 50,
@@ -985,99 +982,25 @@
 
                                         assert.equal(err, null, err === null ? '' : err.message);
                                         assert.equal(searchResult.isValid, true);
-                                        assert.equal(searchResult.data.totalRows === 1, true);
+                                        assert.equal(searchResult.data.totalRows === 2, true);
                                         assert.equal(searchResult.data.data[0].idTalk === addResult.data.editData.idTalk, true);
-
-                                        done();
-
-                                    });
-                            });
-                    });
-            });
-        });
-
-        it('Employee can find their talks & filter by employee', function (done) {
+                                        assert.equal(searchResult.data.data[1].idTalk === addResultII.data.editData.idTalk, true);
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+                                        filter.filter.customerInfo = {
+                                            customerId: initDbData.customerCurrent.idPeople
+                                        };
 
-                if (e) throw e;
-
-                var reqEmployeeFirst = myUtils.extendDeep({ user: initDbData.employeeCurrent }, global);
-
-                // 1.- An emeployee ads a conversation
-
-                helpdeskController.talkSavedByEmployee
-                    (reqEmployeeFirst,
-                    {
-                        isNew: true,
-                        formData: {
-                            subject: 'nueva conversaciopn de test',
-                            customerInfo: {
-                                customerId: initDbData.customerCurrent.idPeople
-                            }
-                        }
-                    },
-                    function (err, addResult) {
-
-
-                        // 2.- Another emeployee ads a conversation
-
-                        var reqEmployeeSecond = myUtils.extendDeep({ user: initDbData.employeeAnother }, global);
-
-                        helpdeskController.talkSavedByEmployee
-                            (reqEmployeeSecond,
-                            {
-                                isNew: true,
-                                formData: {
-                                    subject: 'nueva conversaciopn de test',
-                                    customerInfo: {
-                                        customerId: initDbData.customerCurrent.idPeople
-                                    }
-                                }
-                            },
-                            function (err, addResultII) {
-
-
-                                // 3.- a super Employee searches by first employeeId. Should find first talk
-                                var reqEmployeeAdmin = myUtils.extendDeep({ user: initDbData.employeeDefault }, global);
-
-                                var filter = {
-                                    filter: {
-                                        employeeInfo: {
-                                            employeeId: reqEmployeeFirst.user.idPeople
-                                        }
-                                    },
-                                    page: 0,
-                                    pageSize: 50,
-                                    sortAscending: false,
-                                    sortBy: ""
-                                };
-
-
-                                helpdeskController.talkSearch
-                                    (reqEmployeeAdmin,
-                                    filter,
-                                    function (err, searchResult) {
-
-                                        assert.equal(err, null, err === null ? '' : err.message);
-                                        assert.equal(searchResult.isValid, true);
-                                        assert.equal(searchResult.data.totalRows === 1, true);
-                                        assert.equal(searchResult.data.data[0].idTalk === addResult.data.editData.idTalk, true);
-
-                                        // 4.- a super employee searches by second employeeId. Should find second talk
-
-                                        filter.filter.employeeInfo.employeeId = reqEmployeeSecond.user.idPeople;
 
                                         helpdeskController.talkSearch
-                                            (reqEmployeeAdmin,
+                                            (reqEmployee,
                                             filter,
                                             function (err, searchResult) {
 
                                                 assert.equal(err, null, err === null ? '' : err.message);
                                                 assert.equal(searchResult.isValid, true);
                                                 assert.equal(searchResult.data.totalRows === 1, true);
-                                                assert.equal(searchResult.data.data[0].idTalk === addResultII.data.editData.idTalk, true);
+                                                assert.equal(searchResult.data.data[0].idTalk === addResult.data.editData.idTalk, true);
 
                                                 done();
 
@@ -1210,7 +1133,6 @@
 
 
 
-
         it('Employee can find their talks & filter by status', function (done) {
 
 
@@ -1266,6 +1188,98 @@
 
                                 done();
 
+                            });
+                    });
+            });
+        });
+
+        it('Employees with admin profile can find their talks & filter by employee', function (done) {
+
+
+            helpdeskController.testMethodInitDb(function (e, initDbData) {
+
+                if (e) throw e;
+
+                var reqEmployeeFirst = myUtils.extendDeep({ user: initDbData.employeeCurrent }, global);
+
+                // 1.- An emeployee ads a conversation
+
+                helpdeskController.talkSavedByEmployee
+                    (reqEmployeeFirst,
+                    {
+                        isNew: true,
+                        formData: {
+                            subject: 'nueva conversaciopn de test',
+                            customerInfo: {
+                                customerId: initDbData.customerCurrent.idPeople
+                            }
+                        }
+                    },
+                    function (err, addResult) {
+
+
+                        // 2.- Another emeployee ads a conversation
+
+                        var reqEmployeeSecond = myUtils.extendDeep({ user: initDbData.employeeAnother }, global);
+
+                        helpdeskController.talkSavedByEmployee
+                            (reqEmployeeSecond,
+                            {
+                                isNew: true,
+                                formData: {
+                                    subject: 'nueva conversaciopn de test',
+                                    customerInfo: {
+                                        customerId: initDbData.customerCurrent.idPeople
+                                    }
+                                }
+                            },
+                            function (err, addResultII) {
+
+
+                                // 3.- a super Employee searches by first employeeId. Should find first talk
+                                var reqEmployeeAdmin = myUtils.extendDeep({ user: initDbData.employeeDefault }, global);
+
+                                var filter = {
+                                    filter: {
+                                        employeeInfo: {
+                                            employeeId: reqEmployeeFirst.user.idPeople
+                                        }
+                                    },
+                                    page: 0,
+                                    pageSize: 50,
+                                    sortAscending: false,
+                                    sortBy: ""
+                                };
+
+
+                                helpdeskController.talkSearch
+                                    (reqEmployeeAdmin,
+                                    filter,
+                                    function (err, searchResult) {
+
+                                        assert.equal(err, null, err === null ? '' : err.message);
+                                        assert.equal(searchResult.isValid, true);
+                                        assert.equal(searchResult.data.totalRows === 1, true);
+                                        assert.equal(searchResult.data.data[0].idTalk === addResult.data.editData.idTalk, true);
+
+                                        // 4.- a super employee searches by second employeeId. Should find second talk
+
+                                        filter.filter.employeeInfo.employeeId = reqEmployeeSecond.user.idPeople;
+
+                                        helpdeskController.talkSearch
+                                            (reqEmployeeAdmin,
+                                            filter,
+                                            function (err, searchResult) {
+
+                                                assert.equal(err, null, err === null ? '' : err.message);
+                                                assert.equal(searchResult.isValid, true);
+                                                assert.equal(searchResult.data.totalRows === 1, true);
+                                                assert.equal(searchResult.data.data[0].idTalk === addResultII.data.editData.idTalk, true);
+
+                                                done();
+
+                                            });
+                                    });
                             });
                     });
             });

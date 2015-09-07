@@ -78,7 +78,7 @@
                         employeeId = employeeId;
                         customerId = customerId;
 
-                        
+
 
 
                         var helpdeskTalkSave = function (helpdeskTalk) {
@@ -116,7 +116,7 @@
                                             });
 
 
-                                        
+
 
                                         cb(null, dataResult);
 
@@ -175,7 +175,7 @@
 
                                     helpdeskTalk.subject = subject;
                                     helpdeskTalkSave(helpdeskTalk);
-                            });
+                                });
 
 
                         }
@@ -215,6 +215,146 @@
 
                 });
             },
+            _talkSearchByCustomer: function (req, params, cb) {
+
+                HelpdeskPeopleInvolvedModel.find({
+                    idPeople: req.user.idPeople
+                },
+                function (err, data) {
+
+                    if (err) return cb(err);
+
+                    crudAjaxOpts.ajax._talkSearchDataToViewModel(
+                        _.map(data, function (value, index, list) {
+                            return value.idTalk;
+                        }), params, cb);
+                });
+
+            },
+            _talkSearchByEmployee: function (req, params, cb) {
+
+                var dbFilter = {};
+
+                var peopleInvolvedFilter = [];
+                var customerId = null;
+                var employeeId = null;
+
+                if ((params.filter.customerInfo) && (params.filter.customerInfo.customerId !== "")) {
+                    customerId = params.filter.customerInfo.customerId;
+                }
+
+
+                // de momento no contemplamos usuarios admin. Asi que hardcodeamos la siguiente linea
+                var isEmployeeAdmin = false;
+
+                if (isEmployeeAdmin) {
+                    if ((params.filter.employeeInfo) && (params.filter.employeeInfo.employeeId !== "")) {
+                        // comprobar si tiene permisos para buscar por otro empleado. Debe ser super user o admin ...
+                        employeeId = params.filter.employeeInfo.employeeId;
+                    }
+                    else {
+                        // es employee admin y esta buscando conversaciones de cualquier empleado
+                    }
+                }
+                else {
+                    // en caso de que no sea super user. Añadir el filtro de empleado
+                    employeeId = req.user.idPeople;
+                }
+
+
+
+
+
+                if (employeeId !== null) {
+                    peopleInvolvedFilter.push(employeeId);
+                }
+
+                if (customerId !== null) {
+                    peopleInvolvedFilter.push(customerId);
+                }
+
+
+                var query = HelpdeskPeopleInvolvedModel.aggregate(
+                   [
+                       // filter those by idPeople 
+                       // This means ... idPeople == customerId || idPeople == employeeId
+                       { $match: { idPeople: { $in: peopleInvolvedFilter } } },
+                       // group those by idTalk
+                       { $group: { _id: "$idTalk", people: { $push: "$idPeople" } } },
+                       // add peopleCount field
+                       {
+                           $project: {
+                               _id: 0,
+                               idTalk: "$_id",
+                               people: 1,
+                               peopleCount: { $size: "$people" }
+                           }
+                       },
+                       // This means ... people.length ==  (customerId & employeeId).length
+                       { $match: { peopleCount: peopleInvolvedFilter.length } },
+                   ]
+                );
+
+
+                query.exec(function (e, data) {
+
+                    var talkIdsArray = _.map(data, function (value, index, list) {
+                        return value.idTalk;
+                    });
+
+
+                    crudAjaxOpts.ajax._talkSearchDataToViewModel(talkIdsArray, params, cb);
+
+                });
+
+
+
+
+
+            },
+            _talkSearchDataToViewModel: function (talkIdsArray, params, cb) {
+
+                var page = params.page;
+                var pageSize = params.pageSize;
+                var queryFilter = function () {
+                    return {
+                        idTalk: {
+                            $in: talkIdsArray
+                        }
+                    };
+                }();
+                var query = HelpdeskTalkModel.find(queryFilter).skip((page * pageSize)).limit(pageSize);
+                var queryCount = HelpdeskTalkModel.find(queryFilter).count();
+
+                query.exec(function (e, talkArray) {
+
+                    if (e) return cb(e, null);
+
+                    queryCount
+                        .exec(function (e, talkCount) {
+
+                            if (e) return cb(e, null);
+
+                            var dataResult = new DataResultPaginated();
+                            dataResult.isValid = true;
+                            dataResult.data.totalRows = talkCount;
+                            dataResult.data.page = page;
+                            dataResult.data.pageSize = pageSize;
+                            dataResult.data.data = _.map(talkArray, function (value, index, list) {
+                                return {
+                                    idTalk: value.idTalk,
+                                    subject: value.subject,
+                                    dateLastMessage: new Date(), // crudAjaxOpts.ajax._fakeMessagesGetDateLastMessage(talkArray[i].idTalk),
+                                    nMessagesUnread: 0
+                                };
+                            });
+
+                            cb(null, dataResult);
+                        });
+                });
+
+            },
+
             _fakeMessageObjectToViewModel: function (currentUserIdPeople, peopleInvolvedDetailsArray, message) {
 
                 var whoPosted = _.first(_.filter(peopleInvolvedDetailsArray, function (elem) { return elem.idPeople == message.idPeople; }));
@@ -535,97 +675,11 @@
             },
             talkSearch: function (req, params, cb) {
 
-                var dataToViewModel = function (dataSourceArray, cb) {
-
-                    var dataResult = new DataResultPaginated();
-                    dataResult.isValid = true;
-                    dataResult.data.totalRows = dataSourceArray.length;
-                    dataResult.data.page = params.page;
-                    dataResult.data.pageSize = params.pageSize;
-
-                    for (var i = (params.page * params.pageSize) ; i < ((params.page * params.pageSize) + params.pageSize) ; i++) {
-                        if (i < dataSourceArray.length) {
-                            dataResult.data.data.push({
-                                idTalk: dataSourceArray[i].idTalk,
-                                subject: dataSourceArray[i].subject,
-                                dateLastMessage: new Date(), // crudAjaxOpts.ajax._fakeMessagesGetDateLastMessage(dataSourceArray[i].idTalk),
-                                nMessagesUnread: 0
-                            });
-                        }
-                    }
-
-                    return dataResult;
-                };
-                var performSearch = function (mongooseFilter) {
-
-                    HelpdeskPeopleInvolvedModel.find(mongooseFilter,
-                        function (err, data) {
-
-                            if (err) return cb(err);
-
-                            var userTalkIds = _.map(data, function (value, index, list) { return value.idTalk; });
-
-                            var query = HelpdeskTalkModel.find({
-                                idTalk: {
-                                    $in: userTalkIds
-                                },
-                                //idTalk: userTalkIds, // valid as weell
-                            }, function (err, userTalks) {
-
-                                if (err) return cb(err, null);
-
-                                //HelpdeskPeopleLastReadModel.find({
-                                //    idPeople: req.user.idPeople
-                                //}, function (err, lastReadResults) {
-
-                                //    if (err) return cb(err, null);
-
-                                return cb(null, dataToViewModel(userTalks));
-                                //});
-
-                            });
-
-                        });
-
-
-                };
-
-
-
-
                 if (!req.user.isEmployee) {
-                    // set filter on customer talks
-                    performSearch({ idPeople: req.user.idPeople });
+                    crudAjaxOpts.ajax._talkSearchByCustomer(req, params, cb);
                 }
                 else {
-
-                    // de momento tratamos las dos busquedas de la misma manera
-
-                    var dbFilter = {};
-
-                    var peopleInvolvedFilter = [];
-
-                    if ((params.filter.customerInfo) && (params.filter.customerInfo.customerId !== "")) {
-                        peopleInvolvedFilter.push(params.filter.customerInfo.customerId);
-                    }
-
-                    if ((params.filter.employeeInfo) && (params.filter.employeeInfo.employeeId !== "")) {
-                        // comprobar si tiene permisos para buscar por otro empleado. Debe ser super user o admin ...
-                        peopleInvolvedFilter.push(params.filter.employeeInfo.employeeId);
-                    }
-
-                    
-                    // en caso de que no sea super user. Añadir el filtro de empleado
-                    peopleInvolvedFilter.push(req.user.idPeople);
-
-
-                    if (peopleInvolvedFilter.length > 0) {
-                        dbFilter.idPeople = {
-                            $in: peopleInvolvedFilter
-                        };
-                    }
-
-                    performSearch(dbFilter);
+                    crudAjaxOpts.ajax._talkSearchByEmployee(req, params, cb);
                 }
 
             },

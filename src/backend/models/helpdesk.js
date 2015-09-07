@@ -86,7 +86,9 @@
 
     HelpdeskPeople.pre('save', function (next) {
 
-        this.idPeople = uuid.v4();
+        if (!this.idPeople) {
+            this.idPeople = uuid.v4();
+        }
 
         next();
     });
@@ -126,7 +128,9 @@
 
     HelpdeskMessage.pre('save', function (next) {
 
-        this.idMessage = uuid.v4();
+        if (!this.idMessage) {
+            this.idMessage = uuid.v4();
+        }
 
         next();
     });
