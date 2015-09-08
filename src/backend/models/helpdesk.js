@@ -24,6 +24,10 @@
             type: String,
             required: true
         },
+        dateCreated: {
+            type: Date,
+            default:Date.now
+        },
         dateLastMessage: {
             type: Date,
             default: Date.now
@@ -167,6 +171,36 @@
 
 
     module.exports.HelpdeskPeopleLastRead = mongoose.model('HelpdeskPeopleLastRead', HelpdeskPeopleLastRead);
+
+
+    /*********************************************************
+
+    HelpdeskPeopleLastWrite
+
+    ***********************************************************/
+
+    // Define our user schema
+    var HelpdeskPeopleLastWrite = new mongoose.Schema({
+        idTalk: {
+            type: String,
+            required: true
+        },
+        idPeople: {
+            type: String,
+            required: true
+        },
+        idMessage: {
+            type: String,
+            required: true
+        },
+        dateWrite: {
+            type: Date,
+            required: true
+        }
+    });
+
+
+    module.exports.HelpdeskPeopleLastWrite = mongoose.model('HelpdeskPeopleLastWrite', HelpdeskPeopleLastWrite);
 
 
     /*********************************************************

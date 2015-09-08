@@ -12,13 +12,16 @@
     var _ = require("underscore");
     var config = require('../libs/config');
     var crossLayer = require('../../crossLayer/config');
+    var helpdeskCrossLayer = require('../../crossLayer/helpdesk');
     var P = require('p-promise');
 
     var HelpdeskTalkModel = require('../models/helpdesk').HelpdeskTalk;
     var HelpdeskPeopleModel = require('../models/helpdesk').HelpdeskPeople;
     var HelpdeskMessageModel = require('../models/helpdesk').HelpdeskMessage;
     var HelpdeskPeopleLastReadModel = require('../models/helpdesk').HelpdeskPeopleLastRead;
+    var HelpdeskPeopleLastWriteModel = require('../models/helpdesk').HelpdeskPeopleLastWrite;
     var HelpdeskPeopleInvolvedModel = require('../models/helpdesk').HelpdeskPeopleInvolved;
+
 
 
     var crudAjaxOpts = {
@@ -225,58 +228,54 @@
                     if (err) return cb(err);
 
                     crudAjaxOpts.ajax._talkSearchDataToViewModel(
+                        req.user,
                         _.map(data, function (value, index, list) {
                             return value.idTalk;
-                        }), params, cb);
+                        }),
+                        params,
+                        cb);
                 });
 
             },
             _talkSearchByEmployee: function (req, params, cb) {
 
                 var dbFilter = {};
-
+                var isEmployeeAdmin = false;// by the time I write this line no admin users exists. So hardcode this value
                 var peopleInvolvedFilter = [];
-                var customerId = null;
-                var employeeId = null;
+                var customerId = function () {
 
-                if ((params.filter.customerInfo) && (params.filter.customerInfo.customerId !== "")) {
-                    customerId = params.filter.customerInfo.customerId;
-                }
-
-
-                // de momento no contemplamos usuarios admin. Asi que hardcodeamos la siguiente linea
-                var isEmployeeAdmin = false;
-
-                if (isEmployeeAdmin) {
-                    if ((params.filter.employeeInfo) && (params.filter.employeeInfo.employeeId !== "")) {
-                        // comprobar si tiene permisos para buscar por otro empleado. Debe ser super user o admin ...
-                        employeeId = params.filter.employeeInfo.employeeId;
+                    if ((params.filter.customerInfo) && (params.filter.customerInfo.customerId !== "")) {
+                        return params.filter.customerInfo.customerId;
                     }
                     else {
-                        // es employee admin y esta buscando conversaciones de cualquier empleado
+                        return null;
                     }
-                }
-                else {
-                    // en caso de que no sea super user. Añadir el filtro de empleado
-                    employeeId = req.user.idPeople;
-                }
 
+                }();
+                var employeeId = function () {
 
+                    if (isEmployeeAdmin === true) {
+                        if ((params.filter.employeeInfo) && (params.filter.employeeInfo.employeeId !== "")) {
+                            // comprobar si tiene permisos para buscar por otro empleado. Debe ser super user o admin ...
+                            return params.filter.employeeInfo.employeeId;
+                        }
+                        else {
+                            return null;// es employee admin y esta buscando conversaciones de cualquier empleado
+                        }
+                    }
+                    else {
+                        // en caso de que no sea super user. Añadir el filtro de empleado
+                        return req.user.idPeople;
+                    }
 
+                }();
 
+                if (employeeId !== null) peopleInvolvedFilter.push(employeeId);
+                if (customerId !== null) peopleInvolvedFilter.push(customerId);
 
-                if (employeeId !== null) {
-                    peopleInvolvedFilter.push(employeeId);
-                }
-
-                if (customerId !== null) {
-                    peopleInvolvedFilter.push(customerId);
-                }
-
-
-                var query = HelpdeskPeopleInvolvedModel.aggregate(
+                HelpdeskPeopleInvolvedModel.aggregate(
                    [
-                       // filter those by idPeople 
+                       // filter talks by idPeople IN...
                        // This means ... idPeople == customerId || idPeople == employeeId
                        { $match: { idPeople: { $in: peopleInvolvedFilter } } },
                        // group those by idTalk
@@ -290,29 +289,160 @@
                                peopleCount: { $size: "$people" }
                            }
                        },
-                       // This means ... people.length ==  (customerId & employeeId).length
-                       { $match: { peopleCount: peopleInvolvedFilter.length } },
+                       // filter results getting only those elements 
+                       // containing $all items in the source array in the destination array
+                       // This means ... groupedPeople [1,2,3] == destionationArray.[3,1,2]
+                       { $match: { people: { $all: peopleInvolvedFilter } } },
                    ]
-                );
-
-
-                query.exec(function (e, data) {
+                ).exec(function (e, data) {
 
                     var talkIdsArray = _.map(data, function (value, index, list) {
                         return value.idTalk;
                     });
 
-
-                    crudAjaxOpts.ajax._talkSearchDataToViewModel(talkIdsArray, params, cb);
+                    crudAjaxOpts.ajax._talkSearchDataToViewModel(req.user, talkIdsArray, params, cb);
 
                 });
 
-
-
-
-
             },
-            _talkSearchDataToViewModel: function (talkIdsArray, params, cb) {
+            //_talkSearchGroupByStatus: function (requestIdentityUser, talkIdsArray, params, cb) {
+
+            //},
+            //_talkSearchFilterByStatus: function (requestIdentityUser, talkIdsArray, params, cb) {
+
+            //    var page = params.page;
+            //    var pageSize = params.pageSize;
+            //    var queryFilter = function () {
+            //        return {
+            //            idTalk: {
+            //                $in: talkIdsArray
+            //            }
+            //        };
+            //    }();
+            //    var query = HelpdeskTalkModel.find(queryFilter)/*.skip((page * pageSize)).limit(pageSize).sort({ dateLastMessage: 'desc' })*/;
+
+
+            //    HelpdeskPeopleLastWriteModel
+            //        .find({
+            //            idTalk: { $in: talkIdsArray },
+            //            idPeople: requestIdentityUser.idPeople // used to track number of unRead Messages
+            //        }, function (e, userLastMessageWrites) {
+
+            //            if (e) return cb(e, null);
+
+
+            //            HelpdeskPeopleLastReadModel
+            //                .find({
+            //                    idTalk: { $in: talkIdsArray },
+            //                    idPeople: requestIdentityUser.idPeople // used to track number of unRead Messages
+            //                }, function (e, userLastMessageReads) {
+
+            //                    if (e) return cb(e, null);
+
+            //                    HelpdeskMessageModel
+            //                        .find({
+            //                            idTalk: { $in: talkIdsArray },
+            //                        }, function (e, allTalkMessages) {
+
+            //                            if (e) return cb(e, null);
+
+            //                            query.exec(function (e, talkArray) {
+
+            //                                if (e) return cb(e, null);
+
+
+            //                                var notRead = [];
+            //                                var pendingAnswer = [];
+            //                                var ok = [];
+
+            //                                /*
+            //                                    notRead: "2",
+            //                                    pendingAnswer: "1",
+            //                                    Ok: "0"
+            //                                */
+
+
+            //                                _.map(talkArray, function (value, index, list) {
+
+            //                                    var t = {
+            //                                        idTalk: value.idTalk,
+            //                                        subject: value.subject,
+            //                                        dateLastMessage: value.dateLastMessage, // crudAjaxOpts.ajax._fakeMessagesGetDateLastMessage(talkArray[i].idTalk),
+            //                                        nMessagesUnread: function () {
+
+            //                                            var userLastReadMessage = _.find(userLastMessageReads, function (elem) {
+            //                                                return elem.idTalk == value.idTalk;
+            //                                            });
+            //                                            var userLastReadDate = function () {
+
+            //                                                if (userLastReadMessage) {
+            //                                                    return userLastReadMessage.dateRead;
+            //                                                }
+            //                                                else {
+            //                                                    // current user has not been read any message
+            //                                                    return value.dateCreated;
+            //                                                }
+
+            //                                            }();
+
+            //                                            var userLastWriteMessage = _.find(userLastMessageWrites, function (elem) {
+            //                                                return elem.idTalk == value.idTalk;
+            //                                            });
+            //                                            var userLastWriteDate = function () {
+
+            //                                                if (userLastWriteMessage) {
+            //                                                    return userLastWriteMessage.dateWrite;
+            //                                                }
+            //                                                else {
+            //                                                    // current user has not been read any message
+            //                                                    return value.dateCreated;
+            //                                                }
+
+            //                                            }();
+
+            //                                            var talkMessages = _.filter(allTalkMessages, function (elem) {
+            //                                                return elem.idTalk == value.idTalk;
+            //                                            });
+            //                                            var talkMessagesUnread = _.filter(talkMessages, function (elem) {
+            //                                                return elem.datePosted > userLastReadDate;
+            //                                            });
+
+            //                                            var isNotRead = false;
+            //                                            var isPendinWrite = false;
+            //                                            var isOk = false;
+
+            //                                            if (talkMessagesUnread.nMessagesUnread > 0) {
+            //                                                notRead.push({ idTalk: t.idTalk, unread: talkMessagesUnread.length });
+            //                                                isNotRead = true;
+            //                                            }
+
+            //                                            if (_.last(talkMessages).datePosted > userLastWriteDate) {
+            //                                                pendingAnswer.push(t.idTalk);
+            //                                                isPendinWrite = true;
+            //                                            }
+
+            //                                            if ((!isNotRead) && (!isPendinWrite)) {
+            //                                                isOk = true;
+            //                                                ok.push(t.idTalk);
+            //                                            }
+
+            //                                            return talkMessagesUnread.length;
+            //                                        }()
+            //                                    };
+
+            //                                });
+
+            //                                cb(null, dataResult);
+            //                            });
+
+
+            //                        });
+            //                });
+
+
+            //        });
+            //},
+            _talkSearchDataToViewModel: function (requestIdentityUser, talkIdsArray, params, cb) {
 
                 var page = params.page;
                 var pageSize = params.pageSize;
@@ -323,38 +453,92 @@
                         }
                     };
                 }();
-                var query = HelpdeskTalkModel.find(queryFilter).skip((page * pageSize)).limit(pageSize);
+                var query = HelpdeskTalkModel.find(queryFilter).skip((page * pageSize)).limit(pageSize).sort({ dateLastMessage: 'desc' });
                 var queryCount = HelpdeskTalkModel.find(queryFilter).count();
 
-                query.exec(function (e, talkArray) {
 
-                    if (e) return cb(e, null);
+                HelpdeskPeopleLastWriteModel
+                    .find({
+                        idTalk: { $in: talkIdsArray },
+                        idPeople: requestIdentityUser.idPeople // used to track number of unRead Messages
+                    }, function (e, userLastMessageWrites) {
 
-                    queryCount
-                        .exec(function (e, talkCount) {
+                        if (e) return cb(e, null);
 
-                            if (e) return cb(e, null);
 
-                            var dataResult = new DataResultPaginated();
-                            dataResult.isValid = true;
-                            dataResult.data.totalRows = talkCount;
-                            dataResult.data.page = page;
-                            dataResult.data.pageSize = pageSize;
-                            dataResult.data.data = _.map(talkArray, function (value, index, list) {
-                                return {
-                                    idTalk: value.idTalk,
-                                    subject: value.subject,
-                                    dateLastMessage: new Date(), // crudAjaxOpts.ajax._fakeMessagesGetDateLastMessage(talkArray[i].idTalk),
-                                    nMessagesUnread: 0
-                                };
+
+                        HelpdeskPeopleLastReadModel
+                            .find({
+                                idTalk: { $in: talkIdsArray },
+                                idPeople: requestIdentityUser.idPeople // used to track number of unRead Messages
+                            }, function (e, userLastMessageReads) {
+
+                                if (e) return cb(e, null);
+
+                                HelpdeskMessageModel
+                                    .find({
+                                        idTalk: { $in: talkIdsArray },
+                                    }, function (e, allTalkMessages) {
+
+                                        if (e) return cb(e, null);
+
+                                        query.exec(function (e, talkArray) {
+
+                                            if (e) return cb(e, null);
+
+                                            queryCount
+                                                .exec(function (e, talkCount) {
+
+                                                    if (e) return cb(e, null);
+
+                                                    var dataResult = new DataResultPaginated();
+                                                    dataResult.isValid = true;
+                                                    dataResult.data.totalRows = talkCount;
+                                                    dataResult.data.page = page;
+                                                    dataResult.data.pageSize = pageSize;
+                                                    dataResult.data.data = _.map(talkArray, function (value, index, list) {
+                                                        return {
+                                                            idTalk: value.idTalk,
+                                                            subject: value.subject,
+                                                            dateLastMessage: value.dateLastMessage, // crudAjaxOpts.ajax._fakeMessagesGetDateLastMessage(talkArray[i].idTalk),
+                                                            nMessagesUnread: function () {
+
+                                                                var userLastReadMessage = _.find(userLastMessageReads, function (elem) {
+                                                                    return elem.idTalk == value.idTalk;
+                                                                });
+                                                                var userLastReadDate = function () {
+
+                                                                    if (userLastReadMessage) {
+                                                                        return userLastReadMessage.dateRead;
+                                                                    }
+                                                                    else {
+                                                                        // current user has not been read any message
+                                                                        return value.dateCreated;
+                                                                    }
+
+                                                                }();
+                                                                var talkMessages = _.filter(allTalkMessages, function (elem) {
+                                                                    return elem.idTalk == value.idTalk;
+                                                                });
+                                                                var talkMessagesUnread = _.filter(talkMessages, function (elem) {
+                                                                    return elem.datePosted > userLastReadDate;
+                                                                });
+
+                                                                return talkMessagesUnread.length;
+                                                            }()
+                                                        };
+                                                    });
+
+                                                    cb(null, dataResult);
+                                                });
+                                        });
+
+                                    });
                             });
 
-                            cb(null, dataResult);
-                        });
-                });
 
+                    });
             },
-
             _fakeMessageObjectToViewModel: function (currentUserIdPeople, peopleInvolvedDetailsArray, message) {
 
                 var whoPosted = _.first(_.filter(peopleInvolvedDetailsArray, function (elem) { return elem.idPeople == message.idPeople; }));
@@ -389,6 +573,46 @@
             },
             _userRequestCanAccessTalk: function (req, idTalk, cb) {
                 crudAjaxOpts.ajax._userCanAccessTalk(req.user.idPeople, idTalk, cb);
+            },
+            _userLastReadUpdate: function (model, cb) {
+
+                //new HelpdeskPeopleLastReadModel({
+                //    idTalk: idTalk,
+                //    idPeople: req.user.idPeople,
+                //    idMessage: newMessageRead.idMessage,
+                //    dateRead: new Date()
+                //}).save(function (e, talkObject, numberAffected) {
+                //    returnResult();
+                //});
+
+                new HelpdeskPeopleLastReadModel(model)
+                    .save(function (e, lastReadObject, numberAffected) {
+
+                        if (e) return cb(e, null);
+
+                        cb(null, lastReadObject, numberAffected);
+
+                    });
+            },
+            _userLastWriteUpdate: function (model, cb) {
+
+                //new HelpdeskPeopleLastReadModel({
+                //    idTalk: idTalk,
+                //    idPeople: req.user.idPeople,
+                //    idMessage: newMessageRead.idMessage,
+                //    dateWrite: new Date()
+                //}).save(function (e, talkObject, numberAffected) {
+                //    returnResult();
+                //});
+
+                new HelpdeskPeopleLastWriteModel(model)
+                    .save(function (e, lastWriteObject, numberAffected) {
+
+                        if (e) return cb(e, null);
+
+                        cb(null, lastWriteObject, numberAffected);
+
+                    });
             },
             _messageResultToViewModel: function (req, filter, peopleInvolvedDetails, messageArray, cb) {
 
@@ -770,9 +994,20 @@
 
                                                 if (e) return cb(e, null);
 
-                                                dataResult = new DataResult(true, "", messageObject);
-                                                cb(null, dataResult);
+                                                crudAjaxOpts.ajax._userLastWriteUpdate({
+                                                    idTalk: messageObject.idTalk,
+                                                    idPeople: messageObject.idPeople,
+                                                    idMessage: messageObject.idMessage,
+                                                    dateWrite: new Date()
+                                                }, function (e, lastWriteUpdate, lastWriteNumberAffected) {
 
+                                                    if (e) return cb(e, null);
+
+                                                    dataResult = new DataResult(true, "", messageObject);
+
+                                                    cb(null, dataResult);
+
+                                                });
                                             });
                                     });
                                 });
@@ -804,10 +1039,8 @@
                 //    }
                 //};
 
-                var filter = params;
-                var idTalk = filter.filter.idTalk;
-
-
+                //var filter = params;
+                var idTalk = params.filter.idTalk;
 
                 crudAjaxOpts.ajax._userRequestCanAccessTalk(req, idTalk, function (e, hasPermission, peopleInvolvedDetails) {
 
@@ -821,16 +1054,29 @@
 
                             crudAjaxOpts.ajax._messageResultToViewModel(
                                 req,
-                                filter,
+                                params,
                                 peopleInvolvedDetails,
                                 messagesByIdTalk,
                                 function (e, dataResult) {
 
                                     if (e) return cb(e, null);
 
-                                    cb(null, dataResult);
-                                });
+                                    var newMessageRead = _.last(messagesByIdTalk);
 
+                                    if (newMessageRead) {
+                                        crudAjaxOpts.ajax._userLastReadUpdate({
+                                            idTalk: idTalk,
+                                            idPeople: req.user.idPeople,
+                                            idMessage: newMessageRead.idMessage,
+                                            dateRead: new Date()
+                                        }, function (e, talkObject, numberAffected) {
+                                            cb(null, dataResult);
+                                        });
+                                    }
+                                    else {
+                                        cb(null, dataResult);
+                                    }
+                                });
                         });
                     }
                     else {
@@ -910,12 +1156,12 @@
                                     var newMessageRead = _.last(messagesByIdTalk);
 
                                     if (newMessageRead) {
-                                        new HelpdeskPeopleLastReadModel({
+                                        crudAjaxOpts.ajax._userLastReadUpdate({
                                             idTalk: idTalk,
                                             idPeople: req.user.idPeople,
                                             idMessage: newMessageRead.idMessage,
                                             dateRead: new Date()
-                                        }).save(function (e, talkObject, numberAffected) {
+                                        }, function (e, talkObject, numberAffected) {
                                             returnResult();
                                         });
                                     }
