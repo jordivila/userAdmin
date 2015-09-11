@@ -30,14 +30,15 @@
                 assert.equal(err, null, err === null ? '' : err.message);
             }
 
-            return done();
+            done(); 
         });
 
     });
 
     afterEach(function (done) {
-        mongoose.disconnect();
-        done();
+        mongoose.disconnect(function () {
+            done();
+        });
     });
 
 })();

@@ -521,7 +521,10 @@
                                                                     return elem.idTalk == value.idTalk;
                                                                 });
                                                                 var talkMessagesUnread = _.filter(talkMessages, function (elem) {
-                                                                    return elem.datePosted > userLastReadDate;
+                                                                    //return elem.datePosted > userLastReadDate;
+
+                                                                    return ((elem.datePosted > userLastReadDate) &&
+                                                                            (elem.idPeople !== requestIdentityUser.idPeople));
                                                                 });
 
                                                                 return talkMessagesUnread.length;
@@ -585,14 +588,44 @@
                 //    returnResult();
                 //});
 
-                new HelpdeskPeopleLastReadModel(model)
-                    .save(function (e, lastReadObject, numberAffected) {
 
-                        if (e) return cb(e, null);
 
-                        cb(null, lastReadObject, numberAffected);
+                HelpdeskPeopleLastReadModel.findOne({
+                    idTalk: model.idTalk,
+                    idPeople: model.idPeople
+                }, function (e, lastRead) {
 
-                    });
+                    if (e) return cb(e, null);
+
+                    if (lastRead) {
+
+                        HelpdeskPeopleLastReadModel
+                            .findByIdAndUpdate(
+                                lastRead._id,
+                                {
+                                    $set: {
+                                        idMessage: model.idMessage,
+                                        dateRead: model.dateRead
+                                    }
+                                },
+                                function (e, lastReadUpdated) {
+                                    if (e) return cb(e, null);
+
+                                    cb(null, lastReadUpdated, 1);
+                                });
+
+                    } else {
+
+                        new HelpdeskPeopleLastReadModel(model)
+                            .save(function (e, lastReadObject, numberAffected) {
+
+                                if (e) return cb(e, null);
+
+                                cb(null, lastReadObject, numberAffected);
+
+                            });
+                    }
+                });
             },
             _userLastWriteUpdate: function (model, cb) {
 
@@ -605,14 +638,43 @@
                 //    returnResult();
                 //});
 
-                new HelpdeskPeopleLastWriteModel(model)
-                    .save(function (e, lastWriteObject, numberAffected) {
 
-                        if (e) return cb(e, null);
+                HelpdeskPeopleLastWriteModel.findOne({
+                    idTalk: model.idTalk,
+                    idPeople: model.idPeople
+                }, function (e, lastWrite) {
 
-                        cb(null, lastWriteObject, numberAffected);
+                    if (e) return cb(e, null);
 
-                    });
+                    if (lastWrite) {
+
+                        HelpdeskPeopleLastWriteModel
+                            .findByIdAndUpdate(
+                                lastWrite._id,
+                                {
+                                    $set: {
+                                        idMessage: model.idMessage,
+                                        dateWrite: model.dateWrite
+                                    }
+                                },
+                                function (e, lastWriteUpdated) {
+                                    if (e) return cb(e, null);
+
+                                    cb(null, lastWriteUpdated, 1);
+                                });
+
+
+                    } else {
+                        new HelpdeskPeopleLastWriteModel(model)
+                            .save(function (e, lastWriteObject, numberAffected) {
+
+                                if (e) return cb(e, null);
+
+                                cb(null, lastWriteObject, numberAffected);
+
+                            });
+                    }
+                });
             },
             _messageResultToViewModel: function (req, filter, peopleInvolvedDetails, messageArray, cb) {
 
