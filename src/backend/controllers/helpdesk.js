@@ -302,6 +302,7 @@
 
                     crudAjaxOpts.ajax._talkSearchDataToViewModel(req.user, talkIdsArray, params, cb);
 
+
                 });
 
             },
@@ -444,17 +445,23 @@
             //},
             _talkSearchDataToViewModel: function (requestIdentityUser, talkIdsArray, params, cb) {
 
-                var page = params.page;
-                var pageSize = params.pageSize;
-                var queryFilter = function () {
-                    return {
-                        idTalk: {
-                            $in: talkIdsArray
-                        }
-                    };
-                }();
-                var query = HelpdeskTalkModel.find(queryFilter).skip((page * pageSize)).limit(pageSize).sort({ dateLastMessage: 'desc' });
-                var queryCount = HelpdeskTalkModel.find(queryFilter).count();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
                 HelpdeskPeopleLastWriteModel
@@ -475,68 +482,218 @@
 
                                 if (e) return cb(e, null);
 
-                                HelpdeskMessageModel
-                                    .find({
-                                        idTalk: { $in: talkIdsArray },
-                                    }, function (e, allTalkMessages) {
+                                HelpdeskMessageModel.aggregate([
+                                   { $match: { idTalk: { $in: talkIdsArray } } },
+                                   // group those by idTalk
+                                   {
+                                       $group: {
+                                           _id: "$idTalk",
+                                           messages: { $push: "$$ROOT" }
+                                       },
+                                   },
+                                   {
+                                       $project: {
+                                           _id: 0,
+                                           idTalk: "$_id",
+                                           messages: 1,
+                                       },
+                                   },
+                                ])
+                                .exec(function (e, groupedMessages) {
 
-                                        if (e) return cb(e, null);
+                                    if (e) return cb(e, null);
 
-                                        query.exec(function (e, talkArray) {
+                                    console.log("groupedMessagesgroupedMessagesgroupedMessagesgroupedMessages");
+                                    if (groupedMessages.length > 0) {
+
+                                        console.log(groupedMessages);
+                                        console.log(groupedMessages[0].messages);
+                                    }
+                                    console.log(userLastMessageReads);
+                                    console.log(userLastMessageWrites);
+
+                                    if (params.filter.lastMessageStatus) {
+
+                                        console.log("FILTER BY STATUS ----------------------");
+
+                                        var idTalksToRemove = [];
+
+                                        _.each(groupedMessages, function (elem, index, list) {
+
+                                            var idTalk = elem.idTalk;
+                                            var lastTalkMessage = _.last(elem.messages);
+                                            var lastDateUserRead = function () {
+                                                var foundLastReadRow = _.find(userLastMessageReads, function (elemLastRead) {
+                                                    return (elemLastRead.idTalk == idTalk);
+                                                });
+
+                                                if (foundLastReadRow) {
+                                                    return foundLastReadRow.dateRead;
+                                                }
+                                                else {
+                                                    return new Date(1900, 1, 1);
+                                                }
+                                            }();
+                                            var lastDateUserWrite = function () {
+                                                var foundLastWriteRow = _.find(userLastMessageWrites, function (elemLastWrite) {
+                                                    return (elemLastWrite.idTalk == idTalk);
+                                                });
+
+                                                if (foundLastWriteRow) {
+                                                    return foundLastWriteRow.dateWrite;
+                                                }
+                                                else {
+                                                    return new Date(1900, 1, 1);
+                                                }
+                                            }();
+
+
+                                            var userReadAllMessages = lastDateUserRead >= lastTalkMessage.datePosted;
+                                            var userAnsweredLast = lastDateUserWrite >= lastTalkMessage.datePosted;
+
+
+                                            if (params.filter.lastMessageStatus == helpdeskCrossLayer.talkStatus.notRead) {
+                                                // Remove from the resultset those items already read
+                                                if (userReadAllMessages) {
+                                                    idTalksToRemove.push(idTalk);
+                                                }
+                                            }
+
+                                            if (params.filter.lastMessageStatus == helpdeskCrossLayer.talkStatus.pendingAnswer) {
+                                                // remove from the resultset those items where last 
+                                                // message was posted by someone different than identity user
+                                                if (userAnsweredLast)
+                                                {
+                                                    idTalksToRemove.push(idTalk);
+                                                }
+                                            }
+
+                                            if (params.filter.lastMessageStatus == helpdeskCrossLayer.talkStatus.Ok) {
+
+                                            }
+
+                                        });
+
+
+
+                                        if (idTalksToRemove.length > 0) {
+                                            console.log("REMOVE THIUIIIIIIIIS");
+                                            console.log(idTalksToRemove);
+
+                                            talkIdsArray = _.difference(talkIdsArray, idTalksToRemove);
+                                        }
+
+
+                                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    var page = params.page;
+                                    var pageSize = params.pageSize;
+                                    var queryFilter = function () {
+                                        return {
+                                            idTalk: {
+                                                $in: talkIdsArray
+                                            }
+                                        };
+                                    }();
+                                    var query = HelpdeskTalkModel.find(queryFilter).skip((page * pageSize)).limit(pageSize).sort({ dateLastMessage: 'desc' });
+                                    var queryCount = HelpdeskTalkModel.find(queryFilter).count();
+
+
+
+
+
+
+                                    HelpdeskMessageModel
+                                        .find({
+                                            idTalk: { $in: talkIdsArray },
+                                        }, function (e, allTalkMessages) {
 
                                             if (e) return cb(e, null);
 
-                                            queryCount
-                                                .exec(function (e, talkCount) {
+                                            query.exec(function (e, talkArray) {
 
-                                                    if (e) return cb(e, null);
+                                                if (e) return cb(e, null);
 
-                                                    var dataResult = new DataResultPaginated();
-                                                    dataResult.isValid = true;
-                                                    dataResult.data.totalRows = talkCount;
-                                                    dataResult.data.page = page;
-                                                    dataResult.data.pageSize = pageSize;
-                                                    dataResult.data.data = _.map(talkArray, function (value, index, list) {
-                                                        return {
-                                                            idTalk: value.idTalk,
-                                                            subject: value.subject,
-                                                            dateLastMessage: value.dateLastMessage, // crudAjaxOpts.ajax._fakeMessagesGetDateLastMessage(talkArray[i].idTalk),
-                                                            nMessagesUnread: function () {
+                                                queryCount
+                                                    .exec(function (e, talkCount) {
 
-                                                                var userLastReadMessage = _.find(userLastMessageReads, function (elem) {
-                                                                    return elem.idTalk == value.idTalk;
-                                                                });
-                                                                var userLastReadDate = function () {
+                                                        if (e) return cb(e, null);
 
-                                                                    if (userLastReadMessage) {
-                                                                        return userLastReadMessage.dateRead;
-                                                                    }
-                                                                    else {
-                                                                        // current user has not been read any message
-                                                                        return value.dateCreated;
-                                                                    }
+                                                        var dataResult = new DataResultPaginated();
+                                                        dataResult.isValid = true;
+                                                        dataResult.data.totalRows = talkCount;
+                                                        dataResult.data.page = page;
+                                                        dataResult.data.pageSize = pageSize;
+                                                        dataResult.data.data = _.map(talkArray, function (value, index, list) {
+                                                            return {
+                                                                idTalk: value.idTalk,
+                                                                subject: value.subject,
+                                                                dateLastMessage: value.dateLastMessage, // crudAjaxOpts.ajax._fakeMessagesGetDateLastMessage(talkArray[i].idTalk),
+                                                                nMessagesUnread: function () {
 
-                                                                }();
-                                                                var talkMessages = _.filter(allTalkMessages, function (elem) {
-                                                                    return elem.idTalk == value.idTalk;
-                                                                });
-                                                                var talkMessagesUnread = _.filter(talkMessages, function (elem) {
-                                                                    //return elem.datePosted > userLastReadDate;
+                                                                    var userLastReadMessage = _.find(userLastMessageReads, function (elem) {
+                                                                        return elem.idTalk == value.idTalk;
+                                                                    });
+                                                                    var userLastReadDate = function () {
 
-                                                                    return ((elem.datePosted > userLastReadDate) &&
-                                                                            (elem.idPeople !== requestIdentityUser.idPeople));
-                                                                });
+                                                                        if (userLastReadMessage) {
+                                                                            return userLastReadMessage.dateRead;
+                                                                        }
+                                                                        else {
+                                                                            // current user has not been read any message
+                                                                            return value.dateCreated;
+                                                                        }
 
-                                                                return talkMessagesUnread.length;
-                                                            }()
-                                                        };
+                                                                    }();
+                                                                    var talkMessages = _.filter(allTalkMessages, function (elem) {
+                                                                        return elem.idTalk == value.idTalk;
+                                                                    });
+                                                                    var talkMessagesUnread = _.filter(talkMessages, function (elem) {
+                                                                        //return elem.datePosted > userLastReadDate;
+
+                                                                        return ((elem.datePosted > userLastReadDate) &&
+                                                                                (elem.idPeople !== requestIdentityUser.idPeople));
+                                                                    });
+
+                                                                    return talkMessagesUnread.length;
+                                                                }()
+                                                            };
+                                                        });
+
+                                                        cb(null, dataResult);
                                                     });
+                                            });
 
-                                                    cb(null, dataResult);
-                                                });
                                         });
 
-                                    });
+
+
+
+
+
+
+
+
+
+
+
+                                });
+
+
                             });
 
 
@@ -867,7 +1024,6 @@
             },
             testMethodInitDb: function (cb) {
 
-                var self = this;
                 var dataToModel = function (all) {
 
                     var employeeCurrent = all.filter(function (element) {
@@ -886,10 +1042,6 @@
                         return element.isEmployee === false;
                     })[1];
 
-
-                    self._testEmployeeDefault = employeeDefault;
-
-
                     cb(null, {
                         all: all,
                         employeeCurrent: employeeCurrent,
@@ -901,7 +1053,6 @@
 
 
                 };
-
 
                 HelpdeskPeopleModel.find({}, function (e, existingData) {
 
@@ -936,8 +1087,6 @@
                                     email: myUtils.stringFormatCSharp("{0}@something.com", new Array(6).join(k.toString()))
                                 }).save());
                             }
-
-
 
                             return P.all(peopleSaved).nodeify(function (e, data) {
 
@@ -1262,10 +1411,6 @@
             },
             talkSavedByEmployee: function (req, dataItem, cb) {
 
-
-
-
-
                 crudAjaxOpts.ajax._talkSave(
                     req.i18n,
                     dataItem.isNew === true ? null : dataItem.formData.idTalk,
@@ -1276,13 +1421,7 @@
 
                         if (e) return cb(e, null);
 
-
-
-
                         if (dataResult.isValid === true) {
-
-
-
                             crudAjaxOpts.ajax._fakeDataGridTalkGetByIdForEdit(
                                 req,
                                 dataResult.data.idTalk,

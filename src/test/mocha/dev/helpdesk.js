@@ -433,52 +433,54 @@
 
             helpdeskController.testMethodInitDb(function (e, initDbData) {
 
-                if (e) {
-                    throw e;
-                }
-                else {
+                if (e) throw e;
 
-                    var req = myUtils.extendDeep({ user: initDbData.customerCurrent }, global);
+                var req = myUtils.extendDeep({ user: initDbData.customerCurrent }, global);
 
-                    helpdeskController.talkAdd
-                        (req,
-                        {
-                            subject: "nueva conversacion de test"
-                        },
-                        function (err, addResult) {
+                helpdeskController.talkAdd
+                    (req,
+                    {
+                        subject: "nueva conversacion de test"
+                    },
+                    function (err, addResult) {
 
-                            helpdeskController.messageAdd
-                                (req,
-                                {
-                                    idTalk: addResult.data.editData.idTalk,
-                                    message: 'hola esto es un mensaje de prueba'
-                                },
-                                function (err, messageAddResult) {
+                        if (err) throw err;
 
-                                    filter.filter.idTalk = addResult.data.editData.idTalk;
-                                    //filter.filter.idMessageLastRead = 
+                        helpdeskController.messageAdd
+                            (req,
+                            {
+                                idTalk: addResult.data.editData.idTalk,
+                                message: 'hola esto es un mensaje de prueba'
+                            },
+                            function (err, messageAddResult) {
 
-                                    helpdeskController.messageGetUnread
-                                        (req,
-                                        filter,
-                                        function (err, messagesUnread) {
+                                if (err) throw err;
 
-                                            assert.equal(err, null, err === null ? '' : err.message);
-                                            assert.equal(messagesUnread.isValid, true);
-                                            assert.equal(messagesUnread.data.data.length === 0, true);
+                                filter.filter.idTalk = addResult.data.editData.idTalk;
+                                //filter.filter.idMessageLastRead = 
 
-                                            //assert.equal(messagesUnread.data.data[0].idTalk === addResult.data.editData.idTalk, true);
-                                            //assert.equal(messagesUnread.data.data[0].idTalk === messageAddResult.data.idTalk, true);
-                                            //assert.equal(messagesUnread.data.data[0].idMessage === messageAddResult.data.idMessage, true);
-                                            //assert.equal(messagesUnread.data.data[0].whoPosted.name === req.user.name, true);
-                                            //assert.equal(messagesUnread.data.data[0].whoPosted.isEmployee === req.user.isEmployee, true);
+                                helpdeskController.messageGetUnread
+                                    (req,
+                                    filter,
+                                    function (err, messagesUnread) {
 
-                                            done();
+                                        if (err) throw err;
 
-                                        });
-                                });
-                        });
-                }
+                                        assert.equal(err, null, err === null ? '' : err.message);
+                                        assert.equal(messagesUnread.isValid, true);
+                                        assert.equal(messagesUnread.data.data.length === 0, true);
+
+                                        //assert.equal(messagesUnread.data.data[0].idTalk === addResult.data.editData.idTalk, true);
+                                        //assert.equal(messagesUnread.data.data[0].idTalk === messageAddResult.data.idTalk, true);
+                                        //assert.equal(messagesUnread.data.data[0].idMessage === messageAddResult.data.idMessage, true);
+                                        //assert.equal(messagesUnread.data.data[0].whoPosted.name === req.user.name, true);
+                                        //assert.equal(messagesUnread.data.data[0].whoPosted.isEmployee === req.user.isEmployee, true);
+
+                                        done();
+
+                                    });
+                            });
+                    });
             });
 
         });
@@ -1151,6 +1153,8 @@
                     },
                     function (err, addResult) {
 
+                        if (err) throw err;
+
                         helpdeskController.talkSavedByEmployee
                             (reqEmployee,
                             {
@@ -1163,6 +1167,8 @@
                                 }
                             },
                             function (err, addResultII) {
+
+                                if (err) throw err;
 
                                 var filter = {
                                     filter: {
@@ -1178,6 +1184,11 @@
                                     (reqEmployee,
                                     filter,
                                     function (err, searchResult) {
+
+                                        if (err) throw err;
+
+                                        console.log(searchResult);
+                                        console.log(searchResult.data.data);
 
                                         assert.equal(err, null, err === null ? '' : err.message);
                                         assert.equal(searchResult.isValid, true);
@@ -1196,6 +1207,8 @@
                                             (reqEmployee,
                                             filter,
                                             function (err, searchResult) {
+
+                                                if (err) throw err;
 
                                                 assert.equal(err, null, err === null ? '' : err.message);
                                                 assert.equal(searchResult.isValid, true);
@@ -1501,15 +1514,6 @@
 
         it('Employees can Get all messages from their talks', function (done) {
 
-            var filter = {
-                filter: {},
-                page: 0,
-                pageSize: 50,
-                sortAscending: false,
-                sortBy: ""
-            };
-
-
             helpdeskController.testMethodInitDb(function (e, initDbData) {
 
                 if (e) throw e;
@@ -1530,6 +1534,8 @@
                     },
                     function (err, addResult) {
 
+                        if (err) throw err;
+
                         helpdeskController.messageAdd
                             (req,
                             {
@@ -1538,6 +1544,18 @@
                             },
                             function (err, messageAddResult) {
 
+                                if (err) throw err;
+
+                                var filter = function () {
+                                    return {
+                                        filter: {},
+                                        page: 0,
+                                        pageSize: 50,
+                                        sortAscending: false,
+                                        sortBy: ""
+                                    };
+                                }();
+
                                 filter.filter.idTalk = addResult.data.editData.idTalk;
 
                                 helpdeskController.messageGetAll
@@ -1545,6 +1563,7 @@
                                     filter,
                                     function (err, messagesAll) {
 
+                                        if (err) throw err;
 
                                         assert.equal(err, null, err === null ? '' : err.message);
                                         assert.equal(messagesAll.isValid, true);
@@ -1715,7 +1734,6 @@
                                             customerInfo: {
                                                 customerId: initDbData.customerCurrent.idPeople
                                             },
-                                            lastMessageStatus: helpdeskCrossLayer.talkStatus.notRead,
                                             //employeeInfo: {
                                             //    employeeId: initDbData.employeeCurrent.idPeople
                                             //}
@@ -1727,6 +1745,8 @@
                                     };
 
                                 }();
+
+                                filter.filter.lastMessageStatus = helpdeskCrossLayer.talkStatus.notRead;
 
                                 helpdeskController.talkSearch
                                     (reqEmployeeCurrent,
@@ -1796,7 +1816,50 @@
                                                                 //assert.equal(searchResult.data.data[0].idTalk === addResult.data.editData.idTalk, true);
                                                                 //assert.equal(searchResult.data.data[0].nMessagesUnread === 0, true);
 
-                                                                done();
+
+
+
+
+                                                                helpdeskController.messageAdd
+                                                                    (reqEmployeeCurrent,
+                                                                    {
+                                                                        idTalk: addResult.data.editData.idTalk,
+                                                                        message: 'The employee answers a message. '
+                                                                    },
+                                                                    function (err, messageAddResult) {
+
+                                                                        if (err) throw err;
+
+
+                                                                        filter.filter.lastMessageStatus = helpdeskCrossLayer.talkStatus.pendingAnswer;
+
+                                                                        helpdeskController.talkSearch
+                                                                            (reqEmployeeCurrent,
+                                                                            filter,
+                                                                            function (err, searchResult) {
+
+                                                                                if (err) throw err;
+
+                                                                                assert.equal(err, null, err === null ? '' : err.message);
+                                                                                assert.equal(searchResult.isValid, true);
+                                                                                assert.equal(searchResult.data.totalRows === 0, true);
+
+                                                                                done();
+                                                                            });
+                                                                    });
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                
 
                                                             });
 
