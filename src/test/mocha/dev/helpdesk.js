@@ -1695,7 +1695,7 @@
 
         it('Employee can find their talks & filter by status', function (done) {
 
-
+            // 1,. Init database users 
             helpdeskController.testMethodInitDb(function (e, initDbData) {
 
                 if (e) throw e;
@@ -1703,6 +1703,7 @@
                 var reqEmployeeCurrent = myUtils.extendDeep({ user: initDbData.employeeCurrent }, global);
                 var reqCustomerCurrent = myUtils.extendDeep({ user: initDbData.customerCurrent }, global);
 
+                // Employee creates a talk
                 helpdeskController.talkSavedByEmployee
                     (reqEmployeeCurrent,
                     {
@@ -1718,6 +1719,8 @@
 
                         if (err) throw err;
 
+                        // Customer adds a message in employees conversation
+
                         helpdeskController.messageAdd
                             (reqCustomerCurrent,
                             {
@@ -1728,6 +1731,7 @@
 
                                 if (err) throw err;
 
+                                // Employee searches talks where current customer is involved
                                 var filter = function () {
                                     return {
                                         filter: {
@@ -1746,8 +1750,12 @@
 
                                 }();
 
+
+                                // Employee sets filter on messages not read
                                 filter.filter.lastMessageStatus = helpdeskCrossLayer.talkStatus.notRead;
 
+                                // As employee still has not read conversation messages
+                                // This search should return the message added by the customer
                                 helpdeskController.talkSearch
                                     (reqEmployeeCurrent,
                                     filter,
@@ -1762,8 +1770,11 @@
                                         assert.equal(searchResult.data.data[0].nMessagesUnread === 1, true);
 
 
+                                        // Employee searches for pending answer messages
                                         filter.filter.lastMessageStatus = helpdeskCrossLayer.talkStatus.pendingAnswer;
 
+                                        // Employee should find the previous message as pending answered
+                                        // Because employee did not even read the message
                                         helpdeskController.talkSearch
                                             (reqEmployeeCurrent,
                                             filter,
@@ -1791,6 +1802,7 @@
 
 
 
+                                                // Employee reads talk messages
                                                 helpdeskController.messageGetAll
                                                     (reqEmployeeCurrent,
                                                     filterGetAll,
@@ -1799,16 +1811,14 @@
 
                                                         filter.filter.lastMessageStatus = helpdeskCrossLayer.talkStatus.notRead;
 
+                                                        // Employee should find no messages 
+                                                        // as far as it has already read them
                                                         helpdeskController.talkSearch
                                                             (reqEmployeeCurrent,
                                                             filter,
                                                             function (err, searchResult) {
 
                                                                 if (err) throw err;
-
-                                                                console.log(searchResult);
-                                                                console.log(searchResult.data.data);
-
 
                                                                 assert.equal(err, null, err === null ? '' : err.message);
                                                                 assert.equal(searchResult.isValid, true);
@@ -1819,33 +1829,58 @@
 
 
 
-
-                                                                helpdeskController.messageAdd
+                                                                filter.filter.lastMessageStatus = helpdeskCrossLayer.talkStatus.pendingAnswer;
+                                                                
+                                                                helpdeskController.talkSearch
                                                                     (reqEmployeeCurrent,
-                                                                    {
-                                                                        idTalk: addResult.data.editData.idTalk,
-                                                                        message: 'The employee answers a message. '
-                                                                    },
-                                                                    function (err, messageAddResult) {
+                                                                    filter,
+                                                                    function (err, searchResult) {
 
                                                                         if (err) throw err;
 
+                                                                        assert.equal(err, null, err === null ? '' : err.message);
+                                                                        assert.equal(searchResult.isValid, true);
+                                                                        // Employee should find a pending writing message
+                                                                        // as far as did read but not write an answer
+                                                                        assert.equal(searchResult.data.totalRows === 1, true);
 
-                                                                        filter.filter.lastMessageStatus = helpdeskCrossLayer.talkStatus.pendingAnswer;
 
-                                                                        helpdeskController.talkSearch
+
+                                                                        // Employee writes an answer
+                                                                        helpdeskController.messageAdd
                                                                             (reqEmployeeCurrent,
-                                                                            filter,
-                                                                            function (err, searchResult) {
+                                                                            {
+                                                                                idTalk: addResult.data.editData.idTalk,
+                                                                                message: 'The employee answers a message. '
+                                                                            },
+                                                                            function (err, messageAddResult) {
 
                                                                                 if (err) throw err;
 
-                                                                                assert.equal(err, null, err === null ? '' : err.message);
-                                                                                assert.equal(searchResult.isValid, true);
-                                                                                assert.equal(searchResult.data.totalRows === 0, true);
 
-                                                                                done();
+                                                                                filter.filter.lastMessageStatus = helpdeskCrossLayer.talkStatus.pendingAnswer;
+
+                                                                                helpdeskController.talkSearch
+                                                                                    (reqEmployeeCurrent,
+                                                                                    filter,
+                                                                                    function (err, searchResult) {
+
+                                                                                        if (err) throw err;
+
+                                                                                        assert.equal(err, null, err === null ? '' : err.message);
+                                                                                        assert.equal(searchResult.isValid, true);
+                                                                                        assert.equal(searchResult.data.totalRows === 0, true);
+
+                                                                                        done();
+                                                                                    });
                                                                             });
+
+
+
+
+
+
+
                                                                     });
 
 
@@ -1859,7 +1894,17 @@
 
 
 
-                                                                
+
+
+
+
+
+
+
+
+
+
+
 
                                                             });
 
