@@ -548,9 +548,14 @@
                                             }();
 
 
-                                            var userReadAllMessages = lastDateUserRead >= lastTalkMessage.datePosted;
+
+                                            var userReadAllMessages = (lastDateUserRead >= lastTalkMessage.datePosted) || (lastTalkMessage.idPeople == requestIdentityUser.idPeople);
                                             var userAnsweredLast = lastDateUserWrite >= lastTalkMessage.datePosted;
 
+                                            console.log("PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP");
+                                            console.log(lastTalkMessage);
+                                            console.log(requestIdentityUser.idPeople);
+                                            console.log(userReadAllMessages);
 
                                             if (params.filter.lastMessageStatus == helpdeskCrossLayer.talkStatus.notRead) {
                                                 // Remove from the resultset those items already read
@@ -562,8 +567,7 @@
                                             if (params.filter.lastMessageStatus == helpdeskCrossLayer.talkStatus.pendingAnswer) {
                                                 // remove from the resultset those items where last 
                                                 // message was posted by someone different than identity user
-                                                if (userAnsweredLast)
-                                                {
+                                                if (userAnsweredLast) {
                                                     idTalksToRemove.push(idTalk);
                                                 }
                                             }
@@ -581,6 +585,8 @@
                                             console.log(idTalksToRemove);
 
                                             talkIdsArray = _.difference(talkIdsArray, idTalksToRemove);
+
+
                                         }
 
 

@@ -1871,7 +1871,37 @@
                                                                                         assert.equal(searchResult.isValid, true);
                                                                                         assert.equal(searchResult.data.totalRows === 0, true);
 
-                                                                                        done();
+
+
+
+
+                                                                                        filter.filter.lastMessageStatus = helpdeskCrossLayer.talkStatus.notRead;
+
+                                                                                        helpdeskController.talkSearch
+                                                                                            (reqEmployeeCurrent,
+                                                                                            filter,
+                                                                                            function (err, searchUnreadResultAfterWriteAnAnswer) {
+
+                                                                                                if (err) throw err;
+
+                                                                                                console.log("searchUnreadResultAfterWriteAnAnswersearchUnreadResultAfterWriteAnAnswer");
+                                                                                                console.log(searchUnreadResultAfterWriteAnAnswer);
+                                                                                                console.log(searchUnreadResultAfterWriteAnAnswer.data.data);
+
+
+                                                                                                assert.equal(err, null, err === null ? '' : err.message);
+                                                                                                assert.equal(searchUnreadResultAfterWriteAnAnswer.isValid, true);
+                                                                                                assert.equal(searchUnreadResultAfterWriteAnAnswer.data.totalRows === 0, true);
+
+                                                                                                done();
+                                                                                            });
+
+
+
+
+
+
+
                                                                                     });
                                                                             });
 
