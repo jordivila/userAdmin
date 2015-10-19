@@ -5,7 +5,7 @@ REQUIREJS CONFIG
 requirejs.config({
     urlArgs: globals.crossLayer.queryParams.appVersion + "=" + globals.package.version,
     waitSeconds: 0,
-    baseUrl: "/public",
+    baseUrl: "/" + globals.domainInfo.virtualDirectory + "public",
     paths: {
         jquery: "bower_components/jquery/jquery.min",
         jqueryui: "scripts/modules/jquery.ui.custom.bundle",
@@ -17,6 +17,7 @@ requirejs.config({
         respond: 'bower_components/respond/dest/respond.src',
         querystring: 'bower_components/querystring/querystring.min',
         crossLayer: 'crossLayer',
+        
         /**************************************************************
                     Globalize dependencies paths begin
         **************************************************************/
@@ -32,6 +33,7 @@ requirejs.config({
         /**************************************************************
                     Globalize dependencies paths end
         **************************************************************/
+        
     },
     shim: {
         'jqueryui': {

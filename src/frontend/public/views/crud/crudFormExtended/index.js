@@ -4,15 +4,15 @@
     "scripts/Template.App.ClientApp",
 
     "scripts/modules/crud",
-    "/crud/crudCommon/crudSamplesCustomerData.js",
-    "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
+    "../crudCommon/crudSamplesCustomerData.js",
+    "../crudCommon/crudSamplesCustomerDefaultOptions.js",
 
-    "/crud/crudFormExtended/crudProductExtended.AjaxFake.js",
-    "/crud/crudFormExtended/crudProductExtended.FilterModel.js",
-    "/crud/crudFormExtended/crudProductExtended.FormModel.js",
-    "/crud/crudFormExtended/crudProductExtended.GridModel.js",
-    "/crud/crudFormExtended/crudProductExtended.Widget.js",
-    "/crud/crudFormExtended/crudPage.js",
+    "crudProductExtended.AjaxFake.js",
+    "crudProductExtended.FilterModel.js",
+    "crudProductExtended.FormModel.js",
+    "crudProductExtended.GridModel.js",
+    "crudProductExtended.Widget.js",
+    "crudPage.js",
 ],
    function ($, jqUI, clientApp) {
 

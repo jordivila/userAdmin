@@ -22,7 +22,7 @@
 
 
     function initDb(req, cb) {
-
+  
         var i18n = req.i18n;
         var newRole = {
             name: "Guest"

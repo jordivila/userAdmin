@@ -9,6 +9,7 @@
     var BaseController = require('./base');
     var fs = require('fs');
 
+
     function GenericView() {
         BaseController.apply(this, arguments);
     }

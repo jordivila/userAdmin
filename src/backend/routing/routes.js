@@ -24,11 +24,18 @@
     var themesController = new ThemesController();
     var baseController = new BaseController();
 
+    var virtualDirectoryIsRoot = config.get('domainInfo:virtualDirectory') === '';
+
     module.exports.setRoutes = function (app, log, authController) {
 
 
         // set up the middleware
         app.use(function (req, res, next) {
+
+            if (virtualDirectoryIsRoot === false) {
+                req.url = req.url.replace(config.get('domainInfo:virtualDirectory'), '');
+                log.info("Saliendo en req->" + req.url);
+            }
 
             languagesController.initRequest(req, res);
             themesController.initRequest(req, res);
@@ -46,7 +53,7 @@
         routerViews.setRoutes(app);
         routerStatics.setRoutes(app);
         routerApiUser.setRoutes(app, log, authController);
-        
+
 
 
 
@@ -74,6 +81,8 @@
 
         //catch 404
         app.use(function (req, res, next) {
+
+            log.info('Not found URL: %s', req.url);
 
             baseController.setViewModelBase(req);
 
@@ -111,8 +120,7 @@
                     beautify internal server errors
 
             /**************************************************/
-            if (!req.viewModel)
-            {
+            if (!req.viewModel) {
                 baseController.setViewModelBase(req);
             }
 

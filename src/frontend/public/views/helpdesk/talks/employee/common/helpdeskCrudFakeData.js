@@ -1,19 +1,19 @@
 ﻿define([
-    "/helpdesk/talks/common/fakes/helpdeskCrudFakeData.js",
+    "../../common/fakes/helpdeskCrudFakeData.js",
 ],
     function (crudAjaxOpts) {
 
         crudAjaxOpts.apiRoutes = {
-            talkSearch: "/api/helpdesk/employee/talk/search",
-            talkAdd: "/api/helpdesk/employee/talk/add",
-            messageAdd: "/api/helpdesk/employee/message/add",
-            messageGetAll: "/api/helpdesk/employee/message/getAll",
-            messageGetUnread: "/api/helpdesk/employee/message/getUnread",
+            talkSearch: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/employee/talk/search",
+            talkAdd: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/employee/talk/add",
+            messageAdd: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/employee/message/add",
+            messageGetAll: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/employee/message/getAll",
+            messageGetUnread: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/employee/message/getUnread",
 
-            talkGetById: "/api/helpdesk/employee/talk/getById",
-            talkSavedByEmployee: "/api/helpdesk/employee/talk/savedByEmployee",
-            customerSearch: "/api/helpdesk/employee/customer/search",
-            employeeSearch: "/api/helpdesk/employee/employee/search"
+            talkGetById: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/employee/talk/getById",
+            talkSavedByEmployee: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/employee/talk/savedByEmployee",
+            customerSearch: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/employee/customer/search",
+            employeeSearch: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/employee/employee/search"
         };
 
         return crudAjaxOpts;

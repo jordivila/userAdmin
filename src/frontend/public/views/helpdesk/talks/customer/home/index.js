@@ -2,7 +2,7 @@
     "jquery",
     "jqueryui",
     "scripts/Template.App.ClientApp",
-    "/helpdesk/talks/customer/common/helpdeskCommon.js",
+    "../common/helpdeskCommon.js",
     "crossLayer/config"
 ],
 function ($, jqUI, clientApp, helpdeskCommon, crossLayer) {
@@ -26,7 +26,7 @@ function ($, jqUI, clientApp, helpdeskCommon, crossLayer) {
                         navNext();
                     })
                 .end()
-                .find('div.ui-helpdesk-needHelp')
+                .find('div.ui-helpdesk-needHelp') 
                     .click(function () {
                         clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.wiki()));
                     })

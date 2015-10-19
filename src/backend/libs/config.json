@@ -18,7 +18,8 @@
     },
     "domainInfo": {
         "domainName": "localhost:3001",
-        "secutiryProtocol": "https"
+        "secutiryProtocol": "https",
+        "virtualDirectory": "prod/njsite/" 
     },
     "mailing": {
         "credentials": {

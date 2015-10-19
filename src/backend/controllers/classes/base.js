@@ -45,7 +45,13 @@
             //jsFiles: [
             //"/public/views/home/home.js",
             //],
-            crossLayer: crossLayer
+            crossLayer: crossLayer,
+            domainInfo: {
+                //"domainName": 
+                //"secutiryProtocol": 
+                virtualDirectory: config.get('domainInfo:virtualDirectory')
+            },
+
         };
 
         req.viewModel = m;

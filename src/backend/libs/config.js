@@ -26,9 +26,11 @@ if (nconf.get('NODE_ENV') === 'test')
     nconf.set('mongoose:uri', 'mongodb://localhost:27017/testAPI_TestEnv');
 }
 
-if (nconf.get('IsTestEnv') === false)
-{
+if (nconf.get('IsTestEnv') === false) {
     nconf.set('clientApp:usePreCompiled', true);
+}
+else {
+    nconf.set('domainInfo:virtualDirectory', '');
 }
 
 module.exports = nconf;

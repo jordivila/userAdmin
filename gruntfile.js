@@ -491,7 +491,7 @@
 
             requireConfig('uglify', false, false);
 
-            tasks2Run.push('env:prod', 'globCldrData', 'i18nCheck', 'jshint:files', /*'bump',*/ 'clean','mochaTest:testProd'/*, 'express:testQunit', 'qunit'*/, 'requirejs', 'concat', 'cssmin', 'uglify');
+            tasks2Run.push('env:prod', 'globCldrData', 'i18nCheck', 'jshint:files', /*'bump',*/ 'clean'/*, 'express:testQunit', 'qunit'*/, 'requirejs', 'concat', 'cssmin', 'uglify', 'mochaTest:testProd');
         }
         else {
 

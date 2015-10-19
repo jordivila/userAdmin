@@ -5,11 +5,11 @@
 
     var usersController = require('../controllers/users');
     var helpdeskController = require('../controllers/helpdesk');
-
     var bodyParser = require('body-parser');
-
     var bodyParserText = bodyParser.text();
-
+    var crossLayerConfig = require('../../crossLayer/config');
+    var config = require('../libs/config');
+    var virtualDirectory = config.get('domainInfo:virtualDirectory');
 
     module.exports.setRoutes = function (app, log, authController) {
 
@@ -69,35 +69,34 @@
             //authController.isAuthenticated, ????
             function (req, res, next) {
 
-
                 var i18n = req.i18n;
 
                 res.json([
                     {
-                        url: "/home/",
+                        url: "/" + virtualDirectory + "home/",
                         text: i18n.__("GeneralTexts.Home")
                     },
                     {
-                        url: "/user/logon/",
+                        url: "/" + virtualDirectory + "user/logon/",
                         text: i18n.__("AccountResources.LogOn"),
                     },
                     {
                         text: i18n.__("Helpdesk.Talks.MenuTitle"),
                         childs: [
                                 {
-                                    url: "/helpdesk/talks/customer/home/",
+                                    url: "/" + virtualDirectory + "helpdesk/talks/customer/home/",
                                     text: "Customer"
                                 },
                                 {
-                                    url: "/helpdesk/talks/customer/wiki/",
+                                    url: "/" + virtualDirectory + "helpdesk/talks/customer/wiki/",
                                     text: "Customer wiki"
                                 },
                                 {
-                                    url: "/helpdesk/talks/employee/home/",
+                                    url: "/" + virtualDirectory + "helpdesk/talks/employee/home/",
                                     text: "Employee"
                                 },
                                 {
-                                    url: "/helpdesk/talks/employee/wiki/",
+                                    url: "/" + virtualDirectory + "helpdesk/talks/employee/wiki/",
                                     text: "Employee wiki"
                                 }
                         ]
@@ -110,15 +109,15 @@
                         text: i18n.__("GeneralTexts.Settings"),
                         childs: [
                                 {
-                                    url: "/languages/",
+                                    url: "/" + virtualDirectory + "languages/",
                                     text: i18n.__("GeneralTexts.Languages")
                                 },
                                 {
-                                    url: "/themes/",
+                                    url: "/" + virtualDirectory + "themes/",
                                     text: i18n.__("GeneralTexts.SiteThemes")
                                 },
                                 {
-                                    url: "/currencies/",
+                                    url: "/" + virtualDirectory + "currencies/",
                                     text: i18n.__("GeneralTexts.Currencies")
                                 },
                         ]
@@ -131,11 +130,11 @@
                                 text: "Globalize",
                                 childs: [
                                     {
-                                        url: "/globalize/serverside/",
+                                        url: "/" + virtualDirectory + "globalize/serverside/",
                                         text: "Server side"
                                     },
                                     {
-                                        url: "/globalize/clientside/",
+                                        url: "/" + virtualDirectory + "globalize/clientside/",
                                         text: "Client side"
                                     },
                                 ]
@@ -147,19 +146,19 @@
                                         text: "Breadrumb",
                                         childs: [
                                             {
-                                                url: "/breadcrumb/singleItem/",
+                                                url: "/" + virtualDirectory + "breadcrumb/singleItem/",
                                                 text: "Single item"
                                             },
                                             {
-                                                url: "/breadcrumb/multipleItems/",
+                                                url: "/" + virtualDirectory + "breadcrumb/multipleItems/",
                                                 text: "Multiple items"
                                             },
                                             {
-                                                url: "/breadcrumb/clientSideBuild/",
+                                                url: "/" + virtualDirectory + "breadcrumb/clientSideBuild/",
                                                 text: "Client side built"
                                             },
                                             {
-                                                url: "/breadcrumb/clientSideFunction/",
+                                                url: "/" + virtualDirectory + "breadcrumb/clientSideFunction/",
                                                 text: "Client side function"
                                             },
                                         ]
@@ -168,11 +167,11 @@
                                         text: "Menu",
                                         childs: [
                                             {
-                                                url: "/menu/menuTree/",
+                                                url: "/" + virtualDirectory + "menu/menuTree/",
                                                 text: "Menu Tree"
                                             },
                                             {
-                                                url: "/menu/menuSlides/",
+                                                url: "/" + virtualDirectory + "menu/menuSlides/",
                                                 text: "Menu Slides"
                                             },
                                         ]
@@ -181,35 +180,35 @@
                                         text: "Grid widget",
                                         childs: [
                                             {
-                                                url: "/crud/crudGridSimple/",
+                                                url: "/" + virtualDirectory + "crud/crudGridSimple/",
                                                 text: "Basic Grid"
                                             },
                                             {
-                                                url: "/crud/crudGridEmptyMessage/",
+                                                url: "/" + virtualDirectory + "crud/crudGridEmptyMessage/",
                                                 text: "Custom emtpy message"
                                             },
                                             {
-                                                url: "/crud/crudGridSearch/",
+                                                url: "/" + virtualDirectory + "crud/crudGridSearch/",
                                                 text: "Search & paginate"
                                             },
                                             {
-                                                url: "/crud/crudGridSearchDirect/",
+                                                url: "/" + virtualDirectory + "crud/crudGridSearchDirect/",
                                                 text: "Search filter on top"
                                             },
                                             {
-                                                url: "/crud/crudGridPagination/",
+                                                url: "/" + virtualDirectory + "crud/crudGridPagination/",
                                                 text: "Pagination config"
                                             },
                                             {
-                                                url: "/crud/crudGridPaginationLazyLoading/",
+                                                url: "/" + virtualDirectory + "crud/crudGridPaginationLazyLoading/",
                                                 text: "Lazy loading pagination"
                                             },
                                             {
-                                                url: "/crud/crudExpand/",
+                                                url: "/" + virtualDirectory + "crud/crudExpand/",
                                                 text: "Expand grid & resize"
                                             },
                                             {
-                                                url: "/crud/crudExpandCustomSize/",
+                                                url: "/" + virtualDirectory + "crud/crudExpandCustomSize/",
                                                 text: "Expand + custom size"
                                             },
 
@@ -219,11 +218,11 @@
                                         text: "Crud widget",
                                         childs: [
                                             {
-                                                url: "/crud/crudFormSimple/",
+                                                url: "/" + virtualDirectory + "crud/crudFormSimple/",
                                                 text: "CRUD Simple form"
                                             },
                                             {
-                                                url: "/crud/crudFormExtended/",
+                                                url: "/" + virtualDirectory + "crud/crudFormExtended/",
                                                 text: "CRUD Extended"
                                             },
                                         ],

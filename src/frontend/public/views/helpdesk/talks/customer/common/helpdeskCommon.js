@@ -22,7 +22,7 @@ function ($, jqUI, clientApp) {
             }
         },
         helpdeskUrls: {
-            baseAddress: '/helpdesk/talks/customer/',
+            baseAddress: '/' + globals.domainInfo.virtualDirectory + 'helpdesk/talks/customer/',
             home: 'home/',
             subject: function () {
                 return 'subject/';

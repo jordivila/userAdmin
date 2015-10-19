@@ -1,14 +1,14 @@
 ﻿define([
-    "/helpdesk/talks/common/fakes/helpdeskCrudFakeData.js",
+    "../../common/fakes/helpdeskCrudFakeData.js",
 ],
     function (crudAjaxOpts) {
 
         crudAjaxOpts.apiRoutes = {
-            talkSearch: "/api/helpdesk/customer/talk/search",
-            talkAdd: "/api/helpdesk/customer/talk/add",
-            messageAdd: "/api/helpdesk/customer/message/add",
-            messageGetAll: "/api/helpdesk/customer/message/getAll",
-            messageGetUnread: "/api/helpdesk/customer/message/getUnread",
+            talkSearch: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/customer/talk/search",
+            talkAdd: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/customer/talk/add",
+            messageAdd: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/customer/message/add",
+            messageGetAll: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/customer/message/getAll",
+            messageGetUnread: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/customer/message/getUnread",
 
             talkGetById: null,
             talkSavedByEmployee: null,

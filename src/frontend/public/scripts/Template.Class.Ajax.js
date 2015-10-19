@@ -37,8 +37,9 @@ define([
         };
 
         Ajax.prototype.userMenu = function (callback) {
+
             return P(jQuery.ajax({
-                url: "/api/user/menu",
+                url: "/" + globals.domainInfo.virtualDirectory + "api/user/menu",
                 type: "GET",
                 data: {},
                 cache: false
@@ -126,7 +127,7 @@ define([
         Ajax.prototype.i18nDatepicker = function (currentCulture) {
 
             return jQuery.ajax({
-                url: '/public/bower_components/jquery-ui/ui/minified/i18n/jquery.ui.datepicker-' + currentCulture + '.min.js',
+                url: '/' + globals.domainInfo.virtualDirectory + 'public/bower_components/jquery-ui/ui/minified/i18n/jquery.ui.datepicker-' + currentCulture + '.min.js',
                 type: "GET",
                 dataType: "script",
                 cache: true
@@ -136,7 +137,7 @@ define([
         Ajax.prototype.i18nAppMessages = function (currentCulture) {
 
             return jQuery.ajax({
-                url: "/public/locales/" + currentCulture + "/clientMessages.json",
+                url: "/" + globals.domainInfo.virtualDirectory + "public/locales/" + currentCulture + "/clientMessages.json",
                 type: "GET",
                 dataType: "json",
                 cache: true

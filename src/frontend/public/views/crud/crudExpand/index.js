@@ -5,8 +5,8 @@ define([
 
     "scripts/modules/crud",
 
-    "/crud/crudCommon/crudSamplesCustomerData.js",
-    "/crud/crudCommon/crudSamplesCustomerDefaultOptions.js",
+    "../crudCommon/crudSamplesCustomerData.js",
+    "../crudCommon/crudSamplesCustomerDefaultOptions.js",
 
 ],
    function ($, jqUI, clientApp, crudModule, customerAjax, crudDefaultOptions) {
