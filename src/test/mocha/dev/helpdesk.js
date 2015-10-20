@@ -1,12 +1,4 @@
-﻿//Entra el customer
-//Crea una talk
-//Crea un mensaje
-//Busca talks y le sale unread messages 1
-
-
-//Reproducir el test !!!!!
-
-(function () {
+﻿(function () {
     'use strict';
 
 
@@ -718,8 +710,6 @@
 
                                                 if (err) throw err;
 
-                                                console.log(messagesUnread);
-
                                                 assert.equal(err, null, err === null ? '' : err.message);
                                                 assert.equal(messagesUnread.isValid, true);
                                                 assert.equal(messagesUnread.data.data.length === 1, true);
@@ -1186,9 +1176,6 @@
                                     function (err, searchResult) {
 
                                         if (err) throw err;
-
-                                        console.log(searchResult);
-                                        console.log(searchResult.data.data);
 
                                         assert.equal(err, null, err === null ? '' : err.message);
                                         assert.equal(searchResult.isValid, true);
@@ -1883,11 +1870,6 @@
                                                                                             function (err, searchUnreadResultAfterWriteAnAnswer) {
 
                                                                                                 if (err) throw err;
-
-                                                                                                console.log("searchUnreadResultAfterWriteAnAnswersearchUnreadResultAfterWriteAnAnswer");
-                                                                                                console.log(searchUnreadResultAfterWriteAnAnswer);
-                                                                                                console.log(searchUnreadResultAfterWriteAnAnswer.data.data);
-
 
                                                                                                 assert.equal(err, null, err === null ? '' : err.message);
                                                                                                 assert.equal(searchUnreadResultAfterWriteAnAnswer.isValid, true);
