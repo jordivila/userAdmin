@@ -6,7 +6,8 @@
 
 
     var GenericViewController = require('./classes/genericView');
-    var helpdeskApiController = require('./helpdesk');
+    var HelpdeskApiController = require('./helpdesk');
+    var helpdeskApiController = new HelpdeskApiController();
     var _ = require("underscore");
 
     function HelpdeskViewHomeController() {

@@ -4,7 +4,8 @@
     "use strict";
 
     var usersController = require('../controllers/users');
-    var helpdeskController = require('../controllers/helpdesk');
+    var HelpdeskController = require('../controllers/helpdesk');
+    var helpdeskController = new HelpdeskController();
     var bodyParser = require('body-parser');
     var bodyParserText = bodyParser.text();
     var crossLayerConfig = require('../../crossLayer/config');
