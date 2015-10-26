@@ -16,9 +16,6 @@
     var crossLayer = require('../../crossLayer/config');
     var helpdeskCrossLayer = require('../../crossLayer/helpdesk');
     var P = require('p-promise');
-    var http = require('http');
-    var querystring = require('querystring');
-    var ErrorHandledModel = require('../../crossLayer/models/errorHandled');
 
     var HelpdeskTalkModel = require('../models/helpdesk').HelpdeskTalk;
     var HelpdeskPeopleModel = require('../models/helpdesk').HelpdeskPeople;
@@ -32,12 +29,7 @@
         //GenericViewController.apply(this, arguments);
 
         this._isInTestMode = true;
-        this._testEmployeeDefaultIdBackOffice = null;
-        this._importDataCache = {
-            isEmpty: true,
-            customers: null,
-            employees: null,
-        };
+        this._testEmployeeDefaultIdBackOffice = 2;
 
         passport.use('helpdeskStrategy', new BasicStrategy({ passReqToCallback: true }, this.reqCredentialsCheck));
     }
@@ -56,7 +48,7 @@
             });
         }
         else {
-            return cb(new ErrorHandledModel(i18n.__("GeneralTexts.NotImplemented")), customerId);
+            cb(new Error("Not implemented error"), null);
         }
 
     };
@@ -747,7 +739,6 @@
                         dataResult.data.pageSize = pageSize;
                         dataResult.data.data = _.map(people, mapItemCallback);
 
-
                         cb(null, dataResult);
                     });
             });
@@ -835,272 +826,150 @@
 
 
     };
-
-
-    HelpdeskAPIController.prototype.apiRequestImport = function (path, cb) {
-
-
-        var options = {
-            host: 'localhost',
-            port: 12345,
-            path: path,
-            method: 'GET',
-            headers: {
-                //'Content-Type': 'application/x-www-form-urlencoded',
-                'Content-Type': 'application/json; charset=utf-8',
-                //'Content-Length': postData.length
-            },
-        };
-
-        var bufferJson = "";
-        var reqClient = http.request(options, function (res) {
-            console.log('STATUS: ' + res.statusCode);
-            //console.log('HEADERS: ' + JSON.stringify(res.headers));
-            res.setEncoding('utf8');
-            res.on('data', function (chunk) {
-                bufferJson += chunk;
-            });
-            res.on('end', function () {
-                if (res.statusCode !== 200) {
-                    cb(new ErrorHandledModel(i18n.__("Views.Layout.UnExpectedError"), res), null);
-                }
-                else {
-
-
-
-                    cb(null, JSON.parse(bufferJson));
-                    //cb(null, JSON.parse(bufferJson.join()));
-
-                    //try {
-                    //    cb(null, JSON.parse(JSON.stringify(bufferJson.join())));
-                    //} catch (e) {
-                    //    cb(e, null);
-                    //}
-                }
-            });
-        });
-
-        reqClient.on('error', function (e) {
-            cb(e, null);
-        });
-
-        reqClient.end();
-
-
-    };
-    HelpdeskAPIController.prototype.importCustomers = function (pageSize, cb) {
-
-        var path = '/api/manager/customers/';
-
-        if (pageSize && (pageSize > 0)) {
-            path += '/' + pageSize + '/1';
-        }
-
-        this.apiRequestImport(path, cb);
-    };
-    HelpdeskAPIController.prototype.importEmployees = function (pageSize, cb) {
-
-        var path = '/api/manager/employees/';
-
-        if (pageSize && (pageSize > 0)) {
-            path += '/' + pageSize + '/1';
-        }
-
-        this.apiRequestImport(path, cb);
-
-    };
-    HelpdeskAPIController.prototype.importGetData = function (pageSize, cb) {
-
-        var self = this;
-
-        console.log("IMPORT GET DATA Employees BEGIN");
-
-        self.importEmployees(pageSize, function (e, employees) {
-
-            if (e) return cb(e, null);
-
-            console.log("IMPORT GET DATA Custoemrs BEGIN");
-
-            self.importCustomers(pageSize, function (e, customers) {
-
-                if (e) return cb(e, null);
-
-                console.log("IMPORT GET DATA FINISHED");
-
-                self._importDataCache.customers = customers;
-                self._importDataCache.employees = employees;
-                self._importDataCache.isEmpty = false;
-
-                cb(null, self._importDataCache);
-
-            });
-
-        });
-
-    };
-    HelpdeskAPIController.prototype.importSetData = function (cb) {
-
-        var self = this;
-        var dataToModel = function (all) {
-
-            var employeeCurrent = all.filter(function (element) {
-                return element.isEmployee === true;
-            })[0];
-            var employeeAnother = all.filter(function (element) {
-                return element.isEmployee === true;
-            })[1];
-            var employeeDefault = all.filter(function (element, elementIndex, elementsList) {
-
-                //var isDefaultEmployee = (element.isEmployee === true) && (element.idPersonBackOffice == self._testEmployeeDefaultIdBackOffice);
-                var isDefaultEmployee = (element.isEmployee === true);
-
-                return isDefaultEmployee;
-
-            })[2];
-
-            self._testEmployeeDefaultIdBackOffice = employeeDefault.idPersonBackOffice;
-
-            var customerCurrent = all.filter(function (element) {
-                return element.isEmployee === false;
-            })[0];
-            var customerAnother = all.filter(function (element) {
-                return element.isEmployee === false;
-            })[1];
-
-            cb(null, {
-                all: all,
-                employeeCurrent: employeeCurrent,
-                employeeAnother: employeeAnother,
-                employeeDefault: employeeDefault,
-                customerCurrent: customerCurrent,
-                customerAnother: customerAnother
-            });
-
-        };
-
-        console.log("Import set Data");
-
-        var dataEmployeeSave = null;
-        var dataCustomerSave = null;
-
-        dataCustomerSave = function (currentIndexCustomers) {
-
-            console.log("Import set customer->" + currentIndexCustomers);
-
-            if (currentIndexCustomers >= self._importDataCache.customers.length) {
-
-
-                console.log("Import set customer finished");
-
-                HelpdeskPeopleModel
-                    .find({})
-                    .skip(0)
-                    .limit(2000)
-                    .exec(function (e, all) {
-
-                        if (e) return cb(e, null);
-
-                        console.log("Import get all ");
-
-                        dataToModel(all);
-                    });
-
-            }
-            else {
-
-                new HelpdeskPeopleModel({
-                    //idPeople: pMax + k,
-                    idPersonBackOffice: self._importDataCache.customers[currentIndexCustomers].idPersona,    //identificador de la persona en PEF_tb_personaFisica
-                    isEmployee: false,
-                    name: self._importDataCache.customers[currentIndexCustomers].nombre + ' ' + self._importDataCache.customers[currentIndexCustomers].apellido1 + ' ' + self._importDataCache.customers[currentIndexCustomers].apellido2 + ' ',
-                    cardId: new Array(11).join(currentIndexCustomers.toString()),
-                    email: myUtils.stringFormatCSharp("{0}@something.com", new Array(6).join(currentIndexCustomers.toString()))
-                })
-                .save(function (err, employeeSaved, numAffected) {
-
-                    dataCustomerSave(currentIndexCustomers + 1);
-
-                });
-            }
-
-        };
-        dataEmployeeSave = function (currentIndex) {
-
-            console.log("Import set employee->" + currentIndex);
-
-            if (currentIndex >= self._importDataCache.employees.length) {
-                dataCustomerSave(0);
-            }
-            else {
-
-                new HelpdeskPeopleModel({
-                    //idPeople: j,      // -> identity (1,1)
-                    idPersonBackOffice: self._importDataCache.employees[currentIndex].idEmpleado,    //identificaador de la persona en ORG_TB_EMLPEADOS
-                    isEmployee: true,
-                    name: self._importDataCache.employees[currentIndex].descripcion,
-                    cardId: new Array(11).join(currentIndex.toString()),
-                    email: myUtils.stringFormatCSharp("{0}@something.com", new Array(6).join(currentIndex.toString()))
-                })
-                .save(function (err, employeeSaved, numAffected) {
-
-                    dataEmployeeSave(currentIndex + 1);
-
-                });
-            }
-
-        };
-
-
-        dataEmployeeSave(0);
-
-        //    }
-        //});
-
-    };
-    HelpdeskAPIController.prototype.importAll = function (pageSize, cb) {
-
-        var self = this;
-
-        if (self._importDataCache.isEmpty === true) {
-            self.importGetData(pageSize, function (e, getDataResult) {
-
-                if (e) return cb(e);
-
-                self.importSetData(function (e, setDataResult) {
-
-                    if (e) return cb(e);
-
-                    cb(e, setDataResult);
-                });
-            });
-        }
-        else {
-            self.importSetData(function (e, setDataResult) {
-                cb(e, setDataResult);
-            });
-        }
-
-    };
-
-
     HelpdeskAPIController.prototype.testMethodInitDb = function (cb) {
 
         if (this._isInTestMode === true) {
-            this.importAll(10, cb);
+
+            var self = this;
+            var dataToModel = function (all) {
+
+                var employeeCurrent = all.filter(function (element) {
+                    return element.isEmployee === true;
+                })[0];
+                var employeeAnother = all.filter(function (element) {
+                    return element.isEmployee === true;
+                })[1];
+                var employeeDefault = all.filter(function (element, elementIndex, elementsList) {
+
+                    var isDefaultEmployee = (element.isEmployee === true) && (element.idPersonBackOffice == self._testEmployeeDefaultIdBackOffice);
+
+                    if (isDefaultEmployee) {
+                        //all[elementIndex].name = "Default Employee/ Empleado por defecto";
+                    }
+
+                    return isDefaultEmployee;
+
+                })[0];
+                var customerCurrent = all.filter(function (element) {
+                    return element.isEmployee === false;
+                })[0];
+                var customerAnother = all.filter(function (element) {
+                    return element.isEmployee === false;
+                })[1];
+
+                cb(null, {
+                    all: all,
+                    employeeCurrent: employeeCurrent,
+                    employeeAnother: employeeAnother,
+                    employeeDefault: employeeDefault,
+                    customerCurrent: customerCurrent,
+                    customerAnother: customerAnother
+                });
+
+
+            };
+
+            HelpdeskPeopleModel.find({}, function (e, existingData) {
+
+                if (existingData.length === 0) {
+                    var pMax = 10; // pMax -> number of employees & number of customers created
+                    var initPeople = function () {
+
+
+                        var peopleSaved = [];
+
+                        for (var j = 0; j < pMax; j++) {
+
+                            peopleSaved.push(new HelpdeskPeopleModel({
+                                //idPeople: j,      // -> identity (1,1)
+                                idPersonBackOffice: j,    //identificaador de la persona en ORG_TB_EMLPEADOS
+                                isEmployee: true,
+                                name: "Empleado/Employee " + j,
+                                cardId: new Array(11).join(j.toString()),
+                                email: myUtils.stringFormatCSharp("{0}@something.com", new Array(6).join(j.toString()))
+                            }).save());
+
+                        }
+
+                        for (var k = 0; k < pMax; k++) {
+
+                            peopleSaved.push(new HelpdeskPeopleModel({
+                                //idPeople: pMax + k,
+                                idPersonBackOffice: k,    //identificaador de la persona en PEF_tb_personaFisica
+                                isEmployee: false,
+                                name: "Cliente/Customer " + k,
+                                cardId: new Array(11).join(k.toString()),
+                                email: myUtils.stringFormatCSharp("{0}@something.com", new Array(6).join(k.toString()))
+                            }).save());
+                        }
+
+                        return P.all(peopleSaved).nodeify(function (e, data) {
+
+                            if (e !== null) {
+                                cb(e, null);
+                            }
+                            else {
+                                HelpdeskPeopleModel.find({}, function (e, all) {
+                                    dataToModel(all);
+                                });
+                            }
+                        });
+
+                    }();
+                }
+                else {
+                    dataToModel(existingData);
+                }
+            });
         }
+
         else {
             return cb(new ErrorHandledModel(i18n.__("GeneralTexts.NotImplemented")));
         }
+
     };
     HelpdeskAPIController.prototype.talkSearch = function (req, params, cb) {
 
-        var self = this;
+
+
+
+
+
+
+        P.all(peopleSaved).nodeify(function (e, data) {
+
+            if (e !== null) {
+                cb(e, null);
+            }
+            else {
+                HelpdeskPeopleModel.find({}, function (e, all) {
+                    dataToModel(all);
+                });
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         if (!req.user.isEmployee) {
-            self._talkSearchByCustomer(req, params, cb);
+            this._talkSearchByCustomer(req, params, cb);
         }
         else {
-            self._talkSearchByEmployee(req, params, cb);
+            this._talkSearchByEmployee(req, params, cb);
         }
 
     };

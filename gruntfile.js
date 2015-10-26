@@ -499,13 +499,12 @@
 
             tasks2Run.push('jshint:files', 'clean', 'sortJSON', 'i18nCheck', 'globCldrData', 'bump', 'concat' /*,'cssmin', 'uglify'*/);
 
-            
+
 
 
             var config = grunt.file.readJSON('src/backend/libs/config.json');
 
-            if (config.clientApp.usePreCompiled === true)
-            {
+            if (config.clientApp.usePreCompiled === true) {
                 tasks2Run.push('requirejs');
             }
         }
@@ -513,6 +512,7 @@
         grunt.task.run(tasks2Run);
     });
     grunt.registerTask('test', 'Starts grunt with only tests option', function () {
+
         grunt.event.on('watch', function (action, filepath) {
             grunt.config('watch.preCompile.tasks', []);
             grunt.config('watch.testLiveReload.tasks', []);
@@ -529,5 +529,109 @@
         grunt.task.run('env:dev', 'preCompile', 'express:testLiveReload', 'open', 'watch');
     });
     grunt.registerTask('default', ['env:test', 'preCompile', 'express:testLiveReload', 'open', 'watch']);
+
+
+    grunt.registerTask('helpdeskImportData', 'My "asyncfoo" task.', function () {
+        // Force task into async mode and grab a handle to the "done" function.
+        var done = this.async();
+        // Run some sync stuff.
+        grunt.log.writeln('Processing helpdesk import data task...');
+        // And some async stuff.
+
+
+        var HelpdeskController = require('./src/backend/controllers/helpdesk');
+        var helpdeskController = new HelpdeskController();
+        var mongoose = require('./src/backend/libs/db');
+        var commonController = require('./src/backend/controllers/tests');
+        //var i18n = new (require('i18n-2'))(config.get("i18n"));
+
+        //var global = {};
+        //global.i18n = i18n;
+
+        //commonController.initDb(global, function (err, roleCreated) {
+
+        //    if (err) {
+        //        console.log(err);
+        //        throw err;
+        //    }
+
+
+        function clearDB(cnn, cb) {
+
+            // I tested few ways of doing the same thing
+
+            // 1.- This one is the slowest one (in execution time). 
+            //     But needs no maintenance 
+
+            //mongoose.connection.db.dropDatabase(function(err, result) {
+            //    createRoleGuest();
+            //});
+
+            // 2.- This one is faster than the fiorst one (in execution time). 
+            //     Removes all documents in all collections in db 
+
+
+
+
+            var modelsInDb = cnn.modelNames();
+            var modelCounter = 0;
+            var modelRemoveTrack = null;
+            modelRemoveTrack = function (err, rowsAffected) {
+
+                if (err) {
+                    console.error(err);
+                }
+
+                modelCounter++;
+
+                if (modelCounter < modelsInDb.length) {
+                    cnn.model(modelsInDb[modelCounter]).remove(modelRemoveTrack);
+                }
+                else {
+                    cb(err, true);
+                }
+            };
+
+            cnn.model(modelsInDb[modelCounter]).remove(modelRemoveTrack);
+        }
+
+
+
+
+
+        mongoose.dbInit(function (err, cnn) {
+
+            if (err) throw err;
+
+            console.log(cnn.modelNames());
+
+            clearDB(cnn, function (err, roleCreated) {
+
+                if (err) {
+                    console.log(err);
+                    throw err;
+                }
+
+                helpdeskController.importAll(1000000, function (e, importData) {
+
+                    if (e) throw e;
+
+                    grunt.log.writeln('Processing asklñdj askldj lñaskjdñ kasjñ dlkj asldjkdata task...');
+
+                    done();
+
+                });
+
+
+            });
+
+        });
+
+
+
+
+
+
+    });
 
 };

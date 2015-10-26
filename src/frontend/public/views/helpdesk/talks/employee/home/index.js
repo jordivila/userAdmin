@@ -42,23 +42,29 @@ function ($, jqUI, clientApp, helpdeskCommon, crossLayer) {
                 .find('li')
                     .click(function () {
                         var idPeople = jQuery(this).attr('data-user-id');
+
                         clientApp.utils.cookieSetForSession(crossLayer.cookies.helpdeskEmployeeId, idPeople);
 
                         jQuery(this)
                             .parents('ul:first')
-                                .find('li')
+                                .find('div.ui-menuList-itemLink')
                                     .removeClass('ui-state-active')
+                                    .addClass('ui-state-default')
                                 .end()
                             .end()
-                            .addClass('ui-state-active');
+                            .find('div.ui-menuList-itemLink')
+                                .removeClass('ui-state-default')
+                                .addClass('ui-state-active')
+                            .end();
+
                     })
                 .end()
                 .find('li[data-user-id="' + clientApp.utils.cookieGet(crossLayer.cookies.helpdeskEmployeeId) + '"]')
-                    .addClass('ui-state-active')
+                    .find('div.ui-menuList-itemLink')
+                        .addClass('ui-state-active')
+                        .removeClass('ui-state-default')
+                    .end()
                 .end();
-
-
-
         }
     };
 
