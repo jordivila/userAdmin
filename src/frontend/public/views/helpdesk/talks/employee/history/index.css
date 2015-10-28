@@ -21,7 +21,9 @@
 .ui-customerCrud .ui-crudGrid .ui-crudGrid-customerName a {text-decoration:underline !important;}
 .ui-customerCrud .ui-crudGrid .ui-crudGrid-customerCardId {width:49.9% !important;}
 .ui-customerCrud .ui-crudGrid .ui-crudGrid-body .ui-crudGrid-customerCardId  {text-align:right;}
+.ui-customerCrud .ui-crudGrid .ui-crudGrid-body .ui-crudGrid-customerName {text-align:left;}
 
 .ui-employeeCrud .ui-crudGrid .ui-crudGrid-employeeName {width:49.9% !important;}
 .ui-employeeCrud .ui-crudGrid .ui-crudGrid-employeeName a {text-decoration:underline !important;}
 .ui-employeeCrud .ui-crudGrid .ui-crudGrid-employeeEmail  {width:49.9% !important;}
+.ui-employeeCrud .ui-crudGrid .ui-crudGrid-body .ui-crudGrid-employeeName {text-align:left;}

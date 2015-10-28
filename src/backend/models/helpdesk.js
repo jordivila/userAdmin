@@ -26,7 +26,7 @@
         },
         dateCreated: {
             type: Date,
-            default:Date.now
+            default: Date.now
         },
         dateLastMessage: {
             type: Date,

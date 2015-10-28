@@ -19,6 +19,7 @@
     var http = require('http');
     var querystring = require('querystring');
     var ErrorHandledModel = require('../../crossLayer/models/errorHandled');
+    var normalizeForSearch = require('normalize-for-search');
 
     var HelpdeskTalkModel = require('../models/helpdesk').HelpdeskTalk;
     var HelpdeskPeopleModel = require('../models/helpdesk').HelpdeskPeople;
@@ -731,6 +732,7 @@
         query
             .skip((page * pageSize))
             .limit(pageSize)
+            .sort({ name: 'asc' })
             .exec(function (e, people) {
 
                 if (e) return cb(e, null);
@@ -1008,12 +1010,16 @@
             }
             else {
 
+                var name = self._importDataCache.customers[currentIndexCustomers].apellido1 + ' ' +
+                           self._importDataCache.customers[currentIndexCustomers].apellido2 + ' , ' +
+                           self._importDataCache.customers[currentIndexCustomers].nombre;
+
                 new HelpdeskPeopleModel({
                     //idPeople: pMax + k,
                     idPersonBackOffice: self._importDataCache.customers[currentIndexCustomers].idPersona,    //identificador de la persona en PEF_tb_personaFisica
                     isEmployee: false,
-                    name: self._importDataCache.customers[currentIndexCustomers].nombre + ' ' + self._importDataCache.customers[currentIndexCustomers].apellido1 + ' ' + self._importDataCache.customers[currentIndexCustomers].apellido2 + ' ',
-                    cardId: new Array(11).join(currentIndexCustomers.toString()),
+                    name: myUtils.capitalize(normalizeForSearch(name)),
+                    cardId: self._importDataCache.customers[currentIndexCustomers].docNumero,
                     email: myUtils.stringFormatCSharp("{0}@something.com", new Array(6).join(currentIndexCustomers.toString()))
                 })
                 .save(function (err, employeeSaved, numAffected) {
@@ -1033,12 +1039,17 @@
             }
             else {
 
+                var name = self._importDataCache.employees[currentIndex].apellido1 + ' ' +
+                           self._importDataCache.employees[currentIndex].apellido2 + ' , ' +
+                           self._importDataCache.employees[currentIndex].nombre;
+
                 new HelpdeskPeopleModel({
                     //idPeople: j,      // -> identity (1,1)
-                    idPersonBackOffice: self._importDataCache.employees[currentIndex].idEmpleado,    //identificaador de la persona en ORG_TB_EMLPEADOS
+                    //idPersonBackOffice: self._importDataCache.employees[currentIndex].idEmpleado,    //identificaador de la persona en ORG_TB_EMLPEADOS
+                    idPersonBackOffice: self._importDataCache.employees[currentIndex].idPersona,    //identificaador de la persona en PEF_Tb_PersonaFisica aunque sea un emepleado
                     isEmployee: true,
-                    name: self._importDataCache.employees[currentIndex].descripcion,
-                    cardId: new Array(11).join(currentIndex.toString()),
+                    name: myUtils.capitalize(normalizeForSearch(name)),
+                    cardId: self._importDataCache.employees[currentIndex].docNumero,
                     email: myUtils.stringFormatCSharp("{0}@something.com", new Array(6).join(currentIndex.toString()))
                 })
                 .save(function (err, employeeSaved, numAffected) {
@@ -1457,12 +1468,24 @@
         var dbFilter = { isEmployee: false };
 
         if ((params.filter.customerName) && (params.filter.customerName.trim() !== "")) {
-            dbFilter.name = new RegExp(myUtils.stringFormatCSharp('{0}', params.filter.customerName), "i");
+            // this reg ex is some kind of search like this-> "%word1% AND %word2%"
+
+            //(?=.*\bjordi\b)(?=.*\bvila\b).+
+
+            var words = params.filter.customerName.trim().replace('.','').split(' ');
+            var str = '';
+            for (var i = 0; i < words.length; i++) {
+                str += '(?=.*\\b' + normalizeForSearch(words[i]) + '\\b)';
+            }
+
+            dbFilter.name = new RegExp(str, "ig");
         }
 
         if ((params.filter.customerCardId) && (params.filter.customerCardId.trim() !== "")) {
             dbFilter.cardId = new RegExp(myUtils.stringFormatCSharp('{0}', params.filter.customerCardId), "i");
         }
+
+        console.log(dbFilter);
 
         this._searchPeoplePaginated(
             dbFilter,
@@ -1483,7 +1506,16 @@
         var dbFilter = { isEmployee: true };
 
         if ((params.filter.employeeName) && (params.filter.employeeName.trim() !== "")) {
-            dbFilter.name = new RegExp(myUtils.stringFormatCSharp('{0}', params.filter.employeeName), "i");
+            // this reg ex is some kind of search like this-> "%word1% AND %word2%"
+
+            //(?=.*\bjordi\b)(?=.*\bvila\b).+
+            var words = params.filter.employeeName.trim().split(' ');
+            var str = '';
+            for (var i = 0; i < words.length; i++) {
+                str += '(?=.*\\b' + normalizeForSearch(words[i]) + '\\b)';
+            }
+
+            dbFilter.name = new RegExp(str, "ig");
         }
 
         if ((params.filter.employeeEmail) && (params.filter.employeeEmail.trim() !== "")) {

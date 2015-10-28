@@ -8,7 +8,7 @@
     var utils = require('./libs/initMochaTests');
     var util = require('util');
     var assert = require("assert");
-    var HelpdeskController = require(pathToSrc + 'backend/controllers/helpdesk');
+    var HelpdeskController = require(pathToSrc + 'backend/controllers/helpdesk_MongoDB_OK');
     var helpdeskController = new HelpdeskController();
     var ErrorHandled = require(pathToSrc + 'crossLayer/models/errorHandled');
     var myUtils = require(pathToSrc + 'backend/libs/commonFunctions');

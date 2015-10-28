@@ -612,7 +612,7 @@
                     throw err;
                 }
 
-                helpdeskController.importAll(1000000, function (e, importData) {
+                helpdeskController.importAll(2000, function (e, importData) {
 
                     if (e) throw e;
 
@@ -621,7 +621,6 @@
                     done();
 
                 });
-
 
             });
 

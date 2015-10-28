@@ -27,20 +27,14 @@
         return false;
     }
 
-    describe('Helpdesk Employees API features', function () {
 
-        this.timeout(15000);
+    describe('Helpdesk API features', function () {
 
-        it('Import all customers', function (done) {
-            
-            helpdeskController.importAll(1000000,function (e, importData) {
+        it('No tests here. API should return the same as mongodb tests', function (done) {
 
-                if (e) throw e;
+            assert.equal(1, 1, true);
 
-                console.log();
-
-                done();
-            });
+            done();
 
         });
 

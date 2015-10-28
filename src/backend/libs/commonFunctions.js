@@ -8,6 +8,7 @@ var jQueryExtendPort = require('node.extend'); //https://github.com/dreamerslab/
 module.exports.extend = extend;
 module.exports.extendDeep = extendDeep;
 module.exports.stringFormatCSharp = stringFormatCSharp;
+module.exports.capitalize = capitalize;
 
 
 
@@ -50,4 +51,8 @@ function stringFormatCSharp() {
     return string.replace(/{(\d+)}/g, function (match, number) {
         return typeof args[number] != 'undefined' ? args[number] : match;
     });
+}
+
+function capitalize(value) {
+    return value.replace(/(?:^|\s)\S/g, function (a) { return a.toUpperCase(); });
 }

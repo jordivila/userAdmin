@@ -1,6 +1,6 @@
 {
   "name": "userAdmin",
-  "version": "0.0.10502",
+  "version": "0.0.10581",
   "description": "userAdmin",
   "private": true,
   "author": {
@@ -51,6 +51,7 @@
     "node-html-encoder": "0.0.2",
     "node-uuid": "1.4.3",
     "node.extend": "^1.1.5",
+    "normalize-for-search": "^1.2.0",
     "p-promise": "^0.5.0",
     "passport": "0.2.1",
     "passport-http": "0.2.2",

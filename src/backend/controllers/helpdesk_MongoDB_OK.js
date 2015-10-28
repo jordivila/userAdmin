@@ -930,41 +930,6 @@
     };
     HelpdeskAPIController.prototype.talkSearch = function (req, params, cb) {
 
-
-
-
-
-
-
-        P.all(peopleSaved).nodeify(function (e, data) {
-
-            if (e !== null) {
-                cb(e, null);
-            }
-            else {
-                HelpdeskPeopleModel.find({}, function (e, all) {
-                    dataToModel(all);
-                });
-            }
-        });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         if (!req.user.isEmployee) {
             this._talkSearchByCustomer(req, params, cb);
         }
