@@ -55,9 +55,6 @@
     HelpdeskAPIController.prototype._talkSave = function (i18n, idTalk, subject, customerId, employeeId, cb) {
         try {
 
-
-
-
             var dataResult = null;
             var modelErrors = [];
             var isNew = idTalk === null;
@@ -72,10 +69,6 @@
                 }
 
             }();
-
-
-
-
 
             if (modelErrors.length > 0) {
                 dataResult = new DataResult(false, i18n.__("Views.Crud.ErrorExistsInForm"), { modelState: modelErrors });

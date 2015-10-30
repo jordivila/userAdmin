@@ -60,36 +60,36 @@
         //}
         //else {
 
-        //console.log("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+            //console.log("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
 
-        HelpdeskPeopleModel.findOne({
-            idPeople: customerId,
-        }, function (e, customer) {
+            HelpdeskPeopleModel.findOne({
+                idPeople: customerId,
+            }, function (e, customer) {
 
-            if (e) return cb(e, null);
+                if (e) return cb(e, null);
 
-            //console.log("Employee Default");
+                //console.log("Employee Default");
 
-            self.apiRequestImport("/api/manager/employees/default/" + customer.idPersonBackOffice,
-                function (e, employeeDefaultId) {
+                self.apiRequestImport("/api/manager/employees/default/" + customer.idPersonBackOffice,
+                    function (e, employeeDefaultId) {
 
-                    //console.log("XXXXXXXXXXXXXXXX");
-                    //console.log(arguments);
+                        //console.log("XXXXXXXXXXXXXXXX");
+                        //console.log(arguments);
 
-                    if (e) return cb(e, null);
-
-                    HelpdeskPeopleModel.findOne({
-                        isEmployee: true,
-                        idPersonBackOffice: employeeDefaultId.idPersonBackOffice
-                    }, function (e, employeeDefault) {
                         if (e) return cb(e, null);
 
-                        cb(null, employeeDefault);
+                        HelpdeskPeopleModel.findOne({
+                            isEmployee: true,
+                            idPersonBackOffice: employeeDefaultId.idPersonBackOffice
+                        }, function (e, employeeDefault) {
+                            if (e) return cb(e, null);
+
+                            cb(null, employeeDefault);
+                        });
                     });
-                });
 
 
-        });
+            });
         //}
 
     };
@@ -1114,7 +1114,7 @@
         //    this.importAll(cb);
         //}
         //else {
-        this.importAll(cb);
+            this.importAll(cb);
         //}
     };
     HelpdeskAPIController.prototype.talkSearch = function (req, params, cb) {

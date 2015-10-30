@@ -8,7 +8,7 @@
     var utils = require('./libs/initMochaTests');
     var util = require('util');
     var assert = require("assert");
-    var HelpdeskController = require(pathToSrc + 'backend/controllers/helpdesk_MongoDB_OK');
+    var HelpdeskController = require(pathToSrc + 'backend/controllers/helpdesk_API_Hibryd_OK');
     var helpdeskController = new HelpdeskController();
     var ErrorHandled = require(pathToSrc + 'crossLayer/models/errorHandled');
     var myUtils = require(pathToSrc + 'backend/libs/commonFunctions');
@@ -27,7 +27,7 @@
         return false;
     }
 
-    describe('Helpdesk MongoDB only Customers features', function () {
+    describe('Helpdesk API Hibryd Customers features', function () {
 
         it('Customer can add a talk', function (done) {
 
@@ -871,6 +871,7 @@
 
                                                 if (err) throw err;
 
+
                                                 assert.equal(err, null, err === null ? '' : err.message);
                                                 assert.equal(searchResult.isValid, true);
                                                 assert.equal(searchResult.data.totalRows === 1, true);
@@ -917,7 +918,7 @@
 
     });
 
-    describe('Helpdesk MongoDB only Employees features', function () {
+    describe('Helpdesk API Hibryd Employees features', function () {
 
         it('Employees can add a talk', function (done) {
 
@@ -1263,6 +1264,7 @@
                                         assert.equal(err, null, err === null ? '' : err.message);
                                         assert.equal(customerResults.isValid, true);
                                         assert.equal(customerResults.data.totalRows === 1, true);
+
                                         done();
 
                                     });
