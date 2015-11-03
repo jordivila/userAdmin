@@ -13,7 +13,7 @@
     }
     HomeController.prototype = new GenericViewController();
     HomeController.prototype.ReadMeMarkDownContent = null; // shared between instances !!
-    HomeController.prototype.viewIndexModel = function (req, cb) {
+    HomeController.prototype.viewIndexModel = function (req, res, cb) {
 
         var self = this;
 

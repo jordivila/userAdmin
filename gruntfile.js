@@ -539,11 +539,12 @@
         // And some async stuff.
 
 
-        var HelpdeskController = require('./src/backend/controllers/helpdesk');
+        var HelpdeskController = require('./src/backend/controllers/helpdesk_API_Hibryd_OK');
         var helpdeskController = new HelpdeskController();
         var mongoose = require('./src/backend/libs/db');
         var commonController = require('./src/backend/controllers/tests');
-        //var i18n = new (require('i18n-2'))(config.get("i18n"));
+        var config = require('./src/backend/libs/config');
+        var i18n = new (require('i18n-2'))(config.get("i18n"));
 
         //var global = {};
         //global.i18n = i18n;
@@ -612,7 +613,7 @@
                     throw err;
                 }
 
-                helpdeskController.importAll(function (e, importData) {
+                helpdeskController.importAll(i18n, function (e, importData) {
 
                     if (e) throw e;
 

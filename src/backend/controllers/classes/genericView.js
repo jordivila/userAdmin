@@ -30,7 +30,7 @@
             viewModelPath: viewModelPath
         };
     };
-    GenericView.prototype.viewIndexModel = function(req, cb) {
+    GenericView.prototype.viewIndexModel = function(req, res, cb) {
 
         cb(null, {});
 
@@ -39,7 +39,7 @@
 
         if (req.viewModel.isSEORequest) {
 
-            this.viewIndexModel(req, function(err, result) {
+            this.viewIndexModel(req, res, function(err, result) {
 
                 if (err) {
                     return next(err);
@@ -62,7 +62,7 @@
         //var getTexts = this.viewI18nTextsCacheGet;
         var self = this;
 
-        this.viewIndexModel(req, function(err, result) {
+        this.viewIndexModel(req, res, function(err, result) {
 
             if (err) {
                 return next(err);

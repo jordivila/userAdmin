@@ -10,6 +10,7 @@
     var BaseController = require('../controllers/classes/base');
     var GenericViewController = require('../controllers/classes/genericView');
     var HelpdeskViewHomeController = require('../controllers/helpdeskViewHome');
+    var HelpdeskViewAuthController = require('../controllers/helpdeskViewAuth');
 
     var languagesController = new LanguagesController();
     var currenciesController = new CurrenciesController();
@@ -19,6 +20,7 @@
     var baseController = new BaseController();
     var genericViewController = new GenericViewController();
     var helpdeskViewHomeController = new HelpdeskViewHomeController();
+    var helpdeskViewAuthController = new HelpdeskViewAuthController();
 
     function registerCommonVerbs(app, route, controller) {
 
@@ -66,6 +68,7 @@
         });
 
     }
+
 
     module.exports.setRoutes = function (app) {
 
@@ -123,6 +126,7 @@
         registerCommonVerbs(app, "helpdesk/talks/common/fakes", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/common", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/home", helpdeskViewHomeController);
+        registerCommonVerbs(app, "helpdesk/talks/employee/auth", helpdeskViewAuthController);
         registerCommonVerbs(app, "helpdesk/talks/employee/wiki", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/history", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/message", genericViewController);

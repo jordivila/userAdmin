@@ -52,7 +52,7 @@
 
         cb();
     };
-    GlobalizeController.prototype.viewIndexModel = function (req, cb) {
+    GlobalizeController.prototype.viewIndexModel = function (req, res, cb) {
 
         var like;
         var currentCulture = req.viewModel.globalization.cultureGlobalization;

@@ -29,11 +29,50 @@
     var HelpdeskPeopleInvolvedModel = require('../models/helpdesk').HelpdeskPeopleInvolved;
 
 
-    function HelpdeskAPIController() {
-        //GenericViewController.apply(this, arguments);
 
-        //this._isInTestMode = true;
-        //this._testEmployeeDefaultIdBackOffice = null;
+    function apiRequest(i18n, path, cb) {
+
+        path = "/ArquiaXXI.BackOffice.WCF.Services/HelpdeskServices/HelpdeskService.svc/wb/" + path;
+
+        var options = {
+            host: 'localhost',
+            port: 80,
+            path: path,
+            method: 'GET',
+            headers: {
+                //'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': 'application/json; charset=utf-8',
+                //'Content-Length': postData.length
+            },
+        };
+
+        var bufferJson = "";
+        var reqClient = http.request(options, function (res) {
+            //console.log('STATUS: ' + res.statusCode);
+            //console.log('HEADERS: ' + JSON.stringify(res.headers));
+            res.setEncoding('utf8');
+            res.on('data', function (chunk) {
+                bufferJson += chunk;
+            });
+            res.on('end', function () {
+                if (res.statusCode !== 200) {
+                    cb(new ErrorHandledModel(i18n.__("Views.Layout.UnExpectedError"), res), null);
+                }
+                else {
+                    cb(null, JSON.parse(bufferJson));
+                }
+            });
+        });
+
+        reqClient.on('error', function (e) {
+            cb(e, null);
+        });
+
+        reqClient.end();
+    }
+
+    function HelpdeskAPIController() {
+
         this._importDataCache = {
             isEmpty: true,
             customers: null,
@@ -43,55 +82,32 @@
         passport.use('helpdeskStrategy', new BasicStrategy({ passReqToCallback: true }, this.reqCredentialsCheck));
     }
 
-    HelpdeskAPIController.prototype._employeeDefaultGet = function (customerId, cb) {
+
+    HelpdeskAPIController.prototype._employeeDefaultGet = function (i18n, customerId, cb) {
 
         var self = this;
 
-        //if (this._isInTestMode) {
+        HelpdeskPeopleModel.findOne({
+            idPeople: customerId,
+        }, function (e, customer) {
 
-        //    HelpdeskPeopleModel.findOne({
-        //        isEmployee: true,
-        //        idPersonBackOffice: this._testEmployeeDefaultIdBackOffice
-        //    }, function (e, employeeDefault) {
-        //        if (e) return cb(e, null);
+            if (e) return cb(e, null);
 
-        //        cb(null, employeeDefault);
-        //    });
-        //}
-        //else {
+            apiRequest(i18n, "employeeGetDefault/" + customer.idPersonBackOffice,
+                function (e, employeeDefaultId) {
 
-            //console.log("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+                    if (e) return cb(e, null);
 
-            HelpdeskPeopleModel.findOne({
-                idPeople: customerId,
-            }, function (e, customer) {
-
-                if (e) return cb(e, null);
-
-                //console.log("Employee Default");
-
-                self.apiRequestImport("/api/manager/employees/default/" + customer.idPersonBackOffice,
-                    function (e, employeeDefaultId) {
-
-                        //console.log("XXXXXXXXXXXXXXXX");
-                        //console.log(arguments);
-
+                    HelpdeskPeopleModel.findOne({
+                        isEmployee: true,
+                        idPersonBackOffice: employeeDefaultId.idPersonBackOffice
+                    }, function (e, employeeDefault) {
                         if (e) return cb(e, null);
 
-                        HelpdeskPeopleModel.findOne({
-                            isEmployee: true,
-                            idPersonBackOffice: employeeDefaultId.idPersonBackOffice
-                        }, function (e, employeeDefault) {
-                            if (e) return cb(e, null);
-
-                            cb(null, employeeDefault);
-                        });
+                        cb(null, employeeDefault);
                     });
-
-
-            });
-        //}
-
+                });
+        });
     };
     HelpdeskAPIController.prototype._talkSave = function (i18n, idTalk, subject, customerId, employeeId, cb) {
         try {
@@ -788,6 +804,8 @@
     };
     HelpdeskAPIController.prototype.reqCredentialsCheck = function (req, username, password, callback) {
 
+
+        var self = this;
         var i18n = req.i18n;
 
         var invalidCredentials = function () {
@@ -827,11 +845,38 @@
         // this methods returns tru if api route for the current request
         // was a customer route
         // See /src/backend/routing/routesApiUser.js
+
+
         if (req.params.apiEndpointType === 'customer') {
             checkByCookieName(crossLayer.cookies.helpdeskCustomerId);
         }
         else {
-            checkByCookieName(crossLayer.cookies.helpdeskEmployeeId);
+
+
+
+
+            var path = 'authTicketValidate/';
+            path += req.cookies.oAuthTicket;
+
+            apiRequest(i18n, path, function (e, authTicket) {
+
+                HelpdeskPeopleModel.findOne({
+                    idPersonBackOffice: authTicket.idPersonBackOffice,
+                    isEmployee: true
+                }, function (err, peopleInfo) {
+
+                    if (peopleInfo === null) {
+                        invalidCredentials();
+                    }
+                    else {
+                        callback(null, peopleInfo);
+                    }
+
+                });
+
+            });
+
+
         }
     };
     HelpdeskAPIController.prototype.isAuthenticated = function (req, res, next) {
@@ -870,77 +915,32 @@
 
     };
 
+    HelpdeskAPIController.prototype.importCustomers = function (i18n, cb) {
 
-    HelpdeskAPIController.prototype.apiRequestImport = function (path, cb) {
+        var self = this;
 
+        apiRequest(i18n, 'customersGetForImport', cb);
+    };
+    HelpdeskAPIController.prototype.importEmployees = function (i18n, cb) {
 
-        var options = {
-            host: 'localhost',
-            port: 12345,
-            path: path,
-            method: 'GET',
-            headers: {
-                //'Content-Type': 'application/x-www-form-urlencoded',
-                'Content-Type': 'application/json; charset=utf-8',
-                //'Content-Length': postData.length
-            },
-        };
+        var self = this;
 
-        var bufferJson = "";
-        var reqClient = http.request(options, function (res) {
-            //console.log('STATUS: ' + res.statusCode);
-            //console.log('HEADERS: ' + JSON.stringify(res.headers));
-            res.setEncoding('utf8');
-            res.on('data', function (chunk) {
-                bufferJson += chunk;
-            });
-            res.on('end', function () {
-                if (res.statusCode !== 200) {
-                    cb(new ErrorHandledModel(i18n.__("Views.Layout.UnExpectedError"), res), null);
-                }
-                else {
-
-
-
-                    cb(null, JSON.parse(bufferJson));
-                    //cb(null, JSON.parse(bufferJson.join()));
-
-                    //try {
-                    //    cb(null, JSON.parse(JSON.stringify(bufferJson.join())));
-                    //} catch (e) {
-                    //    cb(e, null);
-                    //}
-                }
-            });
-        });
-
-        reqClient.on('error', function (e) {
-            cb(e, null);
-        });
-
-        reqClient.end();
-
+        apiRequest(i18n, 'employeesGetForImport', cb);
 
     };
-    HelpdeskAPIController.prototype.importCustomers = function (cb) {
-        this.apiRequestImport('/api/manager/customersGetForImport/', cb);
-    };
-    HelpdeskAPIController.prototype.importEmployees = function (cb) {
-        this.apiRequestImport('/api/manager/employeesGetForImport/', cb);
-    };
-    HelpdeskAPIController.prototype.importGetData = function (cb) {
+    HelpdeskAPIController.prototype.importGetData = function (i18n, cb) {
 
         var self = this;
 
         console.log("IMPORT GET DATA Employees BEGIN");
 
-        self.importEmployees(function (e, employees) {
+        self.importEmployees(i18n, function (e, employees) {
 
             if (e) return cb(e, null);
 
             console.log("IMPORT GET DATA Custoemrs BEGIN");
 
-            self.importCustomers(function (e, customers) {
+            self.importCustomers(i18n, function (e, customers) {
 
                 if (e) return cb(e, null);
 
@@ -1082,12 +1082,12 @@
         //});
 
     };
-    HelpdeskAPIController.prototype.importAll = function (cb) {
+    HelpdeskAPIController.prototype.importAll = function (i18n, cb) {
 
         var self = this;
 
         if (self._importDataCache.isEmpty === true) {
-            self.importGetData(function (e, getDataResult) {
+            self.importGetData(i18n, function (e, getDataResult) {
 
                 if (e) return cb(e);
 
@@ -1108,13 +1108,13 @@
     };
 
 
-    HelpdeskAPIController.prototype.testMethodInitDb = function (cb) {
+    HelpdeskAPIController.prototype.testMethodInitDb = function (i18n, cb) {
 
         //if (this._isInTestMode === true) {
         //    this.importAll(cb);
         //}
         //else {
-            this.importAll(cb);
+        this.importAll(i18n, cb);
         //}
     };
     HelpdeskAPIController.prototype.talkSearch = function (req, params, cb) {
@@ -1133,7 +1133,7 @@
 
         var self = this;
 
-        this._employeeDefaultGet(req.user.idPeople, function (e, employeeDefault) {
+        this._employeeDefaultGet(req.i18n, req.user.idPeople, function (e, employeeDefault) {
 
             if (e) return cb(e, null);
 

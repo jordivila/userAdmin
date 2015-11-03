@@ -10,6 +10,7 @@
             <button class="ui-helpdesk-talks-wellcome-next">{{{__ "Helpdesk.Talks.Employee.Wellcome.Next"}}} <i class="fa fa-arrow-right "></i> </button>
         </div>
 
+        {{#if this.Employees }}
         <div>
             <h3>Select fake user / Selecciona un usuario de fake</h3>
             <ul class="ui-userSelector-list ui-menuTree ui-menuList ui-widget-content ui-corner-all" style="overflow: hidden;">
@@ -24,7 +25,7 @@
                 {{/each}}
             </ul>
         </div>
-
+        {{/if}}
 
     </div>
 </div>

@@ -14,38 +14,22 @@
         GenericViewController.apply(this, arguments);
     }
     HelpdeskViewHomeController.prototype = new GenericViewController();
-    HelpdeskViewHomeController.prototype.viewIndexModel = function (req, cb) {
+    HelpdeskViewHomeController.prototype.viewIndexModel = function (req, res, cb) {
 
-        var params = {};
-        params.filter = {};
-        params.page = 0;
-        params.pageSize = 1000;
+        helpdeskApiController.reqCredentialsCheck(req, '', '',
+            function (e, dataAuth) {
 
-        helpdeskApiController.customerSearch(req, params, function (e, customers) {
 
-            if (e) return cb(e);
-
-            for (var i = 0; i < customers.data.data.length; i++) {
-                customers.data.data[i].idPeople = customers.data.data[i].customerId;
-                customers.data.data[i].name = customers.data.data[i].customerName;
-            }
-
-            helpdeskApiController.employeeSearch(req, params, function (e, employees) {
-
-                if (e) return cb(e);
-
-                for (var i = 0; i < employees.data.data.length; i++) {
-                    employees.data.data[i].idPeople = employees.data.data[i].employeeId;
-                    employees.data.data[i].name = employees.data.data[i].employeeName;
-                }
-
+                console.log("dataAuth");
+                console.log(dataAuth);
 
                 cb(null, {
-                    Customers: customers.data.data,
-                    Employees: employees.data.data
+                    //Customers: customers.data.data,
+                    Employees: [dataAuth]
                 });
+
+
             });
-        });
 
     };
 

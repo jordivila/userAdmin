@@ -14,7 +14,7 @@
         GenericViewController.apply(this, arguments);
     }
     HelpdeskViewHomeController.prototype = new GenericViewController();
-    HelpdeskViewHomeController.prototype.viewIndexModel = function (req, cb) {
+    HelpdeskViewHomeController.prototype.viewIndexModel = function (req, res, cb) {
 
         helpdeskApiController.testMethodInitDb(function (e, data) {
 

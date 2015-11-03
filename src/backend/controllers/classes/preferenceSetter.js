@@ -74,7 +74,7 @@
 
     };
 
-    PreferenceSetter.prototype.viewIndexModel = function (req, cb) {
+    PreferenceSetter.prototype.viewIndexModel = function (req, res, cb) {
 
         this.getAll(req, function (err, getAllResult) {
 

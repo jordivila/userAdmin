@@ -31,7 +31,7 @@
 
         it('Customer can add a talk', function (done) {
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -76,7 +76,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) {
                     throw e;
@@ -121,7 +121,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) {
                     throw e;
@@ -178,7 +178,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -230,7 +230,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -293,7 +293,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) {
                     throw e;
@@ -356,7 +356,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) {
                     throw e;
@@ -424,7 +424,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -499,7 +499,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) {
                     throw e;
@@ -573,7 +573,7 @@
                 sortBy: ""
             };
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -651,7 +651,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -735,7 +735,7 @@
             // when a customer writes a message 
             // This message should not compute as an unread message
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -812,7 +812,7 @@
 
         it('Customers messages can get unread message number', function (done) {
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -872,16 +872,13 @@
                                                 if (err) throw err;
 
 
+                                                //console.log(searchResult.data.data);
+
                                                 assert.equal(err, null, err === null ? '' : err.message);
                                                 assert.equal(searchResult.isValid, true);
                                                 assert.equal(searchResult.data.totalRows === 1, true);
                                                 assert.equal(searchResult.data.data[0].idTalk === addResult.data.editData.idTalk, true);
                                                 assert.equal(searchResult.data.data[0].nMessagesUnread === 1, true);
-
-
-
-
-
 
 
                                                 helpdeskController.messageGetAll
@@ -932,7 +929,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -978,7 +975,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -1061,7 +1058,7 @@
 
         it('Employees can find their talks', function (done) {
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -1125,7 +1122,7 @@
         it('Employees can find their talks & filter by customer', function (done) {
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -1222,7 +1219,7 @@
                 sortBy: ""
             };
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -1283,7 +1280,7 @@
                 sortBy: ""
             };
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -1344,7 +1341,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -1394,7 +1391,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -1453,7 +1450,7 @@
             };
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -1503,7 +1500,7 @@
 
         it('Employees can Get all messages from their talks', function (done) {
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -1574,7 +1571,7 @@
         it('Employee unread messages get updated', function (done) {
 
 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -1685,7 +1682,7 @@
         it('Employee can find their talks & filter by status', function (done) {
 
             // 1,. Init database users 
-            helpdeskController.testMethodInitDb(function (e, initDbData) {
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
                 if (e) throw e;
 
@@ -1961,7 +1958,7 @@
         //it('Employees with admin profile can find their talks & filter by employee', function (done) {
 
 
-        //    helpdeskController.testMethodInitDb(function (e, initDbData) {
+        //    helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
 
         //        if (e) throw e;
 
