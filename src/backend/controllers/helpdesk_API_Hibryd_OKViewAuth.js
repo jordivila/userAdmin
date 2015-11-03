@@ -25,8 +25,6 @@
         );
         res.end();
 
-
-        //cb(null, {});
     };
 
 })(module);

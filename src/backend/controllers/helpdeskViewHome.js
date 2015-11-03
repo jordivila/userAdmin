@@ -19,18 +19,12 @@
         helpdeskApiController.reqCredentialsCheck(req, '', '',
             function (e, dataAuth) {
 
-
-                console.log("dataAuth");
-                console.log(dataAuth);
-
                 cb(null, {
                     //Customers: customers.data.data,
-                    Employees: [dataAuth]
+                    Employees: [dataAuth],
+                    WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Employee.Wellcome.WhoYouAreMessage')
                 });
-
-
             });
-
     };
 
 })(module);

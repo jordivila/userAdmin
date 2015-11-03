@@ -23,7 +23,8 @@
 
             cb(null, {
                 Customers: allCustomers,
-                Employees: allEmployees
+                Employees: allEmployees,
+                WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Employee.Wellcome.SelectFakeUser')
             });
 
         });

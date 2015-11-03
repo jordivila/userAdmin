@@ -56,7 +56,8 @@
             });
             res.on('end', function () {
                 if (res.statusCode !== 200) {
-                    cb(new ErrorHandledModel(i18n.__("Views.Layout.UnExpectedError"), res), null);
+                    //cb(new ErrorHandledModel(i18n.__("Views.Layout.UnExpectedError"), res), null);
+                    cb(new ErrorHandledModel(i18n.__("Views.Layout.UnExpectedError")), null);
                 }
                 else {
                     cb(null, JSON.parse(bufferJson));
