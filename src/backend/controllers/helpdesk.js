@@ -32,10 +32,24 @@
 
     function apiRequest(i18n, path, cb) {
 
-        path = "/ArquiaXXI.BackOffice.WCF.Services/HelpdeskServices/HelpdeskService.svc/wb/" + path;
+        //path = "/ArquiaXXI.BackOffice.WCF.Services/HelpdeskServices/HelpdeskService.svc/wb/" + path;
+
+        //var options = {
+        //    host: 'localhost',
+        //    port: 80,
+        //    path: path,
+        //    method: 'GET',
+        //    headers: {
+        //        //'Content-Type': 'application/x-www-form-urlencoded',
+        //        'Content-Type': 'application/json; charset=utf-8',
+        //        //'Content-Length': postData.length
+        //    },
+        //};
+
+        path = "/Arquia.WCF/ArquiaXXI.BackOffice.WCF.Services/HelpdeskServices/HelpdeskService.svc/wb/" + path;
 
         var options = {
-            host: 'localhost',
+            host: '77.0.11.220',
             port: 80,
             path: path,
             method: 'GET',
@@ -45,6 +59,8 @@
                 //'Content-Length': postData.length
             },
         };
+
+
 
         var bufferJson = "";
         var reqClient = http.request(options, function (res) {
