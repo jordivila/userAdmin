@@ -55,6 +55,7 @@
                 bufferJson += chunk;
             });
             res.on('end', function () {
+
                 if (res.statusCode !== 200) {
                     //cb(new ErrorHandledModel(i18n.__("Views.Layout.UnExpectedError"), res), null);
                     cb(new ErrorHandledModel(i18n.__("Views.Layout.UnExpectedError")), null);
@@ -848,37 +849,62 @@
         // See /src/backend/routing/routesApiUser.js
 
 
-        if (req.params.apiEndpointType === 'customer') {
-            checkByCookieName(crossLayer.cookies.helpdeskCustomerId);
-        }
-        else {
 
+        var path = 'authTicketValidate/';
+        path += req.cookies.oAuthTicket;
 
+        apiRequest(i18n, path, function (e, authTicket) {
 
+            if (e) return callback(e, null);
 
-            var path = 'authTicketValidate/';
-            path += req.cookies.oAuthTicket;
+            if (authTicket === null) {
+                invalidCredentials();
+            }
+            else {
 
-            apiRequest(i18n, path, function (e, authTicket) {
+                var setPeopleInfo = function () {
+                    HelpdeskPeopleModel.findOne({
+                        idPersonBackOffice: authTicket.idPersonBackOffice,
+                        isEmployee: authTicket.isEmployee
+                    }, function (err, peopleInfo) {
 
-                HelpdeskPeopleModel.findOne({
-                    idPersonBackOffice: authTicket.idPersonBackOffice,
-                    isEmployee: true
-                }, function (err, peopleInfo) {
+                        if (err) return callback(err, null);
 
-                    if (peopleInfo === null) {
+                        if (peopleInfo === null) {
+                            invalidCredentials();
+                        }
+                        else {
+                            callback(null, peopleInfo);
+                        }
+
+                    });
+                };
+
+                if (req.params.apiEndpointType === 'customer') {
+                    
+                    if (authTicket.isEmployee === true) {
+                        // Un usuario empleado esta intentando entrar en la seccion de customers
                         invalidCredentials();
                     }
                     else {
-                        callback(null, peopleInfo);
+                        setPeopleInfo();
                     }
 
-                });
+                }
+                else {
 
-            });
+                    if (authTicket.isEmployee === false) {
+                        // Un usuario customer esta intentando entrar en la seccion de empleados
+                        invalidCredentials();
+                    }
+                    else {
+                        setPeopleInfo();
+                    }
 
+                }
+            }
+        });
 
-        }
     };
     HelpdeskAPIController.prototype.isAuthenticated = function (req, res, next) {
 

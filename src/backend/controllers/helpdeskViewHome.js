@@ -19,11 +19,30 @@
         helpdeskApiController.reqCredentialsCheck(req, '', '',
             function (e, dataAuth) {
 
-                cb(null, {
-                    //Customers: customers.data.data,
-                    Employees: [dataAuth],
-                    WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Employee.Wellcome.WhoYouAreMessage')
-                });
+                if (e) return cb(e, null);
+
+                if (dataAuth !== null) {
+
+                    if (dataAuth === false) {
+
+                        cb(null, {
+                            WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.PersonNotFound')
+                        });
+
+                    }
+                    else {
+
+                        cb(null, {
+                            Employees: [dataAuth],
+                            WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.WhoYouAreMessage')
+                        });
+                    }
+                }
+                else {
+                    cb(null, {
+                        WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull')
+                    });
+                }
             });
     };
 
