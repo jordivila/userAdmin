@@ -16,7 +16,7 @@ function dbInit(cb)
     });
 
     mongoose.connection.on('open', function callback() {
-        log.info("Connected to DB!");
+        log.info("Connected to DB!" + config.get('mongoose:uri'));
 
         cb(null, mongoose.connection);
     });

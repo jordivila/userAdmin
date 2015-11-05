@@ -38,7 +38,7 @@
             var requestingViewModel = (req.params[0] == 'index.handlebars.json');
 
             if (requestingView || requestingViewModel) {
-                
+
                 controller.setViewInfo(app, req, route);
 
                 if (requestingView) {
@@ -68,7 +68,6 @@
         });
 
     }
-
 
     module.exports.setRoutes = function (app) {
 
@@ -120,9 +119,6 @@
         registerCommonVerbs(app, "crud/crudFormExtended", genericViewController);
         registerCommonVerbs(app, "crud/crudGridEmptyMessage", genericViewController);
 
-        
-
-        
         registerCommonVerbs(app, "helpdesk/talks/common/fakes", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/common", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/home", helpdeskViewHomeController);
@@ -138,13 +134,7 @@
         registerCommonVerbs(app, "helpdesk/talks/customer/history", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/subject", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/message", genericViewController);
-        
-        
-        
-        
-        
-        
-        
+
     };
 
 })(module);

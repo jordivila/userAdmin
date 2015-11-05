@@ -878,6 +878,9 @@
             }
             else {
 
+                console.log(authTicket);
+                console.log(req.params.apiEndpointType);
+
                 var setPeopleInfo = function () {
                     HelpdeskPeopleModel.findOne({
                         idPersonBackOffice: authTicket.idPersonBackOffice,
@@ -890,6 +893,9 @@
                             invalidCredentials();
                         }
                         else {
+
+                            console.log(peopleInfo);
+
                             callback(null, peopleInfo);
                         }
 
@@ -897,6 +903,8 @@
                 };
 
                 if (req.params.apiEndpointType === 'customer') {
+
+                    console.log("Es una ruta de customer");
                     
                     if (authTicket.isEmployee === true) {
                         // Un usuario empleado esta intentando entrar en la seccion de customers
@@ -908,6 +916,8 @@
 
                 }
                 else {
+
+                    console.log("Es una ruta de empleado");
 
                     if (authTicket.isEmployee === false) {
                         // Un usuario customer esta intentando entrar en la seccion de empleados
