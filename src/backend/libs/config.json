@@ -19,7 +19,7 @@
     "domainInfo": {
         "domainName": "localhost:3001",
         "secutiryProtocol": "https",
-        "virtualDirectory": "prodnjsite/" 
+        "virtualDirectory": "prodnjsite/"
     },
     "mailing": {
         "credentials": {
@@ -27,6 +27,13 @@
             "password": "someFakeUserPassword"
         },
         "supportEmailAddress": "supportaccount@fakedomainname.com"
+    },
+    "helpdesk": {
+        "api": {
+            "host": "localhost",
+            "port": 80,
+            "basePath": "/ArquiaXXI.BackOffice.WCF.Services/HelpdeskServices/HelpdeskService.svc/wb/"
+        }
     },
     "clientApp": {
         "usePreCompiled": false,

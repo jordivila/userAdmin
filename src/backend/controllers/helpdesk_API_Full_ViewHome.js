@@ -16,37 +16,37 @@
     HelpdeskViewHomeController.prototype = new GenericViewController();
     HelpdeskViewHomeController.prototype.viewIndexModel = function (req, res, cb) {
 
-        var params = {};
-        params.filter = {};
-        params.page = 0;
-        params.pageSize = 1000;
+        req.params.apiEndpointType = req.route.path.indexOf('helpdesk/talks/customer/home') > -1 ? 'customer' : 'employee';
 
-        helpdeskApiController.customerSearch(req, params, function (e, customers) {
+        helpdeskApiController.reqCredentialsCheck(req, '', '',
+            function (e, dataAuth) {
 
-            if (e) return cb(e);
+                if (e) return cb(e, null);
 
-            for (var i = 0; i < customers.data.data.length; i++) {
-                customers.data.data[i].idPeople = customers.data.data[i].customerId;
-                customers.data.data[i].name = customers.data.data[i].customerName;
-            }
+                if (dataAuth !== null) {
 
-            helpdeskApiController.employeeSearch(req, params, function (e, employees) {
+                    if (dataAuth === false) {
 
-                if (e) return cb(e);
+                        cb(null, {
+                            WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.PersonNotFound')
+                        });
 
-                for (var i = 0; i < employees.data.data.length; i++) {
-                    employees.data.data[i].idPeople = employees.data.data[i].employeeId;
-                    employees.data.data[i].name = employees.data.data[i].employeeName;
+                    }
+                    else {
+
+                        cb(null, {
+                            Customers: dataAuth.isEmployee === false ? [dataAuth] : undefined,
+                            Employees: dataAuth.isEmployee === true ? [dataAuth] : undefined,
+                            WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.WhoYouAreMessage')
+                        });
+                    }
                 }
-
-
-                cb(null, {
-                    Customers: customers.data.data,
-                    Employees: employees.data.data
-                });
+                else {
+                    cb(null, {
+                        WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull')
+                    });
+                }
             });
-        });
-
     };
 
 })(module);

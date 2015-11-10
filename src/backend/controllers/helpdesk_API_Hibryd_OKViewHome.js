@@ -16,6 +16,8 @@
     HelpdeskViewHomeController.prototype = new GenericViewController();
     HelpdeskViewHomeController.prototype.viewIndexModel = function (req, res, cb) {
 
+        req.params.apiEndpointType = req.route.path.indexOf('helpdesk/talks/customer/home') > -1 ? 'customer' : 'employee';
+
         helpdeskApiController.reqCredentialsCheck(req, '', '',
             function (e, dataAuth) {
 
@@ -33,7 +35,8 @@
                     else {
 
                         cb(null, {
-                            Employees: [dataAuth],
+                            Customers: dataAuth.isEmployee === false ? [dataAuth] : undefined,
+                            Employees: dataAuth.isEmployee === true ? [dataAuth] : undefined,
                             WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.WhoYouAreMessage')
                         });
                     }

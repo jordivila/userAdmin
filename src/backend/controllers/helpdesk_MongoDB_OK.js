@@ -819,7 +819,7 @@
 
 
     };
-    HelpdeskAPIController.prototype.testMethodInitDb = function (cb) {
+    HelpdeskAPIController.prototype.testMethodInitDb = function (i18n, cb) {
 
         if (this._isInTestMode === true) {
 
@@ -858,7 +858,6 @@
                     customerCurrent: customerCurrent,
                     customerAnother: customerAnother
                 });
-
 
             };
 

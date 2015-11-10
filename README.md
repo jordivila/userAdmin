@@ -62,10 +62,13 @@ The easiest way to get started is to clone the repository and then:
 1. http://seositecheckup.com/
 2. http://www.woorank.com 
 
+
 ## Use this as a check list when deploying ##
 
 - [http://seositecheckup.com](http://seositecheckup.com "Seo Check")
 - [https://asafaweb.com/Scan?Url=jordivilanode.azurewebsites.net](https://asafaweb.com/Scan?Url=jordivilanode.azurewebsites.net)
+- [http://webdevchecklist.com/](http://webdevchecklist.com/)
+- [https://developers.google.com/speed/pagespeed/insights/](https://developers.google.com/speed/pagespeed/insights/)
 
 
 ## Next things to keep an eye ##

@@ -46,11 +46,26 @@
         //    },
         //};
 
-        path = "/Arquia.WCF/ArquiaXXI.BackOffice.WCF.Services/HelpdeskServices/HelpdeskService.svc/wb/" + path;
+        //path = "/Arquia.WCF/ArquiaXXI.BackOffice.WCF.Services/HelpdeskServices/HelpdeskService.svc/wb/" + path;
+
+        //var options = {
+        //    host: '77.0.11.220',
+        //    port: 80,
+        //    path: path,
+        //    method: 'GET',
+        //    headers: {
+        //        //'Content-Type': 'application/x-www-form-urlencoded',
+        //        'Content-Type': 'application/json; charset=utf-8',
+        //        //'Content-Length': postData.length
+        //    },
+        //};
+
+
+        path = config.get('helpdesk:api:basePath') + path;
 
         var options = {
-            host: '77.0.11.220',
-            port: 80,
+            host: config.get('helpdesk:api:host'),
+            port: config.get('helpdesk:api:port'),
             path: path,
             method: 'GET',
             headers: {
@@ -59,7 +74,6 @@
                 //'Content-Length': postData.length
             },
         };
-
 
 
         var bufferJson = "";
@@ -890,6 +904,9 @@
                             invalidCredentials();
                         }
                         else {
+
+                            console.log(peopleInfo);
+
                             callback(null, peopleInfo);
                         }
 

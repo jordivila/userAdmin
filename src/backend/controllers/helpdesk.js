@@ -46,11 +46,26 @@
         //    },
         //};
 
-        path = "/Arquia.WCF/ArquiaXXI.BackOffice.WCF.Services/HelpdeskServices/HelpdeskService.svc/wb/" + path;
+        //path = "/Arquia.WCF/ArquiaXXI.BackOffice.WCF.Services/HelpdeskServices/HelpdeskService.svc/wb/" + path;
+
+        //var options = {
+        //    host: '77.0.11.220',
+        //    port: 80,
+        //    path: path,
+        //    method: 'GET',
+        //    headers: {
+        //        //'Content-Type': 'application/x-www-form-urlencoded',
+        //        'Content-Type': 'application/json; charset=utf-8',
+        //        //'Content-Length': postData.length
+        //    },
+        //};
+
+
+        path = config.get('helpdesk:api:basePath') + path;
 
         var options = {
-            host: '77.0.11.220',
-            port: 80,
+            host: config.get('helpdesk:api:host'),
+            port: config.get('helpdesk:api:port'),
             path: path,
             method: 'GET',
             headers: {
@@ -59,7 +74,6 @@
                 //'Content-Length': postData.length
             },
         };
-
 
 
         var bufferJson = "";
@@ -878,9 +892,6 @@
             }
             else {
 
-                console.log(authTicket);
-                console.log(req.params.apiEndpointType);
-
                 var setPeopleInfo = function () {
                     HelpdeskPeopleModel.findOne({
                         idPersonBackOffice: authTicket.idPersonBackOffice,
@@ -904,8 +915,6 @@
 
                 if (req.params.apiEndpointType === 'customer') {
 
-                    console.log("Es una ruta de customer");
-                    
                     if (authTicket.isEmployee === true) {
                         // Un usuario empleado esta intentando entrar en la seccion de customers
                         invalidCredentials();
@@ -916,8 +925,6 @@
 
                 }
                 else {
-
-                    console.log("Es una ruta de empleado");
 
                     if (authTicket.isEmployee === false) {
                         // Un usuario customer esta intentando entrar en la seccion de empleados
