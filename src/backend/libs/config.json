@@ -29,6 +29,9 @@
         "supportEmailAddress": "supportaccount@fakedomainname.com"
     },
     "helpdesk": {
+        "controllerType": "helpdesk_API_Full_OK",
+        "controllerAuthType": "helpdesk_API_Full_ViewAuth",
+        "controllerHomeType": "helpdesk_API_Full_ViewHome",
         "api": {
             "host": "localhost",
             "port": 80,

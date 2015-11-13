@@ -81,7 +81,7 @@
             });
             res.on('end', function () {
 
-                
+
 
                 if (res.statusCode !== 200) {
 
@@ -137,8 +137,6 @@
         });
 
 
-        //console.log(JSON.stringify(params));
-
         reqClient.write(JSON.stringify(params));
         reqClient.end();
     }
@@ -162,12 +160,11 @@
     };
     HelpdeskAPIController.prototype._talkSave = function (i18n, idTalk, subject, customerId, employeeId, cb) {
 
-
         apiRequestPost(i18n, "talkSave/",
             {
                 idTalk: idTalk,
                 subject: subject,
-                customerId: customerId===''?null: customerId,
+                customerId: customerId,
                 employeeId: employeeId
             }, function (e, data) {
 
@@ -233,12 +230,11 @@
         path += "/" + params.pageSize;
         path += "/";
 
-        if (params.filter.lastMessageStatus)
-        {
+        if (params.filter.lastMessageStatus) {
             path += "?lastMsgStatus=" + params.filter.lastMessageStatus;
         }
 
-        
+
 
         apiRequest(req.i18n, path, function (e, data) {
             cb(e, data);
@@ -273,8 +269,6 @@
         apiRequest(i18n, path, function (e, authTicket) {
 
             if (e) return callback(e, null);
-
-            
 
             if (authTicket === null) {
                 invalidCredentials();
@@ -332,24 +326,17 @@
             },
             function (err, user, info) {
 
-
-                
-
                 if (err) {
                     return next(err);
                 }
 
-
-                
-
                 if (!user) {
                     res.status(401);
-                    res.end();
                 }
-                else {
-                    req.user = user;
-                    next();
-                }
+
+                req.user = user;
+
+                next();
 
             })(req, res, next);
 
@@ -464,13 +451,14 @@
 
         var self = this;
 
-        self._talkSave(
-            req.i18n,
-            dataItem.isNew === true ? null : dataItem.formData.idTalk,
-            dataItem.formData.subject,
-            dataItem.formData.customerInfo.customerId, // customerId
-            req.user.idPeople, //employeeId
-            function (e, dataResult) {
+        apiRequestPost(req.i18n, "talkSave/",
+            {
+                idTalk: dataItem.isNew === true ? null : dataItem.formData.idTalk,
+                subject: dataItem.formData.subject,
+                customerId: dataItem.formData.customerInfo.customerId,
+                employeeId: req.user.idPeople
+            }, function (e, dataResult) {
+
 
                 if (e) return cb(e, null);
 
@@ -480,6 +468,8 @@
                         dataResult.data.idTalk,
                         function (e, dataResultGetById) {
 
+
+
                             if (e) return cb(e, null);
 
                             if (dataResultGetById.isValid) {
@@ -488,16 +478,16 @@
                                 dataResultGetById.messages[0] = dataResult.messages[0];
                             }
 
+
+
+
                             cb(null, dataResultGetById);
                         });
                 }
                 else {
                     cb(null, dataResult);
                 }
-
-
             });
-
     };
     HelpdeskAPIController.prototype.customerSearch = function (req, params, cb) {
 
@@ -522,7 +512,7 @@
                     "?name=" + encodeURIComponent(params.filter.employeeName) + "&" +
                     "email=" + encodeURIComponent(params.filter.employeeEmail);
 
-        
+
 
         apiRequest(req.i18n, path, function (e, data) {
             cb(e, data);

@@ -2,6 +2,7 @@
 
     "use strict";
 
+    var config = require('../libs/config');
     var LanguagesController = require('../controllers/languages');
     var CurrenciesController = require('../controllers/currencies');
     var HomeController = require('../controllers/home');
@@ -9,8 +10,8 @@
     var GlobalizeController = require('../controllers/globalize');
     var BaseController = require('../controllers/classes/base');
     var GenericViewController = require('../controllers/classes/genericView');
-    var HelpdeskViewHomeController = require('../controllers/helpdeskViewHome');
-    var HelpdeskViewAuthController = require('../controllers/helpdeskViewAuth');
+    var HelpdeskViewHomeController = require('../controllers/' + config.get('helpdesk:controllerHomeType'));
+    var HelpdeskViewAuthController = require('../controllers/' + config.get('helpdesk:controllerAuthType'));
 
     var languagesController = new LanguagesController();
     var currenciesController = new CurrenciesController();
@@ -123,12 +124,14 @@
         registerCommonVerbs(app, "helpdesk/talks/employee/common", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/home", helpdeskViewHomeController);
         registerCommonVerbs(app, "helpdesk/talks/employee/auth", helpdeskViewAuthController);
+        registerCommonVerbs(app, "helpdesk/talks/employee/unauthorize", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/wiki", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/history", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/message", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/subject", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/home", helpdeskViewHomeController);
         registerCommonVerbs(app, "helpdesk/talks/customer/auth", helpdeskViewAuthController);
+        registerCommonVerbs(app, "helpdesk/talks/customer/unauthorize", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/wiki", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/common", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/history", genericViewController);

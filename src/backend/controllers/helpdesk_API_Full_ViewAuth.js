@@ -5,9 +5,11 @@
     module.exports = HelpdeskViewAuthController;
 
 
-    var GenericViewController = require('./classes/genericView');
-    var HelpdeskApiController = require('./helpdesk');
+    var config = require('../libs/config');
+    var HelpdeskApiController = require('./' + config.get('helpdesk:controllerType'));
     var helpdeskApiController = new HelpdeskApiController();
+
+    var GenericViewController = require('./classes/genericView');
     var _ = require("underscore");
 
     function HelpdeskViewAuthController() {

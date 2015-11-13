@@ -4,13 +4,14 @@
     "use strict";
 
     var usersController = require('../controllers/users');
-    var HelpdeskController = require('../controllers/helpdesk');
-    var helpdeskController = new HelpdeskController();
     var bodyParser = require('body-parser');
     var bodyParserText = bodyParser.text();
     var crossLayerConfig = require('../../crossLayer/config');
     var config = require('../libs/config');
     var virtualDirectory = config.get('domainInfo:virtualDirectory');
+    var HelpdeskController = require('../controllers/' + config.get('helpdesk:controllerType'));
+    var helpdeskController = new HelpdeskController();
+
 
     module.exports.setRoutes = function (app, log, authController) {
 

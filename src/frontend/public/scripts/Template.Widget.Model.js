@@ -93,11 +93,14 @@ function ($, jqUI) {
             }
         },
         bindErrors: function (keyValueArray) {
+
             var self = this;
-            for (var i = 0; i < keyValueArray.length; i++) {
-                jQuery(self.element).find('div[data-widgetModelItem-id="{0}"]:first'.format(keyValueArray[i].key))
-                    .widgetModelItem('setErrors', keyValueArray[i].value)
-                    .addClass('ui-state-error');
+            if (keyValueArray) {
+                for (var i = 0; i < keyValueArray.length; i++) {
+                    jQuery(self.element).find('div[data-widgetModelItem-id="{0}"]:first'.format(keyValueArray[i].key))
+                        .widgetModelItem('setErrors', keyValueArray[i].value)
+                        .addClass('ui-state-error');
+                }
             }
         },
         bindValue: function (dataItem) {

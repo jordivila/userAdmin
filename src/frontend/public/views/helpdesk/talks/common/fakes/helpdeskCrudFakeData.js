@@ -22,9 +22,18 @@
             ajax: {
 
                 helpdeskCommonOptions: {
+                    cache: false,
                     beforeSend: function (xhr, settings) {
                         //xhr.setRequestHeader("Authorization", "Basic " + btoa(helpdesk + ":" + user.password));
                         xhr.setRequestHeader("Authorization", "Basic " + btoa("helpdeskUsernameFake:helpdeskPasswordFake"));
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        //clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.history()));
+
+
+                        if (jqXHR.status == 401) {
+                            clientApp.template.loadByUrl('../unauthorize/');
+                        }
                     }
                 },
 

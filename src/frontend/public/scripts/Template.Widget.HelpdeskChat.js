@@ -367,7 +367,7 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observable
         messageWindowSetActiveEvents: function (widget) {
 
 
-            console.log("became busyyyyyyyyyyyyyyyyyyyyyy");
+            //console.log("became busyyyyyyyyyyyyyyyyyyyyyy");
 
             // Every time a message is send by the user
             // An interval begins
@@ -385,8 +385,8 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observable
 
                 var diff = dateHelper.getDifferenceSeconds(new Date(), widget.options.messagesPendingIdleTimeCurrent);
 
-                console.log("SECOOOOOOOONSD");
-                console.log(diff);
+                //console.log("SECOOOOOOOONSD");
+                //console.log(diff);
 
                 if (diff > widget.options.idleTimeInSecondsBeforeStopping) {
                     widget.messageWindowSetIdleEvents(widget);
