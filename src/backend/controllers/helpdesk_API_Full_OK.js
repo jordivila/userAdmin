@@ -454,7 +454,7 @@
 
         this._fakeDataGridTalkGetByIdForEdit(req, dataItem.idTalk,
             function (e, dataResult) {
-                if (e) return cb(error, null);
+                if (e) return cb(e, null);
 
                 cb(null, dataResult);
 
