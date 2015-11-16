@@ -857,9 +857,9 @@
                                     (reqEmployeeDefault,
                                     {
                                         idTalk: addResult.data.editData.idTalk,
-                                        message: 'The customer adds a message. Current employee should find it as "notRead" status search'
+                                        message: 'The employee adds a message. Current employee should find it as "notRead" status search'
                                     },
-                                    function (err, messageAddResult) {
+                                    function (err, messageAddedByEmployeeResult) {
 
                                         if (err) throw err;
 
@@ -895,6 +895,13 @@
 
                                                         if (err) throw err;
 
+
+                                                        // Check first message is the message poseted by empluyee
+                                                        assert.equal(err, null, err === null ? '' : err.message);
+                                                        assert.equal(messageAddedByEmployeeResult.data.idMessage, messagesAll.data.data[0].idMessage);
+                                                        assert.equal(messagesAll.data.data[0].whoPosted.isCurrentUser, false);
+
+
                                                         helpdeskController.talkSearch
                                                             (reqCustomerCurrent,
                                                             filter,
@@ -908,7 +915,22 @@
                                                                 assert.equal(searchResult.data.data[0].idTalk === addResult.data.editData.idTalk, true);
                                                                 assert.equal(searchResult.data.data[0].nMessagesUnread === 0, true);
 
-                                                                done();
+
+                                                                helpdeskController.messageGetAll
+                                                                    (reqEmployeeDefault,
+                                                                    filterGetAll,
+                                                                    function (err, messagesAll) {
+
+                                                                        if (err) throw err;
+
+
+                                                                        // Check first message is the message poseted by empluyee
+                                                                        assert.equal(err, null, err === null ? '' : err.message);
+                                                                        assert.equal(messageAddedByEmployeeResult.data.idMessage, messagesAll.data.data[0].idMessage);
+                                                                        assert.equal(messagesAll.data.data[0].whoPosted.isCurrentUser, true);
+
+                                                                        done();
+                                                                    });
                                                             });
                                                     });
                                             });
@@ -919,7 +941,6 @@
                     });
             });
         });
-
     });
 
     describe(helpdeskControllerPath + '---- Helpdesk Employees features', function () {
@@ -1990,6 +2011,96 @@
         //            });
         //    });
         //});
+
+    });
+
+    describe(helpdeskControllerPath + '---- Helpdesk Check Whoposted', function () {
+
+        it('Message who posted info is Ok', function (done) {
+
+            helpdeskController.testMethodInitDb(i18n, function (e, initDbData) {
+
+                if (e) throw e;
+
+                var reqCustomerCurrent = myUtils.extendDeep({ user: initDbData.customerCurrent }, global);
+                var reqEmployeeDefault = myUtils.extendDeep({ user: initDbData.employeeDefault }, global);
+
+
+                helpdeskController.talkAdd
+                    (reqCustomerCurrent,
+                    {
+                        subject: "new chat conversation"
+                    },
+                    function (err, addResult) {
+
+                        if (err) throw err;
+
+                        var filterGetAll = {
+                            filter: {
+                                idTalk: addResult.data.editData.idTalk
+                            },
+                            page: 0,
+                            pageSize: 50,
+                            sortAscending: false,
+                            sortBy: ""
+                        };
+
+                        helpdeskController.messageGetAll
+                            (reqEmployeeDefault,
+                            filterGetAll,
+                            function (err, messagesAll) {
+
+                                if (err) throw err;
+
+                                helpdeskController.messageAdd
+                                    (reqEmployeeDefault,
+                                    {
+                                        idTalk: addResult.data.editData.idTalk,
+                                        message: 'The employee adds a message. Current employee should find it as "notRead" status search'
+                                    },
+                                    function (err, messageAddedByEmployeeResult) {
+
+                                        if (err) throw err;
+
+                                        helpdeskController.messageGetAll
+                                            (reqCustomerCurrent,
+                                            filterGetAll,
+                                            function (err, messagesAll) {
+
+                                                if (err) throw err;
+
+
+                                                // Check first message is the message poseted by empluyee
+                                                assert.equal(err, null, err === null ? '' : err.message);
+                                                assert.equal(messageAddedByEmployeeResult.data.idMessage, messagesAll.data.data[0].idMessage);
+                                                assert.equal(messagesAll.data.data[0].whoPosted.isCurrentUser, false);
+
+
+                                                helpdeskController.messageGetAll
+                                                    (reqEmployeeDefault,
+                                                    filterGetAll,
+                                                    function (err, messagesAll) {
+
+                                                        if (err) throw err;
+
+                                                        // Check first message is the message poseted by empluyee
+                                                        assert.equal(err, null, err === null ? '' : err.message);
+                                                        assert.equal(messageAddedByEmployeeResult.data.idMessage, messagesAll.data.data[0].idMessage);
+                                                        assert.equal(messagesAll.data.data[0].whoPosted.isCurrentUser, true);
+
+                                                        done();
+                                                    });
+
+                                            });
+
+                                    });
+
+
+                            });
+                    });
+            });
+        });
+
 
     });
 
