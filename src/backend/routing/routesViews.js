@@ -12,6 +12,7 @@
     var GenericViewController = require('../controllers/classes/genericView');
     var HelpdeskViewHomeController = require('../controllers/' + config.get('helpdesk:controllerHomeType'));
     var HelpdeskViewAuthController = require('../controllers/' + config.get('helpdesk:controllerAuthType'));
+    var HelpdeskViewMessageController = require('../controllers/' + config.get('helpdesk:controllerViewMessageType'));
 
     var languagesController = new LanguagesController();
     var currenciesController = new CurrenciesController();
@@ -22,6 +23,7 @@
     var genericViewController = new GenericViewController();
     var helpdeskViewHomeController = new HelpdeskViewHomeController();
     var helpdeskViewAuthController = new HelpdeskViewAuthController();
+    var helpdeskViewMessageController = new HelpdeskViewMessageController();
 
     function registerCommonVerbs(app, route, controller) {
 
@@ -127,7 +129,7 @@
         registerCommonVerbs(app, "helpdesk/talks/employee/unauthorize", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/wiki", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/history", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/employee/message", genericViewController);
+        registerCommonVerbs(app, "helpdesk/talks/employee/message", helpdeskViewMessageController);
         registerCommonVerbs(app, "helpdesk/talks/employee/subject", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/home", helpdeskViewHomeController);
         registerCommonVerbs(app, "helpdesk/talks/customer/auth", helpdeskViewAuthController);
@@ -136,7 +138,7 @@
         registerCommonVerbs(app, "helpdesk/talks/customer/common", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/history", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/subject", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/customer/message", genericViewController);
+        registerCommonVerbs(app, "helpdesk/talks/customer/message", helpdeskViewMessageController);
 
     };
 

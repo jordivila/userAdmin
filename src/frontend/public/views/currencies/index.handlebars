@@ -15,7 +15,7 @@
     <div class="ui-currencySelector-container ">
         <h3>{{{__ "Views.Languages.SelectPreferredCurrency"}}}</h3>
         <ul class="ui-currencySelector-list ui-menuTree ui-menuList ui-widget-content ui-corner-all" style="overflow: hidden;">
-            {{#each itemList}}
+            {{#each this.viewModel.itemList}}
             <li class="ui-menuList-item ui-widget-content ui-corner-all"
                 data-currency-id="{{this.id}}">
                 <div class="ui-menuList-itemLink {{#if this.selected }} ui-state-active {{else}} ui-state-default {{/if}}">

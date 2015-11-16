@@ -1,14 +1,14 @@
 <div id="demo">
     <h2>{{{__ "Views.Globalize.DemoOutput"}}}</h2>
-    <p>{{{__ "Views.Globalize.Now"}}}: <span id="date">{{TheDate}}</span></p>
-    <p>{{{__ "Views.Globalize.ANumber"}}}: <span id="number">{{TheNumber}}</span></p>
-    <p>{{{__ "Views.Globalize.ACurrency"}}}: <span id="currency">{{TheCurrency}}</span></p>
-    <p>Plural form of <span id="plural-number">{{TheNumber}}</span> is <span id="plural-form">{{ThePlural}}</span></p>
+    <p>{{{__ "Views.Globalize.Now"}}}: <span id="date">{{this.viewModel.TheDate}}</span></p>
+    <p>{{{__ "Views.Globalize.ANumber"}}}: <span id="number">{{this.viewModel.TheNumber}}</span></p>
+    <p>{{{__ "Views.Globalize.ACurrency"}}}: <span id="currency">{{this.viewModel.TheCurrency}}</span></p>
+    <p>Plural form of <span id="plural-number">{{this.viewModel.TheNumber}}</span> is <span id="plural-form">{{this.viewModel.ThePlural}}</span></p>
     <p>{{{__ "Views.Globalize.Messages"}}}:</p>
     <ul>
-        {{#each TheMessages}}
+        {{#each this.viewModel.TheMessages}}
         <li><span>{{this}}</span></li>
         {{/each}}
     </ul>
-    <p>{{{__ "Views.Globalize.SomethingHappened"}}}: <span id="relative-time">{{TheTimeAgo}}</span></p>
+    <p>{{{__ "Views.Globalize.SomethingHappened"}}}: <span id="relative-time">{{this.viewModel.TheTimeAgo}}</span></p>
 </div>

@@ -1,4 +1,5 @@
 ﻿body {overflow:hidden; /*prevents double scrolling on the page*/}
 .ui-pageHolder .ui-sitePage .ui-site-title  {display:none;/**/}
+.ui-helpdeskChat .ui-helpdesk-talks-subject-userIcon {border:0;margin:0 0.5em 0 0;}
 
 

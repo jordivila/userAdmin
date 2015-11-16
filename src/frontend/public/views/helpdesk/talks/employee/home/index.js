@@ -33,8 +33,6 @@ function ($, jqUI, clientApp, helpdeskCommon, crossLayer) {
                 .end()
                 .removeClass('ui-helper-hidden');
 
-
-
             /**************************************
                 Employee Selector
             *************************************/

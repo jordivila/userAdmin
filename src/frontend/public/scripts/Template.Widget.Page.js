@@ -191,25 +191,23 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
 
             var dfd = jQuery.Deferred();
 
-
-
             Handlebars.registerHelper('__', function (context, options) {
-                // register i18n helper function
 
-                if (Object.keys(options.data.root.i18nTexts).indexOf(context) > -1) {
-                    return options.data.root.i18nTexts[context];
+
+                console.log("options.data.root");
+                console.log(options.data.root);
+
+                // register i18n helper function
+                if (Object.keys(options.data.root.viewModel.i18nTexts).indexOf(context) > -1) {
+                    return options.data.root.viewModel.i18nTexts[context];
                 }
                 else {
                     return context;
                 }
             });
 
-
             Handlebars.registerHelper('breadcrumbHelper', handleBarsHelpers.breadcrumbHelper);
-
-
-
-
+            Handlebars.registerHelper('jsonHelper', handleBarsHelpers.jsonHelper);
 
             dfd.resolve();
 
@@ -270,24 +268,32 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
         },
         handlebarsLoadTemplateData: function (data) {
 
-            var html = data[0] + "{{#each cssFiles}}<link href='{{this}}' rel='Stylesheet' type='text/css' />{{/each}}";
-            var model = data[1];
-            var hasEntry = data[2];
-            var template = Handlebars.compile(html);
-            var templateContext = {};
-            var handlebarTemplate = template(jQuery.extend({}, model, templateContext));
+            try {
 
-            if (model.title) {
-                clientApp.utils.setPageTitle(model.title);
+                var html = data[0] + "{{#each cssFiles}}<link href='{{this}}' rel='Stylesheet' type='text/css' />{{/each}}";
+                var model = data[1];
+                var hasEntry = data[2];
+                var template = Handlebars.compile(html);
+                var templateContext = {};
+                var handlebarTemplate = template(jQuery.extend({}, model.viewModel ? model : { viewModel: model }, templateContext));
+
+                if (model.title) {
+                    clientApp.utils.setPageTitle(model.title);
+                }
+
+
+                this.breadcrumbRender(model);
+                this.options.$siteContent.html(handlebarTemplate);
+
+                if (hasEntry) {
+                    clientApp.view.main({ viewModel: model });
+                }
+
+            }
+            catch (e) {
+                console.log(e);
             }
 
-
-            this.breadcrumbRender(model);
-            this.options.$siteContent.html(handlebarTemplate);
-
-            if (hasEntry) {
-                clientApp.view.main();
-            }
 
         },
         breadcrumbInitWidget: function () {

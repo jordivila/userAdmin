@@ -8,11 +8,11 @@
         <div class="ui-helpdesk-talks-wellcome-buttonsBox ui-helper-hidden">
             <button class="ui-helpdesk-talks-wellcome-next">{{{__ "Helpdesk.Talks.Wellcome.Next"}}} <i class="fa fa-arrow-right "></i> </button>
         </div>
-        {{#if this.Customers }}
+        {{#if this.viewModel.Customers }}
         <div>
-            <h3>{{ this.WhoYouAreMessage }}</h3>
+            <h3>{{ this.viewModel.WhoYouAreMessage }}</h3>
             <ul class="ui-userSelector-list ui-menuTree ui-menuList ui-widget-content ui-corner-all" style="overflow: hidden;">
-                {{#each Customers}}
+                {{#each this.viewModel.Customers}}
                 <li class="ui-menuList-item ui-widget-content ui-corner-all"
                     data-user-id="{{this.idPeople}}">
                     <div class="ui-menuList-itemLink {{#if this.selected }} ui-state-active {{else}} ui-state-default {{/if}}">
@@ -26,7 +26,7 @@
         {{else}}
         <br />
         <div>
-            <h3 class="ui-state-error">{{ this.WhoYouAreMessage }}</h3>
+            <h3 class="ui-state-error">{{ this.viewModel.WhoYouAreMessage }}</h3>
         </div>
         {{/if}}
     </div>

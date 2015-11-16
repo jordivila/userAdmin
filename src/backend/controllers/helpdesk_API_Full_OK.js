@@ -332,15 +332,9 @@
             },
             function (err, user, info) {
 
-
-                
-
                 if (err) {
                     return next(err);
                 }
-
-
-                
 
                 if (!user) {
                     res.status(401);

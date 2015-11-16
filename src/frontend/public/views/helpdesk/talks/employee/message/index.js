@@ -18,7 +18,7 @@ function ($, jqUI, HelpdeskChatWidget, clientApp, UrlHelper, helpdeskCommon, cru
             }];
 
         },
-        main: function () {
+        main: function (viewModel) {
 
             jQuery('#employeeHelpdeskChat')
                 .helpdeskChat({
@@ -34,7 +34,7 @@ function ($, jqUI, HelpdeskChatWidget, clientApp, UrlHelper, helpdeskCommon, cru
 
                     }(),
                     talkTitle: clientApp.i18n.texts.get("Helpdesk.Talks.Message.Title"),
-                    talkDescription: clientApp.i18n.texts.get("Helpdesk.Talks.Message.Description"),
+                    talkDescription: viewModel.viewModel.viewModel.helpdeskMessageViewModel.talkTitle,
                     messageAdd: crudAjaxOpts.ajax.messageAdd,
                     messageGetAll: crudAjaxOpts.ajax.messageGetAll,
                     messageGetUnread: crudAjaxOpts.ajax.messageGetUnread,

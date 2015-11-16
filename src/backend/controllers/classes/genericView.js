@@ -45,7 +45,10 @@
                     return next(err);
                 }
 
-                res.render(req.viewInfo.viewPath, util.extend(req.viewModel, result));
+                
+                req.viewModel.viewModel = result;
+
+                res.render(req.viewInfo.viewPath, req.viewModel);
             });
 
         } else {
@@ -74,9 +77,16 @@
                     return next(errTexts);
                 }
 
+
+                
+
+                //result.viewModel = result;
                 result.i18nTexts = i18nTexts;
 
-                res.json(util.extend(req.viewModel, result));
+
+                res.json(util.extend(req.viewModel, {
+                    viewModel: result
+                }));
 
             });
 

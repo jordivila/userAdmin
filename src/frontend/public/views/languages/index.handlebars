@@ -15,7 +15,7 @@
     <div class="ui-languageSelector-container ">
         <h3>{{{__ "Views.Languages.SelectPreferredLang"}}}</h3>
         <ul class="ui-languageSelector-list ui-menuTree ui-menuList ui-widget-content ui-corner-all" style="overflow: hidden;">
-            {{#each itemList}}
+            {{#each this.viewModel.itemList}}
             <li class="ui-menuList-item ui-widget-content ui-corner-all"
                 data-language-id="{{this.id}}">
                 <div class="ui-menuList-itemLink {{#if this.selected }} ui-state-active {{else}} ui-state-default {{/if}}">

@@ -89,13 +89,14 @@
             globalization : {{{ jsonHelper globalization }}},
             domainInfo: {{{ jsonHelper domainInfo }}},
             viewEntryPoint : {{#if viewEntryPoint}} {{{ jsonHelper viewEntryPoint }}} {{else}} undefined  {{/if}},
-                    breadcrumb: {{#if breadcrumb}} {{{ jsonHelper breadcrumb }}} {{else}} undefined {{/if}},
-                            domIds:{
-                                panelMain: '#panelMain',
-                                panelMenu: '#panelMenu',
-                                panelProgress: '#panelProgress'
-                            }
-                    };
+            viewModel : {{#if viewModel}} {{{ jsonHelper viewModel }}} {{else}} undefined  {{/if}},
+            breadcrumb: {{#if breadcrumb}} {{{ jsonHelper breadcrumb }}} {{else}} undefined {{/if}},
+            domIds:{
+                panelMain: '#panelMain',
+                panelMenu: '#panelMenu',
+                panelProgress: '#panelProgress'
+            }
+        };
 
     </script>
     <script data-main="/{{domainInfo.virtualDirectory}}public/scripts/Template.App.RequireJs.Init.js?{{crossLayer.queryParams.appVersion}}={{package.version}}" src="/{{domainInfo.virtualDirectory}}public/bower_components/requirejs/require.js"></script>

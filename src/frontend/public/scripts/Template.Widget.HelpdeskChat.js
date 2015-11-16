@@ -407,7 +407,7 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observable
                    .end()
                    .find('p')
                        .find('span')
-                           .html(self.options.talkDescription)
+                           .html(clientApp.i18n.texts.get("Helpdesk.Talks.History.GridColumns.Subject") + ' : ' + self.options.talkDescription)
                        .end()
                        .addClass(hasDesc ? 'ui-helper-hidden' : '')
                    .end()
