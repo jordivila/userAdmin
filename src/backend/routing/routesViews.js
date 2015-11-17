@@ -10,6 +10,8 @@
     var GlobalizeController = require('../controllers/globalize');
     var BaseController = require('../controllers/classes/base');
     var GenericViewController = require('../controllers/classes/genericView');
+
+    var HelpdeskViewBaseController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewBaseController;
     var HelpdeskViewHomeController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewHomeController;
     var HelpdeskViewAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewAuthController;
     var HelpdeskViewMessageController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewMessageController;
@@ -21,6 +23,8 @@
     var globalizeController = new GlobalizeController();
     var baseController = new BaseController();
     var genericViewController = new GenericViewController();
+
+    var helpdeskViewBaseController = new HelpdeskViewBaseController();
     var helpdeskViewHomeController = new HelpdeskViewHomeController();
     var helpdeskViewAuthController = new HelpdeskViewAuthController();
     var helpdeskViewMessageController = new HelpdeskViewMessageController();
@@ -132,21 +136,21 @@
 
         registerCommonVerbs(app, "helpdesk/talks/common/fakes", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/common", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/employee/home", helpdeskViewHomeController, helpdeskViewHomeController.isAuthenticated);
+        registerCommonVerbs(app, "helpdesk/talks/employee/home", helpdeskViewHomeController, helpdeskViewBaseController.isAuthenticated);
         registerCommonVerbs(app, "helpdesk/talks/employee/auth", helpdeskViewAuthController);
         registerCommonVerbs(app, "helpdesk/talks/employee/unauthorize", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/wiki", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/employee/history", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/employee/message", helpdeskViewMessageController);
-        registerCommonVerbs(app, "helpdesk/talks/employee/subject", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/customer/home", helpdeskViewHomeController);
+        registerCommonVerbs(app, "helpdesk/talks/employee/history", genericViewController, helpdeskViewBaseController.isAuthenticated);
+        registerCommonVerbs(app, "helpdesk/talks/employee/message", helpdeskViewMessageController, helpdeskViewBaseController.isAuthenticated);
+        registerCommonVerbs(app, "helpdesk/talks/employee/subject", genericViewController, helpdeskViewBaseController.isAuthenticated);
+        registerCommonVerbs(app, "helpdesk/talks/customer/home", helpdeskViewHomeController, helpdeskViewBaseController.isAuthenticated);
         registerCommonVerbs(app, "helpdesk/talks/customer/auth", helpdeskViewAuthController);
         registerCommonVerbs(app, "helpdesk/talks/customer/unauthorize", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/wiki", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/customer/common", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/customer/history", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/customer/subject", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/customer/message", helpdeskViewMessageController);
+        registerCommonVerbs(app, "helpdesk/talks/customer/history", genericViewController, helpdeskViewBaseController.isAuthenticated);
+        registerCommonVerbs(app, "helpdesk/talks/customer/subject", genericViewController, helpdeskViewBaseController.isAuthenticated);
+        registerCommonVerbs(app, "helpdesk/talks/customer/message", helpdeskViewMessageController, helpdeskViewBaseController.isAuthenticated);
 
     };
 

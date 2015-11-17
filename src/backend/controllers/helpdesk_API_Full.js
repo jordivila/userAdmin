@@ -4,6 +4,7 @@
 
 
     module.exports.HelpdeskAPIController = HelpdeskAPIController;
+    module.exports.HelpdeskViewBaseController = HelpdeskViewBaseController;
     module.exports.HelpdeskViewAuthController = HelpdeskViewAuthController;
     module.exports.HelpdeskViewHomeController = HelpdeskViewHomeController;
     module.exports.HelpdeskViewMessageController = HelpdeskViewMessageController;
@@ -250,7 +251,15 @@
 
                 if (!user) {
 
-                    var isSeoRequest = req.viweModel ? req.viewModel.isSEORequest : false;
+                    var isSeoRequest = true;
+
+                    if (req.params.apiEndpointType) {
+                        // request is an api request
+                        isSeoRequest = false;
+                    }
+                    else {
+                        isSeoRequest = req.viewModel.isSEORequest;
+                    }
 
                     if (!isSeoRequest) {
                         res.status(401);
@@ -606,14 +615,14 @@
         GenericViewController.apply(this, arguments);
     }
     HelpdeskViewBaseController.prototype = new GenericViewController();
+    HelpdeskViewBaseController.prototype.isAuthenticated = function (req, res, next) {
+        return reqIsAuthenticated('helpdeskStrategyViews', req, res, next);
+    };
 
     function HelpdeskViewHomeController() {
         HelpdeskViewBaseController.apply(this, arguments);
     }
     HelpdeskViewHomeController.prototype = new HelpdeskViewBaseController();
-    HelpdeskViewHomeController.prototype.isAuthenticated = function (req, res, next) {
-        return reqIsAuthenticated('helpdeskStrategyViews', req, res, next);
-    };
     HelpdeskViewHomeController.prototype.viewIndexModel = function (req, res, cb) {
 
         req.params.apiEndpointType = req.route.path.indexOf('helpdesk/talks/customer/home') > -1 ? 'customer' : 'employee';
