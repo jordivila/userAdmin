@@ -8,7 +8,8 @@
     var utils = require('./initMochaTests');
     var util = require('util');
     var assert = require("assert");
-    var HelpdeskController = require(pathToSrc + helpdeskControllerPath);
+    var HelpdeskController = require(pathToSrc + helpdeskControllerPath).HelpdeskAPIController;
+
     var helpdeskController = new HelpdeskController();
     var ErrorHandled = require(pathToSrc + 'crossLayer/models/errorHandled');
     var myUtils = require(pathToSrc + 'backend/libs/commonFunctions');

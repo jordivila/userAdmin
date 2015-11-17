@@ -9,7 +9,7 @@
     var crossLayerConfig = require('../../crossLayer/config');
     var config = require('../libs/config');
     var virtualDirectory = config.get('domainInfo:virtualDirectory');
-    var HelpdeskController = require('../controllers/' + config.get('helpdesk:controllerType'));
+    var HelpdeskController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskAPIController;
     var helpdeskController = new HelpdeskController();
 
 

@@ -10,9 +10,9 @@
     var GlobalizeController = require('../controllers/globalize');
     var BaseController = require('../controllers/classes/base');
     var GenericViewController = require('../controllers/classes/genericView');
-    var HelpdeskViewHomeController = require('../controllers/' + config.get('helpdesk:controllerHomeType'));
-    var HelpdeskViewAuthController = require('../controllers/' + config.get('helpdesk:controllerAuthType'));
-    var HelpdeskViewMessageController = require('../controllers/' + config.get('helpdesk:controllerViewMessageType'));
+    var HelpdeskViewHomeController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewHomeController;
+    var HelpdeskViewAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewAuthController;
+    var HelpdeskViewMessageController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewMessageController;
 
     var languagesController = new LanguagesController();
     var currenciesController = new CurrenciesController();
@@ -25,7 +25,7 @@
     var helpdeskViewAuthController = new HelpdeskViewAuthController();
     var helpdeskViewMessageController = new HelpdeskViewMessageController();
 
-    function registerCommonVerbs(app, route, controller) {
+    function registerCommonVerbs(app, route, controller, passportIsAuthFunc) {
 
         // set up the middleware
         app.use('/' + route + '/*', function (req, res, next) {
@@ -35,7 +35,12 @@
             next();
         });
 
-        app.get('/' + route + '/*', function (req, res, next) {
+
+        var getViewContentActions = [];
+
+        if (passportIsAuthFunc) { getViewContentActions.push(passportIsAuthFunc); }
+
+        getViewContentActions.push(function (req, res, next) {
 
             var requestingView = (!req.params[0]);
             var requestingViewModel = (req.params[0] == 'index.handlebars.json');
@@ -65,6 +70,9 @@
                 });
             }
         });
+
+
+        app.get('/' + route + '/*', getViewContentActions);
 
         app.put('/' + route + '/*', function (req, res, next) {
             controller.update(req, res, next);
@@ -124,7 +132,7 @@
 
         registerCommonVerbs(app, "helpdesk/talks/common/fakes", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/common", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/employee/home", helpdeskViewHomeController);
+        registerCommonVerbs(app, "helpdesk/talks/employee/home", helpdeskViewHomeController, helpdeskViewHomeController.isAuthenticated);
         registerCommonVerbs(app, "helpdesk/talks/employee/auth", helpdeskViewAuthController);
         registerCommonVerbs(app, "helpdesk/talks/employee/unauthorize", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/employee/wiki", genericViewController);

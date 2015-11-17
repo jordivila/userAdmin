@@ -44,7 +44,6 @@
                 if (err) {
                     return next(err);
                 }
-
                 
                 req.viewModel.viewModel = result;
 
@@ -77,12 +76,8 @@
                     return next(errTexts);
                 }
 
-
-                
-
                 //result.viewModel = result;
                 result.i18nTexts = i18nTexts;
-
 
                 res.json(util.extend(req.viewModel, {
                     viewModel: result

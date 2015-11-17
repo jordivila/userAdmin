@@ -3,7 +3,13 @@
     "use strict";
 
 
-    module.exports = HelpdeskAPIController;
+    //module.exports = HelpdeskAPIController;
+
+    module.exports.HelpdeskAPIController = HelpdeskAPIController;
+    //module.exports.HelpdeskViewAuthController = HelpdeskViewAuthController;
+    //module.exports.HelpdeskViewHomeController = HelpdeskViewHomeController;
+    //module.exports.HelpdeskViewMessageController = HelpdeskViewMessageController;
+
 
     var passport = require('passport');
     var BasicStrategy = require('passport-http').BasicStrategy;

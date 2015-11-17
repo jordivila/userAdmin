@@ -3,10 +3,15 @@
     "use strict";
 
 
-    module.exports = HelpdeskAPIController;
+    module.exports.HelpdeskAPIController = HelpdeskAPIController;
+    module.exports.HelpdeskViewAuthController = HelpdeskViewAuthController;
+    module.exports.HelpdeskViewHomeController = HelpdeskViewHomeController;
+    module.exports.HelpdeskViewMessageController = HelpdeskViewMessageController;
 
     var passport = require('passport');
-    var BasicStrategy = require('passport-http').BasicStrategy;
+    //var BasicStrategy = require('passport-http').BasicStrategy;
+    var LocalStretegy = require('passport-local').Strategy;
+
     var myUtils = require('../libs/commonFunctions');
     var Encoder = require('node-html-encoder').Encoder;
     var DataResult = require('../../crossLayer/models/dataResult');
@@ -20,6 +25,7 @@
     var querystring = require('querystring');
     var ErrorHandledModel = require('../../crossLayer/models/errorHandled');
     var normalizeForSearch = require('normalize-for-search');
+    var GenericViewController = require('./classes/genericView');
 
 
 
@@ -137,12 +143,153 @@
         });
 
 
+        //console.log(JSON.stringify(params));
+
         reqClient.write(JSON.stringify(params));
         reqClient.end();
     }
 
+
+
+    function reqCredentialsCheckAPI(req, username, password, callback) {
+
+        var i18n = req.i18n;
+        var invalidCredentials = function () {
+            callback(null, false, {
+                message: i18n.__("AccountResources.InvalidCredentials")
+            });
+        };
+
+
+        reqCredentialsCheckViews(req, username, password, function (e, authTicket) {
+
+            if (e) return callback(e, null);
+
+            // By the time request raises this point
+            // previous method has already check credentials
+            // At this point user is already authenticated
+            // So, Just check user the next steps
+
+            var setPeopleInfo = function () {
+
+                callback(null, authTicket);
+
+            };
+
+            if (req.params.apiEndpointType === 'customer') {
+
+                if (authTicket.isEmployee === true) {
+                    // Un usuario empleado esta intentando entrar en la seccion de customers
+                    invalidCredentials();
+                }
+                else {
+                    setPeopleInfo();
+                }
+
+            }
+            else {
+
+                if (authTicket.isEmployee === false) {
+                    // Un usuario customer esta intentando entrar en la seccion de empleados
+                    invalidCredentials();
+                }
+                else {
+                    setPeopleInfo();
+                }
+
+            }
+
+
+        });
+
+    }
+    function reqCredentialsCheckViews(req, username, password, callback) {
+
+        var i18n = req.i18n;
+
+        // some api routes are for customers
+        // and another ones are for employees only
+        // this methods returns tru if api route for the current request
+        // was a customer route
+        // See /src/backend/routing/routesApiUser.js
+        var path = 'authTicketValidateFullApi/';
+        path += req.cookies.oAuthTicket;
+
+        apiRequest(i18n, path, function (e, authTicket) {
+
+            if (e) return callback(e, null);
+
+            if (authTicket === null) {
+                callback(null, false, {
+                    message: i18n.__("AccountResources.InvalidCredentials")
+                });
+            }
+            else {
+                callback(null, authTicket);
+            }
+        });
+    }
+    function reqIsAuthenticated(strategyName, req, res, next) {
+
+        if (req.method == "GET") {
+            req.query.fakeEmailLocalStrategy = 'fakeEmail@kk.com';
+            req.query.fakePwdLocalStrategy = 'fakepassword';
+        }
+        else {
+            req.body.fakeEmailLocalStrategy = 'fakeEmail@kk.com';
+            req.body.fakePwdLocalStrategy = 'fakepassword';
+        }
+
+        return passport.authenticate(
+            strategyName,
+            function (err, user, info) {
+
+                if (err) {
+                    return next(err);
+                }
+
+                if (!user) {
+
+                    var isSeoRequest = req.viweModel ? req.viewModel.isSEORequest : false;
+
+                    if (!isSeoRequest) {
+                        res.status(401);
+                        res.end();
+                    }
+                    else {
+                        res.redirect('../unauthorize/');
+                    }
+                }
+                else {
+                    req.user = user;
+                    next();
+                }
+
+            })(req, res, next);
+
+    }
+
+
+    // these strategies should be of type custom strategy. 
+    // to make it faster I used LocalStregy simulating fake user/pwd credentials
+    // as far as credentials are set by thirdparty application by using an OAuth token
+    passport.use('helpdeskStrategyViews', new LocalStretegy({
+        passReqToCallback: true,
+        session: false,
+        usernameField: 'fakeEmailLocalStrategy',
+        passwordField: 'fakePwdLocalStrategy',
+    }, reqCredentialsCheckViews));
+
+    passport.use('helpdeskStrategyAPI', new LocalStretegy({
+        passReqToCallback: true,
+        session: false,
+        usernameField: 'fakeEmailLocalStrategy',
+        passwordField: 'fakePwdLocalStrategy',
+    }, reqCredentialsCheckAPI));
+
+
     function HelpdeskAPIController() {
-        passport.use('helpdeskStrategy', new BasicStrategy({ passReqToCallback: true }, this.reqCredentialsCheck));
+
     }
     HelpdeskAPIController.prototype._employeeDefaultGet = function (i18n, customerIdPeople, cb) {
 
@@ -160,11 +307,12 @@
     };
     HelpdeskAPIController.prototype._talkSave = function (i18n, idTalk, subject, customerId, employeeId, cb) {
 
+
         apiRequestPost(i18n, "talkSave/",
             {
                 idTalk: idTalk,
                 subject: subject,
-                customerId: customerId,
+                customerId: customerId === '' ? null : customerId,
                 employeeId: employeeId
             }, function (e, data) {
 
@@ -248,99 +396,9 @@
             cb(e, data);
         });
     };
-    HelpdeskAPIController.prototype.reqCredentialsCheck = function (req, username, password, callback) {
-
-        var self = this;
-        var i18n = req.i18n;
-        var invalidCredentials = function () {
-            callback(null, false, {
-                message: i18n.__("AccountResources.InvalidCredentials")
-            });
-        };
-
-        // some api routes are for customers
-        // and another ones are for employees only
-        // this methods returns tru if api route for the current request
-        // was a customer route
-        // See /src/backend/routing/routesApiUser.js
-        var path = 'authTicketValidateFullApi/';
-        path += req.cookies.oAuthTicket;
-
-        apiRequest(i18n, path, function (e, authTicket) {
-
-            if (e) return callback(e, null);
-
-            if (authTicket === null) {
-                invalidCredentials();
-            }
-            else {
-
-                var setPeopleInfo = function () {
-
-                    callback(null, authTicket);
-
-                };
-
-                if (req.params.apiEndpointType === 'customer') {
-
-                    if (authTicket.isEmployee === true) {
-                        // Un usuario empleado esta intentando entrar en la seccion de customers
-                        invalidCredentials();
-                    }
-                    else {
-                        setPeopleInfo();
-                    }
-
-                }
-                else {
-
-                    if (authTicket.isEmployee === false) {
-                        // Un usuario customer esta intentando entrar en la seccion de empleados
-                        invalidCredentials();
-                    }
-                    else {
-                        setPeopleInfo();
-                    }
-
-                }
-            }
-        });
-
-    };
+    HelpdeskAPIController.prototype.reqCredentialsCheck = reqCredentialsCheckViews;
     HelpdeskAPIController.prototype.isAuthenticated = function (req, res, next) {
-
-        //  when using basic auth passports sends header WWW-Authenticate
-        //  which forces browser to show a dialog box asking for user credentials 
-        //  
-
-        //passport.authenticate('basic', {
-        //    session: false
-        //})(req, res, next);
-
-        // I use a custom callback on passport baic auth
-        // avoiding this header to be sent
-
-        passport.authenticate(
-            'helpdeskStrategy', {
-                session: false
-            },
-            function (err, user, info) {
-
-                if (err) {
-                    return next(err);
-                }
-
-                if (!user) {
-                    res.status(401);
-                }
-
-                req.user = user;
-
-                next();
-
-            })(req, res, next);
-
-
+        return reqIsAuthenticated('helpdeskStrategyAPI', req, res, next);
     };
     HelpdeskAPIController.prototype.testMethodInitDb = function (i18n, cb) {
         apiRequest(i18n, "testMethodInitDb", function (e, data) {
@@ -441,7 +499,7 @@
 
         this._fakeDataGridTalkGetByIdForEdit(req, dataItem.idTalk,
             function (e, dataResult) {
-                if (e) return cb(error, null);
+                if (e) return cb(e, null);
 
                 cb(null, dataResult);
 
@@ -451,14 +509,13 @@
 
         var self = this;
 
-        apiRequestPost(req.i18n, "talkSave/",
-            {
-                idTalk: dataItem.isNew === true ? null : dataItem.formData.idTalk,
-                subject: dataItem.formData.subject,
-                customerId: dataItem.formData.customerInfo.customerId,
-                employeeId: req.user.idPeople
-            }, function (e, dataResult) {
-
+        self._talkSave(
+            req.i18n,
+            dataItem.isNew === true ? null : dataItem.formData.idTalk,
+            dataItem.formData.subject,
+            dataItem.formData.customerInfo.customerId, // customerId
+            req.user.idPeople, //employeeId
+            function (e, dataResult) {
 
                 if (e) return cb(e, null);
 
@@ -468,8 +525,6 @@
                         dataResult.data.idTalk,
                         function (e, dataResultGetById) {
 
-
-
                             if (e) return cb(e, null);
 
                             if (dataResultGetById.isValid) {
@@ -478,16 +533,16 @@
                                 dataResultGetById.messages[0] = dataResult.messages[0];
                             }
 
-
-
-
                             cb(null, dataResultGetById);
                         });
                 }
                 else {
                     cb(null, dataResult);
                 }
+
+
             });
+
     };
     HelpdeskAPIController.prototype.customerSearch = function (req, params, cb) {
 
@@ -519,5 +574,127 @@
         });
 
     };
+
+
+
+    function HelpdeskViewAuthController() {
+        GenericViewController.apply(this, arguments);
+    }
+    HelpdeskViewAuthController.prototype = new GenericViewController();
+    HelpdeskViewAuthController.prototype.viewIndexModel = function (req, res, cb) {
+
+        this.setCookie(res, "oAuthTicket", req.query.oAuthTicket);
+
+        res.writeHead(301,
+          {
+              Location: '../home/'// + newRoom
+          }
+        );
+        res.end();
+
+
+        //cb(null, {});
+    };
+
+    function HelpdeskViewBaseController() {
+
+        //passport.use('helpdeskStrategyView', new BasicStrategy({ passReqToCallback: true }, this.reqCredentialsCheck));
+
+        this.helpdeskApiController = new HelpdeskAPIController();
+
+
+        GenericViewController.apply(this, arguments);
+    }
+    HelpdeskViewBaseController.prototype = new GenericViewController();
+
+    function HelpdeskViewHomeController() {
+        HelpdeskViewBaseController.apply(this, arguments);
+    }
+    HelpdeskViewHomeController.prototype = new HelpdeskViewBaseController();
+    HelpdeskViewHomeController.prototype.isAuthenticated = function (req, res, next) {
+        return reqIsAuthenticated('helpdeskStrategyViews', req, res, next);
+    };
+    HelpdeskViewHomeController.prototype.viewIndexModel = function (req, res, cb) {
+
+        req.params.apiEndpointType = req.route.path.indexOf('helpdesk/talks/customer/home') > -1 ? 'customer' : 'employee';
+
+        this.helpdeskApiController.reqCredentialsCheck(req, '', '',
+            function (e, dataAuth) {
+
+                if (e) return cb(e, null);
+
+                if (dataAuth !== null) {
+
+                    if (dataAuth === false) {
+
+                        cb(null, {
+                            WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.PersonNotFound')
+                        });
+
+                    }
+                    else {
+
+                        cb(null, {
+                            Customers: dataAuth.isEmployee === false ? [dataAuth] : undefined,
+                            Employees: dataAuth.isEmployee === true ? [dataAuth] : undefined,
+                            WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.WhoYouAreMessage')
+                        });
+                    }
+                }
+                else {
+                    cb(null, {
+                        WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull')
+                    });
+                }
+            });
+    };
+
+    function HelpdeskViewMessageController() {
+        HelpdeskViewBaseController.apply(this, arguments);
+    }
+    HelpdeskViewMessageController.prototype = new HelpdeskViewBaseController();
+    HelpdeskViewMessageController.prototype.viewIndexModel = function (req, res, cb) {
+
+        var self = this;
+
+        req.params.apiEndpointType = req.route.path.indexOf('helpdesk/talks/customer/home') > -1 ? 'customer' : 'employee';
+
+        self.helpdeskApiController.reqCredentialsCheck(req, '', '',
+            function (e, dataAuth) {
+
+                if (e) return cb(e, null);
+
+                var sendInvalidaCredentials = function () {
+                    cb(null, {
+                        talkTitle: req.i18n.__("Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull")
+                    });
+                };
+
+                if (dataAuth === null) return sendInvalidaCredentials();
+
+                if (dataAuth === false) return sendInvalidaCredentials();
+
+                req.user = dataAuth;
+
+                self.helpdeskApiController.talkGetById(req, { idTalk: req.query.idTalk },
+                    function (e, talkObject) {
+
+                        if (e) return cb(e, null);
+
+                        if (talkObject.isValid) {
+                            cb(null, {
+                                talkTitle: talkObject.data.subject
+                            });
+                        }
+                        else {
+                            cb(null, {
+                                talkTitle: talkObject.messages.join(' ')
+                            });
+                        }
+                    });
+            });
+    };
+
+
 
 })(module);

@@ -271,11 +271,11 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
             try {
 
                 var html = data[0] + "{{#each cssFiles}}<link href='{{this}}' rel='Stylesheet' type='text/css' />{{/each}}";
-                var model = data[1];
+                var model = data[1].viewModel ? data[1] : { viewModel: data[1] };
                 var hasEntry = data[2];
                 var template = Handlebars.compile(html);
                 var templateContext = {};
-                var handlebarTemplate = template(jQuery.extend({}, model.viewModel ? model : { viewModel: model }, templateContext));
+                var handlebarTemplate = template(jQuery.extend({}, model, templateContext));
 
                 if (model.title) {
                     clientApp.utils.setPageTitle(model.title);
@@ -286,7 +286,7 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
                 this.options.$siteContent.html(handlebarTemplate);
 
                 if (hasEntry) {
-                    clientApp.view.main({ viewModel: model });
+                    clientApp.view.main(model);
                 }
 
             }
