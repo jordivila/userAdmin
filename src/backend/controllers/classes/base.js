@@ -14,6 +14,19 @@
 
     }
 
+    Base.prototype.getRequestType = function (req) {
+
+        var requestingView = (!req.params[0]);
+        var requestingViewModel = (req.params[0] == 'index.handlebars.json');
+        var requestingViewContent = ((!requestingView) && (requestingViewModel));
+
+        return {
+            isView: requestingView,
+            isViewModel: requestingViewModel,
+            isViewContent: requestingViewContent
+        };
+    };
+
     Base.prototype.setViewModelBase = function (req) {
 
         var m = {
@@ -34,7 +47,9 @@
                 currency: req.cookies[crossLayer.cookies.currency] ? req.cookies[crossLayer.cookies.currency] : config.get('clientApp:money:default')
             },
             // Indica si la pagina viene de una peticion del menu o viene de una peticion para SEO
-            isSEORequest: (req.query[crossLayer.queryParams.seoRequest] === undefined),
+            //isSEORequest: (req.query[crossLayer.queryParams.seoRequest] === undefined),
+            isSEORequest: (!req.xhr),
+
             //breadcrumb: [
             //{ title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
             //{ title: i18n.__("GeneralTexts.Home"), url: "/" }

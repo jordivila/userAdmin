@@ -18,16 +18,13 @@
 
     var crossLayer = {
         queryParams: {
-            seoRequest: "sr",
+            //seoRequest: "sr",
             appVersion: "av"
         },
         cookies: {
             currency: "curId",
             i18nLocale: "i18nL",
             theme: "th",
-
-            helpdeskCustomerId: "hcid",
-            helpdeskEmployeeId: "heid",
         }  
     };
 

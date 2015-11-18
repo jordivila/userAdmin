@@ -27,9 +27,9 @@ define([
                                             crossLayer.queryParams.appVersion,
                                             globals.package.version).href;
 
-                        settings.url = urlHelper
-                                        .bind(settings.url)
-                                        .paramSet(crossLayer.queryParams.seoRequest, false).href;
+                        //settings.url = urlHelper
+                        //                .bind(settings.url)
+                        //                .paramSet(crossLayer.queryParams.seoRequest, false).href;
                     }
                 }
             });

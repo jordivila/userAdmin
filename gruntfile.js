@@ -174,9 +174,9 @@
             },
         },
         open: {
-            qunit: {
-                path: 'http://localhost:<%= express.testLiveReload.options.port %>/tests/'
-            },
+            //qunit: {
+            //    path: 'http://localhost:<%= express.testLiveReload.options.port %>/tests/'
+            //},
             home: {
                 path: 'http://localhost:<%= express.testLiveReload.options.port %>/'
             }

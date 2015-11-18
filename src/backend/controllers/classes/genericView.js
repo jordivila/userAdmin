@@ -1,4 +1,4 @@
-﻿(function(module) {
+﻿(function (module) {
 
     "use strict";
 
@@ -15,9 +15,33 @@
     }
 
     GenericView.prototype = new BaseController();
-    GenericView.prototype.setViewInfo = function(app, req, route) {
-        var viewPath = route + '/index.handlebars';
-        var viewModelPath = app.get('views') + '/' + viewPath + '.json';
+    GenericView.prototype.setViewInfo = function (app, req, route) {
+
+        //var viewPath = route + '/index.handlebars';
+        //var viewModelPath = app.get('views') + '/' + viewPath + '.json';
+        //req.viewModel = util.extend(req.viewModel, require(viewModelPath));
+
+        //if (req.viewModel.title) {
+        //    req.viewModel.title = req.i18n.__(req.viewModel.title);
+        //}
+
+        //req.viewInfo = {
+        //    viewPath: viewPath,
+        //    viewModelPath: viewModelPath
+        //};
+
+
+        //console.log(req.viewInfo);
+
+        var reqType = this.getRequestType(req);
+        var pathname = req._parsedUrl.pathname.substr(1);
+        var viewPath = pathname + (reqType.isView === true ? 'index.handlebars' : '');
+        var viewModelPath = app.get('views') + '/' + viewPath + (reqType.isView === true ? '.json' : '');
+
+        if (reqType.isViewModel === true)
+        {
+            viewPath = viewPath.replace('.json','');
+        }
 
         req.viewModel = util.extend(req.viewModel, require(viewModelPath));
 
@@ -29,22 +53,23 @@
             viewPath: viewPath,
             viewModelPath: viewModelPath
         };
+
     };
-    GenericView.prototype.viewIndexModel = function(req, res, cb) {
+    GenericView.prototype.viewIndexModel = function (req, res, cb) {
 
         cb(null, {});
 
     };
-    GenericView.prototype.viewIndex = function(app, req, res, next) {
+    GenericView.prototype.viewIndex = function (app, req, res, next) {
 
         if (req.viewModel.isSEORequest) {
 
-            this.viewIndexModel(req, res, function(err, result) {
+            this.viewIndexModel(req, res, function (err, result) {
 
                 if (err) {
                     return next(err);
                 }
-                
+
                 req.viewModel.viewModel = result;
 
                 res.render(req.viewInfo.viewPath, req.viewModel);
@@ -59,18 +84,18 @@
         }
 
     };
-    GenericView.prototype.viewIndexJson = function(app, req, res, next) {
+    GenericView.prototype.viewIndexJson = function (app, req, res, next) {
 
         //var getTexts = this.viewI18nTextsCacheGet;
         var self = this;
 
-        this.viewIndexModel(req, res, function(err, result) {
+        this.viewIndexModel(req, res, function (err, result) {
 
             if (err) {
                 return next(err);
             }
 
-            self.viewI18nTextsCacheGet(app, req, function(errTexts, i18nTexts) {
+            self.viewI18nTextsCacheGet(app, req, function (errTexts, i18nTexts) {
 
                 if (errTexts) {
                     return next(errTexts);
@@ -90,17 +115,17 @@
     };
     GenericView.viewI18nTextsCacheKeys = []; // static !!!
     GenericView.viewI18nTextsCacheValues = {}; // static !!!
-    GenericView.prototype.viewI18nTextsCacheGet = function(app, req, cb) {
+    GenericView.prototype.viewI18nTextsCacheGet = function (app, req, cb) {
 
         var self = this;
         var cacheKey = req.i18n.locale + req.viewInfo.viewPath;
-        var sendTexts = function() {
+        var sendTexts = function () {
             cb(null, GenericView.viewI18nTextsCacheValues[cacheKey]);
         };
 
         if (GenericView.viewI18nTextsCacheKeys.indexOf(cacheKey) == -1) {
 
-            self.viewI18nTextsCacheBuild(app, req, function(err, texts) {
+            self.viewI18nTextsCacheBuild(app, req, function (err, texts) {
 
                 if (err) {
                     cb(err);
@@ -117,7 +142,7 @@
             sendTexts();
         }
     };
-    GenericView.prototype.viewI18nTextsCacheBuild = function(app, req, cb) {
+    GenericView.prototype.viewI18nTextsCacheBuild = function (app, req, cb) {
         /*
             Find i18n resources in handlebars templates -> {{{__ "someI18nTextKey"}}}
             And add them to json model requests
@@ -130,7 +155,7 @@
         // 2.- read view  contents
         fs.readFile(viewPath, {
             encoding: 'utf8'
-        }, function(err, data) {
+        }, function (err, data) {
 
             if (err) return cb(err);
 

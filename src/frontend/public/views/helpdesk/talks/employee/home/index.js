@@ -32,37 +32,6 @@ function ($, jqUI, clientApp, helpdeskCommon, crossLayer) {
                     })
                 .end()
                 .removeClass('ui-helper-hidden');
-
-            /**************************************
-                Employee Selector
-            *************************************/
-            //jQuery('ul.ui-userSelector-list:first')
-            //    .find('li')
-            //        .click(function () {
-            //            var idPeople = jQuery(this).attr('data-user-id');
-
-            //            clientApp.utils.cookieSetForSession(crossLayer.cookies.helpdeskEmployeeId, idPeople);
-
-            //            jQuery(this)
-            //                .parents('ul:first')
-            //                    .find('div.ui-menuList-itemLink')
-            //                        .removeClass('ui-state-active')
-            //                        .addClass('ui-state-default')
-            //                    .end()
-            //                .end()
-            //                .find('div.ui-menuList-itemLink')
-            //                    .removeClass('ui-state-default')
-            //                    .addClass('ui-state-active')
-            //                .end();
-
-            //        })
-            //    .end()
-            //    .find('li[data-user-id="' + clientApp.utils.cookieGet(crossLayer.cookies.helpdeskEmployeeId) + '"]')
-            //        .find('div.ui-menuList-itemLink')
-            //            .addClass('ui-state-active')
-            //            .removeClass('ui-state-default')
-            //        .end()
-            //    .end();
         }
     };
 

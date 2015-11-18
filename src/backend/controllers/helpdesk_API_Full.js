@@ -149,10 +149,7 @@
         reqClient.write(JSON.stringify(params));
         reqClient.end();
     }
-
-
-
-    function reqCredentialsCheckAPI(req, username, password, callback) {
+    function reqCredentialsCheckViews(req, username, password, callback) {
 
         var i18n = req.i18n;
         var invalidCredentials = function () {
@@ -161,52 +158,6 @@
             });
         };
 
-
-        reqCredentialsCheckViews(req, username, password, function (e, authTicket) {
-
-            if (e) return callback(e, null);
-
-            // By the time request raises this point
-            // previous method has already check credentials
-            // At this point user is already authenticated
-            // So, Just check user the next steps
-
-            var setPeopleInfo = function () {
-
-                callback(null, authTicket);
-
-            };
-
-            if (req.params.apiEndpointType === 'customer') {
-
-                if (authTicket.isEmployee === true) {
-                    // Un usuario empleado esta intentando entrar en la seccion de customers
-                    invalidCredentials();
-                }
-                else {
-                    setPeopleInfo();
-                }
-
-            }
-            else {
-
-                if (authTicket.isEmployee === false) {
-                    // Un usuario customer esta intentando entrar en la seccion de empleados
-                    invalidCredentials();
-                }
-                else {
-                    setPeopleInfo();
-                }
-
-            }
-
-
-        });
-
-    }
-    function reqCredentialsCheckViews(req, username, password, callback) {
-
-        var i18n = req.i18n;
 
         // some api routes are for customers
         // and another ones are for employees only
@@ -226,7 +177,33 @@
                 });
             }
             else {
-                callback(null, authTicket);
+
+                var setPeopleInfo = function () {
+                    callback(null, authTicket);
+                };
+
+                if (req.params.apiEndpointType === 'customer') {
+
+                    if (authTicket.isEmployee === true) {
+                        // Un usuario empleado esta intentando entrar en la seccion de customers
+                        invalidCredentials();
+                    }
+                    else {
+                        setPeopleInfo();
+                    }
+
+                }
+                else {
+
+                    if (authTicket.isEmployee === false) {
+                        // Un usuario customer esta intentando entrar en la seccion de empleados
+                        invalidCredentials();
+                    }
+                    else {
+                        setPeopleInfo();
+                    }
+                }
+
             }
         });
     }
@@ -251,15 +228,7 @@
 
                 if (!user) {
 
-                    var isSeoRequest = true;
-
-                    if (req.params.apiEndpointType) {
-                        // request is an api request
-                        isSeoRequest = false;
-                    }
-                    else {
-                        isSeoRequest = req.viewModel.isSEORequest;
-                    }
+                    var isSeoRequest = req.viewModel.isSEORequest;
 
                     if (!isSeoRequest) {
                         res.status(401);
@@ -288,13 +257,6 @@
         usernameField: 'fakeEmailLocalStrategy',
         passwordField: 'fakePwdLocalStrategy',
     }, reqCredentialsCheckViews));
-
-    passport.use('helpdeskStrategyAPI', new LocalStretegy({
-        passReqToCallback: true,
-        session: false,
-        usernameField: 'fakeEmailLocalStrategy',
-        passwordField: 'fakePwdLocalStrategy',
-    }, reqCredentialsCheckAPI));
 
 
     function HelpdeskAPIController() {
@@ -407,7 +369,7 @@
     };
     HelpdeskAPIController.prototype.reqCredentialsCheck = reqCredentialsCheckViews;
     HelpdeskAPIController.prototype.isAuthenticated = function (req, res, next) {
-        return reqIsAuthenticated('helpdeskStrategyAPI', req, res, next);
+        return reqIsAuthenticated('helpdeskStrategyViews', req, res, next);
     };
     HelpdeskAPIController.prototype.testMethodInitDb = function (i18n, cb) {
         apiRequest(i18n, "testMethodInitDb", function (e, data) {
