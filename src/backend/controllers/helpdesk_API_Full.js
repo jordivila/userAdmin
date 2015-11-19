@@ -8,6 +8,7 @@
     module.exports.HelpdeskViewAuthController = HelpdeskViewAuthController;
     module.exports.HelpdeskViewHomeController = HelpdeskViewHomeController;
     module.exports.HelpdeskViewMessageController = HelpdeskViewMessageController;
+    module.exports.HelpdeskViewUnAuthController = HelpdeskViewUnAuthController;
 
     var passport = require('passport');
     //var BasicStrategy = require('passport-http').BasicStrategy;
@@ -182,7 +183,7 @@
                     callback(null, authTicket);
                 };
 
-                if (req.params.apiEndpointType === 'customer') {
+                if (req.params.apiEndpointType === helpdeskUserType.customer) {
 
                     if (authTicket.isEmployee === true) {
                         // Un usuario empleado esta intentando entrar en la seccion de customers
@@ -228,7 +229,7 @@
 
                 if (!user) {
 
-                    var isSeoRequest = req.viewModel.isSEORequest;
+                    var isSeoRequest = req.viewModel === undefined ? false : req.viewModel.isSEORequest;
 
                     if (!isSeoRequest) {
                         res.status(401);
@@ -257,6 +258,11 @@
         usernameField: 'fakeEmailLocalStrategy',
         passwordField: 'fakePwdLocalStrategy',
     }, reqCredentialsCheckViews));
+
+    var helpdeskUserType = {
+        customer: 'customer',
+        employee: 'employee'
+    };
 
 
     function HelpdeskAPIController() {
@@ -577,6 +583,18 @@
 
     };
 
+    function HelpdeskViewUnAuthController() {
+        GenericViewController.apply(this, arguments);
+    }
+    HelpdeskViewUnAuthController.prototype = new GenericViewController();
+    HelpdeskViewUnAuthController.prototype.viewIndexModel = function (req, res, cb) {
+
+        this.deleteCookie(res, "oAuthTicket");
+
+        cb(null, {});
+    };
+
+
     function HelpdeskViewBaseController() {
 
         //passport.use('helpdeskStrategyView', new BasicStrategy({ passReqToCallback: true }, this.reqCredentialsCheck));
@@ -597,7 +615,7 @@
     HelpdeskViewHomeController.prototype = new HelpdeskViewBaseController();
     HelpdeskViewHomeController.prototype.viewIndexModel = function (req, res, cb) {
 
-        req.params.apiEndpointType = req.route.path.indexOf('helpdesk/talks/customer/home') > -1 ? 'customer' : 'employee';
+        
 
         this.helpdeskApiController.reqCredentialsCheck(req, '', '',
             function (e, dataAuth) {
@@ -638,7 +656,7 @@
 
         var self = this;
 
-        req.params.apiEndpointType = req.route.path.indexOf('helpdesk/talks/customer/home') > -1 ? 'customer' : 'employee';
+        
 
         self.helpdeskApiController.reqCredentialsCheck(req, '', '',
             function (e, dataAuth) {

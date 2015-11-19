@@ -4,8 +4,8 @@
     "scripts/Template.Widget.HelpdeskChat",
     "scripts/Template.App.ClientApp",
     "scripts/Template.Class.UrlHelper",
-    "../common/helpdeskCommon.js",
-    "../common/helpdeskCrudFakeData.js",
+    "../common/helpdeskCommonEmployee.js",
+    "../common/helpdeskCrudFakeDataEmployee.js",
 ],
 function ($, jqUI, HelpdeskChatWidget, clientApp, UrlHelper, helpdeskCommon, crudAjaxOpts) {
 

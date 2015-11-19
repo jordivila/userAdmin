@@ -29,7 +29,7 @@
         "supportEmailAddress": "supportaccount@fakedomainname.com"
     },
     "helpdesk": {
-        "controllerType": "helpdesk_API_Full",
+        "controllerType": "helpdesk_MongoDB",
         "api": {
             "host": "localhost",
             "port": 80,

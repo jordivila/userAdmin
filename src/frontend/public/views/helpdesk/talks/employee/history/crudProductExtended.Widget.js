@@ -1,15 +1,20 @@
 define([
+    "require",
     "jquery",
     "jqueryui",
     "scripts/Template.App.ClientApp",
     "scripts/modules/crud",
     "crossLayer/dateHelper",
-    "../common/helpdeskCrudFakeData.js",
-    "../common/helpdeskCommon.js",
+    "../common/helpdeskCrudFakeDataEmployee.js",
+    "../common/helpdeskCommonEmployee.js",
     "crossLayer/models/dataResult",
     'crossLayer/helpdesk',
 ],
-function ($, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, DataResult, helpdeskCrossLayer) {
+function (require, $, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, DataResult, helpdeskCrossLayer) {
+
+
+    console.log("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
+    console.log(crudAjaxOpts);
 
     jQuery.widget("ui.product", jQuery.ui.crud,
     {

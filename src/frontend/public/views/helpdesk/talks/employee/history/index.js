@@ -1,11 +1,14 @@
 ﻿define([
+    "require",
     "jquery",
     "jqueryui",
     "scripts/Template.App.ClientApp",
-    "../common/helpdeskCommon.js",
+    "../common/helpdeskCommonEmployee.js",
     "./crudPage.js",
 ],
-   function ($, jqUI, clientApp, helpdeskCommon) {
+   function (require,$, jqUI, clientApp, helpdeskCommon) {
+
+
 
        clientApp.view = {
            breadcrumb: function () {

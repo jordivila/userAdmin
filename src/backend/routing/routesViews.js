@@ -14,6 +14,7 @@
     var HelpdeskViewBaseController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewBaseController;
     var HelpdeskViewHomeController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewHomeController;
     var HelpdeskViewAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewAuthController;
+    var HelpdeskViewUnAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewUnAuthController;
     var HelpdeskViewMessageController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewMessageController;
 
     var languagesController = new LanguagesController();
@@ -27,6 +28,8 @@
     var helpdeskViewBaseController = new HelpdeskViewBaseController();
     var helpdeskViewHomeController = new HelpdeskViewHomeController();
     var helpdeskViewAuthController = new HelpdeskViewAuthController();
+    var helpdeskViewUnAuthController = new HelpdeskViewUnAuthController();
+
     var helpdeskViewMessageController = new HelpdeskViewMessageController();
 
     function registerCommonVerbs(app, route, controller, passportIsAuthFunc) {
@@ -141,7 +144,7 @@
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/common", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/home", helpdeskViewHomeController, helpdeskViewBaseController.isAuthenticated);
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/auth", helpdeskViewAuthController);
-        registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/unauthorize", genericViewController);
+        registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/unauthorize", helpdeskViewUnAuthController);
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/wiki", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/history", genericViewController, helpdeskViewBaseController.isAuthenticated);
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/message", helpdeskViewMessageController, helpdeskViewBaseController.isAuthenticated);

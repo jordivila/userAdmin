@@ -77,6 +77,10 @@
         res.cookie(name, value, { expires: new Date(Date.now() + 900000), httpOnly: true });
     };
 
+    Base.prototype.deleteCookie = function (res, name) {
+        res.cookie(name, 'deleted', { expires: new Date(1900,1), httpOnly: true });
+    };
+
     Base.prototype.setCookieClientAccess = function (res, name, value) {
         // WARNING !! httpOnly->false
         res.cookie(name, value, { expires: new Date(Date.now() + 900000), httpOnly: false });

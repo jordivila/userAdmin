@@ -10,6 +10,7 @@
     module.exports.HelpdeskViewAuthController = HelpdeskViewAuthController;
     module.exports.HelpdeskViewHomeController = HelpdeskViewHomeController;
     module.exports.HelpdeskViewMessageController = HelpdeskViewMessageController;
+    module.exports.HelpdeskViewUnAuthController = HelpdeskViewUnAuthController;
 
 
     var passport = require('passport');
@@ -53,58 +54,79 @@
         // this methods returns tru if api route for the current request
         // was a customer route
         // See /src/backend/routing/routesApiUser.js
-        var cookieName = "ajksdhkasjdhk";
-        //if (req.params.apiEndpointType === 'customer') {
-        //    checkByCookieName(crossLayer.cookies.helpdeskCustomerId);
-        //}
-        //else {
-        //    checkByCookieName(crossLayer.cookies.helpdeskEmployeeId);
-        //}
+        var cookieName = "oAuthTicket";
 
 
-        var peopleId = req.cookies[cookieName];
+        var authTicketGuid = req.cookies[cookieName];
 
-        HelpdeskPeopleModel.findOne({
-            idPeople: peopleId
-        }, function (err, peopleInfo) {
+        if (!authTicketGuid) {
+            return invalidCredentials();
+        }
 
-            if (err) return callback(err, null);
 
-            if (peopleInfo === null) {
-                invalidCredentials();
-            }
-            else {
+        tokenTempController.getByGuid(authTicketGuid, function (err, token) {
 
-                var setPeopleInfo = function () {
+            if (err) return cb(err);
 
-                    callback(null, peopleInfo);
+            if (!token) return invalidCredentials();
 
-                };
 
-                if (req.params.apiEndpointType === 'customer') {
+            var authTicketInfo = JSON.parse(token.jsonObject);
 
-                    if (peopleInfo.isEmployee === true) {
-                        // Un usuario empleado esta intentando entrar en la seccion de customers
-                        invalidCredentials();
-                    }
-                    else {
-                        setPeopleInfo();
-                    }
+            console.log("AUTHIOTCKET AUTHIOTCKET AUTHIOTCKET AUTHIOTCKET AUTHIOTCKET AUTHIOTCKET AUTHIOTCKET ");
+            console.log(req.originalUrl);
+            console.log(authTicketGuid);
+            console.log(authTicketInfo);
 
+            HelpdeskPeopleModel.findOne({
+                idPersonBackOffice: authTicketInfo.idPersonBackOffice,
+                isEmployee: authTicketInfo.isEmployee
+            }, function (err, peopleInfo) {
+
+                if (err) return callback(err, null);
+
+                if (peopleInfo === null) {
+                    invalidCredentials();
                 }
                 else {
 
-                    if (peopleInfo.isEmployee === false) {
-                        // Un usuario customer esta intentando entrar en la seccion de empleados
-                        invalidCredentials();
+                    var setPeopleInfo = function () {
+
+                        callback(null, peopleInfo);
+
+                    };
+
+                    if (req.params.apiEndpointType === helpdeskUserType.customer) {
+
+                        if (peopleInfo.isEmployee === true) {
+                            // Un usuario empleado esta intentando entrar en la seccion de customers
+                            invalidCredentials();
+                        }
+                        else {
+                            setPeopleInfo();
+                        }
+
                     }
                     else {
-                        setPeopleInfo();
-                    }
 
+                        if (peopleInfo.isEmployee === false) {
+                            // Un usuario customer esta intentando entrar en la seccion de empleados
+                            invalidCredentials();
+                        }
+                        else {
+                            setPeopleInfo();
+                        }
+
+                    }
                 }
-            }
+            });
+
+
         });
+
+
+
+
 
 
 
@@ -130,7 +152,9 @@
 
                 if (!user) {
 
-                    if (!req.viewModel.isSEORequest) {
+                    var isSeoRequest = req.viewModel === undefined ? false : req.viewModel.isSEORequest;
+
+                    if (isSeoRequest === false) {
                         res.status(401);
                         res.end();
                     }
@@ -159,7 +183,10 @@
     }, reqCredentialsCheckViews));
 
 
-
+    var helpdeskUserType = {
+        customer: 'customer',
+        employee: 'employee'
+    };
     var _testEmployeeDefaultIdBackOffice = 2;
 
     function HelpdeskAPIController() {
@@ -1404,29 +1431,45 @@
             self.viewIndexModelDone(req, res, cb);
         };
 
-        HelpdeskPeopleModel.findOne({
-            idPersonBackOffice: _testEmployeeDefaultIdBackOffice,
-            isEmployee: false
-        }, function (err, peopleInfo) {
 
-            if (err) return cb(err, null);
+        var fakeUser = {
+            idPersonBackOffice: req.params.apiEndpointType == helpdeskUserType.customer ? 0 : _testEmployeeDefaultIdBackOffice,
+            isEmployee: req.params.apiEndpointType == helpdeskUserType.customer ? false : true,
+        };
 
-            if (peopleInfo === null) {
-                // Employee not found. Just go next... 401 Not Authorized will be fired
-                done('');
-            }
-            else {
+        HelpdeskPeopleModel.findOne(fakeUser,
+            function (err, peopleInfo) {
 
-                tokenTempController.create(
-                    new Date(),
-                    JSON.stringify(peopleInfo),
-                    req.i18n,
-                    function (err, token) {
-                        if (err) return cb(err);
-                        done(token);
-                    });
-            }
-        });
+                if (err) return cb(err, null);
+
+                if (peopleInfo === null) {
+                    // Employee not found. Just go next... 401 Not Authorized will be fired
+                    done('');
+                }
+                else {
+
+                    tokenTempController.create(
+                        new Date(),
+                        JSON.stringify(peopleInfo),
+                        req.i18n,
+                        function (err, token) {
+                            if (err) return cb(err);
+
+                            done(token.guid);
+                        });
+                }
+            });
+    };
+
+    function HelpdeskViewUnAuthController() {
+        GenericViewController.apply(this, arguments);
+    }
+    HelpdeskViewUnAuthController.prototype = new GenericViewController();
+    HelpdeskViewUnAuthController.prototype.viewIndexModel = function (req, res, cb) {
+
+        this.deleteCookie(res, "oAuthTicket");
+
+        cb(null, {});
     };
 
     function HelpdeskViewBaseController() {
@@ -1443,10 +1486,6 @@
     }
     HelpdeskViewHomeController.prototype = new HelpdeskViewBaseController();
     HelpdeskViewHomeController.prototype.viewIndexModel = function (req, res, cb) {
-
-        //req.params.apiEndpointType = req.route.path.indexOf('helpdesk/talks/customer/home') > -1 ? 'customer' : 'employee';
-
-        console.log(req.params.apiEndpointType);
 
         this.helpdeskApiController.reqCredentialsCheck(req, '', '',
             function (e, dataAuth) {
@@ -1486,8 +1525,6 @@
     HelpdeskViewMessageController.prototype.viewIndexModel = function (req, res, cb) {
 
         var self = this;
-
-        req.params.apiEndpointType = req.route.path.indexOf('helpdesk/talks/customer/home') > -1 ? 'customer' : 'employee';
 
         self.helpdeskApiController.reqCredentialsCheck(req, '', '',
             function (e, dataAuth) {

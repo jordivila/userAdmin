@@ -42,6 +42,10 @@
                     var self = this;
                     var dfd = jQuery.Deferred();
 
+
+                    console.log("XXXXXXXXXXXXXX");
+                    console.log(crudAjaxOpts.apiRoutes.talkSearch);
+
                     var a = [
                         jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
                             url: crudAjaxOpts.apiRoutes.talkSearch,

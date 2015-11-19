@@ -1,5 +1,6 @@
 ﻿
 define([
+    "require",
     "jquery",
     "jqueryui",
     "scripts/Template.Widget.Base",
@@ -9,7 +10,7 @@ define([
     "./crudSamplesCustomerDefaultOptions.js",
     "./crudSamplesEmployeeDefaultOptions.js",
 ],
-function ($, jqUI, wBase, crudBase, crudExtendedWidget, clientApp, crudDefaultOptionsCustomer, crudDefaultOptionsEmployee) {
+function (require, $, jqUI, wBase, crudBase, crudExtendedWidget, clientApp, crudDefaultOptionsCustomer, crudDefaultOptionsEmployee) {
 
 
     jQuery.widget("ui.crudExtendedSample", jQuery.ui.widgetBase,

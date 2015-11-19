@@ -2,7 +2,7 @@
     "jquery",
     "jqueryui",
     "scripts/Template.App.ClientApp",
-    "../common/helpdeskCommon.js",
+    "../common/helpdeskCommonEmployee.js",
 ],
 function ($, jqUI, clientApp, helpdeskCommon) {
 
