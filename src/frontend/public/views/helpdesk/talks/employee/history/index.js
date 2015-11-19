@@ -4,7 +4,7 @@
     "jqueryui",
     "scripts/Template.App.ClientApp",
     "../common/helpdeskCommonEmployee.js",
-    "./crudPage.js",
+    "../../employee/history/crudPage.js", 
 ],
    function (require,$, jqUI, clientApp, helpdeskCommon) {
 

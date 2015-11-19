@@ -12,10 +12,6 @@ define([
 ],
 function (require, $, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdeskCommon, DataResult, helpdeskCrossLayer) {
 
-
-    console.log("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
-    console.log(crudAjaxOpts);
-
     jQuery.widget("ui.product", jQuery.ui.crud,
     {
         options: {
