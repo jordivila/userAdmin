@@ -491,7 +491,7 @@
 
             requireConfig('uglify', false, false);
 
-            tasks2Run.push('env:prod', 'globCldrData', 'i18nCheck', 'jshint:files', /*'bump',*/ 'clean'/*, 'express:testQunit', 'qunit'*/, 'requirejs', 'concat', 'cssmin', 'uglify', 'mochaTest:testProd');
+            tasks2Run.push('env:prod', 'globCldrData', 'i18nCheck', 'jshint:files', /*'bump',*/ 'clean'/*, 'express:testQunit', 'qunit'*/, 'requirejs', 'concat', 'cssmin', 'uglify', 'mochaTest:testProd', 'helpdeskInitMongoDB');
         }
         else {
 
@@ -531,15 +531,15 @@
     grunt.registerTask('default', ['env:test', 'preCompile', 'express:testLiveReload', 'open', 'watch']);
 
 
-    grunt.registerTask('helpdeskImportData', 'My "asyncfoo" task.', function () {
+    grunt.registerTask('helpdeskInitMongoDB', 'My "asyncfoo" task.', function () {
         // Force task into async mode and grab a handle to the "done" function.
         var done = this.async();
         // Run some sync stuff.
-        grunt.log.writeln('Processing helpdesk import data task...');
+        grunt.log.writeln('Processing helpdesk init DB data task...');
         // And some async stuff.
 
 
-        var HelpdeskController = require('./src/backend/controllers/helpdesk_API_Hibryd_OK');
+        var HelpdeskController = require('./src/backend/controllers/helpdesk_MongoDB').HelpdeskAPIController;
         var helpdeskController = new HelpdeskController();
         var mongoose = require('./src/backend/libs/db');
         var commonController = require('./src/backend/controllers/tests');
@@ -613,7 +613,7 @@
                     throw err;
                 }
 
-                helpdeskController.importAll(i18n, function (e, importData) {
+                helpdeskController.testMethodInitDb(i18n, function (e, importData) {
 
                     if (e) throw e;
 

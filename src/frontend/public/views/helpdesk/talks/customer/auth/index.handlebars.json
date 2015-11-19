@@ -1,3 +1,4 @@
 {
-    "title": "Helpdesk.Talks.Wellcome.Title"
+    "title": "Helpdesk.Talks.Employee.Wellcome.Title",
+    "viewEntryPoint": "./index.js"
 }

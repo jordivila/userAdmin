@@ -8,7 +8,10 @@
 function ($, jqUI, clientApp, helpdeskCommon, crossLayer) {
 
     clientApp.view = {
-        main: function () {
+        main: function (context) {
+
+
+            clientApp.template.loadByUrl(context.viewModel.location);
 
         }
     };

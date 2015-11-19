@@ -147,27 +147,6 @@
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/message", helpdeskViewMessageController, helpdeskViewBaseController.isAuthenticated);
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/subject", genericViewController, helpdeskViewBaseController.isAuthenticated);
 
-
-        //registerCommonVerbs(app, "helpdesk/talks/employee/common", genericViewController);
-        //registerCommonVerbs(app, "helpdesk/talks/employee/home", helpdeskViewHomeController, helpdeskViewBaseController.isAuthenticated);
-        //registerCommonVerbs(app, "helpdesk/talks/employee/auth", helpdeskViewAuthController);
-        //registerCommonVerbs(app, "helpdesk/talks/employee/unauthorize", genericViewController);
-        //registerCommonVerbs(app, "helpdesk/talks/employee/wiki", genericViewController);
-        //registerCommonVerbs(app, "helpdesk/talks/employee/history", genericViewController, helpdeskViewBaseController.isAuthenticated);
-        //registerCommonVerbs(app, "helpdesk/talks/employee/message", helpdeskViewMessageController, helpdeskViewBaseController.isAuthenticated);
-        //registerCommonVerbs(app, "helpdesk/talks/employee/subject", genericViewController, helpdeskViewBaseController.isAuthenticated);
-
-
-        //registerCommonVerbs(app, "helpdesk/talks/customer/common", genericViewController);
-        //registerCommonVerbs(app, "helpdesk/talks/customer/home", helpdeskViewHomeController, helpdeskViewBaseController.isAuthenticated);
-        //registerCommonVerbs(app, "helpdesk/talks/customer/auth", helpdeskViewAuthController);
-        //registerCommonVerbs(app, "helpdesk/talks/customer/unauthorize", genericViewController);
-        //registerCommonVerbs(app, "helpdesk/talks/customer/wiki", genericViewController);
-        //registerCommonVerbs(app, "helpdesk/talks/customer/history", genericViewController, helpdeskViewBaseController.isAuthenticated);
-        //registerCommonVerbs(app, "helpdesk/talks/customer/message", helpdeskViewMessageController, helpdeskViewBaseController.isAuthenticated);
-        //registerCommonVerbs(app, "helpdesk/talks/customer/subject", genericViewController, helpdeskViewBaseController.isAuthenticated);
-        
-
     };
 
 })(module);

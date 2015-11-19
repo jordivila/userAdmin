@@ -25,6 +25,7 @@
     var helpdeskCrossLayer = require('../../crossLayer/helpdesk');
     var P = require('p-promise');
     var GenericViewController = require('./classes/genericView');
+    var tokenTempController = require('./tokenTemp');
 
     var HelpdeskTalkModel = require('../models/helpdesk').HelpdeskTalk;
     var HelpdeskPeopleModel = require('../models/helpdesk').HelpdeskPeople;
@@ -129,9 +130,7 @@
 
                 if (!user) {
 
-                    var isSeoRequest = req.viewModel.isSEORequest;
-
-                    if (!isSeoRequest) {
+                    if (!req.viewModel.isSEORequest) {
                         res.status(401);
                         res.end();
                     }
@@ -159,37 +158,23 @@
         passwordField: 'fakePwdLocalStrategy',
     }, reqCredentialsCheckViews));
 
-    //passport.use('helpdeskStrategyAPI', new LocalStretegy({
-    //    passReqToCallback: true,
-    //    session: false,
-    //    usernameField: 'fakeEmailLocalStrategy',
-    //    passwordField: 'fakePwdLocalStrategy',
-    //}, reqCredentialsCheckAPI));
 
 
+    var _testEmployeeDefaultIdBackOffice = 2;
 
     function HelpdeskAPIController() {
-        //GenericViewController.apply(this, arguments);
 
-        this._isInTestMode = true;
-        this._testEmployeeDefaultIdBackOffice = 2;
     }
     HelpdeskAPIController.prototype._employeeDefaultGet = function (customerId, cb) {
 
-        if (this._isInTestMode) {
+        HelpdeskPeopleModel.findOne({
+            isEmployee: true,
+            idPersonBackOffice: _testEmployeeDefaultIdBackOffice
+        }, function (e, employeeDefault) {
+            if (e) return cb(e, null);
 
-            HelpdeskPeopleModel.findOne({
-                isEmployee: true,
-                idPersonBackOffice: this._testEmployeeDefaultIdBackOffice
-            }, function (e, employeeDefault) {
-                if (e) return cb(e, null);
-
-                cb(null, employeeDefault);
-            });
-        }
-        else {
-            cb(new Error("Not implemented error"), null);
-        }
+            cb(null, employeeDefault);
+        });
 
     };
     HelpdeskAPIController.prototype._talkSave = function (i18n, idTalk, subject, customerId, employeeId, cb) {
@@ -882,103 +867,96 @@
     };
     HelpdeskAPIController.prototype.testMethodInitDb = function (i18n, cb) {
 
-        if (this._isInTestMode === true) {
+        var self = this;
+        var dataToModel = function (all) {
 
-            var self = this;
-            var dataToModel = function (all) {
+            var employeeCurrent = all.filter(function (element) {
+                return element.isEmployee === true;
+            })[0];
+            var employeeAnother = all.filter(function (element) {
+                return element.isEmployee === true;
+            })[1];
+            var employeeDefault = all.filter(function (element, elementIndex, elementsList) {
 
-                var employeeCurrent = all.filter(function (element) {
-                    return element.isEmployee === true;
-                })[0];
-                var employeeAnother = all.filter(function (element) {
-                    return element.isEmployee === true;
-                })[1];
-                var employeeDefault = all.filter(function (element, elementIndex, elementsList) {
+                var isDefaultEmployee = (element.isEmployee === true) && (element.idPersonBackOffice == _testEmployeeDefaultIdBackOffice);
 
-                    var isDefaultEmployee = (element.isEmployee === true) && (element.idPersonBackOffice == self._testEmployeeDefaultIdBackOffice);
+                if (isDefaultEmployee) {
+                    //all[elementIndex].name = "Default Employee/ Empleado por defecto";
+                }
 
-                    if (isDefaultEmployee) {
-                        //all[elementIndex].name = "Default Employee/ Empleado por defecto";
+                return isDefaultEmployee;
+
+            })[0];
+            var customerCurrent = all.filter(function (element) {
+                return element.isEmployee === false;
+            })[0];
+            var customerAnother = all.filter(function (element) {
+                return element.isEmployee === false;
+            })[1];
+
+            cb(null, {
+                all: all,
+                employeeCurrent: employeeCurrent,
+                employeeAnother: employeeAnother,
+                employeeDefault: employeeDefault,
+                customerCurrent: customerCurrent,
+                customerAnother: customerAnother
+            });
+
+        };
+
+        HelpdeskPeopleModel.find({}, function (e, existingData) {
+
+            if (existingData.length === 0) {
+                var pMax = 10; // pMax -> number of employees & number of customers created
+                var initPeople = function () {
+
+
+                    var peopleSaved = [];
+
+                    for (var j = 0; j < pMax; j++) {
+
+                        peopleSaved.push(new HelpdeskPeopleModel({
+                            //idPeople: j,      // -> identity (1,1)
+                            idPersonBackOffice: j,    //identificaador de la persona en ORG_TB_EMLPEADOS
+                            isEmployee: true,
+                            name: "Empleado/Employee " + j,
+                            cardId: new Array(11).join(j.toString()),
+                            email: myUtils.stringFormatCSharp("{0}@something.com", new Array(6).join(j.toString()))
+                        }).save());
+
                     }
 
-                    return isDefaultEmployee;
+                    for (var k = 0; k < pMax; k++) {
 
-                })[0];
-                var customerCurrent = all.filter(function (element) {
-                    return element.isEmployee === false;
-                })[0];
-                var customerAnother = all.filter(function (element) {
-                    return element.isEmployee === false;
-                })[1];
+                        peopleSaved.push(new HelpdeskPeopleModel({
+                            //idPeople: pMax + k,
+                            idPersonBackOffice: k,    //identificaador de la persona en PEF_tb_personaFisica
+                            isEmployee: false,
+                            name: "Cliente/Customer " + k,
+                            cardId: new Array(11).join(k.toString()),
+                            email: myUtils.stringFormatCSharp("{0}@something.com", new Array(6).join(k.toString()))
+                        }).save());
+                    }
 
-                cb(null, {
-                    all: all,
-                    employeeCurrent: employeeCurrent,
-                    employeeAnother: employeeAnother,
-                    employeeDefault: employeeDefault,
-                    customerCurrent: customerCurrent,
-                    customerAnother: customerAnother
-                });
+                    return P.all(peopleSaved).nodeify(function (e, data) {
 
-            };
-
-            HelpdeskPeopleModel.find({}, function (e, existingData) {
-
-                if (existingData.length === 0) {
-                    var pMax = 10; // pMax -> number of employees & number of customers created
-                    var initPeople = function () {
-
-
-                        var peopleSaved = [];
-
-                        for (var j = 0; j < pMax; j++) {
-
-                            peopleSaved.push(new HelpdeskPeopleModel({
-                                //idPeople: j,      // -> identity (1,1)
-                                idPersonBackOffice: j,    //identificaador de la persona en ORG_TB_EMLPEADOS
-                                isEmployee: true,
-                                name: "Empleado/Employee " + j,
-                                cardId: new Array(11).join(j.toString()),
-                                email: myUtils.stringFormatCSharp("{0}@something.com", new Array(6).join(j.toString()))
-                            }).save());
-
+                        if (e !== null) {
+                            cb(e, null);
                         }
-
-                        for (var k = 0; k < pMax; k++) {
-
-                            peopleSaved.push(new HelpdeskPeopleModel({
-                                //idPeople: pMax + k,
-                                idPersonBackOffice: k,    //identificaador de la persona en PEF_tb_personaFisica
-                                isEmployee: false,
-                                name: "Cliente/Customer " + k,
-                                cardId: new Array(11).join(k.toString()),
-                                email: myUtils.stringFormatCSharp("{0}@something.com", new Array(6).join(k.toString()))
-                            }).save());
+                        else {
+                            HelpdeskPeopleModel.find({}, function (e, all) {
+                                dataToModel(all);
+                            });
                         }
+                    });
 
-                        return P.all(peopleSaved).nodeify(function (e, data) {
-
-                            if (e !== null) {
-                                cb(e, null);
-                            }
-                            else {
-                                HelpdeskPeopleModel.find({}, function (e, all) {
-                                    dataToModel(all);
-                                });
-                            }
-                        });
-
-                    }();
-                }
-                else {
-                    dataToModel(existingData);
-                }
-            });
-        }
-
-        else {
-            return cb(new ErrorHandledModel(i18n.__("GeneralTexts.NotImplemented")));
-        }
+                }();
+            }
+            else {
+                dataToModel(existingData);
+            }
+        });
 
     };
     HelpdeskAPIController.prototype.talkSearch = function (req, params, cb) {
@@ -1399,19 +1377,56 @@
         GenericViewController.apply(this, arguments);
     }
     HelpdeskViewAuthController.prototype = new GenericViewController();
+    HelpdeskViewAuthController.prototype.viewIndexModelDone = function (req, res, cb) {
+        if (req.viewModel.isSEORequest) {
+            res.writeHead(301,
+              {
+                  Location: '../home/'
+              }
+            );
+            res.end();
+        }
+        else {
+            cb(null, {
+                location: '../home/'
+            });
+        }
+    };
     HelpdeskViewAuthController.prototype.viewIndexModel = function (req, res, cb) {
 
-        this.setCookie(res, "oAuthTicket", req.query.oAuthTicket);
+        // Simulate authentication !! 
+        // Do not use this on production !!
 
-        res.writeHead(301,
-          {
-              Location: '../home/'// + newRoom
-          }
-        );
-        res.end();
+        var self = this;
 
+        var done = function (guidValue) {
+            self.setCookie(res, "oAuthTicket", guidValue);
+            self.viewIndexModelDone(req, res, cb);
+        };
 
-        //cb(null, {});
+        HelpdeskPeopleModel.findOne({
+            idPersonBackOffice: _testEmployeeDefaultIdBackOffice,
+            isEmployee: false
+        }, function (err, peopleInfo) {
+
+            if (err) return cb(err, null);
+
+            if (peopleInfo === null) {
+                // Employee not found. Just go next... 401 Not Authorized will be fired
+                done('');
+            }
+            else {
+
+                tokenTempController.create(
+                    new Date(),
+                    JSON.stringify(peopleInfo),
+                    req.i18n,
+                    function (err, token) {
+                        if (err) return cb(err);
+                        done(token);
+                    });
+            }
+        });
     };
 
     function HelpdeskViewBaseController() {
@@ -1424,25 +1439,44 @@
     };
 
     function HelpdeskViewHomeController() {
-        GenericViewController.apply(this, arguments);
+        HelpdeskViewBaseController.apply(this, arguments);
     }
     HelpdeskViewHomeController.prototype = new HelpdeskViewBaseController();
     HelpdeskViewHomeController.prototype.viewIndexModel = function (req, res, cb) {
 
-        this.helpdeskApiController.testMethodInitDb(req.i18n, function (e, data) {
+        //req.params.apiEndpointType = req.route.path.indexOf('helpdesk/talks/customer/home') > -1 ? 'customer' : 'employee';
 
-            var allCustomers = _.filter(data.all, function (elem) { return elem.isEmployee === false; });
-            var allEmployees = _.filter(data.all, function (elem) { return elem.isEmployee === true; });
+        console.log(req.params.apiEndpointType);
 
-            cb(null, {
-                Customers: allCustomers,
-                Employees: allEmployees,
-                WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Employee.Wellcome.SelectFakeUser')
+        this.helpdeskApiController.reqCredentialsCheck(req, '', '',
+            function (e, dataAuth) {
+
+                if (e) return cb(e, null);
+
+                if (dataAuth !== null) {
+
+                    if (dataAuth === false) {
+
+                        cb(null, {
+                            WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.PersonNotFound')
+                        });
+
+                    }
+                    else {
+
+                        cb(null, {
+                            Customers: dataAuth.isEmployee === false ? [dataAuth] : undefined,
+                            Employees: dataAuth.isEmployee === true ? [dataAuth] : undefined,
+                            WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.WhoYouAreMessage')
+                        });
+                    }
+                }
+                else {
+                    cb(null, {
+                        WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull')
+                    });
+                }
             });
-
-        });
-
-
     };
 
     function HelpdeskViewMessageController() {

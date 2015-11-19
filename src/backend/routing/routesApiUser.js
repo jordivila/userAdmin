@@ -86,7 +86,7 @@
                         text: i18n.__("Helpdesk.Talks.MenuTitle"),
                         childs: [
                                 {
-                                    url: "/" + virtualDirectory + "helpdesk/talks/customer/home/",
+                                    url: "/" + virtualDirectory + "helpdesk/talks/customer/auth/",
                                     text: "Customer"
                                 },
                                 {
@@ -94,7 +94,7 @@
                                     text: "Customer wiki"
                                 },
                                 {
-                                    url: "/" + virtualDirectory + "helpdesk/talks/employee/home/",
+                                    url: "/" + virtualDirectory + "helpdesk/talks/employee/auth/",
                                     text: "Employee"
                                 },
                                 {

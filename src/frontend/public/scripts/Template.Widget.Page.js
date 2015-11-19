@@ -193,10 +193,6 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
 
             Handlebars.registerHelper('__', function (context, options) {
 
-
-                console.log("options.data.root");
-                console.log(options.data.root);
-
                 // register i18n helper function
                 if (Object.keys(options.data.root.viewModel.i18nTexts).indexOf(context) > -1) {
                     return options.data.root.viewModel.i18nTexts[context];
@@ -238,7 +234,7 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
             return dfd.promise();
         },
         handlebarsLoadTemplateError: function (dfd, err) {
-            console.error(err);
+            
 
             clientApp.utils.setPageTitle(err.statusText ? err.statusText : '');
 

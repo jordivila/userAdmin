@@ -552,19 +552,29 @@
         GenericViewController.apply(this, arguments);
     }
     HelpdeskViewAuthController.prototype = new GenericViewController();
+    HelpdeskViewAuthController.prototype.viewIndexModelDone = function (req, res, cb) {
+        if (req.viewModel.isSEORequest) {
+            res.writeHead(301,
+              {
+                  Location: '../home/'
+              }
+            );
+            res.end();
+        }
+        else {
+            cb(null, {
+                location: '../home/'
+            });
+        }
+    };
     HelpdeskViewAuthController.prototype.viewIndexModel = function (req, res, cb) {
 
-        this.setCookie(res, "oAuthTicket", req.query.oAuthTicket);
+        if (req.query.oAuthTicket) {
+            this.setCookie(res, "oAuthTicket", req.query.oAuthTicket);
+        }
 
-        res.writeHead(301,
-          {
-              Location: '../home/'// + newRoom
-          }
-        );
-        res.end();
+        this.viewIndexModelDone(req, res, cb);
 
-
-        //cb(null, {});
     };
 
     function HelpdeskViewBaseController() {
