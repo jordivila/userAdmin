@@ -34,7 +34,7 @@
 
             if (virtualDirectoryIsRoot === false) {
                 req.url = req.url.replace(config.get('domainInfo:virtualDirectory'), '');
-                log.info("Saliendo en req->" + req.url);
+                //log.info("Saliendo en req->" + req.url);
             }
 
             languagesController.initRequest(req, res);
