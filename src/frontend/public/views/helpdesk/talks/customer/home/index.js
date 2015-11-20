@@ -2,7 +2,7 @@
     "jquery",
     "jqueryui",
     "scripts/Template.App.ClientApp",
-    "../common/helpdeskCommon.js",
+    "helpdesk/customer/common/helpdeskCommon",
     "crossLayer/config"
 ],
 function ($, jqUI, clientApp, helpdeskCommon, crossLayer) {

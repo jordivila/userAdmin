@@ -1,28 +1,27 @@
-﻿define(
+﻿
+define(
 [
     'json', //requirejs plugin to load json data
     'text', //requirejs plugin to load text data
     'jquery',
     'domReady',
-    //'jqueryui',
-    '/scripts/modules/jquery.ui.custom.bundle.js',
+    'jqueryui',
     'history',
     'handlebars',
-    "/scripts/modules/modernizr.customBuild.js",
-    '/scripts/Template.Class.UrlHelper.js',
-    '/scripts/Template.ExtendPrototypes.String.js',
-    '/scripts/Template.Widget.Base.js',
-    '/scripts/Template.Widget.Menu.base.js',
-    '/scripts/Template.Widget.Menu.slides.js',
-    '/scripts/Template.Widget.Menu.nav.js',
-    '/scripts/Template.Widget.Page.js',
-    "/scripts/Template.App.ClientApp.js",
-    //"/scripts/Template.Class.Ajax.js",
-    //"/scripts/Template.Class.I18n.js",
-    //'/scripts/Template.Class.Globalize.js',
+    'modernizr',
+    'scripts/Template.Class.UrlHelper',
+    'scripts/Template.ExtendPrototypes.String',
+    'scripts/Template.Widget.Base',
+    'scripts/Template.Widget.Menu.base',
+    'scripts/Template.Widget.Menu.slides',
+    'scripts/Template.Widget.Menu.nav',
+    'scripts/Template.Widget.Page',
+    "scripts/Template.App.ClientApp",
 ],
 function (json, text, $, domReady, jqUI, hist, handl, Modernizr, url, a, b, c, d, e, f, clientApp) {
-
     return clientApp;
-
+},
+function () {
+    console.log("requirejs ERROR at scripts/modules/main.js");
+    console.log(arguments);
 });

@@ -7,7 +7,18 @@
 function ($, jqUI, clientApp) {
 
     clientApp.view = {
-        main: function () {
+        main: function (context) {
+
+
+            var urlDest = "";
+
+            if (context.domainInfo.virtualDirectory === "") {
+                urlDest = "/currencies/";
+            }
+            else {
+                urlDest = "/" + context.domainInfo.virtualDirectory + "currencies/";
+            }
+
 
             jQuery('div.ui-currencySelector:first').itemPicker({
                 messageBoxSelector: 'div.ui-currencySelector-messages:first',
@@ -17,7 +28,7 @@ function ($, jqUI, clientApp) {
                 itemApllyingFailUnhandledMsg: clientApp.i18n.texts.get("Views.Layout.ApplyingChangesError"),
                 itemServerPut: function (itemId) {
                     return jQuery.ajax({
-                        url: "/currencies/",
+                        url: urlDest,
                         type: "PUT",
                         data: JSON.stringify({ newValue: itemId }),
                         cache: false
@@ -25,7 +36,7 @@ function ($, jqUI, clientApp) {
                 },
                 itemServerPutOk: function (result) {
                     //location.reload();
-                    location.href = "/currencies/";
+                    location.href = urlDest;
                 },
             });
         }

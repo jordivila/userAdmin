@@ -4,8 +4,8 @@
     "scripts/Template.App.ClientApp",
 
     "scripts/modules/crud",
-    "../common/helpdeskCrudFakeData.js",
-    "../common/helpdeskCommon.js",
+    "helpdesk/customer/common/helpdeskCrudFakeData",
+    "helpdesk/customer/common/helpdeskCommon",
     "crossLayer/dateHelper"
 ],
 function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskCommon, dateHelper) {

@@ -1,6 +1,7 @@
 ﻿.ui-text-circle{width:1.5em;height:1.5em;border-radius:50%;line-height:1.5em;text-align:center;float:right;}
 .ui-helper-invisible {visibility:hidden;}
 .ui-display-table {display:table;}
+.ui-wordWrap {word-wrap: break-word;word-break: break-word;}
 .ui-pageHolder {height:100%;width:100%;border:0;background-image:none;}
 .ui-pageHolder .ui-sitePage{width:100%;height:100%; margin:0 auto 0 auto;float:right;
              /*DO NOT Remove position:relative -> child position:absolute content will take this as parent relative */

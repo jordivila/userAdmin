@@ -34,6 +34,8 @@ function ($, jqUI, Handlebars, hist, rcrumbs, nav, P, crossLayerConfig, clientAp
             this.options.$siteContent = jQuery('div.ui-siteContent:first');
             this.options.$breadcrumbBox = jQuery(this.element).find('div.ui-breadcrumb-box');
             this.options.$menuNav = jQuery(this.element).find('div[data-widget="userActivity"]:first');
+
+            
         },
         _init: function () {
 

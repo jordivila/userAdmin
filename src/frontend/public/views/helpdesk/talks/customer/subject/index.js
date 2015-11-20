@@ -5,8 +5,8 @@
     "pPromises",
 
     "scripts/modules/crud",
-    "../common/helpdeskCrudFakeData.js",
-    "../common/helpdeskCommon.js",
+    "helpdesk/customer/common/helpdeskCrudFakeData",
+    "helpdesk/customer/common/helpdeskCommon",
 ],
 function ($, jqUI, clientApp, P, crudModule, crudAjaxOpts, helpdeskCommon) {
 

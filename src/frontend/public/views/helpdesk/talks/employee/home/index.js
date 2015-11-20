@@ -2,13 +2,13 @@
     "jquery",
     "jqueryui",
     "scripts/Template.App.ClientApp",
-    "../common/helpdeskCommonEmployee.js",
+    "helpdesk/employee/common/helpdeskCommonEmployee",
     "crossLayer/config"
 ],
 function ($, jqUI, clientApp, helpdeskCommon, crossLayer) {
 
     clientApp.view = {
-        main: function () {
+        main: function (context) {
 
             var navNext = function () {
                 clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.history()));

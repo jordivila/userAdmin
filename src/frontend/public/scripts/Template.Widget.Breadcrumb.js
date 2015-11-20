@@ -2,7 +2,8 @@ define([
     "jquery",
     "jqueryui",
     "scripts/jQuery.Plugins.scrollUtils",
-    "scripts/Template.Class.Utils"
+    "scripts/Template.Class.Utils",
+    "scripts/Template.Widget.Menu.base",
 ],
 function ($, jqUI, scrollUtils, Utils) {
 

@@ -2,7 +2,16 @@
    function ($, jqUI, clientApp) {
 
        clientApp.view = {
-           main: function () {
+           main: function (context) {
+
+               var urlDest = "";
+
+               if (context.domainInfo.virtualDirectory === "") {
+                   urlDest = "/languages/";
+               }
+               else {
+                   urlDest = "/" + context.domainInfo.virtualDirectory + "languages/";
+               }
 
                jQuery('div.ui-languageSelector:first').itemPicker({
                    messageBoxSelector: 'div.ui-languageSelector-messages:first',
@@ -12,7 +21,8 @@
                    itemApllyingFailUnhandledMsg: clientApp.i18n.texts.get("Views.Layout.ApplyingChangesError"),
                    itemServerPut: function (itemId) {
                        return jQuery.ajax({
-                           url: "/languages/",
+                           //url: "/languages/",
+                           url: urlDest,
                            type: "PUT",
                            data: JSON.stringify({ newValue: itemId }),
                            cache: false
@@ -20,7 +30,7 @@
                    },
                    itemServerPutOk: function (result) {
                        //location.reload();
-                       location.href = "/languages/";
+                       location.href = urlDest;
                    },
                });
 

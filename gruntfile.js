@@ -197,22 +197,9 @@
 
                         {
                             name: "scripts/modules/jquery.ui.custom.bundle",
-                            exclude: [
-
-                            ]
                         },
                         {
                             name: "scripts/modules/main",
-                            exclude: [
-                                 //"bower/jquery-ui/ui/minified/jquery.ui.core.min",
-                                 //"bower/jquery-ui/ui/minified/jquery.ui.widget.min",
-                                 //"bower/jquery-ui/ui/minified/jquery.ui.datepicker.min",
-                                 //"bower/jquery-ui/ui/minified/jquery.ui.button.min",
-                                 //"bower/jquery-ui/ui/minified/jquery.ui.effect.min",
-                                 //"bower/jquery-ui/ui/minified/jquery.ui.effect-drop.min",
-                                 //"bower/jquery-ui/ui/minified/jquery.ui.effect-slide.min",
-                                 //"scripts/modules/jquery.ui.custom.bundle.js",
-                            ]
                         },
                         {
                             name: "scripts/modules/crud",
@@ -267,6 +254,11 @@
                         es5shim: '../bower_components/es5-shim',
                         querystring: '../bower_components/querystring/querystring.min',
                         respond: '../bower_components/respond/dest/respond.src',
+
+                        modernizr: "scripts/modules/modernizr.customBuild",
+                        scripts: "scripts",
+                        css: 'css',
+
                         /**************************************************************
                                     Globalize dependencies paths begin
                         **************************************************************/

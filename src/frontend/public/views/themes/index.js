@@ -2,8 +2,16 @@
    function ($, jqUI, clientApp) {
 
        clientApp.view = {
-           main: function () {
+           main: function (context) {
 
+               var urlDest = "";
+
+               if (context.domainInfo.virtualDirectory === "") {
+                   urlDest = "/themes/";
+               }
+               else {
+                   urlDest = "/" + context.domainInfo.virtualDirectory + "themes/";
+               }
 
                jQuery('div.ui-themeSelector:first').itemPicker({
                    messageBoxSelector: 'div.ui-themeSelector-messages:first',
@@ -13,7 +21,7 @@
                    itemApllyingFailUnhandledMsg: clientApp.i18n.texts.get("Views.Layout.ApplyingChangesError"),
                    itemServerPut: function (itemId) {
                        return jQuery.ajax({
-                           url: "/themes/",
+                           url: urlDest,
                            type: "PUT",
                            data: JSON.stringify({ newValue: itemId }),
                            cache: false
@@ -21,7 +29,7 @@
                    },
                    itemServerPutOk: function (result) {
                        //location.reload();
-                       location.href = "/themes/";
+                       location.href = urlDest;
                    },
                });
 

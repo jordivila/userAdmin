@@ -1,5 +1,5 @@
 ﻿define([
-    "../../common/fakes/helpdeskCrudFakeData.js",
+    "helpdesk/common/fakes/helpdeskCrudFakeData",
 ],
     function (crudAjaxOpts) {
 

@@ -24,7 +24,7 @@
         <ul class="ui-themeSelector-list ui-menuTree ui-menuList ui-widget-content ui-corner-all" style="overflow: hidden;">
             {{#each this.viewModel.itemList}}
             <li class="ui-menuList-item ui-widget-content ui-corner-all ui-state-default" data-theme-id="{{this.name}}">
-                <img src="/public/images/jQueryUIThemes/{{this.icon}}" alt="{{this.name}}" title="{{this.name}}" />
+                <img src="/{{../domainInfo.virtualDirectory}}public/images/jQueryUIThemes/{{this.icon}}" alt="{{this.name}}" title="{{this.name}}" />
             </li>
             {{/each}}
         </ul>

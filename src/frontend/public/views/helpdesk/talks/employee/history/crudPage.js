@@ -5,10 +5,10 @@ define([
     "jqueryui",
     "scripts/Template.Widget.Base",
     "scripts/modules/crud",
-    "./crudProductExtended.Widget.js",
+    "helpdesk/employee/history/crudProductExtended.Widget",
     "scripts/Template.App.ClientApp",
-    "./crudSamplesCustomerDefaultOptions.js",
-    "./crudSamplesEmployeeDefaultOptions.js",
+    "helpdesk/employee/history/crudSamplesCustomerDefaultOptions",
+    "helpdesk/employee/history/crudSamplesEmployeeDefaultOptions",
 ],
 function (require, $, jqUI, wBase, crudBase, crudExtendedWidget, clientApp, crudDefaultOptionsCustomer, crudDefaultOptionsEmployee) {
 

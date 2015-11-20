@@ -1,5 +1,5 @@
 ﻿
-define(
+define("jqueryui", // explicitly define jqueryui module name
 [
     "bower/jquery-ui/ui/minified/jquery.ui.core.min",
     "bower/jquery-ui/ui/minified/jquery.ui.widget.min",

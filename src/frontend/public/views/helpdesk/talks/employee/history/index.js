@@ -3,8 +3,8 @@
     "jquery",
     "jqueryui",
     "scripts/Template.App.ClientApp",
-    "../common/helpdeskCommonEmployee.js",
-    "../../employee/history/crudPage.js", 
+    "helpdesk/employee/common/helpdeskCommonEmployee",
+    "helpdesk/employee/history/crudPage",
 ],
    function (require,$, jqUI, clientApp, helpdeskCommon) {
 

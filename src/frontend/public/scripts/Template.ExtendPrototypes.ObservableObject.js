@@ -1,5 +1,5 @@
 ﻿define([
-    "bower_components/object.observe/dist/object-observe.min"
+    "bower/object.observe/dist/object-observe.min"
 ],
 function (objectObserver) {
 
