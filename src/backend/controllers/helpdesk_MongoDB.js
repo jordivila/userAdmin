@@ -3,14 +3,12 @@
     "use strict";
 
 
-    //module.exports = HelpdeskAPIController;
-
     module.exports.HelpdeskAPIController = HelpdeskAPIController;
     module.exports.HelpdeskViewBaseController = HelpdeskViewBaseController;
     module.exports.HelpdeskViewAuthController = HelpdeskViewAuthController;
     module.exports.HelpdeskViewHomeController = HelpdeskViewHomeController;
     module.exports.HelpdeskViewMessageController = HelpdeskViewMessageController;
-    module.exports.HelpdeskViewUnAuthController = HelpdeskViewUnAuthController;
+    //module.exports.HelpdeskViewUnAuthController = HelpdeskViewUnAuthController;
 
 
     var passport = require('passport');
@@ -27,6 +25,9 @@
     var P = require('p-promise');
     var GenericViewController = require('./classes/genericView');
     var tokenTempController = require('./tokenTemp');
+    var HelpdeskBaseController = require('./HelpdeskBase').HelpdeskBaseController;
+    var HelpdeskUserType = require('./HelpdeskBase').HelpdeskUserType;
+
 
     var HelpdeskTalkModel = require('../models/helpdesk').HelpdeskTalk;
     var HelpdeskPeopleModel = require('../models/helpdesk').HelpdeskPeople;
@@ -42,6 +43,9 @@
 
         var i18n = req.i18n;
         var invalidCredentials = function () {
+
+            var eeee = new Error("sadsd");
+
             callback(null, false, {
                 message: i18n.__("AccountResources.InvalidCredentials")
             });
@@ -56,27 +60,32 @@
         // See /src/backend/routing/routesApiUser.js
         var cookieName = "oAuthTicket";
 
-
         var authTicketGuid = req.cookies[cookieName];
 
+
+
         if (!authTicketGuid) {
+
+            console.log("11111");
+
             return invalidCredentials();
         }
 
 
         tokenTempController.getByGuid(authTicketGuid, function (err, token) {
 
+
+
             if (err) return cb(err);
+
+            console.log("2222");
+            console.log(token);
 
             if (!token) return invalidCredentials();
 
 
             var authTicketInfo = JSON.parse(token.jsonObject);
 
-            console.log("AUTHIOTCKET AUTHIOTCKET AUTHIOTCKET AUTHIOTCKET AUTHIOTCKET AUTHIOTCKET AUTHIOTCKET ");
-            console.log(req.originalUrl);
-            console.log(authTicketGuid);
-            console.log(authTicketInfo);
 
             HelpdeskPeopleModel.findOne({
                 idPersonBackOffice: authTicketInfo.idPersonBackOffice,
@@ -96,7 +105,7 @@
 
                     };
 
-                    if (req.params.apiEndpointType === helpdeskUserType.customer) {
+                    if (req.params.apiEndpointType === HelpdeskUserType.customer) {
 
                         if (peopleInfo.isEmployee === true) {
                             // Un usuario empleado esta intentando entrar en la seccion de customers
@@ -183,16 +192,17 @@
     }, reqCredentialsCheckViews));
 
 
-    var helpdeskUserType = {
-        customer: 'customer',
-        employee: 'employee'
-    };
     var _testEmployeeDefaultIdBackOffice = 2;
 
     function HelpdeskAPIController() {
-
+        HelpdeskBaseController.apply(this, arguments);
     }
-    HelpdeskAPIController.prototype._employeeDefaultGet = function (customerId, cb) {
+    HelpdeskAPIController.prototype = new HelpdeskBaseController();
+    HelpdeskAPIController.prototype._employeeDefaultGet = function (i18n, customerIdPeople, cb) {
+
+        // For a given customer an employee is assigned to talk with autopmatically
+        // As far as this controller is for demo purposes 
+        // a fixed employee is assigned for every customer
 
         HelpdeskPeopleModel.findOne({
             isEmployee: true,
@@ -200,6 +210,7 @@
         }, function (e, employeeDefault) {
             if (e) return cb(e, null);
 
+            
             cb(null, employeeDefault);
         });
 
@@ -259,18 +270,14 @@
 
                             var sendResult = function () {
 
-
-
                                 dataResult = new DataResult(
                                     true,
                                     isNew ? i18n.__("Helpdesk.Talks.Subject.NewSubjectAdded") :
                                             i18n.__("Template.Widget.Crud.SavedChanges"),
                                     {
-                                        idTalk: idTalk
+                                        idTalk: idTalk,
+                                        talkObject: talkObject
                                     });
-
-
-
 
                                 cb(null, dataResult);
 
@@ -986,57 +993,6 @@
         });
 
     };
-    HelpdeskAPIController.prototype.talkSearch = function (req, params, cb) {
-
-        if (!req.user.isEmployee) {
-            this._talkSearchByCustomer(req, params, cb);
-        }
-        else {
-            this._talkSearchByEmployee(req, params, cb);
-        }
-
-    };
-    HelpdeskAPIController.prototype.talkAdd = function (req, dataItem, cb) {
-
-        var self = this;
-
-        this._employeeDefaultGet(req.user.idPeople, function (e, employeeDefault) {
-
-            if (e) return cb(e, null);
-
-            self._talkSave(
-                req.i18n,
-                null,
-                dataItem.subject,
-                req.user.idPeople, // customerId
-                employeeDefault.idPeople, //employeeId
-                function (e, dataResult) {
-
-                    if (e) return cb(e, null);
-
-                    if (dataResult.isValid === true) {
-
-                        HelpdeskTalkModel.findOne({
-                            idTalk: dataResult.data.idTalk
-                        }, function (e, talkDetail) {
-
-                            if (e) return cb(e, null);
-
-                            dataItem.editData = talkDetail;
-                            dataItem.formData = undefined;
-                            dataResult.data = dataItem;
-
-                            cb(null, dataResult);
-                        });
-
-                    }
-                    else {
-                        cb(null, dataResult);
-                    }
-
-                });
-        });
-    };
     HelpdeskAPIController.prototype.messageAdd = function (req, dataItem, cb) {
 
 
@@ -1295,55 +1251,6 @@
     /************************************************************
                         Methods for employee
     *************************************************************/
-    HelpdeskAPIController.prototype.talkGetById = function (req, dataItem, cb) {
-
-        var dataResult = null;
-
-
-        this._fakeDataGridTalkGetByIdForEdit(req, dataItem.idTalk,
-            function (e, dataResult) {
-                if (e) return cb(error, null);
-
-                cb(null, dataResult);
-
-            });
-    };
-    HelpdeskAPIController.prototype.talkSavedByEmployee = function (req, dataItem, cb) {
-
-        var self = this;
-
-        this._talkSave(
-            req.i18n,
-            dataItem.isNew === true ? null : dataItem.formData.idTalk,
-            dataItem.formData.subject,
-            dataItem.formData.customerInfo.customerId,  // customerId
-            req.user.idPeople, // employeeId
-            function (e, dataResult) {
-
-                if (e) return cb(e, null);
-
-                if (dataResult.isValid === true) {
-                    self._fakeDataGridTalkGetByIdForEdit(
-                        req,
-                        dataResult.data.idTalk,
-                        function (e, dataResultGetById) {
-
-                            if (e) return cb(e, null);
-
-                            if (dataResultGetById.isValid) {
-                                // ponemos en el mensaje de salida
-                                // el mensaje resultado de guardar
-                                dataResultGetById.messages[0] = dataResult.messages[0];
-                            }
-
-                            cb(null, dataResultGetById);
-                        });
-                }
-                else {
-                    cb(null, dataResult);
-                }
-            });
-    };
     HelpdeskAPIController.prototype.customerSearch = function (req, params, cb) {
 
         var dbFilter = { isEmployee: false };
@@ -1433,14 +1340,18 @@
 
 
         var fakeUser = {
-            idPersonBackOffice: req.params.apiEndpointType == helpdeskUserType.customer ? 0 : _testEmployeeDefaultIdBackOffice,
-            isEmployee: req.params.apiEndpointType == helpdeskUserType.customer ? false : true,
+            idPersonBackOffice: req.params.apiEndpointType == HelpdeskUserType.customer ? 0 : _testEmployeeDefaultIdBackOffice,
+            isEmployee: req.params.apiEndpointType == HelpdeskUserType.customer ? false : true,
         };
+
+        console.log(fakeUser);
 
         HelpdeskPeopleModel.findOne(fakeUser,
             function (err, peopleInfo) {
 
                 if (err) return cb(err, null);
+
+                console.log(peopleInfo);
 
                 if (peopleInfo === null) {
                     // Employee not found. Just go next... 401 Not Authorized will be fired
@@ -1459,17 +1370,6 @@
                         });
                 }
             });
-    };
-
-    function HelpdeskViewUnAuthController() {
-        GenericViewController.apply(this, arguments);
-    }
-    HelpdeskViewUnAuthController.prototype = new GenericViewController();
-    HelpdeskViewUnAuthController.prototype.viewIndexModel = function (req, res, cb) {
-
-        this.deleteCookie(res, "oAuthTicket");
-
-        cb(null, {});
     };
 
     function HelpdeskViewBaseController() {

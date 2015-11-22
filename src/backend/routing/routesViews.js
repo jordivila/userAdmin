@@ -11,11 +11,22 @@
     var BaseController = require('../controllers/classes/base');
     var GenericViewController = require('../controllers/classes/genericView');
 
+    //var HelpdeskViewBaseController = require('../controllers/helpdeskBase').HelpdeskViewBaseController;
     var HelpdeskViewBaseController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewBaseController;
+
+    //var HelpdeskViewHomeController = require('../controllers/helpdeskBase').HelpdeskViewHomeController;
     var HelpdeskViewHomeController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewHomeController;
-    var HelpdeskViewAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewAuthController;
-    var HelpdeskViewUnAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewUnAuthController;
+    
+    //var HelpdeskViewMessageController = require('../controllers/helpdeskBase').HelpdeskViewMessageController;
     var HelpdeskViewMessageController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewMessageController;
+
+    //var HelpdeskViewAuthController = require('../controllers/helpdeskBase').HelpdeskViewAuthController;
+    var HelpdeskViewAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewAuthController;
+
+    var HelpdeskViewUnAuthController = require('../controllers/helpdeskBase').HelpdeskViewUnAuthController;
+    //var HelpdeskViewUnAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewUnAuthController;
+
+
 
     var languagesController = new LanguagesController();
     var currenciesController = new CurrenciesController();
@@ -29,7 +40,6 @@
     var helpdeskViewHomeController = new HelpdeskViewHomeController();
     var helpdeskViewAuthController = new HelpdeskViewAuthController();
     var helpdeskViewUnAuthController = new HelpdeskViewUnAuthController();
-
     var helpdeskViewMessageController = new HelpdeskViewMessageController();
 
     function registerCommonVerbs(app, route, controller, passportIsAuthFunc) {

@@ -8,10 +8,8 @@
     module.exports.HelpdeskViewAuthController = HelpdeskViewAuthController;
     module.exports.HelpdeskViewHomeController = HelpdeskViewHomeController;
     module.exports.HelpdeskViewMessageController = HelpdeskViewMessageController;
-    module.exports.HelpdeskViewUnAuthController = HelpdeskViewUnAuthController;
 
     var passport = require('passport');
-    //var BasicStrategy = require('passport-http').BasicStrategy;
     var LocalStretegy = require('passport-local').Strategy;
 
     var myUtils = require('../libs/commonFunctions');
@@ -28,6 +26,8 @@
     var ErrorHandledModel = require('../../crossLayer/models/errorHandled');
     var normalizeForSearch = require('normalize-for-search');
     var GenericViewController = require('./classes/genericView');
+    var HelpdeskBaseController = require('./HelpdeskBase').HelpdeskBaseController;
+    var HelpdeskUserType = require('./HelpdeskBase').HelpdeskUserType;
 
 
 
@@ -183,7 +183,7 @@
                     callback(null, authTicket);
                 };
 
-                if (req.params.apiEndpointType === helpdeskUserType.customer) {
+                if (req.params.apiEndpointType === HelpdeskUserType.customer) {
 
                     if (authTicket.isEmployee === true) {
                         // Un usuario empleado esta intentando entrar en la seccion de customers
@@ -259,25 +259,23 @@
         passwordField: 'fakePwdLocalStrategy',
     }, reqCredentialsCheckViews));
 
-    var helpdeskUserType = {
-        customer: 'customer',
-        employee: 'employee'
-    };
-
-
     function HelpdeskAPIController() {
-
+        HelpdeskBaseController.apply(this, arguments);
     }
+    HelpdeskAPIController.prototype = new HelpdeskBaseController();
     HelpdeskAPIController.prototype._employeeDefaultGet = function (i18n, customerIdPeople, cb) {
 
         var self = this;
 
+
+
         apiRequest(i18n, "employeeGetDefaultByIdPeople/" + customerIdPeople,
-            function (e, employeeDefaultId) {
+            function (e, employeeDefault) {
 
                 if (e) return cb(e, null);
 
-                cb(null, employeeDefaultId);
+
+                cb(null, employeeDefault);
 
             });
 
@@ -382,52 +380,6 @@
             cb(e, data);
         });
     };
-    HelpdeskAPIController.prototype.talkSearch = function (req, params, cb) {
-
-        var self = this;
-
-        if (!req.user.isEmployee) {
-            self._talkSearchByCustomer(req, params, cb);
-        }
-        else {
-            self._talkSearchByEmployee(req, params, cb);
-        }
-
-    };
-    HelpdeskAPIController.prototype.talkAdd = function (req, dataItem, cb) {
-
-        var self = this;
-
-        this._employeeDefaultGet(req.i18n, req.user.idPeople, function (e, employeeDefault) {
-
-            if (e) return cb(e, null);
-
-            self._talkSave(
-                req.i18n,
-                null,
-                dataItem.subject,
-                req.user.idPeople, // customerId
-                employeeDefault.idPeople, //employeeId
-                function (e, dataResult) {
-
-                    if (e) return cb(e, null);
-
-                    if (dataResult.isValid === true) {
-
-                        var talkDetail = dataResult.data.talkObject;
-                        dataItem.editData = talkDetail;
-                        dataItem.formData = undefined;
-                        dataResult.data = dataItem;
-
-                        cb(null, dataResult);
-                    }
-                    else {
-                        cb(null, dataResult);
-                    }
-
-                });
-        });
-    };
     HelpdeskAPIController.prototype.messageAdd = function (req, dataItem, cb) {
 
         apiRequestPost(req.i18n, "messageAdd/",
@@ -469,58 +421,6 @@
     /************************************************************
                         Methods for employee
     *************************************************************/
-    HelpdeskAPIController.prototype.talkGetById = function (req, dataItem, cb) {
-
-        var dataResult = null;
-
-
-        this._fakeDataGridTalkGetByIdForEdit(req, dataItem.idTalk,
-            function (e, dataResult) {
-                if (e) return cb(e, null);
-
-                cb(null, dataResult);
-
-            });
-    };
-    HelpdeskAPIController.prototype.talkSavedByEmployee = function (req, dataItem, cb) {
-
-        var self = this;
-
-        self._talkSave(
-            req.i18n,
-            dataItem.isNew === true ? null : dataItem.formData.idTalk,
-            dataItem.formData.subject,
-            dataItem.formData.customerInfo.customerId, // customerId
-            req.user.idPeople, //employeeId
-            function (e, dataResult) {
-
-                if (e) return cb(e, null);
-
-                if (dataResult.isValid === true) {
-                    self._fakeDataGridTalkGetByIdForEdit(
-                        req,
-                        dataResult.data.idTalk,
-                        function (e, dataResultGetById) {
-
-                            if (e) return cb(e, null);
-
-                            if (dataResultGetById.isValid) {
-                                // ponemos en el mensaje de salida
-                                // el mensaje resultado de guardar
-                                dataResultGetById.messages[0] = dataResult.messages[0];
-                            }
-
-                            cb(null, dataResultGetById);
-                        });
-                }
-                else {
-                    cb(null, dataResult);
-                }
-
-
-            });
-
-    };
     HelpdeskAPIController.prototype.customerSearch = function (req, params, cb) {
 
         var path = "customerSearch/" +
@@ -583,25 +483,8 @@
 
     };
 
-    function HelpdeskViewUnAuthController() {
-        GenericViewController.apply(this, arguments);
-    }
-    HelpdeskViewUnAuthController.prototype = new GenericViewController();
-    HelpdeskViewUnAuthController.prototype.viewIndexModel = function (req, res, cb) {
-
-        this.deleteCookie(res, "oAuthTicket");
-
-        cb(null, {});
-    };
-
-
     function HelpdeskViewBaseController() {
-
-        //passport.use('helpdeskStrategyView', new BasicStrategy({ passReqToCallback: true }, this.reqCredentialsCheck));
-
         this.helpdeskApiController = new HelpdeskAPIController();
-
-
         GenericViewController.apply(this, arguments);
     }
     HelpdeskViewBaseController.prototype = new GenericViewController();
