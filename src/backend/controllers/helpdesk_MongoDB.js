@@ -984,9 +984,10 @@
         var req = myUtils.extendDeep({ user: existingData.customerCurrent }, global);
 
 
-        var rescursive = function (i) { };
+        var rescursiveTalkAdd = function (i) { };
+        var recursiveMsgAdd = function (addResult, i, j) { };
 
-        rescursive = function (i) {
+        rescursiveTalkAdd = function (i) {
 
             var d = new Date();
 
@@ -999,31 +1000,49 @@
 
                     if (err) return cb(err, null);
 
-                    self.messageAdd
-                        (req,
-                        {
-                            idTalk: addResult.data.editData.idTalk,
-                            message: 'hola esto es un mensaje de prueba'
-                        },
-                        function (err, messageAddResult) {
+                    i = i + 1;
 
-                            if (err) return cb(err, null);
+                    recursiveMsgAdd(addResult, i, 0, (i + 1));
 
-                            if (i < 200) {
-                                i = i + 1;
-                                rescursive(i);
-                            }
-                            else {
-                                cb(null, {
-
-                                });
-                            }
-                        });
                 });
         };
 
+        recursiveMsgAdd = function (addResult, i, j, jMax) {
 
-        rescursive(0);
+            var d = new Date();
+
+            if (j < jMax) {
+
+                self.messageAdd
+                    (req,
+                    {
+                        idTalk: addResult.data.editData.idTalk,
+                        message: 'hola esto es un mensaje de prueba' + d.getSeconds().toString() + d.getMilliseconds().toString()
+                    },
+                    function (err, messageAddResult) {
+
+                        if (err) return cb(err, null);
+
+                        j = j + 1;
+
+                        recursiveMsgAdd(addResult, i, j, jMax);
+                    });
+            }
+            else {
+
+                if (i < 60) {
+                    i = i + 1;
+                    rescursiveTalkAdd(i);
+                }
+                else {
+                    cb(null, {
+
+                    });
+                }
+            }
+        };
+
+        rescursiveTalkAdd(0);
 
     };
     HelpdeskAPIController.prototype.messageAdd = function (req, dataItem, cb) {
