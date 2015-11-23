@@ -10,6 +10,7 @@
     var config = require('../libs/config');
     var virtualDirectory = config.get('domainInfo:virtualDirectory');
     var HelpdeskController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskAPIController;
+    var helpdeskIsAuthenticated = require('../controllers/' + config.get('helpdesk:controllerType')).isAuthenticated;
     var helpdeskController = new HelpdeskController();
 
 
@@ -253,7 +254,7 @@
 
 
         app.post('/api/helpdesk/:apiEndpointType(customer|employee)/talk/search', [
-            helpdeskController.isAuthenticated,
+            helpdeskIsAuthenticated,
             function (req, res, next) {
                 helpdeskController.talkSearch(req, req.body, function (err, dateResult) {
                     if (err) return next(err);
@@ -262,7 +263,7 @@
                 });
             }]);
         app.post('/api/helpdesk/:apiEndpointType(customer|employee)/talk/add', [
-            helpdeskController.isAuthenticated,
+            helpdeskIsAuthenticated,
             function (req, res, next) {
                 helpdeskController.talkAdd(req, req.body, function (err, dateResult) {
                     if (err) return next(err);
@@ -272,7 +273,7 @@
             }]
         );
         app.post('/api/helpdesk/:apiEndpointType(customer|employee)/message/add', [
-            helpdeskController.isAuthenticated,
+            helpdeskIsAuthenticated,
             function (req, res, next) {
                 helpdeskController.messageAdd(req, req.body, function (err, dateResult) {
                     if (err) return next(err);
@@ -282,7 +283,7 @@
             }]
         );
         app.post('/api/helpdesk/:apiEndpointType(customer|employee)/message/getAll', [
-            helpdeskController.isAuthenticated,
+            helpdeskIsAuthenticated,
             function (req, res, next) {
                 helpdeskController.messageGetAll(req, req.body, function (err, dateResult) {
                     if (err) return next(err);
@@ -292,7 +293,7 @@
             }]
         );
         app.post('/api/helpdesk/:apiEndpointType(customer|employee)/message/getUnread', [
-            helpdeskController.isAuthenticated,
+            helpdeskIsAuthenticated,
             function (req, res, next) {
                 helpdeskController.messageGetUnread(req, req.body, function (err, dateResult) {
                     if (err) return next(err);
@@ -303,7 +304,7 @@
         );
         // api routes just for employees
         app.post('/api/helpdesk/:apiEndpointType(employee)/talk/getById', [
-            helpdeskController.isAuthenticated,
+            helpdeskIsAuthenticated,
             function (req, res, next) {
                 helpdeskController.talkGetById(req, req.body, function (err, dateResult) {
                     if (err) return next(err);
@@ -313,7 +314,7 @@
             }]
         );
         app.post('/api/helpdesk/:apiEndpointType(employee)/talk/savedByEmployee', [
-            helpdeskController.isAuthenticated,
+            helpdeskIsAuthenticated,
             function (req, res, next) {
                 helpdeskController.talkSavedByEmployee(req, req.body, function (err, dateResult) {
                     if (err) return next(err);
@@ -323,7 +324,7 @@
             }]
         );
         app.post('/api/helpdesk/:apiEndpointType(employee)/customer/search', [
-            helpdeskController.isAuthenticated,
+            helpdeskIsAuthenticated,
             function (req, res, next) {
                 helpdeskController.customerSearch(req, req.body, function (err, dateResult) {
                     if (err) return next(err);
@@ -333,7 +334,7 @@
             }]
         );
         app.post('/api/helpdesk/:apiEndpointType(employee)/employee/search', [
-            helpdeskController.isAuthenticated,
+            helpdeskIsAuthenticated,
             function (req, res, next) {
                 helpdeskController.employeeSearch(req, req.body, function (err, dateResult) {
                     if (err) return next(err);

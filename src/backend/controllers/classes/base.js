@@ -29,6 +29,7 @@
 
     Base.prototype.setViewModelBase = function (req) {
 
+
         var m = {
             title: '',
             domainName: config.get('domainInfo:domainName'),
@@ -49,7 +50,9 @@
             // Indica si la pagina viene de una peticion del menu o viene de una peticion para SEO
             //isSEORequest: (req.query[crossLayer.queryParams.seoRequest] === undefined),
             isSEORequest: (!req.xhr),
-
+            clientApp: {
+                layoutBodyCssClass: config.get('clientApp:layoutBodyCssClass'),
+            },
             //breadcrumb: [
             //{ title: i18n.__("GeneralTexts.BreadcrumbNavigation") },
             //{ title: i18n.__("GeneralTexts.Home"), url: "/" }

@@ -11,6 +11,8 @@
     module.exports.HelpdeskBaseController = HelpdeskBaseController;
     module.exports.HelpdeskUserType = HelpdeskUserType;
     module.exports.HelpdeskViewUnAuthController = HelpdeskViewUnAuthController;
+    module.exports.HelpdeskViewHomeController = HelpdeskViewHomeController;
+
 
     var passport = require('passport');
     var LocalStretegy = require('passport-local').Strategy;
@@ -34,30 +36,6 @@
     function HelpdeskBaseController() {
 
     }
-    HelpdeskBaseController.prototype._employeeDefaultGet = function (i18n, customerIdPeople, cb) {
-        cb(new Error("Not implemented exception"), null);
-    };
-    HelpdeskBaseController.prototype._talkSave = function (i18n, idTalk, subject, customerId, employeeId, cb) {
-        cb(new Error("Not implemented exception"), null);
-    };
-    HelpdeskBaseController.prototype._talkSearchByCustomer = function (req, params, cb) {
-        cb(new Error("Not implemented exception"), null);
-    };
-    HelpdeskBaseController.prototype._talkSearchByEmployee = function (req, params, cb) {
-        cb(new Error("Not implemented exception"), null);
-    };
-    HelpdeskBaseController.prototype._fakeDataGridTalkGetByIdForEdit = function (req, idTalk, cb) {
-        cb(new Error("Not implemented exception"), null);
-    };
-    HelpdeskBaseController.prototype.reqCredentialsCheck = function (req, username, password, cb) {
-        cb(new Error("Not implemented exception"), null);
-    };
-    HelpdeskBaseController.prototype.isAuthenticated = function (req, res, next) {
-        cb(new Error("Not implemented exception"), null);
-    };
-    HelpdeskBaseController.prototype.testMethodInitDb = function (i18n, cb) {
-        cb(new Error("Not implemented exception"), null);
-    };
     HelpdeskBaseController.prototype.talkSearch = function (req, params, cb) {
 
         var self = this;
@@ -168,12 +146,6 @@
             });
 
     };
-    HelpdeskBaseController.prototype.customerSearch = function (req, params, cb) {
-        cb(new Error("Not implemented exception"), null);
-    };
-    HelpdeskBaseController.prototype.employeeSearch = function (req, params, cb) {
-        cb(new Error("Not implemented exception"), null);
-    };
 
 
 
@@ -188,6 +160,38 @@
         cb(null, {});
     };
 
+    function HelpdeskViewHomeController() {
+        GenericViewController.apply(this, arguments);
+    }
+    HelpdeskViewHomeController.prototype = new GenericViewController();
+    HelpdeskViewHomeController.prototype.viewIndexModel = function (req, res, cb) {
+
+
+        if (req.user !== null) {
+
+            if (req.user === false) {
+
+                cb(null, {
+                    WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.PersonNotFound')
+                });
+
+            }
+            else {
+
+                cb(null, {
+                    Customers: req.user.isEmployee === false ? [req.user] : undefined,
+                    Employees: req.user.isEmployee === true ? [req.user] : undefined,
+                    WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.WhoYouAreMessage')
+                });
+            }
+        }
+        else {
+            cb(null, {
+                WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull')
+            });
+        }
+
+    };
 
 
 })(module);

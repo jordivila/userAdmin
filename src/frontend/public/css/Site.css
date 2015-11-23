@@ -1,4 +1,11 @@
-﻿.ui-text-circle{width:1.5em;height:1.5em;border-radius:50%;line-height:1.5em;text-align:center;float:right;}
+﻿.ui-noMenuSite .ui-mainMenuToggle,
+.ui-noMenuSite #panelMenu {display:none !important;}
+.ui-noMenuSite .ui-site-nameBox a { visibility:hidden; }
+.ui-noMenuSite .ui-pageHolder .ui-sitePage { width: 100%; margin:0 0 0 0;}
+.ui-noMenuSite .ui-widgetModelItem-employeeInfo {display:none;}
+
+
+.ui-text-circle{width:1.5em;height:1.5em;border-radius:50%;line-height:1.5em;text-align:center;float:right;}
 .ui-helper-invisible {visibility:hidden;}
 .ui-display-table {display:table;}
 .ui-wordWrap {word-wrap: break-word;word-break: break-word;}

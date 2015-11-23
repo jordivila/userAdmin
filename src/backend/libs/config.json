@@ -37,6 +37,7 @@
         }
     },
     "clientApp": {
+        "layoutBodyCssClass": "",
         "usePreCompiled": false,
         "cache": {
             "maxAgeDefault": 86400000

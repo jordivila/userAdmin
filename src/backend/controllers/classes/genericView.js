@@ -72,8 +72,6 @@
 
                 req.viewModel.viewModel = result;
 
-                console.log(req.viewModel);
-
                 res.render(req.viewInfo.viewPath, req.viewModel);
             });
 

@@ -11,20 +11,12 @@
     var BaseController = require('../controllers/classes/base');
     var GenericViewController = require('../controllers/classes/genericView');
 
-    //var HelpdeskViewBaseController = require('../controllers/helpdeskBase').HelpdeskViewBaseController;
-    var HelpdeskViewBaseController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewBaseController;
 
-    //var HelpdeskViewHomeController = require('../controllers/helpdeskBase').HelpdeskViewHomeController;
-    var HelpdeskViewHomeController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewHomeController;
-    
-    //var HelpdeskViewMessageController = require('../controllers/helpdeskBase').HelpdeskViewMessageController;
+    var helpdeskIsAuthenticated = require('../controllers/' + config.get('helpdesk:controllerType')).isAuthenticated;
+    var HelpdeskViewHomeController = require('../controllers/helpdeskBase').HelpdeskViewHomeController;
     var HelpdeskViewMessageController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewMessageController;
-
-    //var HelpdeskViewAuthController = require('../controllers/helpdeskBase').HelpdeskViewAuthController;
     var HelpdeskViewAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewAuthController;
-
     var HelpdeskViewUnAuthController = require('../controllers/helpdeskBase').HelpdeskViewUnAuthController;
-    //var HelpdeskViewUnAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewUnAuthController;
 
 
 
@@ -36,13 +28,12 @@
     var baseController = new BaseController();
     var genericViewController = new GenericViewController();
 
-    var helpdeskViewBaseController = new HelpdeskViewBaseController();
     var helpdeskViewHomeController = new HelpdeskViewHomeController();
     var helpdeskViewAuthController = new HelpdeskViewAuthController();
     var helpdeskViewUnAuthController = new HelpdeskViewUnAuthController();
     var helpdeskViewMessageController = new HelpdeskViewMessageController();
 
-    function registerCommonVerbs(app, route, controller, passportIsAuthFunc) {
+    function registerCommonVerbs(app, route, controller, passportIsAuthFunc, cacheOn) {
 
         // set up the middleware
         app.use('/' + route + '/*', function (req, res, next) {
@@ -55,7 +46,9 @@
 
         var getViewContentActions = [];
 
-        if (passportIsAuthFunc) { getViewContentActions.push(passportIsAuthFunc); }
+        if (typeof (passportIsAuthFunc) == 'function') {
+            getViewContentActions.push(passportIsAuthFunc);
+        }
 
         getViewContentActions.push(function (req, res, next) {
 
@@ -64,6 +57,13 @@
             if (reqType.isView || reqType.isViewModel) {
 
                 controller.setViewInfo(app, req, route);
+
+                if (cacheOn === false)
+                {
+                    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+                    res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+                    res.setHeader("Expires", "0"); // Proxies.
+                }
 
                 if (reqType.isView) {
                     controller.viewIndex(app, req, res, next);
@@ -152,13 +152,13 @@
 
         registerCommonVerbs(app, "helpdesk/talks/common/fakes", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/common", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/home", helpdeskViewHomeController, helpdeskViewBaseController.isAuthenticated);
-        registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/auth", helpdeskViewAuthController);
+        registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/home", helpdeskViewHomeController, helpdeskIsAuthenticated, false);
+        registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/auth", helpdeskViewAuthController, undefined, false);
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/unauthorize", helpdeskViewUnAuthController);
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/wiki", genericViewController);
-        registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/history", genericViewController, helpdeskViewBaseController.isAuthenticated);
-        registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/message", helpdeskViewMessageController, helpdeskViewBaseController.isAuthenticated);
-        registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/subject", genericViewController, helpdeskViewBaseController.isAuthenticated);
+        registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/history", genericViewController, helpdeskIsAuthenticated);
+        registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/message", helpdeskViewMessageController, helpdeskIsAuthenticated);
+        registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/subject", genericViewController, helpdeskIsAuthenticated);
 
     };
 

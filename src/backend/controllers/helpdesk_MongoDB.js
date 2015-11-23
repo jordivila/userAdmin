@@ -3,17 +3,15 @@
     "use strict";
 
 
+    module.exports.isAuthenticated = reqIsAuthenticated;
     module.exports.HelpdeskAPIController = HelpdeskAPIController;
-    module.exports.HelpdeskViewBaseController = HelpdeskViewBaseController;
     module.exports.HelpdeskViewAuthController = HelpdeskViewAuthController;
-    module.exports.HelpdeskViewHomeController = HelpdeskViewHomeController;
     module.exports.HelpdeskViewMessageController = HelpdeskViewMessageController;
-    //module.exports.HelpdeskViewUnAuthController = HelpdeskViewUnAuthController;
 
 
     var passport = require('passport');
-    var BasicStrategy = require('passport-http').BasicStrategy;
     var LocalStretegy = require('passport-local').Strategy;
+
     var myUtils = require('../libs/commonFunctions');
     var Encoder = require('node-html-encoder').Encoder;
     var DataResult = require('../../crossLayer/models/dataResult');
@@ -27,6 +25,7 @@
     var tokenTempController = require('./tokenTemp');
     var HelpdeskBaseController = require('./HelpdeskBase').HelpdeskBaseController;
     var HelpdeskUserType = require('./HelpdeskBase').HelpdeskUserType;
+    var passportStrategyName = "helpdeskStrategyViews";
 
 
     var HelpdeskTalkModel = require('../models/helpdesk').HelpdeskTalk;
@@ -43,9 +42,6 @@
 
         var i18n = req.i18n;
         var invalidCredentials = function () {
-
-            var eeee = new Error("sadsd");
-
             callback(null, false, {
                 message: i18n.__("AccountResources.InvalidCredentials")
             });
@@ -65,27 +61,17 @@
 
 
         if (!authTicketGuid) {
-
-            console.log("11111");
-
             return invalidCredentials();
         }
 
 
         tokenTempController.getByGuid(authTicketGuid, function (err, token) {
 
-
-
             if (err) return cb(err);
-
-            console.log("2222");
-            console.log(token);
 
             if (!token) return invalidCredentials();
 
-
             var authTicketInfo = JSON.parse(token.jsonObject);
-
 
             HelpdeskPeopleModel.findOne({
                 idPersonBackOffice: authTicketInfo.idPersonBackOffice,
@@ -140,7 +126,7 @@
 
 
     }
-    function reqIsAuthenticated(strategyName, req, res, next) {
+    function reqIsAuthenticated(req, res, next) {
 
         if (req.method == "GET") {
             req.query.fakeEmailLocalStrategy = 'fakeEmail@kk.com';
@@ -152,7 +138,7 @@
         }
 
         return passport.authenticate(
-            strategyName,
+            passportStrategyName,
             function (err, user, info) {
 
                 if (err) {
@@ -184,7 +170,7 @@
     // these strategies should be of type custom strategy. 
     // to make it faster I used LocalStregy simulating fake user/pwd credentials
     // as far as credentials are set by thirdparty application by using an OAuth token
-    passport.use('helpdeskStrategyViews', new LocalStretegy({
+    passport.use(passportStrategyName, new LocalStretegy({
         passReqToCallback: true,
         session: false,
         usernameField: 'fakeEmailLocalStrategy',
@@ -210,7 +196,7 @@
         }, function (e, employeeDefault) {
             if (e) return cb(e, null);
 
-            
+
             cb(null, employeeDefault);
         });
 
@@ -895,10 +881,6 @@
                     });
             });
     };
-    HelpdeskAPIController.prototype.reqCredentialsCheck = reqCredentialsCheckViews;
-    HelpdeskAPIController.prototype.isAuthenticated = function (req, res, next) {
-        return reqIsAuthenticated('helpdeskStrategyViews', req, res, next);
-    };
     HelpdeskAPIController.prototype.testMethodInitDb = function (i18n, cb) {
 
         var self = this;
@@ -944,7 +926,6 @@
             if (existingData.length === 0) {
                 var pMax = 10; // pMax -> number of employees & number of customers created
                 var initPeople = function () {
-
 
                     var peopleSaved = [];
 
@@ -1344,14 +1325,10 @@
             isEmployee: req.params.apiEndpointType == HelpdeskUserType.customer ? false : true,
         };
 
-        console.log(fakeUser);
-
         HelpdeskPeopleModel.findOne(fakeUser,
             function (err, peopleInfo) {
 
                 if (err) return cb(err, null);
-
-                console.log(peopleInfo);
 
                 if (peopleInfo === null) {
                     // Employee not found. Just go next... 401 Not Authorized will be fired
@@ -1372,94 +1349,45 @@
             });
     };
 
-    function HelpdeskViewBaseController() {
+
+    function HelpdeskViewMessageController() {
         this.helpdeskApiController = new HelpdeskAPIController();
         GenericViewController.apply(this, arguments);
     }
-    HelpdeskViewBaseController.prototype = new GenericViewController();
-    HelpdeskViewBaseController.prototype.isAuthenticated = function (req, res, next) {
-        return reqIsAuthenticated('helpdeskStrategyViews', req, res, next);
-    };
-
-    function HelpdeskViewHomeController() {
-        HelpdeskViewBaseController.apply(this, arguments);
-    }
-    HelpdeskViewHomeController.prototype = new HelpdeskViewBaseController();
-    HelpdeskViewHomeController.prototype.viewIndexModel = function (req, res, cb) {
-
-        this.helpdeskApiController.reqCredentialsCheck(req, '', '',
-            function (e, dataAuth) {
-
-                if (e) return cb(e, null);
-
-                if (dataAuth !== null) {
-
-                    if (dataAuth === false) {
-
-                        cb(null, {
-                            WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.PersonNotFound')
-                        });
-
-                    }
-                    else {
-
-                        cb(null, {
-                            Customers: dataAuth.isEmployee === false ? [dataAuth] : undefined,
-                            Employees: dataAuth.isEmployee === true ? [dataAuth] : undefined,
-                            WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.WhoYouAreMessage')
-                        });
-                    }
-                }
-                else {
-                    cb(null, {
-                        WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull')
-                    });
-                }
-            });
-    };
-
-    function HelpdeskViewMessageController() {
-        HelpdeskViewBaseController.apply(this, arguments);
-    }
-    HelpdeskViewMessageController.prototype = new HelpdeskViewBaseController();
+    HelpdeskViewMessageController.prototype = new GenericViewController();
     HelpdeskViewMessageController.prototype.viewIndexModel = function (req, res, cb) {
 
         var self = this;
 
-        self.helpdeskApiController.reqCredentialsCheck(req, '', '',
-            function (e, dataAuth) {
+        var sendInvalidaCredentials = function () {
+            cb(null, {
+                talkTitle: req.i18n.__("Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull")
+            });
+        };
+
+        if (req.user === null) return sendInvalidaCredentials();
+
+        if (req.user === false) return sendInvalidaCredentials();
+
+        req.user = req.user;
+
+        self.helpdeskApiController.talkGetById(req, { idTalk: req.query.idTalk },
+            function (e, talkObject) {
 
                 if (e) return cb(e, null);
 
-                var sendInvalidaCredentials = function () {
+                if (talkObject.isValid) {
                     cb(null, {
-                        talkTitle: req.i18n.__("Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull")
+                        talkTitle: talkObject.data.subject
                     });
-                };
-
-                if (dataAuth === null) return sendInvalidaCredentials();
-
-                if (dataAuth === false) return sendInvalidaCredentials();
-
-                req.user = dataAuth;
-
-                self.helpdeskApiController.talkGetById(req, { idTalk: req.query.idTalk },
-                    function (e, talkObject) {
-
-                        if (e) return cb(e, null);
-
-                        if (talkObject.isValid) {
-                            cb(null, {
-                                talkTitle: talkObject.data.subject
-                            });
-                        }
-                        else {
-                            cb(null, {
-                                talkTitle: talkObject.messages.join(' ')
-                            });
-                        }
+                }
+                else {
+                    cb(null, {
+                        talkTitle: talkObject.messages.join(' ')
                     });
+                }
             });
+
     };
 
 })(module);
