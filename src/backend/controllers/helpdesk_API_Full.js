@@ -7,6 +7,7 @@
     module.exports.HelpdeskAPIController = HelpdeskAPIController;
     module.exports.HelpdeskViewAuthController = HelpdeskViewAuthController;
     module.exports.HelpdeskViewMessageController = HelpdeskViewMessageController;
+    module.exports.HelpdeskViewLoadDataController = HelpdeskViewLoadDataController;
 
 
     var passport = require('passport');
@@ -519,5 +520,22 @@
             });
 
     };
+
+    function HelpdeskViewLoadDataController() {
+        this.helpdeskApiController = new HelpdeskAPIController();
+        GenericViewController.apply(this, arguments);
+    }
+    HelpdeskViewLoadDataController.prototype = new GenericViewController();
+    HelpdeskViewLoadDataController.prototype.viewIndexModel = function (req, res, cb) {
+
+        // do nothihg here.
+        // this is just for testing purposes on MongoDB
+
+        cb(null, {
+            
+        });
+
+    };
+
 
 })(module);

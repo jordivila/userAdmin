@@ -7,6 +7,7 @@
     module.exports.HelpdeskAPIController = HelpdeskAPIController;
     module.exports.HelpdeskViewAuthController = HelpdeskViewAuthController;
     module.exports.HelpdeskViewMessageController = HelpdeskViewMessageController;
+    module.exports.HelpdeskViewLoadDataController = HelpdeskViewLoadDataController;
 
 
     var passport = require('passport');
@@ -26,6 +27,7 @@
     var HelpdeskBaseController = require('./HelpdeskBase').HelpdeskBaseController;
     var HelpdeskUserType = require('./HelpdeskBase').HelpdeskUserType;
     var passportStrategyName = "helpdeskStrategyViews";
+    var testsController = require('./tests');
 
 
     var HelpdeskTalkModel = require('../models/helpdesk').HelpdeskTalk;
@@ -974,6 +976,56 @@
         });
 
     };
+    HelpdeskAPIController.prototype.loadDataTest = function (i18n, existingData, cb) {
+
+
+        var self = this;
+        var global = { i18n: i18n };
+        var req = myUtils.extendDeep({ user: existingData.customerCurrent }, global);
+
+
+        var rescursive = function (i) { };
+
+        rescursive = function (i) {
+
+            var d = new Date();
+
+            self.talkAdd
+                (req,
+                {
+                    subject: "nueva conversacion de test " + d.getSeconds().toString() + d.getMilliseconds().toString()
+                },
+                function (err, addResult) {
+
+                    if (err) return cb(err, null);
+
+                    self.messageAdd
+                        (req,
+                        {
+                            idTalk: addResult.data.editData.idTalk,
+                            message: 'hola esto es un mensaje de prueba'
+                        },
+                        function (err, messageAddResult) {
+
+                            if (err) return cb(err, null);
+
+                            if (i < 200) {
+                                i = i + 1;
+                                rescursive(i);
+                            }
+                            else {
+                                cb(null, {
+
+                                });
+                            }
+                        });
+                });
+        };
+
+
+        rescursive(0);
+
+    };
     HelpdeskAPIController.prototype.messageAdd = function (req, dataItem, cb) {
 
 
@@ -1286,8 +1338,6 @@
             cb);
     };
 
-
-
     function HelpdeskViewAuthController() {
         GenericViewController.apply(this, arguments);
     }
@@ -1349,7 +1399,6 @@
             });
     };
 
-
     function HelpdeskViewMessageController() {
         this.helpdeskApiController = new HelpdeskAPIController();
         GenericViewController.apply(this, arguments);
@@ -1389,5 +1438,36 @@
             });
 
     };
+
+    function HelpdeskViewLoadDataController() {
+        this.helpdeskApiController = new HelpdeskAPIController();
+        GenericViewController.apply(this, arguments);
+    }
+    HelpdeskViewLoadDataController.prototype = new GenericViewController();
+    HelpdeskViewLoadDataController.prototype.viewIndexModel = function (req, res, cb) {
+
+        var self = this;
+
+        testsController.initDb(req, function (e, result) {
+
+            if (e) return cb(e, null);
+
+            self.helpdeskApiController.testMethodInitDb(req.i18n, function (e, existingData) {
+
+                if (e) return cb(e, null);
+
+                self.helpdeskApiController.loadDataTest(req.i18n, existingData, function (e, loadedData) {
+
+                    if (e) return cb(e, null);
+
+                    cb(null, {
+                        kk: 'pp'
+                    });
+                });
+            });
+
+        });
+    };
+
 
 })(module);

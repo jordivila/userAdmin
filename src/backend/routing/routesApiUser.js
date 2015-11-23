@@ -87,6 +87,10 @@
                         text: i18n.__("Helpdesk.Talks.MenuTitle"),
                         childs: [
                                 {
+                                    url: "/" + virtualDirectory + "helpdesk/talks/common/loadData/",
+                                    text: "Load data"
+                                },
+                                {
                                     url: "/" + virtualDirectory + "helpdesk/talks/customer/auth/",
                                     text: "Customer"
                                 },

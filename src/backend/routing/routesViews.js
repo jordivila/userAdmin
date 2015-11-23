@@ -17,6 +17,7 @@
     var HelpdeskViewMessageController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewMessageController;
     var HelpdeskViewAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewAuthController;
     var HelpdeskViewUnAuthController = require('../controllers/helpdeskBase').HelpdeskViewUnAuthController;
+    var HelpdeskViewLoadDataController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewLoadDataController;
 
 
 
@@ -32,6 +33,7 @@
     var helpdeskViewAuthController = new HelpdeskViewAuthController();
     var helpdeskViewUnAuthController = new HelpdeskViewUnAuthController();
     var helpdeskViewMessageController = new HelpdeskViewMessageController();
+    var helpdeskViewLoadDataController = new HelpdeskViewLoadDataController();
 
     function registerCommonVerbs(app, route, controller, passportIsAuthFunc, cacheOn) {
 
@@ -151,6 +153,7 @@
 
 
         registerCommonVerbs(app, "helpdesk/talks/common/fakes", genericViewController);
+        registerCommonVerbs(app, "helpdesk/talks/common/loadData", helpdeskViewLoadDataController);
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/common", genericViewController);
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/home", helpdeskViewHomeController, helpdeskIsAuthenticated, false);
         registerCommonVerbs(app, "helpdesk/talks/:apiEndpointType(customer|employee)/auth", helpdeskViewAuthController, undefined, false);
