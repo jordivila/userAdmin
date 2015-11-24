@@ -43,6 +43,8 @@
     "Helpdesk.Talks.Auth.PersonNotFound": "El usuario no está dado de alta en el servicio. Contacte con administración.",
     "Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull": "Credenciales no válidas. Sesión caducada.",
     "Helpdesk.Talks.Auth.Wellcome.WhoYouAreMessage": "Estás conectado como: ",
+    "Helpdesk.Talks.Chat.HelpUseTextCustomer": "Utiliza esta pantalla para comunicarte con tu gestor. Escríbele un mensaje y te contestará lo antes posible",
+    "Helpdesk.Talks.Chat.HelpUseTextEmployee": "Utiliza esta pantalla para comunicarte con el cliente. Escríbele un mensaje y te contestará lo antes posible",
     "Helpdesk.Talks.Chat.IddleClickToActivate": "Si quieres reactivar esta ventana haz click en el boton ",
     "Helpdesk.Talks.Chat.IddleTimePassed": "La ventana de chat se desactivó porque no había actividad",
     "Helpdesk.Talks.Customer.History.gridFirstTime": "Usa el botón de arriba para empezar una conversación",

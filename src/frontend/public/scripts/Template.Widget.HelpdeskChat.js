@@ -19,6 +19,7 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observable
             idTalk: null,
             talkTitle: null,
             talkDescription: null,
+            talkHelpUse: null,
 
             $header: jQuery('div.ui-site-header-box:first'),
             $mainBox: null,
@@ -83,6 +84,8 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observable
                                     '<i class="ui-helpdesk-talks-subject-userIcon fa fa-question-circle ui-state-default"></i>' +
                                     '<span></span>' +
                                 '</p>' +
+                            '</div>' +
+                            '<div class="helpUseText">' +
                             '</div>' +
                         '</div>' +
                         '<div class="ui-helpdesk-talks-add-model ui-widget-content ui-state-default"></div>' +
@@ -398,6 +401,7 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observable
             var self = this;
             var hasTitle = self.options.talkTitle === null;
             var hasDesc = self.options.talkDescription === null;
+            var hasHelpUse = self.options.talkHelpUse === null;
 
             self.options.$messageWindow
                 .find('div.subject')
@@ -412,7 +416,11 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observable
                        .addClass(hasDesc ? 'ui-helper-hidden' : '')
                    .end()
                    .addClass(((hasTitle === false) && (hasDesc === false)) ? '' : 'ui-helper-hidden')
-               .end();
+               .end()
+                .find('div.helpUseText')
+                    .html(self.options.talkHelpUse)
+                .end();
+
         },
         messageSendData: function ($parent, $input, formValue, attemptCount) {
 

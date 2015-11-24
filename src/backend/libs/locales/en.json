@@ -43,6 +43,8 @@
     "Helpdesk.Talks.Auth.PersonNotFound": "User was not found on helpdesk database. Please contact admin user",
     "Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull": "Invalid credentials or session expired",
     "Helpdesk.Talks.Auth.Wellcome.WhoYouAreMessage": "You are logged in as: ",
+    "Helpdesk.Talks.Chat.HelpUseTextCustomer": "Use this screen to communicate with your manager . Write him a message and will reply as soon as possible",
+    "Helpdesk.Talks.Chat.HelpUseTextEmployee": "Use this screen to communicate with the customer . Write him a message and will reply as soon as possible",
     "Helpdesk.Talks.Chat.IddleClickToActivate": "Click the button if you want to reactivate it",
     "Helpdesk.Talks.Chat.IddleTimePassed": "Chat window became idle since you were not writing messages for a while",
     "Helpdesk.Talks.Customer.History.gridFirstTime": "Use the above button to start a conversation",

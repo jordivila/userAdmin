@@ -35,6 +35,7 @@ function ($, jqUI, HelpdeskChatWidget, clientApp, UrlHelper, helpdeskCommon, cru
                     }(),
                     talkTitle: clientApp.i18n.texts.get("Helpdesk.Talks.Message.Title"),
                     talkDescription: context.viewModel.talkTitle,
+                    talkHelpUse: clientApp.i18n.texts.get("Helpdesk.Talks.Chat.HelpUseTextCustomer"),
                     messageAdd: crudAjaxOpts.ajax.messageAdd,
                     messageGetAll: crudAjaxOpts.ajax.messageGetAll,
                     messageGetUnread: crudAjaxOpts.ajax.messageGetUnread,
