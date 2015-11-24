@@ -174,9 +174,9 @@
             },
         },
         open: {
-            //qunit: {
-            //    path: 'http://localhost:<%= express.testLiveReload.options.port %>/tests/'
-            //},
+            qunit: {
+                path: 'http://localhost:<%= express.testLiveReload.options.port %>/tests/'
+            },
             home: {
                 path: 'http://localhost:<%= express.testLiveReload.options.port %>/'
             }
@@ -527,102 +527,35 @@
         // Force task into async mode and grab a handle to the "done" function.
         var done = this.async();
         // Run some sync stuff.
-        grunt.log.writeln('Processing helpdesk init DB data task...');
+        grunt.log.writeln('Processing helpdeskInitMongoDB data task...');
         // And some async stuff.
 
 
         var HelpdeskController = require('./src/backend/controllers/helpdesk_MongoDB').HelpdeskAPIController;
         var helpdeskController = new HelpdeskController();
         var mongoose = require('./src/backend/libs/db');
-        var commonController = require('./src/backend/controllers/tests');
+        var testController = require('./src/backend/controllers/tests');
         var config = require('./src/backend/libs/config');
         var i18n = new (require('i18n-2'))(config.get("i18n"));
 
-        //var global = {};
-        //global.i18n = i18n;
+        var global = {};
+        global.i18n = i18n;
 
-        //commonController.initDb(global, function (err, roleCreated) {
+        testController.initDb(global, function (e, roleCreated) {
 
-        //    if (err) {
-        //        console.log(err);
-        //        throw err;
-        //    }
+            if (e) throw e;
 
+            helpdeskController.testMethodInitDb(i18n, function (e, importData) {
 
-        function clearDB(cnn, cb) {
+                if (e) throw e;
 
-            // I tested few ways of doing the same thing
+                grunt.log.writeln('helpdeskInitMongoDB finished...');
 
-            // 1.- This one is the slowest one (in execution time). 
-            //     But needs no maintenance 
-
-            //mongoose.connection.db.dropDatabase(function(err, result) {
-            //    createRoleGuest();
-            //});
-
-            // 2.- This one is faster than the fiorst one (in execution time). 
-            //     Removes all documents in all collections in db 
-
-
-
-
-            var modelsInDb = cnn.modelNames();
-            var modelCounter = 0;
-            var modelRemoveTrack = null;
-            modelRemoveTrack = function (err, rowsAffected) {
-
-                if (err) {
-                    console.error(err);
-                }
-
-                modelCounter++;
-
-                if (modelCounter < modelsInDb.length) {
-                    cnn.model(modelsInDb[modelCounter]).remove(modelRemoveTrack);
-                }
-                else {
-                    cb(err, true);
-                }
-            };
-
-            cnn.model(modelsInDb[modelCounter]).remove(modelRemoveTrack);
-        }
-
-
-
-
-
-        mongoose.dbInit(function (err, cnn) {
-
-            if (err) throw err;
-
-            console.log(cnn.modelNames());
-
-            clearDB(cnn, function (err, roleCreated) {
-
-                if (err) {
-                    console.log(err);
-                    throw err;
-                }
-
-                helpdeskController.testMethodInitDb(i18n, function (e, importData) {
-
-                    if (e) throw e;
-
-                    grunt.log.writeln('Processing asklñdj askldj lñaskjdñ kasjñ dlkj asldjkdata task...');
-
-                    done();
-
-                });
+                done();
 
             });
 
         });
-
-
-
-
-
 
     });
 

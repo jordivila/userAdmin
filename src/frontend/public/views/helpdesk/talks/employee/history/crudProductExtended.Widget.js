@@ -246,11 +246,16 @@ function (require, $, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdesk
                              var dateDescr = function () {
 
                                  var diff = dateHelper.getDifferenceDays(new Date(), dataItem[columnName]);
-                                 if (diff === 0) {
+                                 var diffDay = new Date().getDay() != (dataItem[columnName]).getDay();
+
+                                 console.log(diffDay);
+                                 window.ggg = Globalize;
+
+                                 if (diffDay === false) {
                                      return Globalize.formatDate(dataItem[columnName], { time: "short" });
                                  }
                                  else {
-                                     return Globalize.formatDate(dataItem[columnName], { date: "short" });
+                                     return Globalize.formatDate(dataItem[columnName], { skeleton: "MMd" });
                                  }
                              };
 

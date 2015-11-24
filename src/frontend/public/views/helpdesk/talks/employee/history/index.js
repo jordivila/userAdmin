@@ -20,7 +20,7 @@
 
            },
 
-           main: function () {
+           main: function (context) {
 
                jQuery('div.ui-helpdesk-talks:first')
                    .find('i.ui-helpdesk-talks-summary-userIcon:first')

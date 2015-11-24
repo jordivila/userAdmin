@@ -987,6 +987,9 @@
         var rescursiveTalkAdd = function (i) { };
         var recursiveMsgAdd = function (addResult, i, j) { };
 
+        var nTalksMax = 30;
+        var nMsgPerTalkMax = 10;
+
         rescursiveTalkAdd = function (i) {
 
             var d = new Date();
@@ -994,7 +997,7 @@
             self.talkAdd
                 (req,
                 {
-                    subject: "nueva conversacion de test " + d.getSeconds().toString() + d.getMilliseconds().toString()
+                    subject: "test " + d.getSeconds().toString() + d.getMilliseconds().toString()
                 },
                 function (err, addResult) {
 
@@ -1002,7 +1005,7 @@
 
                     i = i + 1;
 
-                    recursiveMsgAdd(addResult, i, 0, (i + 1));
+                    recursiveMsgAdd(addResult, i, 0, (Math.floor(Math.random() * (nMsgPerTalkMax)) + 1));
 
                 });
         };
@@ -1017,7 +1020,7 @@
                     (req,
                     {
                         idTalk: addResult.data.editData.idTalk,
-                        message: 'hola esto es un mensaje de prueba' + d.getSeconds().toString() + d.getMilliseconds().toString()
+                        message: 'mensaje de prueba / test message -> ' + d.getSeconds().toString() + d.getMilliseconds().toString()
                     },
                     function (err, messageAddResult) {
 
@@ -1030,8 +1033,7 @@
             }
             else {
 
-                if (i < 60) {
-                    i = i + 1;
+                if (i < nTalksMax) {
                     rescursiveTalkAdd(i);
                 }
                 else {

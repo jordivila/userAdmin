@@ -10,6 +10,7 @@
 .ui-productCrud .ui-productCrud-filter .ui-productCrud-filter-removeEmployeeIcon { width: 1em; height: 1em;float:left;cursor:pointer; margin: 0 0.5em 0 0;padding:0.2em; }
 
 .ui-productCrud .ui-productCrud-gridButtons .ui-add-button {margin:0 0 0 2em;}
+.ui-productCrud .ui-crudGrid-header  {display:none;}
 .ui-productCrud .ui-crudGrid-subject {width:80%;}
 .ui-productCrud .ui-crudGrid-body .ui-crudGrid-subject {text-align:left !important;}
 .ui-productCrud .ui-crudGrid-dateLastMessage {width:20%;}

@@ -104,6 +104,7 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskCommon, dateHelp
                              gridCustomOptions: {
                                  texts: {
                                      gridFirstTime: clientApp.i18n.texts.get("Helpdesk.Talks.Customer.History.gridFirstTime"),
+                                     gridEmptyData: clientApp.i18n.texts.get("Helpdesk.Talks.History.EmptyData"),
                                  },
                              },
 
