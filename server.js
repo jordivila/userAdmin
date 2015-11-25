@@ -23,6 +23,8 @@
     var usePreCompiled = config.get('clientApp:usePreCompiled');
     var handleBarsHelpers = require('./src/crossLayer/handleBarsHelper');
 
+    app.enable('strict routing');
+
     app.set('root', usePreCompiled === true ? (__dirname + '/src/frontend/public-build/') : (__dirname + '/src/frontend/public/'));
     app.set('crossLayer', __dirname + '/src/crossLayer/');
     app.set('bower_components', __dirname + '/src/frontend/bower_components/');

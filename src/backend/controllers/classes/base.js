@@ -18,7 +18,7 @@
 
         var requestingView = (!req.params[0]);
         var requestingViewModel = (req.params[0] == 'index.handlebars.json');
-        var requestingViewContent = ((!requestingView) && (requestingViewModel));
+        var requestingViewContent = ((!requestingView) && (!requestingViewModel));
 
         return {
             isView: requestingView,

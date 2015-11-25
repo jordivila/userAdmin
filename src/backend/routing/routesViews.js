@@ -40,6 +40,7 @@
 
     function registerCommonVerbs(app, route, controller, passportIsAuthFunc, cacheOn) {
 
+
         // set up the middleware
         app.use('/' + route + '/*', function (req, res, next) {
 
@@ -63,8 +64,7 @@
 
                 controller.setViewInfo(app, req, route);
 
-                if (cacheOn === false)
-                {
+                if (cacheOn === false) {
                     res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
                     res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
                     res.setHeader("Expires", "0"); // Proxies.
@@ -93,6 +93,16 @@
             }
         });
 
+        app.get('/' + route, function (req, res, next) {
+
+            res.writeHead(301,
+              {
+                  Location: req.originalUrl + "/"
+              }
+            );
+            res.end();
+
+        });
 
         app.get('/' + route + '/*', getViewContentActions);
 
