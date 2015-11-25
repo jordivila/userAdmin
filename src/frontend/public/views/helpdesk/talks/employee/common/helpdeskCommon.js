@@ -8,7 +8,7 @@ function ($, jqUI, clientApp, HelpdeskCommon) {
 
     var helpdeskCommon = new HelpdeskCommon();
 
-    helpdeskCommon.helpdeskUrls.baseAddress = '/' + globals.domainInfo.virtualDirectory + 'helpdesk/talks/customer/';
+    helpdeskCommon.helpdeskUrls.baseAddress = '/' + globals.domainInfo.virtualDirectory + 'helpdesk/talks/employee/';
 
     return helpdeskCommon;
 

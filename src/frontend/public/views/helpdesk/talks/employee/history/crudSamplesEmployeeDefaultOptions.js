@@ -1,6 +1,6 @@
 ﻿define([
     "scripts/Template.App.ClientApp",
-    "helpdesk/employee/common/helpdeskCrudFakeDataEmployee",
+    "helpdesk/employee/common/helpdeskCrudFakeData",
 ],
     function (clientApp, employeeAjax) {
 
