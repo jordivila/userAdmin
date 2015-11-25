@@ -13,6 +13,7 @@
 
 
     var helpdeskIsAuthenticated = require('../controllers/' + config.get('helpdesk:controllerType')).isAuthenticated;
+    var HelpdeskAPIController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskAPIController;
     var HelpdeskViewHomeController = require('../controllers/helpdeskBase').HelpdeskViewHomeController;
     var HelpdeskViewMessageController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewMessageController;
     var HelpdeskViewAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewAuthController;
@@ -29,7 +30,9 @@
     var baseController = new BaseController();
     var genericViewController = new GenericViewController();
 
-    var helpdeskViewHomeController = new HelpdeskViewHomeController();
+
+    var helpdeskAPIController = new HelpdeskAPIController();
+    var helpdeskViewHomeController = new HelpdeskViewHomeController(helpdeskAPIController);
     var helpdeskViewAuthController = new HelpdeskViewAuthController();
     var helpdeskViewUnAuthController = new HelpdeskViewUnAuthController();
     var helpdeskViewMessageController = new HelpdeskViewMessageController();

@@ -4,3 +4,5 @@
 .ui-helpdesk-talks-wellcome-container .ui-helpdesk-talks-wellcome-buttonsBox {text-align:center;margin:2em;}
 .ui-helpdesk-talks-wellcome-container button {font-size:150% !important;margin:0 auto 0 auto;}
 .ui-helpdesk-talks-wellcome-container .ui-helpdesk-needHelp {text-decoration: underline;cursor:pointer;}
+
+.ui-helpdesk-talks-wellcome-container .ui-customerEmlpoyeeAssigned table td {padding:0.5em 0.5em 0.5em 0em;}

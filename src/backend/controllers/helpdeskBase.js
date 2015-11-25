@@ -160,12 +160,12 @@
         cb(null, {});
     };
 
-    function HelpdeskViewHomeController() {
+    function HelpdeskViewHomeController(apiController) {
+        this.apiController = apiController;
         GenericViewController.apply(this, arguments);
     }
     HelpdeskViewHomeController.prototype = new GenericViewController();
     HelpdeskViewHomeController.prototype.viewIndexModel = function (req, res, cb) {
-
 
         if (req.user !== null) {
 
@@ -178,11 +178,32 @@
             }
             else {
 
-                cb(null, {
-                    Customers: req.user.isEmployee === false ? [req.user] : undefined,
-                    Employees: req.user.isEmployee === true ? [req.user] : undefined,
-                    WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.WhoYouAreMessage')
-                });
+                var sendResult = function (wellcomeMsg, defaultEmployeeInfo) {
+
+                    cb(null, {
+                        Customers: req.user.isEmployee === false ? [req.user] : undefined,
+                        Employees: req.user.isEmployee === true ? [req.user] : undefined,
+                        WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.WhoYouAreMessage'),
+                        WellcomeMessage: wellcomeMsg,
+                        defaultEmployeeInfo: defaultEmployeeInfo
+                    });
+                };
+
+                if (req.params.apiEndpointType === HelpdeskUserType.customer) {
+                    this.apiController._employeeDefaultGet(
+                        req.i18n,
+                        req.user.idPeople,
+                        function (e, defaultEmployeeInfo) {
+                            sendResult(req.i18n.__('Helpdesk.Talks.Home.Wellcome.Customer.Description'), {
+                                name: defaultEmployeeInfo.name,
+                                email: defaultEmployeeInfo.email
+                            });
+                        });
+                }
+                else {
+                    sendResult(req.i18n.__('Helpdesk.Talks.Home.Wellcome.Employee.Description'), undefined);
+                }
+
             }
         }
         else {
@@ -192,6 +213,5 @@
         }
 
     };
-
 
 })(module);
