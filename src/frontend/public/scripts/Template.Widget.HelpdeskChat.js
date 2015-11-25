@@ -20,14 +20,11 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observable
             talkTitle: null,
             talkDescription: null,
             talkHelpUse: null,
-
             $header: jQuery('div.ui-site-header-box:first'),
             $mainBox: null,
             $messageWindow: null,
             $messageModelWidget: null,
-
             globalize: null,
-
             messageAdd: function () {
                 var dfd = jQuery.Deferred();
                 dfd.reject("{0}.{1}.messageAdd is an abstract option . It should be implemented and passed as a widget option".format(this.namespace, this.widgetName));
@@ -67,7 +64,6 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observable
                             '<div class="ui-helper-clearfix"></div>' +
                         '</div>';
             }(),
-
         },
         _create: function () {
 
@@ -190,8 +186,6 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observable
 
         },
         destroy: function () {
-
-            console.log("DESTROYYYYYYYYYYYYYYYYYYYYYYYYYYYY");
 
             Object.unobserve(this.options.messagesPending, this.messagesPendingChangeCallback);
 
@@ -356,10 +350,6 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observable
 
         },
         messageWindowSetIdleEvents: function (widget) {
-
-            //console.log("became idleeeeeeeeeeeeeeeeeee");
-            //console.log(widget.options.messagesUnreadCheckTimeOutId);
-
 
             clearTimeout(widget.options.messagesUnreadCheckTimeOutId);
             clearInterval(widget.options.messagePendingIdleTimeIntervalChecker);
@@ -635,9 +625,5 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observable
 
 
         }
-
-
-
     });
-
 });
