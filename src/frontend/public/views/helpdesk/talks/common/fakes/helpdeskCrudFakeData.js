@@ -30,9 +30,6 @@
                     beforeSend: function (xhr, settings) {
                         //xhr.setRequestHeader("Authorization", "Basic " + btoa(helpdesk + ":" + user.password));
                         xhr.setRequestHeader("Authorization", "Basic " + btoa("helpdeskUsernameFake:helpdeskPasswordFake"));
-
-                        console.log("argumentsargumentsargumentsargumentsarguments");
-                        console.log(settings.url);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         //clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.history()));
