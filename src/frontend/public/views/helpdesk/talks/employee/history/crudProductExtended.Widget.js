@@ -248,9 +248,6 @@ function (require, $, jqUI, clientApp, wCrud, dateHelper, crudAjaxOpts, helpdesk
                                  var diff = dateHelper.getDifferenceDays(new Date(), dataItem[columnName]);
                                  var diffDay = new Date().getDay() != (dataItem[columnName]).getDay();
 
-                                 console.log(diffDay);
-                                 window.ggg = Globalize;
-
                                  if (diffDay === false) {
                                      return Globalize.formatDate(dataItem[columnName], { time: "short" });
                                  }

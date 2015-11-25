@@ -65,11 +65,13 @@ function ($, jqUI, clientApp, crudModule, crudAjaxOpts, helpdeskCommon, dateHelp
                                          var dateDescr = function (theDate) {
 
                                              var diff = dateHelper.getDifferenceDays(new Date(), theDate);
-                                             if (diff === 0) {
+                                             var diffDay = new Date().getDay() != (theDate).getDay();
+
+                                             if (diffDay === false) {
                                                  return Globalize.formatDate(theDate, { time: "short" });
                                              }
                                              else {
-                                                 return Globalize.formatDate(theDate, { date: "short" });
+                                                 return Globalize.formatDate(theDate, { skeleton: "MMd" });
                                              }
 
                                          };
