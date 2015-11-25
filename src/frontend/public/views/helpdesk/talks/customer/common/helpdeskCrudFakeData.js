@@ -1,7 +1,9 @@
 ﻿define([
     "helpdesk/common/fakes/helpdeskCrudFakeData",
 ],
-    function (crudAjaxOpts) {
+    function (CrudAjaxOpts) {
+
+        var crudAjaxOpts = new CrudAjaxOpts();
 
         crudAjaxOpts.apiRoutes = {
             talkSearch: "/" + globals.domainInfo.virtualDirectory + "api/helpdesk/customer/talk/search",

@@ -6,8 +6,11 @@
 ],
     function (clientApp, DataResult, DataResultPaginated, P) {
 
-        var crudAjaxOpts = {
-            apiRoutes: {
+        function CrudAjaxOpts() {
+
+            var self = this;
+
+            this.apiRoutes = {
                 talkSearch: null,
                 talkAdd: null,
                 messageAdd: null,
@@ -18,14 +21,18 @@
                 talkSavedByEmployee: null,
                 customerSearch: null,
                 employeeSearch: null
-            },
-            ajax: {
+            };
+
+            this.ajax = {
 
                 helpdeskCommonOptions: {
                     cache: false,
                     beforeSend: function (xhr, settings) {
                         //xhr.setRequestHeader("Authorization", "Basic " + btoa(helpdesk + ":" + user.password));
                         xhr.setRequestHeader("Authorization", "Basic " + btoa("helpdeskUsernameFake:helpdeskPasswordFake"));
+
+                        console.log("argumentsargumentsargumentsargumentsarguments");
+                        console.log(settings.url);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         //clientApp.template.loadByUrl('{0}{1}'.format(helpdeskCommon.helpdeskUrls.baseAddress, helpdeskCommon.helpdeskUrls.history()));
@@ -36,15 +43,14 @@
                         }
                     }
                 },
-
                 talkSearch: function (filter) {
 
-                    var self = this;
+                    
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
-                            url: crudAjaxOpts.apiRoutes.talkSearch,
+                        jQuery.ajax(jQuery.extend(self.ajax.helpdeskCommonOptions, {
+                            url: self.apiRoutes.talkSearch,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
@@ -78,12 +84,12 @@
                 },
                 talkAdd: function (dataItem) {
 
-                    var self = this;
+                    
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
-                            url: crudAjaxOpts.apiRoutes.talkAdd,
+                        jQuery.ajax(jQuery.extend(self.ajax.helpdeskCommonOptions, {
+                            url: self.apiRoutes.talkAdd,
                             type: "POST",
                             data: JSON.stringify(dataItem),
                             cache: false
@@ -117,12 +123,12 @@
                     // utiliza otro tipo de indicativo a la hora de enseñar progreso
 
 
-                    var self = this;
+                    
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
-                            url: crudAjaxOpts.apiRoutes.messageAdd,
+                        jQuery.ajax(jQuery.extend(self.ajax.helpdeskCommonOptions, {
+                            url: self.apiRoutes.messageAdd,
                             type: "POST",
                             data: JSON.stringify(dataItem),
                             cache: false
@@ -169,8 +175,8 @@
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
-                            url: crudAjaxOpts.apiRoutes.messageGetAll,
+                        jQuery.ajax(jQuery.extend(self.ajax.helpdeskCommonOptions, {
+                            url: self.apiRoutes.messageGetAll,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
@@ -217,8 +223,8 @@
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
-                            url: crudAjaxOpts.apiRoutes.messageGetUnread,
+                        jQuery.ajax(jQuery.extend(self.ajax.helpdeskCommonOptions, {
+                            url: self.apiRoutes.messageGetUnread,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
@@ -245,17 +251,14 @@
 
                     return dfd.promise();
                 },
-                /*************************************************************
-                                    Methods for employee
-                *************************************************************/
+
                 talkGetById: function (dataItem) {
 
-                    var self = this;
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
-                            url: crudAjaxOpts.apiRoutes.talkGetById,
+                        jQuery.ajax(jQuery.extend(self.ajax.helpdeskCommonOptions, {
+                            url: self.apiRoutes.talkGetById,
                             type: "POST",
                             data: JSON.stringify(dataItem),
                             cache: false
@@ -290,12 +293,11 @@
                 },
                 talkSavedByEmployee: function (dataItem) {
 
-                    var self = this;
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
-                            url: crudAjaxOpts.apiRoutes.talkSavedByEmployee,
+                        jQuery.ajax(jQuery.extend(self.ajax.helpdeskCommonOptions, {
+                            url: self.apiRoutes.talkSavedByEmployee,
                             type: "POST",
                             data: JSON.stringify(dataItem),
                             cache: false
@@ -330,12 +332,12 @@
                 },
                 customerSearch: function (filter) {
 
-                    var self = this;
+                    
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
-                            url: crudAjaxOpts.apiRoutes.customerSearch,
+                        jQuery.ajax(jQuery.extend(self.ajax.helpdeskCommonOptions, {
+                            url: self.apiRoutes.customerSearch,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
@@ -370,12 +372,11 @@
                 },
                 employeeSearch: function (filter) {
 
-                    var self = this;
                     var dfd = jQuery.Deferred();
 
                     var a = [
-                        jQuery.ajax(jQuery.extend(crudAjaxOpts.ajax.helpdeskCommonOptions, {
-                            url: crudAjaxOpts.apiRoutes.employeeSearch,
+                        jQuery.ajax(jQuery.extend(self.ajax.helpdeskCommonOptions, {
+                            url: self.apiRoutes.employeeSearch,
                             type: "POST",
                             data: JSON.stringify(filter),
                             cache: false
@@ -395,13 +396,11 @@
 
                     return dfd.promise();
                 },
+            };
 
-            },
-            cache: {
+            
+        }
 
-            }
-        };
-
-        return crudAjaxOpts;
+        return CrudAjaxOpts;
 
     });
