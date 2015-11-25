@@ -357,8 +357,8 @@ function ($, jqUI, clientApp, P, crudModule, scrollUtils, dateHelper, observable
         },
         messageWindowSetIdleEvents: function (widget) {
 
-            console.log("became idleeeeeeeeeeeeeeeeeee");
-            console.log(widget.options.messagesUnreadCheckTimeOutId);
+            //console.log("became idleeeeeeeeeeeeeeeeeee");
+            //console.log(widget.options.messagesUnreadCheckTimeOutId);
 
 
             clearTimeout(widget.options.messagesUnreadCheckTimeOutId);
