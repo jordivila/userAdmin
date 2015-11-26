@@ -13,11 +13,11 @@ function getLogger(module) {
                 label: path
             })
             /*,
-                        new(winston.transports.File)({
-                            filename: 'somefile.log',
-                            level: 'debug',
-                        }) // -> this is not working in azure site
-                        */
+            new(winston.transports.File)({
+                filename: 'somefile.log',
+                level: 'debug',
+            }) // -> this is not working in azure site
+            */
         ]
     });
 }

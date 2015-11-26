@@ -4,7 +4,7 @@
 
     module.exports.addToRole = addToRole;
 
-    var log = require('../libs/log')(module);
+    
     var validator = require('validator');
     var ErrorHandledModel = require('../../crossLayer/models/errorHandled');
     var UsersInRoleModel = require('../models/usersInRoles');

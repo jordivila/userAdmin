@@ -9,7 +9,6 @@
     module.exports.resetPassword = resetPassword;
 
 
-    var log = require('../libs/log')(module);
     var config = require('../libs/config');
     var util = require('util');
     var validator = require('validator');

@@ -10,7 +10,7 @@
     var bodyParser = require('body-parser');
     var config = require('./src/backend/libs/config');
     var DbController = require('./src/backend/controllers/db');
-    var log = require('./src/backend/libs/log')(module);
+    var log = require('./src/backend/controllers/log')(module);
     var cookieParser = require('cookie-parser');
     var i18n = require('i18n-2');
     var util = require('util');
@@ -72,7 +72,8 @@
 
 
 
-    if (process.env.NODE_ENV === 'test') {
+    if (config.get('IsTestEnv')){
+        //if (process.env.NODE_ENV === 'test') {
         testsController.initTestEnvironment(app);
     }
 

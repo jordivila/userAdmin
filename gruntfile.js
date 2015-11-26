@@ -155,6 +155,9 @@
             }
         },
         watch: {
+            options: {
+                livereload: true,
+            },
             test: {
                 files: ['<%= jshint.files %>'],
                 tasks: ['env:test', 'jshint:files', 'mochaTest:test', /*'express:testQunit', 'qunit'*/]

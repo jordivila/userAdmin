@@ -7,7 +7,7 @@
 
 
 
-    var log = require('../libs/log')(module);
+    
     var validator = require('validator');
     var RoleModel = require('../models/usersRoles');
     var RoleValidator = require('../models/usersRoles.validate.client');

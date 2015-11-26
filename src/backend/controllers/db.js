@@ -5,7 +5,7 @@
     module.exports = DbController;
 
     var mongoose = require('mongoose');
-    var log = require('../libs/log')(module);
+    var log = require('../controllers/log')(module);
     var config = require('../libs/config');
 
 
