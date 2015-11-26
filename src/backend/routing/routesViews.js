@@ -50,48 +50,67 @@
 
         var getViewContentActions = [];
 
-        if (typeof (passportIsAuthFunc) == 'function') {
-            getViewContentActions.push(passportIsAuthFunc);
-        }
-
         getViewContentActions.push(function (req, res, next) {
 
             var reqType = controller.getRequestType(req);
 
-            if (reqType.isView || reqType.isViewModel) {
+            var keepOnGoing = function () {
 
-                controller.setViewInfo(app, req, route);
+                if (reqType.isView || reqType.isViewModel) {
 
-                if (cacheOn === false) {
-                    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
-                    res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
-                    res.setHeader("Expires", "0"); // Proxies.
-                }
+                    controller.setViewInfo(app, req, route);
 
-                if (reqType.isView) {
-                    controller.viewIndex(app, req, res, next);
+                    if (cacheOn === false) {
+                        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+                        res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+                        res.setHeader("Expires", "0"); // Proxies.
+                    }
+
+                    if (reqType.isView) {
+                        controller.viewIndex(app, req, res, next);
+                    }
+                    else {
+                        controller.viewIndexJson(app, req, res, next);
+                    }
+
                 }
                 else {
-                    controller.viewIndexJson(app, req, res, next);
+
+                    var pathName = req._parsedUrl.pathname.replace('', '');
+
+                    res.sendFile(pathName, {
+                        root: app.get('views')
+                    }, function (err) {
+                        if (err) {
+                            res.status(err.status);
+                            next();
+                        }
+                    });
                 }
 
-            }
-            else {
+            };
 
-                var pathName = req._parsedUrl.pathname.replace('', '');
-
-                res.sendFile(pathName, {
-                    root: app.get('views')
-                }, function (err) {
-                    if (err) {
-                        res.status(err.status);
-                        next();
-                    }
+            /*************************************
+            Authenticate is done only when requests ask for a view or a viewModel
+            No need to authenticate .css, .png, etc
+            *************************************/
+            if ((typeof (passportIsAuthFunc) == 'function') && (reqType.isViewContent === false)) {
+                passportIsAuthFunc(req, res, function () {
+                    keepOnGoing();
                 });
             }
+            else {
+                keepOnGoing();
+            }
+
+
         });
 
+
+        // Redirect trailling slahes
         app.get('/' + route, function (req, res, next) {
+
+            // Redirect trailling slahes
 
             res.writeHead(301,
               {
