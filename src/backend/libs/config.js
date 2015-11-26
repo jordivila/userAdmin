@@ -24,7 +24,7 @@ if (nconf.get('NODE_ENV') === 'test')
     // I use different connections for dev, test & production environments
     // If you do not want to use different cnn strings for dev & test simply comment the next line
     //nconf.set('mongoose:uri', 'mongodb://77.0.33.61:27017/helpdeskTest');
-    nconf.set('mongoose:uri', 'mongodb://localhost:27017/testAPI_TestEnv');
+    nconf.set('mongoose:uri', 'mongodb://localhost:27017/junceumTest');
 
     nconf.set('helpdesk:api:host', 'localhost');
     nconf.set('helpdesk:api:port', 80);

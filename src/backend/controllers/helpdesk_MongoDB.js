@@ -6,8 +6,6 @@
     module.exports.isAuthenticated = reqIsAuthenticated;
     module.exports.HelpdeskAPIController = HelpdeskAPIController;
     module.exports.HelpdeskViewAuthController = HelpdeskViewAuthController;
-    module.exports.HelpdeskViewMessageController = HelpdeskViewMessageController;
-    module.exports.HelpdeskViewLoadDataController = HelpdeskViewLoadDataController;
 
 
     var passport = require('passport');
@@ -976,75 +974,87 @@
         });
 
     };
-    HelpdeskAPIController.prototype.loadDataTest = function (i18n, existingData, cb) {
-
+    HelpdeskAPIController.prototype.loadDataTest = function (i18n, cb) {
 
         var self = this;
         var global = { i18n: i18n };
-        var req = myUtils.extendDeep({ user: existingData.customerCurrent }, global);
+
+        testsController.initDb(global, function (e, result) {
+
+            if (e) return cb(e, null);
+
+            self.testMethodInitDb(global, function (e, existingData) {
+
+                if (e) return cb(e, null);
+
+                
+                var req = myUtils.extendDeep({ user: existingData.customerCurrent }, global);
 
 
-        var rescursiveTalkAdd = function (i) { };
-        var recursiveMsgAdd = function (addResult, i, j) { };
+                var rescursiveTalkAdd = function (i) { };
+                var recursiveMsgAdd = function (addResult, i, j) { };
 
-        var nTalksMax = 30;
-        var nMsgPerTalkMax = 10;
+                var nTalksMax = 30;
+                var nMsgPerTalkMax = 10;
 
-        rescursiveTalkAdd = function (i) {
+                rescursiveTalkAdd = function (i) {
 
-            var d = new Date();
+                    var d = new Date();
 
-            self.talkAdd
-                (req,
-                {
-                    subject: "test " + d.getSeconds().toString() + d.getMilliseconds().toString()
-                },
-                function (err, addResult) {
+                    self.talkAdd
+                        (req,
+                        {
+                            subject: "test " + d.getSeconds().toString() + d.getMilliseconds().toString()
+                        },
+                        function (err, addResult) {
 
-                    if (err) return cb(err, null);
+                            if (err) return cb(err, null);
 
-                    i = i + 1;
+                            i = i + 1;
 
-                    recursiveMsgAdd(addResult, i, 0, (Math.floor(Math.random() * (nMsgPerTalkMax)) + 1));
+                            recursiveMsgAdd(addResult, i, 0, (Math.floor(Math.random() * (nMsgPerTalkMax)) + 1));
 
-                });
-        };
+                        });
+                };
 
-        recursiveMsgAdd = function (addResult, i, j, jMax) {
+                recursiveMsgAdd = function (addResult, i, j, jMax) {
 
-            var d = new Date();
+                    var d = new Date();
 
-            if (j < jMax) {
+                    if (j < jMax) {
 
-                self.messageAdd
-                    (req,
-                    {
-                        idTalk: addResult.data.editData.idTalk,
-                        message: 'mensaje de prueba / test message -> ' + d.getSeconds().toString() + d.getMilliseconds().toString()
-                    },
-                    function (err, messageAddResult) {
+                        self.messageAdd
+                            (req,
+                            {
+                                idTalk: addResult.data.editData.idTalk,
+                                message: 'mensaje de prueba / test message -> ' + d.getSeconds().toString() + d.getMilliseconds().toString()
+                            },
+                            function (err, messageAddResult) {
 
-                        if (err) return cb(err, null);
+                                if (err) return cb(err, null);
 
-                        j = j + 1;
+                                j = j + 1;
 
-                        recursiveMsgAdd(addResult, i, j, jMax);
-                    });
-            }
-            else {
+                                recursiveMsgAdd(addResult, i, j, jMax);
+                            });
+                    }
+                    else {
 
-                if (i < nTalksMax) {
-                    rescursiveTalkAdd(i);
-                }
-                else {
-                    cb(null, {
+                        if (i < nTalksMax) {
+                            rescursiveTalkAdd(i);
+                        }
+                        else {
+                            cb(null, {
 
-                    });
-                }
-            }
-        };
+                            });
+                        }
+                    }
+                };
 
-        rescursiveTalkAdd(0);
+                rescursiveTalkAdd(0);
+
+            });
+        });
 
     };
     HelpdeskAPIController.prototype.messageAdd = function (req, dataItem, cb) {
@@ -1419,76 +1429,5 @@
                 }
             });
     };
-
-    function HelpdeskViewMessageController() {
-        this.helpdeskApiController = new HelpdeskAPIController();
-        GenericViewController.apply(this, arguments);
-    }
-    HelpdeskViewMessageController.prototype = new GenericViewController();
-    HelpdeskViewMessageController.prototype.viewIndexModel = function (req, res, cb) {
-
-        var self = this;
-
-        var sendInvalidaCredentials = function () {
-            cb(null, {
-                talkTitle: req.i18n.__("Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull")
-            });
-        };
-
-        if (req.user === null) return sendInvalidaCredentials();
-
-        if (req.user === false) return sendInvalidaCredentials();
-
-        req.user = req.user;
-
-        self.helpdeskApiController.talkGetById(req, { idTalk: req.query.idTalk },
-            function (e, talkObject) {
-
-                if (e) return cb(e, null);
-
-                if (talkObject.isValid) {
-                    cb(null, {
-                        talkTitle: talkObject.data.subject
-                    });
-                }
-                else {
-                    cb(null, {
-                        talkTitle: talkObject.messages.join(' ')
-                    });
-                }
-            });
-
-    };
-
-    function HelpdeskViewLoadDataController() {
-        this.helpdeskApiController = new HelpdeskAPIController();
-        GenericViewController.apply(this, arguments);
-    }
-    HelpdeskViewLoadDataController.prototype = new GenericViewController();
-    HelpdeskViewLoadDataController.prototype.viewIndexModel = function (req, res, cb) {
-
-        var self = this;
-
-        testsController.initDb(req, function (e, result) {
-
-            if (e) return cb(e, null);
-
-            self.helpdeskApiController.testMethodInitDb(req.i18n, function (e, existingData) {
-
-                if (e) return cb(e, null);
-
-                self.helpdeskApiController.loadDataTest(req.i18n, existingData, function (e, loadedData) {
-
-                    if (e) return cb(e, null);
-
-                    cb(null, {
-                        kk: 'pp'
-                    });
-                });
-            });
-
-        });
-    };
-
 
 })(module);

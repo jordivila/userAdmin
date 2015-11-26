@@ -17,7 +17,7 @@
     module.exports.setRoutes = function (app, log, authController) {
 
 
-        app.get('/api/user', [
+        app.get('/api/user/', [
             authController.isAuthenticated,
             function (req, res, next) {
 
@@ -33,7 +33,7 @@
             }
         ]);
 
-        app.post('/api/user', function (req, res, next) {
+        app.post('/api/user/', function (req, res, next) {
             var result = usersController.create(req, req.body, function (err, user) {
                 if (err) return next(err);
 

@@ -6,8 +6,6 @@
     module.exports.isAuthenticated = reqIsAuthenticated;
     module.exports.HelpdeskAPIController = HelpdeskAPIController;
     module.exports.HelpdeskViewAuthController = HelpdeskViewAuthController;
-    module.exports.HelpdeskViewMessageController = HelpdeskViewMessageController;
-    module.exports.HelpdeskViewLoadDataController = HelpdeskViewLoadDataController;
 
 
     var passport = require('passport');
@@ -451,7 +449,6 @@
     };
 
 
-
     function HelpdeskViewAuthController() {
         GenericViewController.apply(this, arguments);
     }
@@ -480,62 +477,5 @@
         this.viewIndexModelDone(req, res, cb);
 
     };
-
-    function HelpdeskViewMessageController() {
-        this.helpdeskApiController = new HelpdeskAPIController();
-        GenericViewController.apply(this, arguments);
-    }
-    HelpdeskViewMessageController.prototype = new GenericViewController();
-    HelpdeskViewMessageController.prototype.viewIndexModel = function (req, res, cb) {
-
-        var self = this;
-
-        var sendInvalidaCredentials = function () {
-            cb(null, {
-                talkTitle: req.i18n.__("Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull")
-            });
-        };
-
-        if (req.user === null) return sendInvalidaCredentials();
-
-        if (req.user === false) return sendInvalidaCredentials();
-
-        req.user = req.user;
-
-        self.helpdeskApiController.talkGetById(req, { idTalk: req.query.idTalk },
-            function (e, talkObject) {
-
-                if (e) return cb(e, null);
-
-                if (talkObject.isValid) {
-                    cb(null, {
-                        talkTitle: talkObject.data.subject
-                    });
-                }
-                else {
-                    cb(null, {
-                        talkTitle: talkObject.messages.join(' ')
-                    });
-                }
-            });
-
-    };
-
-    function HelpdeskViewLoadDataController() {
-        this.helpdeskApiController = new HelpdeskAPIController();
-        GenericViewController.apply(this, arguments);
-    }
-    HelpdeskViewLoadDataController.prototype = new GenericViewController();
-    HelpdeskViewLoadDataController.prototype.viewIndexModel = function (req, res, cb) {
-
-        // do nothihg here.
-        // this is just for testing purposes on MongoDB
-
-        cb(null, {
-            
-        });
-
-    };
-
 
 })(module);

@@ -12,6 +12,8 @@
     module.exports.HelpdeskUserType = HelpdeskUserType;
     module.exports.HelpdeskViewUnAuthController = HelpdeskViewUnAuthController;
     module.exports.HelpdeskViewHomeController = HelpdeskViewHomeController;
+    module.exports.HelpdeskViewMessageController = HelpdeskViewMessageController;
+    module.exports.HelpdeskViewLoadDataController = HelpdeskViewLoadDataController;
 
 
     var passport = require('passport');
@@ -211,6 +213,63 @@
                 WhoYouAreMessage: req.i18n.__('Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull')
             });
         }
+
+    };
+
+    function HelpdeskViewMessageController(apiController) {
+        this.apiController = apiController;
+        GenericViewController.apply(this, arguments);
+    }
+    HelpdeskViewMessageController.prototype = new GenericViewController();
+    HelpdeskViewMessageController.prototype.viewIndexModel = function (req, res, cb) {
+
+        var self = this;
+
+        var sendInvalidaCredentials = function () {
+            cb(null, {
+                talkTitle: req.i18n.__("Helpdesk.Talks.Auth.Wellcome.AuthTicketIsNull")
+            });
+        };
+
+        if (req.user === null) return sendInvalidaCredentials();
+
+        if (req.user === false) return sendInvalidaCredentials();
+
+        req.user = req.user;
+
+        self.apiController.talkGetById(req, { idTalk: req.query.idTalk },
+            function (e, talkObject) {
+
+                if (e) return cb(e, null);
+
+                if (talkObject.isValid) {
+                    cb(null, {
+                        talkTitle: talkObject.data.subject
+                    });
+                }
+                else {
+                    cb(null, {
+                        talkTitle: talkObject.messages.join(' ')
+                    });
+                }
+            });
+
+    };
+
+    function HelpdeskViewLoadDataController(apiController) {
+        this.apiController = apiController;
+        GenericViewController.apply(this, arguments);
+    }
+    HelpdeskViewLoadDataController.prototype = new GenericViewController();
+    HelpdeskViewLoadDataController.prototype.viewIndexModel = function (req, res, cb) {
+
+        this.apiController.loadDataTest(req.i18n, function (e, result) {
+
+            if (e) return cb(e, null);
+
+            cb(null, result);
+
+        });
 
     };
 

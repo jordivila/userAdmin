@@ -9,7 +9,7 @@
     var passport = require('passport');
     var bodyParser = require('body-parser');
     var config = require('./src/backend/libs/config');
-    var mongoose = require('./src/backend/libs/db');
+    var DbController = require('./src/backend/controllers/db');
     var log = require('./src/backend/libs/log')(module);
     var cookieParser = require('cookie-parser');
     var i18n = require('i18n-2');
@@ -53,7 +53,10 @@
 
     i18n.expressBind(app, config.get("i18n"));
 
-    mongoose.dbInit(function (err, cnn) { });
+    new DbController().CnnOpen(function (err, cnn) {
+
+
+    });
 
     new GlobalizeController().initCldrData(function (err) {
 

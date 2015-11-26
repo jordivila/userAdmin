@@ -11,17 +11,6 @@
     var BaseController = require('../controllers/classes/base');
     var GenericViewController = require('../controllers/classes/genericView');
 
-
-    var helpdeskIsAuthenticated = require('../controllers/' + config.get('helpdesk:controllerType')).isAuthenticated;
-    var HelpdeskAPIController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskAPIController;
-    var HelpdeskViewHomeController = require('../controllers/helpdeskBase').HelpdeskViewHomeController;
-    var HelpdeskViewMessageController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewMessageController;
-    var HelpdeskViewAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewAuthController;
-    var HelpdeskViewUnAuthController = require('../controllers/helpdeskBase').HelpdeskViewUnAuthController;
-    var HelpdeskViewLoadDataController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewLoadDataController;
-
-
-
     var languagesController = new LanguagesController();
     var currenciesController = new CurrenciesController();
     var homeController = new HomeController();
@@ -31,12 +20,21 @@
     var genericViewController = new GenericViewController();
 
 
+
+    var helpdeskIsAuthenticated = require('../controllers/' + config.get('helpdesk:controllerType')).isAuthenticated;
+    var HelpdeskAPIController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskAPIController;
+    var HelpdeskViewHomeController = require('../controllers/helpdeskBase').HelpdeskViewHomeController;
+    var HelpdeskViewMessageController = require('../controllers/helpdeskBase').HelpdeskViewMessageController;
+    var HelpdeskViewAuthController = require('../controllers/' + config.get('helpdesk:controllerType')).HelpdeskViewAuthController;
+    var HelpdeskViewUnAuthController = require('../controllers/helpdeskBase').HelpdeskViewUnAuthController;
+    var HelpdeskViewLoadDataController = require('../controllers/helpdeskBase').HelpdeskViewLoadDataController;
+
     var helpdeskAPIController = new HelpdeskAPIController();
     var helpdeskViewHomeController = new HelpdeskViewHomeController(helpdeskAPIController);
     var helpdeskViewAuthController = new HelpdeskViewAuthController();
     var helpdeskViewUnAuthController = new HelpdeskViewUnAuthController();
-    var helpdeskViewMessageController = new HelpdeskViewMessageController();
-    var helpdeskViewLoadDataController = new HelpdeskViewLoadDataController();
+    var helpdeskViewMessageController = new HelpdeskViewMessageController(helpdeskAPIController);
+    var helpdeskViewLoadDataController = new HelpdeskViewLoadDataController(helpdeskAPIController);
 
     function registerCommonVerbs(app, route, controller, passportIsAuthFunc, cacheOn) {
 

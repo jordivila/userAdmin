@@ -4,7 +4,7 @@
         "tokenLife": 3600
     },
     "mongoose": {
-        "uri": "mongodb://77.0.33.61:27017/helpdeskProd"
+        "uri": "mongodb://localhost:27017/junceumDev"
     },
     "encryptKeyForCookieParser": "someEncriptiongKey",
     "i18n": {

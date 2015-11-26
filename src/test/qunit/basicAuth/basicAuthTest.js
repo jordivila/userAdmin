@@ -18,6 +18,11 @@
                 callback(data);
             })
             .fail(function (jqXHR, textStatus, errorThrown) {
+
+                console.log("argumentsargumentsargumentsargumentsarguments");
+                console.log(arguments);
+                console.log("argumentsargumentsargumentsargumentsarguments");
+
                 ok(false, "Unhandled error creating user. TextStatus->" + textStatus + " / errorThrown->" + errorThrown);
             });
     };
