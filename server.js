@@ -28,7 +28,8 @@
     app.set('root', usePreCompiled === true ? (__dirname + '/src/frontend/public-build/') : (__dirname + '/src/frontend/public/'));
     app.set('crossLayer', __dirname + '/src/crossLayer/');
     app.set('bower_components', __dirname + '/src/frontend/bower_components/');
-    app.set('views', __dirname + (process.env.NODE_ENV === 'production' ? '/src/frontend/public-build/views/' : '/src/frontend/public/views/'));
+    //app.set('views', __dirname + (process.env.NODE_ENV === 'production' ? '/src/frontend/public-build/views/' : '/src/frontend/public/views/'));
+    app.set('views', __dirname + '/src/frontend/public-build/views/');
     app.set('port', config.get('port'));
 
 

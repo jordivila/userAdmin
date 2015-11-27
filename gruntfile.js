@@ -23,6 +23,14 @@
                 '<%= cdnFolder %>/**/*',
             ]
         },
+        copy: {
+            views: {
+                files: [
+                  // includes files within path 
+                  { expand: true, cwd: 'src/frontend/public/', src: ['views/**/*'], dest: 'src/frontend/public-build/' },
+                ],
+            },
+        },
         concat: {
             ui_css: {
                 options: {
@@ -78,7 +86,7 @@
                     collapseWhitespace: true,
                     conservativeCollapse: true,
                     preserveLineBreaks: true,
-                    preventAttributesEscaping:true,
+                    preventAttributesEscaping: true,
                     //customAttrAssign: [],
                     //ignoreCustomFragments: []
                 },
@@ -184,6 +192,10 @@
                 files: ['<%= jshint.files %>', '<%= concat.ui_css.src %>'],
                 tasks: ['preCompile'],
 
+            },
+            htmlmin: {
+                files: ['src/frontend/public/views/**/*.handlebars'],
+                tasks: ['copy:views', 'htmlmin']
             },
             testLiveReload: {
                 files: ['<%= cdnFolder %>/**/*'],
@@ -361,7 +373,6 @@
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-open');
     grunt.loadNpmTasks('grunt-bump');
-    grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
 
 
@@ -511,7 +522,7 @@
 
             requireConfig('none', true, true);
 
-            tasks2Run.push('jshint:files', 'clean', 'sortJSON', 'i18nCheck', 'globCldrData', 'bump', 'concat' );
+            tasks2Run.push('jshint:files', 'clean', 'sortJSON', 'i18nCheck', 'globCldrData', 'bump', 'concat', 'copy:views', 'htmlmin');
 
 
 
@@ -541,6 +552,40 @@
         });
 
         grunt.task.run('env:dev', 'preCompile', 'express:testLiveReload', 'open', 'watch');
+    });
+    grunt.registerMultiTask('htmlmin', 'Minify HTML', function () {
+
+        var chalk = require('chalk');
+        var prettyBytes = require('pretty-bytes');
+        var minify = require('html-minifier').minify;
+
+        var options = this.options();
+        var count = 0;
+
+        this.files.forEach(function (file) {
+            var min;
+            var src = file.src[0];
+
+            if (!src) {
+                return;
+            }
+
+            var max = grunt.file.read(src);
+
+            try {
+                min = minify(max, options);
+            } catch (err) {
+                grunt.warn(src + '\n' + err);
+                return;
+            }
+
+            count++;
+
+            grunt.file.write(file.dest, min);
+            grunt.verbose.writeln('Minified ' + chalk.cyan(file.dest) + ' ' + prettyBytes(max.length) + ' → ' + prettyBytes(min.length));
+        });
+
+        grunt.log.writeln('Minified ' + chalk.cyan(count) + ' files' + (this.files.length !== count ? ' (' + chalk.red(this.files.length - count) + ' failed)' : ''));
     });
     grunt.registerTask('default', ['env:test', 'preCompile', 'express:testLiveReload', 'open', 'watch']);
 
