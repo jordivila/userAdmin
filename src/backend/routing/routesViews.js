@@ -135,7 +135,7 @@
 
             res.writeHead(301,
               {
-                  Location: '/home/'// + newRoom
+                  Location: '/home/'
               }
             );
             res.end();

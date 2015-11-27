@@ -169,15 +169,18 @@
                     //     and store them in an object to be return
                     var i18nTexts = {};
 
-                    var myRegexp = /{{{__\s*(("|')(.*)("|'))}}}/g;
+                    var myRegexp = /{{{__\s*(("|')([^}]+)("|'))}}}/g; //--> match {{{__ "SomeText"}}}
                     var match = myRegexp.exec(data);
+
                     while (match !== null) {
                         //regular expression groups are enclosed in"()" 
 
                         // matched text: match[0]
                         // match start: match.index
                         // capturing group n: match[n]
+
                         var i18nTextKey = match[3];
+
                         i18nTexts[i18nTextKey] = req.i18n.locales[req.i18n.locale][i18nTextKey];
 
                         match = myRegexp.exec(data);

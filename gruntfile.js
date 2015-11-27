@@ -71,6 +71,24 @@
             }
 
         },
+        htmlmin: {
+            prod: {
+                options: {                                 // Target options
+                    removeComments: false,  // remove comments == true builds incorrect layout. Don't know why :(
+                    collapseWhitespace: true,
+                    conservativeCollapse: true,
+                    preserveLineBreaks: true,
+                    preventAttributesEscaping:true,
+                    //customAttrAssign: [],
+                    //ignoreCustomFragments: []
+                },
+                files: [{
+                    expand: true,
+                    src: 'src/frontend/public-build/views/**/*.handlebars',
+                    dest: ''
+                }]
+            }
+        },
         qunit: {
             options: {
 
@@ -343,6 +361,7 @@
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-open');
     grunt.loadNpmTasks('grunt-bump');
+    grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
 
 
@@ -486,13 +505,13 @@
 
             requireConfig('uglify', false, false);
 
-            tasks2Run.push('env:prod', 'globCldrData', 'i18nCheck', 'jshint:files', /*'bump',*/ 'clean'/*, 'express:testQunit', 'qunit'*/, 'requirejs', 'concat', 'cssmin', 'uglify', 'mochaTest:testProd', 'helpdeskInitMongoDB');
+            tasks2Run.push('env:prod', 'globCldrData', 'i18nCheck', 'jshint:files', 'clean', 'requirejs', 'concat', 'cssmin', 'uglify', 'htmlmin', 'mochaTest:testProd', 'helpdeskInitMongoDB');
         }
         else {
 
             requireConfig('none', true, true);
 
-            tasks2Run.push('jshint:files', 'clean', 'sortJSON', 'i18nCheck', 'globCldrData', 'bump', 'concat' /*,'cssmin', 'uglify'*/);
+            tasks2Run.push('jshint:files', 'clean', 'sortJSON', 'i18nCheck', 'globCldrData', 'bump', 'concat' );
 
 
 
