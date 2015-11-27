@@ -600,7 +600,7 @@
 
         var HelpdeskController = require('./src/backend/controllers/helpdesk_MongoDB').HelpdeskAPIController;
         var helpdeskController = new HelpdeskController();
-        var mongoose = require('./src/backend/libs/db');
+        var mongoose = require('./src/backend/controllers/db');
         var testController = require('./src/backend/controllers/tests');
         var config = require('./src/backend/libs/config');
         var i18n = new (require('i18n-2'))(config.get("i18n"));
